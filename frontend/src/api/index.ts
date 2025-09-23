@@ -7,7 +7,7 @@ const api = axios.create({
 });
 
 export const getText = async () => {
-  const res = await api.get('/test');
+  const res = await api.get('/api/test');
 
   return res.data.text;
 };
