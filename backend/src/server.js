@@ -14,6 +14,9 @@ connectDB(MONGO_URI);
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Morgan for log
+app.use(morgan("dev"));
+
 // json, body parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -25,8 +28,6 @@ app.use(morgan("dev"));
 if (process.env.CORS_ENABLED === "true") {
 	app.use(cors({ origin: "http://localhost:5173" })); // for frontend in dev
 }
-
-app.use("/api", testRoutes);
 
 // Swagger
 setupSwagger(app);
