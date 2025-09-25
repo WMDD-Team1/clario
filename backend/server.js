@@ -2,11 +2,14 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import morgan from "morgan";
+import { connectDB } from "./config/db.js";
 import { setupSwagger } from "./swagger.js";
 
-// TEST
-import testRoutes from "./routes/testRoutes.js";
 dotenv.config();
+
+// Mongodb
+const MONGO_URI = process.env.MONGO_URI;
+connectDB(MONGO_URI);
 
 const app = express();
 const PORT = process.env.PORT || 3000;

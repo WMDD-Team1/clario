@@ -20,6 +20,6 @@ const router = express.Router();
  *                   type: string
  *                   example: Hello from backend!
  */
-router.get("/test", getText);
+router.get("/api/test", getText);
 
 export default router;
