@@ -1,7 +1,6 @@
 // UPDATED: Added new imports for login and profile functionality
 import { createUser, loginUser, getUserById } from "../services/auth.service.js";
 
-// FIXED: Added missing 'await' keyword for createUser call
 export const signupController = async (req, res) => {
 	try {
 		const { sub: auth0Id, picture } = req.auth;
@@ -16,7 +15,7 @@ export const signupController = async (req, res) => {
 	}
 };
 
-// NEW: Added loginController for user authentication
+
 // This controller handles user login requests and returns user data
 export const loginController = async (req, res) => {
 	try {
@@ -30,7 +29,7 @@ export const loginController = async (req, res) => {
 		});
 	} catch (err) {
 		console.error("Login Error: ", err);
-		// NEW: Specific error handling for user not found
+		//Specific error handling for user not found
 		if (err.message === "User not found") {
 			return res.status(404).json({ message: "User not found. Please sign up first." });
 		}
@@ -38,7 +37,6 @@ export const loginController = async (req, res) => {
 	}
 };
 
-// NEW: Added getProfileController for profile retrieval
 // This controller handles requests to get current user's profile information
 export const getProfileController = async (req, res) => {
 	try {
@@ -51,7 +49,7 @@ export const getProfileController = async (req, res) => {
 		});
 	} catch (err) {
 		console.error("Get Profile Error: ", err);
-		// NEW: Specific error handling for user not found
+		// Specific error handling for user not found
 		if (err.message === "User not found") {
 			return res.status(404).json({ message: "User not found" });
 		}

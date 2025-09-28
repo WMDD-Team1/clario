@@ -1,8 +1,8 @@
 import express from "express";
-// UPDATED: Added new schema imports for login and profile validation
+// Added new schema imports for login and profile validation
 import { SignupSchema, LoginSchema, ProfileSchema } from "../../schemas/auth.schemas.js";
 import { validate } from "../../middlewares/validate.js";
-// UPDATED: Added new controller imports for login and profile functionality
+// Added new controller imports for login and profile functionality
 import { signupController, loginController, getProfileController } from "../../controllers/auth.controller.js";
 import { checkJWT } from "../../middlewares/checkJWT.js";
 

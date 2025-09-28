@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-// FIXED: Improved validation schema for signup
+//Improved validation schema for signup
 export const SignupSchema = z.object({
 	body: z.object({
 		email: z.string().email(), // FIXED: Changed from z.email() to z.string().email()
@@ -13,14 +13,10 @@ export const SignupSchema = z.object({
 	}),
 });
 
-// NEW: Added LoginSchema for login endpoint validation
-// Login doesn't need body validation since it uses JWT from Auth0
-// The JWT middleware handles authentication
-export const LoginSchema = z.object({
-	// Login endpoint uses JWT authentication, no request body validation needed
-});
 
-// NEW: Added ProfileSchema for profile endpoint validation
+// Login doesn't need body validation since it uses JWT from Auth0
+export const LoginSchema = z.object({
+});
 // Profile endpoint also uses JWT authentication, no request body validation needed
 export const ProfileSchema = z.object({
 	// Profile endpoint uses JWT authentication, no request body validation needed

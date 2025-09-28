@@ -1,11 +1,11 @@
 import User from "../models/User.js";
 
-// FIXED: Original createUser function had bugs - removed 'res' reference and fixed 'newUser' declaration
+// Original createUser function had bugs - removed 'res' reference and fixed 'newUser' declaration
 export const createUser = async (auth0Id, userData, picture) => {
 	let user = await User.findOne({ auth0Id });
-	if (user) return user; // FIXED: Removed invalid 'res.status(200).json(user)' - just return user
+	if (user) return user; // Removed invalid 'res.status(200).json(user)' - just return user
 
-	const newUser = await User.create({ // FIXED: Added 'const' declaration for newUser
+	const newUser = await User.create({ // Added 'const' declaration for newUser
 		auth0Id,
 		...userData,
 		profileImage: userData.profileImage || picture || null,
@@ -13,7 +13,6 @@ export const createUser = async (auth0Id, userData, picture) => {
 	return newUser;
 };
 
-// NEW: Added loginUser function for user authentication
 // This function finds a user by their Auth0 ID and returns user data
 export const loginUser = async (auth0Id) => {
 	try {
@@ -27,7 +26,6 @@ export const loginUser = async (auth0Id) => {
 	}
 };
 
-// NEW: Added getUserById function for profile retrieval
 // This function finds a user by their MongoDB ID and returns user data
 export const getUserById = async (userId) => {
 	try {
