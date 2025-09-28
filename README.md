@@ -1,4 +1,4 @@
-# Smart Document & Finance Assistant
+# Clario - Smart Document & Finance Assistant
 
 ## Required Environment
 
@@ -31,10 +31,11 @@ CORS_ENABLED=true
 **Frontend (`frontend/.env`)**
 
 ```env
-VITE_API_BASE_URL=http://localhost:3000
+VITE_API_BASE_URL=http://localhost:3000/api
 ```
 
 > Note: Frontend uses `VITE_` prefix to access environment variables via `import.meta.env`.
+> Note: Please check Slack for credentials.
 
 ---
 
