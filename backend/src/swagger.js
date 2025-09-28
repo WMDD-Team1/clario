@@ -32,11 +32,12 @@ const swaggerDefinition = {
 					userType: {
 						type: "string",
 						enum: ["Freelancer", "Contractor"],
-						example: "Freelancer",
+						nullable: true,
+						example: null,
 					},
-					profileImage: { type: "string", example: "https://example.com/avatar.png" },
-					province: { type: "string", example: "BC" },
-					currency: { type: "string", default: "CAD" },
+					profileImage: { type: "string", example: "https://example.com/avatar.png", nullable: true },
+					province: { type: "string", example: null, nullable: true },
+					currency: { type: "string", example: "CAD", default: "CAD" },
 					onBoardingCompletedAt: {
 						type: "string",
 						format: "date-time",
@@ -44,7 +45,7 @@ const swaggerDefinition = {
 						example: null,
 					},
 				},
-				required: ["email", "name", "userType"],
+				required: ["email", "name"],
 			},
 
 			// Return
@@ -54,9 +55,18 @@ const swaggerDefinition = {
 					id: { type: "string", example: "650d1e4f5d1234567890abcd" },
 					email: { type: "string", example: "test@example.com" },
 					name: { type: "string", example: "Bitna" },
-					userType: { type: "string", example: "Freelancer" },
-					profileImage: { type: "string", example: "https://example.com/avatar.png" },
-					province: { type: "string", example: "BC" },
+					userType: {
+						type: "string",
+						enum: ["Freelancer", "Contractor"],
+						nullable: true,
+						example: null,
+					},
+					profileImage: {
+						type: "string",
+						example: "https://example.com/avatar.png",
+						nullable: true,
+					},
+					province: { type: "string", example: null, nullable: true },
 					currency: { type: "string", example: "CAD" },
 					onBoardingCompletedAt: {
 						type: "string",
