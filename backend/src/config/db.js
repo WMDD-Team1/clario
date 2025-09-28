@@ -14,7 +14,7 @@ export const connectDB = async (mongoUri) => {
 			console.error("Mongoose disconnected");
 		});
 	} catch (err) {
-		console.error("MongoDB connection failed:  , err");
+		console.error("MongoDB connection failed:  ", err);
 		process.exit(1);
 	}
 };

@@ -4,6 +4,7 @@ import cors from "cors";
 import morgan from "morgan";
 import { connectDB } from "./config/db.js";
 import { setupSwagger } from "./swagger.js";
+import { router as authRoutes } from "./routes/auth/auth.routes.js";
 
 dotenv.config();
 
@@ -28,6 +29,8 @@ app.use(morgan("dev"));
 if (process.env.CORS_ENABLED === "true") {
 	app.use(cors({ origin: "http://localhost:5173" })); // for frontend in dev
 }
+
+app.use("/api/auth", authRoutes);
 
 // Swagger
 setupSwagger(app);
