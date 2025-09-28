@@ -17,9 +17,10 @@ export const router = express.Router();
  * /api/auth/signup:
  *   post:
  *     summary: Create or return a user
- *     description:
+ *     description: >
  *       Creates a new user in MongoDB after verifying JWT from Auth0.
  *       If the user already exists, returns the existing user.
+ *       This endpoint requires a valid Bearer JWT token in the `Authorization` header.
  *     tags: [Auth]
  *     security:
  *       - bearerAuth: []
@@ -31,22 +32,22 @@ export const router = express.Router();
  *             $ref: '#/components/schemas/Signup'
  *     responses:
  *       200:
- *         description: User already exists
+ *         description: User already exists (returns existing user document)
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/User'
  *       201:
- *         description: User successfully created
+ *         description: User successfully created (new user document)
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/User'
  *       400:
- *         description: Validation error
+ *         description: Validation error (invalid input payload)
  *       401:
  *         description: Unauthorized - JWT missing or invalid
  *       500:
- *         description: Server error
+ *         description: Internal server error
  */
 router.post("/signup", checkJWT, validate(SignupSchema), signupController);
