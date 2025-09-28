@@ -1,13 +1,15 @@
 import User from "../models/User.js";
 
 export const createUser = async (auth0Id, userData, picture) => {
-	let user = await User.findOne({ auth0Id });
-	if (user) return res.status(200).json(user);
+	// when user already exists
+	const existed = await User.findOne({ auth0Id });
+	if (existed) return { user: existed, isNew: false };
 
-	newUser = await User.create({
+	// new user
+	const newUser = await User.create({
 		auth0Id,
 		...userData,
 		profileImage: userData.profileImage || picture || null,
 	});
-	return newUser;
+	return { user: newUser, isNew: true };
 };
