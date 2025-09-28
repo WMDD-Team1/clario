@@ -10,6 +10,14 @@ jobs:
         defaults:
             run:
                 working-directory: backend
+
+        env:
+            MONGO_URI: ${{ secrets.MONGO_URI }}
+            FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+            FIREBASE_CLIENT_EMAIL: ${{ secrets.FIREBASE_CLIENT_EMAIL }}
+            FIREBASE_PRIVATE_KEY: ${{ secrets.FIREBASE_PRIVATE_KEY }}
+            FIREBASE_BUCKET: ${{ secrets.FIREBASE_BUCKET }}
+
         steps:
             - uses: actions/checkout@v3
             - name: Setup Node.js
