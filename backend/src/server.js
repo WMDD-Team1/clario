@@ -12,7 +12,7 @@ dotenv.config();
 const MONGO_URI = process.env.MONGO_URI;
 connectDB(MONGO_URI);
 
-const app = express();
+export const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Morgan for log

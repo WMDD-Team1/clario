@@ -11,10 +11,10 @@ export const connectDB = async (mongoUri) => {
 			console.error("Mongoose connection error: ", err);
 		});
 		mongoose.connection.on("disconnected", () => {
-			console.error("Mongoose disconnected");
+			console.log("Mongoose disconnected");
 		});
 	} catch (err) {
-		console.error("MongoDB connection failed:  ", err);
+		console.log("MongoDB connection failed:  ", err);
 		process.exit(1);
 	}
 };
