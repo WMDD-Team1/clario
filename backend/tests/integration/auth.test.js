@@ -1,7 +1,6 @@
 import request from "supertest";
 import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
-import server from "../../src/server.js";
 import User from "../../src/models/User.js";
 
 jest.mock("../../src/middlewares/checkJWT.js", () => {
