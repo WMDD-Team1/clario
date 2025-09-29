@@ -10,6 +10,7 @@ const UserSchema = new mongoose.Schema(
 		email: {
 			type: String,
 			required: true,
+			unique: true,
 		},
 		name: {
 			type: String,
@@ -29,7 +30,7 @@ const UserSchema = new mongoose.Schema(
 		userType: {
 			type: String,
 			enum: ["Freelancer", "Contractor"],
-			default: null,
+			default: "Freelancer",
 		},
 		onBoardingCompletedAt: {
 			type: Date,
