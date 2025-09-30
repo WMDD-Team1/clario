@@ -12,11 +12,12 @@ const UserSchema = new mongoose.Schema(
 		},
 		name: {
 			type: String,
+			required: true,
 		},
 		profileImage: { type: String },
 		currency: {
 			type: String,
-			default: "CAD",
+			default: null,
 		},
 		province: {
 			type: String,

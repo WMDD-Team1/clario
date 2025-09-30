@@ -9,7 +9,6 @@ import { checkJWT } from "../../middlewares/checkJWT.js";
 
 export const router = express.Router();
 
-
 router.post("/signup", checkJWT, validate(SignupSchema), signupController);
 
 router.post("/login", checkJWT, loginController);

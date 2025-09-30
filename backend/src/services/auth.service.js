@@ -7,7 +7,6 @@ export const createUser = async (auth0Id, userData, picture) => {
 	const newUser = await User.create({ // Added 'const' declaration for newUser
 		auth0Id,
 		...userData,
-		profileImage: userData.profileImage || picture || null,
 	});
 	return {user: newUser,isNew:true};
 };
