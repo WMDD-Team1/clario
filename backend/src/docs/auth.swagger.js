@@ -73,10 +73,10 @@
  *             properties:
  *               email:
  *                 type: string
- *                 example: "Clario@example.com"
+ *                 example: "bitna@1234.com"
  *               name:
  *                 type: string
- *                 example: "Ankit"
+ *                 example: "Bitna Lee"
  *     responses:
  *       200:
  *         description: Login successful

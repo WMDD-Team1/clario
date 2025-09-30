@@ -1,4 +1,5 @@
-import { createUser } from "../services/auth.service.js";
+import { createUser,getUserByAuth0Id } from "../services/auth.service.js";
+
 
 export const signupController = async (req, res) => {
 	try {
@@ -16,15 +17,21 @@ export const signupController = async (req, res) => {
 	}
 };
 
+
+
 export const loginController = async (req, res) => {
   try {
-    const { sub: auth0Id, email, name } = req.auth;
+    
+    const { sub: auth0Id } = req.auth;
+    const user = await getUserByAuth0Id(auth0Id);
+    console.log(user);
     const clientData = req.body || {};
 
     const matches = {
-      email: clientData.email ? clientData.email === email : true,
-      name: clientData.name ? clientData.name === name : true,
+      email: clientData.email ? clientData.email === user.email : true,
+      name: clientData.name ? clientData.name === user.name : true,
     };
+
 
     if (!matches.email || !matches.name) {
       return res.status(400).json({
@@ -32,13 +39,14 @@ export const loginController = async (req, res) => {
         message: "Provided values do not match Auth0 data",
       });
     }
-
+    const useremail=user.email;
+    const username=user.name;
     return res.status(200).json({
       valid: true,
       user: {
         auth0Id,
-        email,
-        name,
+        useremail,
+        username,
       },
     });
   } catch (err) {
