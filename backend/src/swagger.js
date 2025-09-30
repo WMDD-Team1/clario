@@ -28,11 +28,12 @@ const swaggerDefinition = {
 //
 const options = {
 	swaggerDefinition,
-	apis: ["./src/routes/**/*.js", "./src/docs/**/*.js"],
+	apis: ["./src/docs/**/*.js"],
 };
 
 const swagger = swaggerJSDoc(options);
 
+// console.log(swagger.components?.schemas);
 export const setupSwagger = (app) => {
 	app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger));
 };
