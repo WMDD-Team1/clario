@@ -14,6 +14,7 @@ const UserSchema = new mongoose.Schema(
 		},
 		name: {
 			type: String,
+			required: true,
 		},
 		profileImage: {
 			type: String,
@@ -21,7 +22,7 @@ const UserSchema = new mongoose.Schema(
 		},
 		currency: {
 			type: String,
-			default: "CAD",
+			default: null,
 		},
 		province: {
 			type: String,
@@ -30,7 +31,7 @@ const UserSchema = new mongoose.Schema(
 		userType: {
 			type: String,
 			enum: ["Freelancer", "Contractor"],
-			default: "Freelancer",
+			default: null,
 		},
 		onBoardingCompletedAt: {
 			type: Date,
