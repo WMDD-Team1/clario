@@ -22,72 +22,18 @@ const swaggerDefinition = {
 				bearerFormat: "JWT",
 			},
 		},
-		schemas: {
-			// Request
-			Signup: {
-				type: "object",
-				properties: {
-					email: { type: "string", example: "test@example.com" },
-					name: { type: "string", example: "Bitna" },
-					userType: {
-						type: "string",
-						enum: ["Freelancer", "Contractor"],
-						example: "Freelancer",
-					},
-					profileImage: { type: "string", example: "https://example.com/avatar.png" },
-					province: { type: "string", example: "BC" },
-					currency: { type: "string", default: "CAD" },
-					onBoardingCompletedAt: {
-						type: "string",
-						format: "date-time",
-						nullable: true,
-						example: null,
-					},
-				},
-				required: ["email", "name", "userType"],
-			},
-
-			// Return
-			User: {
-				type: "object",
-				properties: {
-					id: { type: "string", example: "650d1e4f5d1234567890abcd" },
-					email: { type: "string", example: "test@example.com" },
-					name: { type: "string", example: "Bitna" },
-					userType: { type: "string", example: "Freelancer" },
-					profileImage: { type: "string", example: "https://example.com/avatar.png" },
-					province: { type: "string", example: "BC" },
-					currency: { type: "string", example: "CAD" },
-					onBoardingCompletedAt: {
-						type: "string",
-						format: "date-time",
-						nullable: true,
-						example: null,
-					},
-					createdAt: {
-						type: "string",
-						format: "date-time",
-						example: "2025-09-25T12:34:56.000Z",
-					},
-					updatedAt: {
-						type: "string",
-						format: "date-time",
-						example: "2025-09-25T12:34:56.000Z",
-					},
-				},
-			},
-		},
 	},
 };
 
 //
 const options = {
 	swaggerDefinition,
-	apis: ["./src/routes/**/*.js"],
+	apis: ["./src/docs/**/*.js"],
 };
 
 const swagger = swaggerJSDoc(options);
 
+// console.log(swagger.components?.schemas);
 export const setupSwagger = (app) => {
 	app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger));
 };

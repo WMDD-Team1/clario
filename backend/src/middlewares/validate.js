@@ -5,17 +5,13 @@ export const validate = (schema) => {
 		try {
 			const parsed = await schema.parseAsync({
 				body: req.body,
-				query: req.query,
-				params: req.params,
 			});
 
-			req.body = parsed.body ?? req.body;
-			req.query = parsed.query ?? req.query;
-			req.params = parsed.params ?? req.params;
+			req.body = parsed.body;
 
 			next();
 		} catch (err) {
-			if (err instanceof ZodError) {
+			if (err.errors) {
 				return res.status(400).json({
 					message: "Validation Error",
 					errors: err.errors.map((e) => ({
@@ -24,7 +20,7 @@ export const validate = (schema) => {
 					})),
 				});
 			}
-			next(err);
+			return next(err);
 		}
 	};
 };

@@ -1,58 +1,48 @@
-// UPDATED: Added new imports for login and profile functionality
-import { createUser, loginUser, getUserById } from "../services/auth.service.js";
+import { createUser } from "../services/auth.service.js";
 
 export const signupController = async (req, res) => {
 	try {
 		const { sub: auth0Id, picture } = req.auth;
 		const userData = req.body;
 
-		const newUser = await createUser(auth0Id, userData, picture); // FIXED: Added 'await'
-
-		return res.status(201).json(newUser);
+		const newUser = await createUser(auth0Id, userData, picture);
+		if(isNew){
+			return res.status(201).json(newUser);
+		}
+		return res.status(201).json(user);
 	} catch (err) {
 		console.error("Signup Error: ", err);
 		return res.status(500).json({ message: "Server Error" });
 	}
 };
 
-
-// This controller handles user login requests and returns user data
 export const loginController = async (req, res) => {
-	try {
-		const { sub: auth0Id } = req.auth; // Extract Auth0 ID from JWT token
-		
-		const user = await loginUser(auth0Id); // Call service to find user
-		
-		return res.status(200).json({
-			message: "Login successful",
-			user: user
-		});
-	} catch (err) {
-		console.error("Login Error: ", err);
-		//Specific error handling for user not found
-		if (err.message === "User not found") {
-			return res.status(404).json({ message: "User not found. Please sign up first." });
-		}
-		return res.status(500).json({ message: "Server Error" });
-	}
-};
+  try {
+    const { sub: auth0Id, email, name } = req.auth;
+    const clientData = req.body || {};
 
-// This controller handles requests to get current user's profile information
-export const getProfileController = async (req, res) => {
-	try {
-		const { sub: auth0Id } = req.auth; // Extract Auth0 ID from JWT token
-		
-		const user = await loginUser(auth0Id); // Call service to find user
-		
-		return res.status(200).json({
-			user: user
-		});
-	} catch (err) {
-		console.error("Get Profile Error: ", err);
-		// Specific error handling for user not found
-		if (err.message === "User not found") {
-			return res.status(404).json({ message: "User not found" });
-		}
-		return res.status(500).json({ message: "Server Error" });
-	}
+    const matches = {
+      email: clientData.email ? clientData.email === email : true,
+      name: clientData.name ? clientData.name === name : true,
+    };
+
+    if (!matches.email || !matches.name) {
+      return res.status(400).json({
+        valid: false,
+        message: "Provided values do not match Auth0 data",
+      });
+    }
+
+    return res.status(200).json({
+      valid: true,
+      user: {
+        auth0Id,
+        email,
+        name,
+      },
+    });
+  } catch (err) {
+    console.error("Login Error: ", err);
+    return res.status(500).json({ message: "Server Error" });
+  }
 };

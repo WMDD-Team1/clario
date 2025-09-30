@@ -18,9 +18,10 @@ afterAll(async () => {
 test("User created", async () => {
 	const user = await User.create({
 		auth0Id: "auth0|111",
-		userType: "Freelancer",
 		email: "bitna@gmail.com",
+		name:"Bitna Lee",
 	});
 
 	expect(user.id).toBeDefined();
+	expect(user.name).toBe("Bitna Lee");
 });
