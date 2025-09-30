@@ -4,39 +4,30 @@ const UserSchema = new mongoose.Schema(
 	{
 		auth0Id: {
 			type: String,
-			required: true,
+			require: true,
 			unique: true,
 		},
 		email: {
 			type: String,
-			required: true,
-			unique: true,
 		},
 		name: {
 			type: String,
 			required: true,
 		},
-		profileImage: {
-			type: String,
-			default: null,
-		},
+		profileImage: { type: String },
 		currency: {
 			type: String,
 			default: null,
 		},
 		province: {
 			type: String,
-			default: null,
 		},
 		userType: {
 			type: String,
 			enum: ["Freelancer", "Contractor"],
-			default: null,
+			require: true,
 		},
-		onBoardingCompletedAt: {
-			type: Date,
-			default: null,
-		},
+		onBoardingCompletedAt: Date,
 	},
 	{
 		timestamps: true,
