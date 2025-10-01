@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import { setupSwagger } from "./swagger.js";
-import { router as authRoutes } from "./routes/auth/auth.routes.js";
+import { router as authRoutes } from "./routes/auth/authRoutes.js";
 
 export const app = express();
 

@@ -1,4 +1,4 @@
-import { createUser, getUserByAuth0Id } from "../services/auth.service.js";
+import { createUser, getUserByAuth0Id } from "../services/auth/AuthService.js";
 
 export const signupController = async (req, res) => {
 	try {
