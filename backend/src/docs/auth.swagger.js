@@ -7,12 +7,6 @@
 
 /**
  * @swagger
- * tags:
- *   name: Auth
- *   description: User authentication and signup APIs
- */
-/**
- * @swagger
  * /api/auth/signup:
  *   post:
  *     summary: Create or return a user
@@ -20,16 +14,11 @@
  *       Creates a new user after verifying JWT from Auth0.<br />
  *       - If the user already exists → returns **200 OK** with existing user.<br />
  *       - If a new user is created → returns **201 Created** with new user data.<br />
- *       This endpoint requires a valid Bearer JWT token in the `Authorization` header.
+ *       This endpoint requires a valid Bearer JWT token in the `Authorization` header.<br />
+ *      - **No request body is required.** email and name are taken from the JWT custom claims.
  *     tags: [Auth]
  *     security:
  *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/Signup'
  *     responses:
  *       200:
  *         description: User already exists (returns existing user)
@@ -57,9 +46,9 @@
  *   post:
  *     summary: Login user with Auth0 (email + name only)
  *     description: >
- *       Verifies the user’s **email and name** against the claims inside the Auth0 JWT.  
- *       - Requires a valid Auth0 JWT (Bearer token).  
- *       - Does not create or modify any database records.  
+ *       Verifies the user’s **email and name** against the claims inside the Auth0 JWT.
+ *       - Requires a valid Auth0 JWT (Bearer token).
+ *       - Does not create or modify any database records.
  *       - If email or name are provided in the request body, they must match the JWT claims.
  *     tags: [Auth]
  *     security:

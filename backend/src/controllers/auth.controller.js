@@ -2,14 +2,15 @@ import { createUser, getUserByAuth0Id } from "../services/auth.service.js";
 
 export const signupController = async (req, res) => {
 	try {
-		const { sub: auth0Id, picture } = req.auth;
-		const userData = req.body;
+		const { sub: auth0Id } = req.auth;
+		// added credentials in access token so that backend can save the data right away to db.
+		const email = req.auth["https://clario.com/email"];
+		const name = req.auth["https://clario.com/name"];
+		const picture = req.auth["https://clario.com/picture"];
 
-		const { user, isNew } = await createUser(auth0Id, userData, picture);
-		if (isNew) {
-			return res.status(201).json(newUser);
-		}
-		return res.status(201).json(user);
+		const { user, isNew } = await createUser(auth0Id, email, name, picture);
+
+		return res.status(isNew ? 201 : 200).json(user);
 	} catch (err) {
 		console.error("Signup Error: ", err);
 		return res.status(500).json({ message: "Server Error" });
