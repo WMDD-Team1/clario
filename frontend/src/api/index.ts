@@ -1,13 +1,10 @@
-import axios from 'axios';
+export { default as api, attachAuthInterceptor } from './api';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+// services
+export * from './services/userService';
 
-const api = axios.create({
-  baseURL: API_BASE_URL,
-});
+// adapters
+export * from './adapters/userAdapter';
 
-export const getText = async () => {
-  const res = await api.get('/test');
-
-  return res.data.text;
-};
+// types
+export * from './types/userApi';

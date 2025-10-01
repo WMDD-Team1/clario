@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }: Props) => {
     <Auth0Provider
       domain={domain}
       clientId={clientId}
-      authorizationParams={{ redirect_uri: redirectUri }}
+      authorizationParams={{ redirect_uri: redirectUri, audience: import.meta.env.VITE_AUTH0_AUDIENCE, }}
       onRedirectCallback={onRedirectCallback}
     >
       {children}
