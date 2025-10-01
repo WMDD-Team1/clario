@@ -12,18 +12,60 @@ const ProjectSchema = new mongoose.Schema(
 			ref: "Client",
 			required: true,
 		},
-		contractId: { type: mongoose.Schema.Types.ObjectId, ref: "Contract" },
-		title: {
+
+		name: {
 			type: String,
 			required: true,
 		},
+		type: {
+			type: String,
+		},
+		// still don't know what it's for, ambiguous
+		owners: [
+			{
+				type: String,
+			},
+		],
 		description: String,
-		startDate: Date,
-		endDate: Date,
+		fee: {
+			type: Number,
+		},
+		feeType: {
+			type: String,
+			enum: ["Hourly", "Fixed", "Milestones"],
+		},
+		taxable: {
+			type: Boolean,
+			default: false,
+		},
+		color: {
+			type: String,
+			// may need default hex?
+		},
+
 		status: {
 			type: String,
 			enum: ["Planned", "in-progress", "completed", "cancelled"],
 			default: "Planned",
+		},
+		isArchived: {
+			type: Boolean,
+			default: false,
+		},
+
+		startDate: Date,
+		endDate: Date,
+
+		// Invoice schedule
+		recurrence: {
+			type: {
+				type: String,
+				enum: ["none", "weekly", "monthly", "yearly", "custom"],
+				default: "none",
+			},
+			interval: { type: Number, default: 1 },
+			occurrences: { type: Number, default: null },
+			endDate: { type: Date, default: null },
 		},
 	},
 	{
