@@ -17,9 +17,9 @@ afterAll(async () => {
 
 test("User created", async () => {
 	const user = await User.create({
-		auth0Id: "GMstVXbM75LIhkNzxIAoUAQ2e0PV8qRv@clients",
+		auth0Id: "auth0|111",
 		email: "bitna@gmail.com",
-		name: "Bitna Lee",
+		name:"Bitna Lee",
 	});
 
 	expect(user.id).toBeDefined();

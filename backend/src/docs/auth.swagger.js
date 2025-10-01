@@ -50,3 +50,57 @@
  *       500:
  *         description: Internal server error
  */
+
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     summary: Login user with Auth0 (email + name only)
+ *     description: >
+ *       Verifies the user’s **email and name** against the claims inside the Auth0 JWT.  
+ *       - Requires a valid Auth0 JWT (Bearer token).  
+ *       - Does not create or modify any database records.  
+ *       - If email or name are provided in the request body, they must match the JWT claims.
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: "bitna@1234.com"
+ *               name:
+ *                 type: string
+ *                 example: "Bitna Lee"
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 valid:
+ *                   type: boolean
+ *                   example: true
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     auth0Id:
+ *                       type: string
+ *                     email:
+ *                       type: string
+ *                     name:
+ *                       type: string
+ *       400:
+ *         description: Provided values do not match Auth0 data
+ *       401:
+ *         description: Unauthorized (invalid/missing JWT)
+ *       500:
+ *         description: Server error
+ */

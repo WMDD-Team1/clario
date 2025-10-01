@@ -1,9 +1,11 @@
 export const validate = (schema) => {
 	return async (req, res, next) => {
 		try {
-			const parsed = await schema.parse(req.body);
+			const parsed = await schema.parseAsync({
+				body: req.body,
+			});
 
-			req.body = parsed;
+			req.body = parsed.body;
 
 			next();
 		} catch (err) {
@@ -16,7 +18,6 @@ export const validate = (schema) => {
 					})),
 				});
 			}
-
 			return next(err);
 		}
 	};
