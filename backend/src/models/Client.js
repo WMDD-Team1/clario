@@ -22,21 +22,36 @@ const ClientSchema = new mongoose.Schema(
 		},
 		phone: String,
 		address: String,
+		billingAddress: {
+			type: String,
+			default: null,
+		},
+
 		country: String,
 
-		contracts: [
-			{
-				type: mongoose.Schema.Types.ObjectId,
-				ref: "Contract",
-			},
-		],
-		projects: [
-			{
-				type: mongoose.Schema.Types.ObjectId,
-				ref: "Project",
-			},
-		],
+		taxId: {
+			type: String,
+			default: null,
+		},
+		preferredPaymentMethod: {
+			type: String,
+			enum: ["Bank Transfer", "Credit/Debit Card", "PayPal", "Other"],
+			default: "Bank Transfer",
+		},
+
+		status: {
+			type: String,
+			enum: ["active", "inactive"],
+			default: "active",
+		},
+
+		notes: {
+			type: String,
+			maxlength: 200,
+			default: null,
+		},
 	},
+
 	{
 		timestamps: true,
 	}

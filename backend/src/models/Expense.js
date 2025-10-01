@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const TransactionSchema = new mongoose.Schema(
+const ExpenseSchema = new mongoose.Schema(
 	{
 		userId: {
 			type: mongoose.Schema.Types.ObjectId,
@@ -10,19 +10,19 @@ const TransactionSchema = new mongoose.Schema(
 		projectId: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "Project",
+			required: true,
 		},
-		contractId: {
+		categoryId: {
 			type: mongoose.Schema.Types.ObjectId,
-			ref: "Contract",
+			ref: "Category",
+			required: false,
 		},
-		type: {
-			type: String,
-			enum: ["income", "expense"],
-			required: true,
-		},
-		category: {
+		payeeName: {
 			type: String,
 			required: true,
+		},
+		receiptNumber: {
+			type: String,
 		},
 		amount: {
 			type: Number,
@@ -32,38 +32,29 @@ const TransactionSchema = new mongoose.Schema(
 			type: String,
 			default: "CAD",
 		},
-		description: {
+		taxable: {
+			type: Boolean,
+			default: false,
+		},
+		paymentMethod: {
 			type: String,
-			required: false,
+		},
+		notes: {
+			type: String,
+			maxlength: 200,
+		},
+		receiptUrl: {
+			type: String,
 		},
 		date: {
 			type: Date,
 			required: true,
 		},
-		receiptUrl: {
-			type: String,
-			required: false,
-		},
-		status: {
-			type: String,
-			enum: ["pending", "paid", "overdue"],
-			default: "pending",
-		},
-		ocrText: {
-			type: String,
-			required: false,
-		},
-		metadata: {
-			type: mongoose.Schema.Types.Mixed,
-			required: false,
-		},
 	},
-	{
-		timestamps: true,
-	}
+	{ timestamps: true }
 );
 
-TransactionSchema.set("toJSON", {
+ExpenseSchema.set("toJSON", {
 	virtuals: true,
 	versionKey: false,
 	transform: (_, ret) => {
@@ -71,4 +62,5 @@ TransactionSchema.set("toJSON", {
 		delete ret._id;
 	},
 });
-export default mongoose.model("Transaction", TransactionSchema);
+
+export default mongoose.model("Expense", ExpenseSchema);
