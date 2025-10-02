@@ -9,6 +9,7 @@ import { AuthProvider } from "./api/auth/AuthProvider";
 import App from "./App";
 import "./index.css";
 import { store } from "./store";
+import { UserLoader } from "@components/UserLoader";
 
 function InitApi() {
   const { getAccessTokenSilently } = useAuth0();
@@ -28,7 +29,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <BrowserRouter>
         <AuthProvider>
           <InitApi />
-          <App />
+          <UserLoader>
+            <App />
+          </UserLoader>
         </AuthProvider>
       </BrowserRouter>
     </Provider>

@@ -23,7 +23,6 @@ export const login = createAsyncThunk(
     async () => {
         try {
             const res = await createUser();
-            console.log("Fetched user:", res);
             return mapUser(res);
         } catch (err: any) {
             console.error("Error in login thunk:", err);

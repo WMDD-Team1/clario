@@ -1,8 +1,7 @@
-import { Routes, Route } from "react-router-dom";
-import { Landing } from "./pages/Landing";
-import { Dashboard } from "./pages/Dashboard";
+import { Route, Routes } from "react-router-dom";
 import { PrivateRoute } from "./api/auth/PrivateRoute";
-import { Auth0Callback } from "@pages/Auth0Callback";
+import { Dashboard } from "./pages/Dashboard";
+import { Landing } from "./pages/Landing";
 
 function App() {
   return (
@@ -12,7 +11,7 @@ function App() {
         path="/callback"
         element={
           <PrivateRoute>
-            <Auth0Callback />
+            <Dashboard />
           </PrivateRoute>
         }
       />
