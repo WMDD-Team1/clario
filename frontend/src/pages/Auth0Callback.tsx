@@ -15,7 +15,7 @@ export const Auth0Callback = () => {
 
     useEffect(() => {
         if (isAuthenticated && user?.sub) {
-            dispatch(login(user.sub));
+            dispatch(login());
         }
     }, [isAuthenticated, user, dispatch])
 
@@ -30,8 +30,6 @@ export const Auth0Callback = () => {
             }
         }
     }, [loading, appUser, error, navigate]);
-
-    console.log(appUser)
 
     return (
         <div className="h-screen flex items-center justify-center">

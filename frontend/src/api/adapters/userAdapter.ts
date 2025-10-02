@@ -3,13 +3,15 @@ import { UserApiResponse } from "@/api";
 
 export function mapUser(apiUser: UserApiResponse): User {
     return {
-        auth0Id: apiUser.auth0Id,
+        id: apiUser.id,
         email: apiUser.email,
         name: apiUser.name,
-        profileImage: apiUser.profileImage,
+        picture: apiUser.picture,
         currency: apiUser.currency,
         province: apiUser.province,
-        userType: apiUser.userType as "Freelancer" | "Contractor",
-        onBoardingCompletedAt: new Date(apiUser.onBoardingCompletedAt),
+        userType: apiUser.userType as "Freelancer" | "Contractor" | null,
+        onBoardingCompletedAt: apiUser.onBoardingCompletedAt,
+        createdAt: apiUser.createdAt,
+        updatedAt: apiUser.updatedAt,
     }
 }

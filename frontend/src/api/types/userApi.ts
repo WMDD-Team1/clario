@@ -1,10 +1,12 @@
 export interface UserApiResponse {
-    auth0Id: string;
+    id: string;
     email: string;
     name: string;
-    profileImage: string;
+    picture: string;
     currency: string;
     province: string;
-    userType: "Freelancer" | "Contractor";
+    userType: "Freelancer" | "Contractor" | null;
     onBoardingCompletedAt: string;
+    createdAt: string;
+    updatedAt: string;
 }

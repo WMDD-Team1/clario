@@ -20,19 +20,18 @@ const initialState: UserState = {
 
 export const login = createAsyncThunk(
     "user/login",
-    async (auth0Id: string) => {
-        // const res = await fetchUserById(auth0Id);
-        const res = await createUser({
-            auth0Id: auth0Id,
-            email: "bitna@test.com",
-            name: "Bitna Lee",
-            userType: "Contractor",
-            profileImage: "https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D",
-            province: "BC",
-            currency: "CAD",
-            onBoardingCompletedAt: "2025-09-25T12:34:56.000Z",
-        });
-        return mapUser(res);
+    async () => {
+        try {
+            const res = await createUser();
+            console.log("Fetched user:", res);
+            return mapUser(res);
+        } catch (err: any) {
+            console.error("Error in login thunk:", err);
+            if (err.response && err.response.status === 404) {
+                throw new Error("404: User not found");
+            }
+            throw err;
+        }
     }
 );
 
