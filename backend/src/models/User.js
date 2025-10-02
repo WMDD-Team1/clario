@@ -25,9 +25,12 @@ const UserSchema = new mongoose.Schema(
 		userType: {
 			type: String,
 			enum: ["Freelancer", "Contractor"],
-			require: true,
+			default: null,
 		},
-		onBoardingCompletedAt: Date,
+		onBoardingCompletedAt: {
+			type: Date,
+			default: null,
+		},
 	},
 	{
 		timestamps: true,
@@ -40,6 +43,7 @@ UserSchema.set("toJSON", {
 	transform: (_, ret) => {
 		ret.id = ret._id;
 		delete ret._id;
+		delete ret.auth0Id;
 	},
 });
 

@@ -4,10 +4,8 @@ import { app } from "./app.js";
 
 dotenv.config();
 
-if (process.env.NODE_ENV !== "test") {
-	connectDB(process.env.MONGO_URI);
-	const port = process.env.PORT || 3000;
-	app.listen(port, () => {
-		console.log(`App is running on port ${port}`);
-	});
-}
+connectDB(process.env.MONGO_URI);
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+	console.log(`App is running on port ${port}`);
+});
