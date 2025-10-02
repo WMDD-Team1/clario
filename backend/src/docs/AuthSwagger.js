@@ -9,7 +9,7 @@
  * @swagger
  * /api/auth/signup:
  *   post:
- *     summary: Create or return a user
+ *     summary: Signup - create or return a user
  *     description:
  *       Creates a new user after verifying JWT from Auth0.<br />
  *       - If the user already exists → returns **200 OK** with existing user.<br />
@@ -44,50 +44,26 @@
  * @swagger
  * /api/auth/login:
  *   post:
- *     summary: Login user with Auth0 (email + name only)
+ *     summary: Login - return a user
  *     description: >
- *       Verifies the user’s **email and name** against the claims inside the Auth0 JWT.
- *       - Requires a valid Auth0 JWT (Bearer token).
- *       - Does not create or modify any database records.
- *       - If email or name are provided in the request body, they must match the JWT claims.
+ *       Verifies the user’s identity using the Auth0 JWT. <br />
+ *       - Requires a valid Auth0 JWT (Bearer token). <br />
+ *       - No request body is required.<br />
+ *       - If the user exists in the database, returns the user object.<br />
+ *       - If the user does not exist, returns **404 Not Found**.<br />
+ *       - Does not create or modify any records.<br />
  *     tags: [Auth]
  *     security:
  *       - bearerAuth: []
- *     requestBody:
- *       required: false
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               email:
- *                 type: string
- *                 example: "bitna@1234.com"
- *               name:
- *                 type: string
- *                 example: "Bitna Lee"
  *     responses:
  *       200:
- *         description: Login successful
+ *         description: User successfully logged in (returns a user)
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 valid:
- *                   type: boolean
- *                   example: true
- *                 user:
- *                   type: object
- *                   properties:
- *                     auth0Id:
- *                       type: string
- *                     email:
- *                       type: string
- *                     name:
- *                       type: string
- *       400:
- *         description: Provided values do not match Auth0 data
+ *               $ref: '#/components/schemas/User'
+ *       404:
+ *         description: User not found (signup required)
  *       401:
  *         description: Unauthorized (invalid/missing JWT)
  *       500:

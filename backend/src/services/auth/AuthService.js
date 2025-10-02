@@ -5,7 +5,6 @@ export const createUser = async (auth0Id, email, name, picture) => {
 	if (existed) return { user: existed, isNew: false };
 
 	const newUser = await User.create({
-		// Added 'const' declaration for newUser
 		auth0Id,
 		email,
 		name,
