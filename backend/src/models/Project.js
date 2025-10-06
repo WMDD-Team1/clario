@@ -20,19 +20,14 @@ const ProjectSchema = new mongoose.Schema(
 		type: {
 			type: String,
 		},
-		// still don't know what it's for, ambiguous
-		owners: [
-			{
-				type: String,
-			},
-		],
+
 		description: String,
 		fee: {
 			type: Number,
 		},
 		feeType: {
 			type: String,
-			enum: ["Hourly", "Fixed", "Milestones"],
+			enum: ["milestone", "deliverable", "fixed", "subscription", "hourly"],
 		},
 		taxable: {
 			type: Boolean,

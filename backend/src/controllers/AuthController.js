@@ -1,6 +1,6 @@
 import { createUser, getUserByAuth0Id } from "../services/auth/AuthService.js";
 
-export const signupController = async (req, res) => {
+export const signup = async (req, res) => {
 	try {
 		const { sub: auth0Id } = req.auth;
 		// added credentials in access token so that backend can save the data right away to db.
@@ -13,11 +13,11 @@ export const signupController = async (req, res) => {
 		return res.status(isNew ? 201 : 200).json(user);
 	} catch (err) {
 		console.error("Signup Error: ", err);
-		return res.status(500).json({ message: "Server Error" });
+		return res.status(500).json({ message: "Internal Server Error" });
 	}
 };
 
-export const loginController = async (req, res) => {
+export const login = async (req, res) => {
 	try {
 		const { sub: auth0Id } = req.auth;
 		const user = await getUserByAuth0Id(auth0Id);
@@ -30,6 +30,6 @@ export const loginController = async (req, res) => {
 		res.status(200).json(user);
 	} catch (err) {
 		console.error("Login Error: ", err);
-		return res.status(500).json({ message: "Server Error" });
+		return res.status(500).json({ message: "Internal Server Error" });
 	}
 };
