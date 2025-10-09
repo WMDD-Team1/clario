@@ -1,22 +1,20 @@
 import mongoose from "mongoose";
 
-const incomeSchema = new mongoose.Schema(
+const TransactionSchema = new mongoose.Schema(
 	{
 		userId: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "User",
 			required: true,
 		},
+		type: {
+			type: String,
+			enum: ["income", "expense"],
+		},
 		projectId: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "Project",
 		},
-		contractId: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: "Contract",
-			required: false,
-		},
-
 		date: {
 			type: Date,
 			required: true,
@@ -26,7 +24,7 @@ const incomeSchema = new mongoose.Schema(
 			ref: "Category",
 			required: false,
 		},
-		invoiceNumber: {
+		origin: {
 			type: String,
 		},
 		amount: {
@@ -41,31 +39,29 @@ const incomeSchema = new mongoose.Schema(
 			maxlength: 200,
 			required: false,
 		},
-		taxable: {
-			type: Boolean,
-			default: false,
-		},
 		status: {
 			type: String,
-			enum: ["Draft", "Pending", "Paid", "Overdue"],
+			enum: ["Pending", "Paid"],
 			default: "Pending",
 		},
-
-		recurrence: {
-			type: {
-				type: String,
-				enum: ["one-time", "weekly", "monthly", "custom"],
-				default: "one-time",
-			},
-			occurrences: { type: Number, default: 1 },
+		paymentDate: {
+			type: Date,
+			required: false,
 		},
+		reimbursable: {
+			type: Boolean,
+			required: true,
+		},
+		attachmentURL: {
+			type: String,
+		}
 	},
 	{
 		timestamps: true,
 	}
 );
 
-incomeSchema.set("toJSON", {
+TransactionSchema.set("toJSON", {
 	virtuals: true,
 	versionKey: false,
 	transform: (_, ret) => {
@@ -73,4 +69,4 @@ incomeSchema.set("toJSON", {
 		delete ret._id;
 	},
 });
-export default mongoose.model("Income", incomeSchema);
+export default mongoose.model("Transaction", TransactionSchema);
