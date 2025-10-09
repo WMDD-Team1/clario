@@ -3,7 +3,8 @@ import cors from "cors";
 import morgan from "morgan";
 import { setupSwagger } from "./swagger.js";
 import { router as authRoutes } from "./routes/auth/authRoutes.js";
-import { router as projectRoutes } from "./routes/projects/projectRoutes.js";
+import { router as projectRoutes } from "./routes/projects/projectsRoutes.js";
+import { router as clientRoutes } from "./routes/clients/clientsRoutes.js";
 
 export const app = express();
 
@@ -19,6 +20,7 @@ if (process.env.CORS_ENABLED === "true") {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
+app.use("/api/clients", clientRoutes);
 
 // Swagger
 setupSwagger(app);
