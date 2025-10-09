@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { getText } from './api';
 import Button from '@components/Button';
+import Input from '@components/Input';
+import Card from '@components/Card';
 
 const App = () => {
   const [text, setText] = useState('');
@@ -19,8 +21,14 @@ const App = () => {
       <h2 className="mt-4">
         Communication with Backend: <span className="text-red-500">{text}</span>
       </h2>
+      <Input label='Name' placeholder='Please input your name'/>
 
-      <Button />
+      <Button/>
+      <Card imgURL='https://images.pexels.com/photos/11421980/pexels-photo-11421980.jpeg'
+      cardTitle="AI Design Assistant"
+  cardDescription="A smart tool to help you quickly generate visual designs and web layouts."
+  buttonName="Learn More"
+  buttonLink="https://example.com"/>
     </div>
   );
 };
