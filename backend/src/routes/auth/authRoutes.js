@@ -1,5 +1,5 @@
 import express from "express";
-import * as AuthController from "../../controllers/AuthController.js";
+import * as AuthController from "../../controllers/auth/AuthController.js";
 import { checkJWT } from "../../middlewares/checkJWT.js";
 
 export const router = express.Router();

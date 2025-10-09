@@ -1,4 +1,3 @@
-import Project from "../models/Project.js";
 import {
 	findAllProjects,
 	findByPorjectId,
@@ -6,7 +5,7 @@ import {
 	updateProjectById,
 	deleteProjectById,
 	archiveProjectById,
-} from "../services/projects/ProjectService.js";
+} from "../../services/projects/ProjectsService.js";
 
 export const getAllProjects = async (req, res) => {
 	try {
