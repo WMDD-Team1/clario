@@ -52,6 +52,11 @@ const TransactionSchema = new mongoose.Schema(
 			type: Boolean,
 			required: true,
 		},
+		reimburseTransactionId: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "Transaction",
+			required: false,
+		},
 		attachmentURL: {
 			type: String,
 		}
