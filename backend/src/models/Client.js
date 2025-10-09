@@ -20,34 +20,27 @@ const ClientSchema = new mongoose.Schema(
 			type: String,
 			required: true,
 		},
-		phone: String,
-		address: String,
+		contact: {
+			type: String,
+			default: null,
+		},
+
+		address: {
+			type: String,
+			default: null,
+		},
 		billingAddress: {
 			type: String,
 			default: null,
 		},
-
-		country: String,
-
-		taxId: {
-			type: String,
-			default: null,
+		// align with project schema isArchived :P
+		isArchived: {
+			type: Boolean,
+			default: false,
 		},
-		preferredPaymentMethod: {
+		description: {
 			type: String,
-			enum: ["Bank Transfer", "Credit/Debit Card", "PayPal", "Other"],
-			default: "Bank Transfer",
-		},
-
-		status: {
-			type: String,
-			enum: ["active", "inactive"],
-			default: "active",
-		},
-
-		notes: {
-			type: String,
-			maxlength: 200,
+			maxlength: 500,
 			default: null,
 		},
 	},
@@ -56,6 +49,11 @@ const ClientSchema = new mongoose.Schema(
 		timestamps: true,
 	}
 );
+ClientSchema.virtual("projects", {
+	ref: "Project",
+	localField: "_id",
+	foreignField: "clientId",
+});
 
 ClientSchema.set("toJSON", {
 	virtuals: true,
