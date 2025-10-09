@@ -74,7 +74,7 @@
  *         billingAddress:
  *           type: string
  *           example: "123 Main St, Vancouver, BC"
- *         status:
+ *         isArchived:
  *           type: boolean
  *           description: Whether the client is archived (true = hidden, false = visible)
  *           example: false

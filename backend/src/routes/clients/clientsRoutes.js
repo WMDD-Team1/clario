@@ -8,7 +8,7 @@ export const router = express.Router();
 router.get("/", ClientController.getAllClients);
 router.get("/:id", ClientController.getClientById);
 router.post("/", ClientController.createClient);
-router.put("/:id", ClientController.updateClient);
+router.patch("/:id", ClientController.updateClient);
 router.patch("/:id/archive", ClientController.archiveClient);
 
 export default router;

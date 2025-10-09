@@ -10,7 +10,7 @@
  * /api/clients:
  *   get:
  *     summary: Get all clients
- *     description: >
+ *     description:
  *       Returns a paginated list of all clients belonging to the authenticated user. <br />
  *       Each client also includes a **projectCount** property (the number of projects linked to it). <br />
  *     tags: [Clients]
@@ -79,7 +79,7 @@
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/ClientDetail'
+ *               $ref: '#/components/schemas/Client'
  *       404:
  *         description: Client not found
  *       401:
@@ -116,7 +116,7 @@
 /**
  * @swagger
  * /api/clients/{id}:
- *   put:
+ *   patch:
  *     summary: Update client information
  *     tags: [Clients]
  *     security:
@@ -127,6 +127,8 @@
  *         required: true
  *         schema:
  *           type: string
+ *           example: 670a12b4d9e4fa1234abcd56
+ *         description: Client ID
  *     requestBody:
  *       required: true
  *       content:
