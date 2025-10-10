@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import { PrivateRoute } from "./api/auth/PrivateRoute";
 import { Dashboard } from "./pages/Dashboard";
 import { Landing } from "./pages/Landing";
+import Clients from "@pages/Clients";
 
 function App() {
   return (
@@ -20,6 +21,15 @@ function App() {
         element={
           <PrivateRoute>
             <Dashboard />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/clients"
+        element={
+          <PrivateRoute>
+            <Clients />
           </PrivateRoute>
         }
       />
