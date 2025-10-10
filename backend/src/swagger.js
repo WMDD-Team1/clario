@@ -5,25 +5,35 @@ import swaggerUi from "swagger-ui-express";
 const swaggerDefinition = {
 	openapi: "3.0.0",
 	info: {
-		title: "Smart Docs API",
+		title: "Clario API docs",
 		version: "1.0.0",
-		description: "API documentation for Smart Document & Finance Assistant",
+		description: "API docs for Clario",
 	},
 	servers: [
 		{
 			url: "http://localhost:3000",
 		},
 	],
+	components: {
+		securitySchemes: {
+			bearerAuth: {
+				type: "http",
+				scheme: "bearer",
+				bearerFormat: "JWT",
+			},
+		},
+	},
 };
 
 //
 const options = {
 	swaggerDefinition,
-	apis: ["./routes/*.js"],
+	apis: ["./src/docs/**/*.js"],
 };
 
 const swagger = swaggerJSDoc(options);
 
+// console.log(swagger.components?.schemas);
 export const setupSwagger = (app) => {
 	app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger));
 };

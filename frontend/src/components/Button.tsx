@@ -1,24 +1,26 @@
-import React from 'react';
-import { colorOptions } from './style/color';
+import { ReactNode } from "react";
 
 interface ButtonProps {
-  style: 'lightButton' | 'darkButton' | 'regularButton';
-  buttonName: string;
-  type?: 'button' | 'submit' | 'reset';
-  onClick?: () => void;
-  width?:string;
+  children: ReactNode;
+  onClick: () => void;
+  type?: "button" | "submit" | "reset";
+  className?: string;
 }
 
-const Button: React.FC<ButtonProps> = ({ style, buttonName, type, onClick, width }) => {
+const Button = ({
+  children,
+  onClick,
+  type = "button",
+  className = "",
+}: ButtonProps) => {
   return (
     <button
       type={type}
       onClick={onClick}
-      className={`p-[1rem] rounded-[1rem] ${colorOptions[style]} w-[${width}]`}
+      className={`${className}`}
     >
-      {buttonName}
+      {children}
     </button>
   );
 };
-
 export default Button;
