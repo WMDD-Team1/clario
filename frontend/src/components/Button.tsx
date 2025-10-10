@@ -1,8 +1,11 @@
 import { ReactNode } from "react";
 
-const Button = () => {
-  return <button className='p-[1rem] rounded-[1rem] bg-gray-500'>Button</button>;
-};
+interface ButtonProps {
+  children: ReactNode;
+  onClick: () => void;
+  type?: "button" | "submit" | "reset";
+  className?: string;
+}
 
 const Button = ({
   children,
