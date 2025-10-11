@@ -4,7 +4,7 @@ import { colorOptions } from "./style/color";
 interface ButtonProps {
   buttonColor: 'lightButton' | 'darkButton' | 'regularButton';
   children: ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
   type?: "button" | "submit" | "reset";
   className?: string;
   width?: string;
