@@ -6,6 +6,8 @@ import {
 	archiveClientById,
 } from "../../services/clients/ClientsService.js";
 
+import { clientSchema } from "../../validations/clientSchema.js";
+
 export const getAllClients = async (req, res) => {
 	try {
 		const { sub: userId } = req.auth;
@@ -43,8 +45,9 @@ export const getClientById = async (req, res) => {
 export const createClient = async (req, res) => {
 	try {
 		const { sub: userId } = req.auth;
-		const result = await createNewClient(req.body, userId);
-
+		const parsed = clientSchema.parse(req.body);
+		console.log(parsed);
+		const result = await createNewClient(parsed, userId);
 		res.status(201).json(result);
 	} catch (err) {
 		console.error("Error creating client: ", err);
@@ -61,7 +64,8 @@ export const updateClient = async (req, res) => {
 		const { sub: userId } = req.auth;
 
 		// only for allowed field ? humm.. except id?
-		const result = await updateClientById(clientId, userId, req.body);
+		const parsed = clientSchema.partial().parse(req.body);
+		const result = await updateClientById(clientId, userId, parsed);
 
 		if (!result) return res.status(404).json({ message: "Client not found." });
 

@@ -55,6 +55,7 @@
  *       properties:
  *         id:
  *           type: string
+ *           description: Unique identifier for the client
  *           example: 670a12b4d9e4fa1234abcd56
  *         name:
  *           type: string
@@ -62,6 +63,7 @@
  *         type:
  *           type: string
  *           enum: [Individual, Company]
+ *           example: "Individual"
  *         email:
  *           type: string
  *           example: "bitna@methebest.com"
@@ -106,6 +108,7 @@
  *         type:
  *           type: string
  *           enum: [Individual, Company]
+ *           example: "Company"
  *         email:
  *           type: string
  *           example: "bitna@client.com"

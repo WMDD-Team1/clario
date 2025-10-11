@@ -3,8 +3,7 @@ import mongoose from "mongoose";
 const ClientSchema = new mongoose.Schema(
 	{
 		userId: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: "User",
+			type: String,
 			required: true,
 		},
 		type: {
@@ -61,6 +60,7 @@ ClientSchema.set("toJSON", {
 	transform: (_, ret) => {
 		ret.id = ret._id;
 		delete ret._id;
+		delete ret.userId;
 	},
 });
 
