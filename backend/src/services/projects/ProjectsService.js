@@ -1,18 +1,33 @@
 import Project from "../../models/Project.js";
 
 // CRUD
-export const findAllProjects = async (userId) => {
+export const findAllProjects = async (userId, page, limit) => {
 	const skip = (page - 1) * limit;
 	const [projects, total] = await Promise.all([
-		Project.find({ userId }).skip(skip).limit(limit),
+		Project.find({ userId }).skip(skip).limit(limit).sort({ name: 1 }).populate("clientId", "name _id"),
 		Project.countDocuments({ userId }),
 	]);
 
-	return { projects, total, page, limit };
+	const data = projects.map((project) => ({
+		...project.toJSON(),
+		clientName: project.clientId?.name || null,
+	}));
+	return {
+		data,
+		meta: {
+			total,
+			page,
+			limit,
+			totalPages: Math.ceil(total / limit),
+		},
+	};
 };
 
-export const findByPorjectId = async (id, userId) => {
-	return await Project.findOne({ _id: id, userId }).populate("clientId");
+export const findByProjectId = async (id, userId) => {
+	return await Project.findOne({ _id: id, userId }).populate({
+		path: "clientId",
+		select: "_id name email",
+	});
 };
 
 export const createNewProject = async (data, userId) => {
@@ -31,13 +46,6 @@ export const updateProjectById = async (id, userId, data) => {
 		data,
 		{ new: true }
 	);
-};
-
-export const deleteProjectById = async (id, userId) => {
-	return await Project.findOneAndDelete({
-		_id: id,
-		userId,
-	});
 };
 
 export const archiveProjectById = async (id, userId, isArchived) => {

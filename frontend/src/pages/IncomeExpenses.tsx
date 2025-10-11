@@ -16,8 +16,8 @@ export const IncomeExpenses = () => {
     <>
       {event == '' && (
         <>
-          <Button onClick={addIncome}>Add Income</Button>
-          <Button onClick={addExpenses}>Add Expenses</Button>
+          <Button buttonColor='darkButton' onClick={addIncome}>Add Income</Button>
+          <Button buttonColor='darkButton' onClick={addExpenses}>Add Expenses</Button>
         </>
       )}
       {event == 'addIncome' && (
@@ -30,8 +30,8 @@ export const IncomeExpenses = () => {
             <p>JPG, PNG or PDF formats up to 5MB</p>
           </div>
           <div>
-            <Button>Browse</Button>
-            <Button onClick={() => setEvent('incomeDetails')}>Skip</Button>
+            <Button buttonColor='darkButton'>Browse</Button>
+            <Button buttonColor='darkButton' onClick={() => setEvent('incomeDetails')}>Skip</Button>
           </div>
         </>
       )}
@@ -40,22 +40,23 @@ export const IncomeExpenses = () => {
         <>
           <form action="">
             <h2 className='font-bold'>Income Title</h2>
-            <Input label="Income Title" id="incomeTitle" type="input"></Input>
-            <Input label="Date" id="incomeDate" type="Date"></Input>
+            <Input color="bg-white" label="Income Title" id="incomeTitle" type="input"></Input>
+            <Input color="bg-white" label="Date" id="incomeDate" type="Date"></Input>
             <Select
               label="Type of Income"
               id="incomeType"
               options={['Salary', 'Investment', 'Gift', 'Freelance']}
               value={incomeType}
               onChange={setIncomeType}
+              color='bg-white'
             />
             {/* <h2>{incomeType}</h2> */}
-            <Input label="Invoice No." id="incomeInvoice" type="input"></Input>
-            <Input label="Base Amount" id="incomeAmount" type="number"></Input>
-            <Input label="Notes" id="incomeNotes" type="input"></Input>
+            <Input color="bg-white" label="Invoice No." id="incomeInvoice" type="input"></Input>
+            <Input color="bg-white" label="Base Amount" id="incomeAmount" type="number"></Input>
+            <Input color="bg-white" label="Notes" id="incomeNotes" type="input"></Input>
             <div>
-              <Button type="submit">Add</Button>
-              <Button onClick={addIncome}>Cancel</Button>
+              <Button buttonColor='darkButton' type="submit">Add</Button>
+              <Button buttonColor='darkButton' onClick={addIncome}>Cancel</Button>
             </div>
           </form>
         </>
@@ -71,8 +72,8 @@ export const IncomeExpenses = () => {
             <p>JPG, PNG or PDF formats up to 5MB</p>
           </div>
           <div>
-            <Button>Browse</Button>
-            <Button onClick={() => setEvent('expensesDetails')}>Skip</Button>
+            <Button buttonColor='darkButton'>Browse</Button>
+            <Button buttonColor='darkButton' onClick={() => setEvent('expensesDetails')}>Skip</Button>
           </div>
         </>
       )}
@@ -89,6 +90,7 @@ export const IncomeExpenses = () => {
               options={['Food', 'Rent', 'Transportation', 'Entertainment', 'Others']}
               value={expenseType}
               onChange={setExpenseType}
+              color='bg-white'
             />
             {/* <h2>{expenseType}</h2> */}
             <Input label="Invoice No." id="expenseInvoice" type="input" />
@@ -106,6 +108,7 @@ export const IncomeExpenses = () => {
                     options={['Daily', 'Weekly', 'Monthly', 'Yearly']}
                     value={repeatOption}
                     onChange={setRepeatOption}
+                    color='bg-white'
                   />
                   {/* <h2>{repeatOption}</h2> */}
                 </>
@@ -113,8 +116,8 @@ export const IncomeExpenses = () => {
             </div>
             <Input label="Notes" id="expenseNotes" type="input" />
             <div>
-              <Button type="submit">Add</Button>
-              <Button onClick={addExpenses}>Cancel</Button>
+              <Button buttonColor='darkButton' type="submit">Add</Button>
+              <Button buttonColor='darkButton' onClick={addExpenses}>Cancel</Button>
             </div>
           </form>
         </>

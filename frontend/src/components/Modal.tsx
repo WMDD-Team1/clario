@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState} from 'react';
+import { colorOptions } from './style/color';
 
 interface ModalProps {
   isOpen: boolean;
@@ -6,9 +7,10 @@ interface ModalProps {
   description?: string;
   buttonName?: string;
   onClose: () => void;
+  buttonStyle: 'lightButton' | 'darkButton' | 'regularButton' | 'blueButton';
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, title, description, buttonName, onClose }) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, title, description, buttonName, onClose, buttonStyle='blueButton'}) => {
   if (!isOpen) return null;
 
   return (
@@ -17,7 +19,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, title, description, buttonName, o
         {title && <h2 className="text-xl font-semibold">{title}</h2>}
         {description && <p className="mt-2">{description}</p>}
         <div className="mt-4 flex justify-end">
-          <button onClick={onClose} className="px-4 py-2 bg-blue-500 text-white rounded">
+          <button onClick={onClose} className={`px-4 py-2 ${colorOptions[buttonStyle]} text-white rounded`}>
             {buttonName}
           </button>
         </div>
