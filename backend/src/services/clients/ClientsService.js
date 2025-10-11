@@ -4,12 +4,12 @@ import Client from "../../models/Client.js";
 export const findAllClients = async (userId, page, limit) => {
 	const skip = (page - 1) * limit;
 	const [clients, total] = await Promise.all([
-		Client.find({ userId }).skip(skip).limit(limit).sort({ name: 1 }).populate("projects", "_id").lean(),
+		Client.find({ userId }).skip(skip).limit(limit).sort({ name: 1 }).populate("projects", "_id"),
 		Client.countDocuments({ userId }),
 	]);
 
 	const data = clients.map((client) => ({
-		...client,
+		...client.toJSON(),
 		projectCount: client.projects?.length || 0,
 	}));
 
@@ -25,12 +25,10 @@ export const findAllClients = async (userId, page, limit) => {
 };
 
 export const findByClientId = async (id, userId) => {
-	return await Client.findOne({ _id: id, userId })
-		.populate({
-			path: "projects",
-			select: "_id name",
-		})
-		.lean();
+	return await Client.findOne({ _id: id, userId }).populate({
+		path: "projects",
+		select: "_id name",
+	});
 };
 
 export const createNewClient = async (data, userId) => {

@@ -4,7 +4,7 @@ import { checkJWT } from "../../middlewares/checkJWT.js";
 
 export const router = express.Router();
 
-// router.use(checkJWT);
+router.use(checkJWT);
 router.get("/", ClientController.getAllClients);
 router.get("/:id", ClientController.getClientById);
 router.post("/", ClientController.createClient);

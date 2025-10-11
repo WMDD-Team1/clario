@@ -1,23 +1,30 @@
 import { ReactNode } from "react";
+import { colorOptions } from "./style/color";
 
 interface ButtonProps {
+  buttonColor: 'lightButton' | 'darkButton' | 'regularButton';
   children: ReactNode;
   onClick: () => void;
   type?: "button" | "submit" | "reset";
   className?: string;
+  width?: string;
+  textColor?: string
 }
 
 const Button = ({
   children,
   onClick,
   type = "button",
-  className = "",
+  buttonColor,
+  width,
+  textColor
 }: ButtonProps) => {
   return (
     <button
       type={type}
       onClick={onClick}
-      className={`${className}`}
+      className={`p-[1rem] rounded-[1rem] ${colorOptions[buttonColor]} `}
+      style={{width:width, color:textColor}}
     >
       {children}
     </button>
