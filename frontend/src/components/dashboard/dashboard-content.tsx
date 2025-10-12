@@ -28,7 +28,7 @@ export function DashboardContent() {
     <div className="p-4 md:p-4">
       <div className="flex items-center justify-between mb-6 md:mb-8">
         <div className="flex items-center gap-3">
-          <h1 className="text-xl md:text-2xl font-mono">Financial Dashboard</h1>
+          <h1 className="text-xl md:text-2xl font-mono">Dashboard</h1>
         </div>
         <div className="flex items-center gap-2 md:gap-4">
           <button className="md:hidden w-8 h-8 bg-gray-200 rounded-lg" aria-label="Menu">

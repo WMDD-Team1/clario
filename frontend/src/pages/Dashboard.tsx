@@ -13,12 +13,19 @@ export const Dashboard = () => {
   if (loading) return <p>Loading Dashboard...</p>
   if (error) return <p>Error getting your user: {error}</p>
   if (!appUser) return <p>No user found</p>
+  // For development mode (when accessing /dev-dashboard), skip authentication checks
+  const isDevMode = window.location.pathname === '/dev-dashboard';
+
+  if (!isDevMode) {
+    if (loading) return <p>Loading Dashboard...</p>
+    if (error) return <p>Error getting your user: {error}</p>
+    if (!appUser) return <p>No user found</p>
+  }
 
   const handleLogout = () => {
     dispatch(logoutSliceAction());
     logout({ logoutParams: { returnTo: window.location.origin } })
   }
-
 
   return (
     <DashboardLayout />

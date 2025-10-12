@@ -23,6 +23,8 @@ function App() {
           </PrivateRoute>
         }
       />
+      {/* Temporary route for development - bypasses authentication */}
+      <Route path="/dev-dashboard" element={<Dashboard />} />
     </Routes>
   );
 }
