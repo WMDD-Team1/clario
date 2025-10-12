@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
-import Client from "../../src/models/Client.js";
-import * as ClientService from "../../src/services/clients/ClientsService.js";
+import Client from "../../../src/models/Client.js";
+import * as ClientService from "../../../src/services/clients/ClientsService.js";
 
 let mongoServer;
 
 beforeAll(async () => {
-	await import("../../src/models/Project.js");
+	await import("../../../src/models/Project.js");
 	mongoServer = await MongoMemoryServer.create();
 	const uri = mongoServer.getUri();
 	await mongoose.connect(uri);
