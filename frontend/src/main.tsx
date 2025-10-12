@@ -1,4 +1,4 @@
-import { attachAuthInterceptor } from "@/api";
+import { attachAuthInterceptor } from "./api"; // update path if needed
 import { useAuth0 } from "@auth0/auth0-react";
 import { Auth0Client } from "@auth0/auth0-spa-js";
 import React from "react";
@@ -9,7 +9,7 @@ import { AuthProvider } from "./api/auth/AuthProvider";
 import App from "./App";
 import "./index.css";
 import { store } from "./store";
-import { UserLoader } from "@components/UserLoader";
+import { UserLoader } from "./components/UserLoader";
 
 function InitApi() {
   const { getAccessTokenSilently } = useAuth0();
@@ -17,7 +17,7 @@ function InitApi() {
   React.useEffect(() => {
     attachAuthInterceptor({
       getTokenSilently: getAccessTokenSilently,
-    } as unknown as Auth0Client)
+    } as unknown as Auth0Client);
   }, [getAccessTokenSilently]);
 
   return null;
