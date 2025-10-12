@@ -8,11 +8,25 @@ export const findAll = async (userId, page, limit) => {
             .skip(skip)
             .limit(limit)
             .sort({ date: 1 })
+            .populate("projectId", "name _id")
             .lean(),
         Transaction.countDocuments({ userId }),
     ])
 
-    return { transactions, meta: { total, page, limit } };
+    const data = transactions.map((transaction) => ({
+        ...transaction,
+        projectName: transaction.projectId?.name || null,
+    }))
+
+    return {
+        data,
+        meta: {
+            total,
+            page,
+            limit,
+            totalPages: Math.ceil(total / limit),
+        }
+    };
 };
 
 export const findOneById = async (id, userId) => {
