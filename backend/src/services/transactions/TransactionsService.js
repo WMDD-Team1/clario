@@ -15,8 +15,8 @@ export const findAll = async (userId, page, limit) => {
     return { transactions, meta: { total, page, limit } };
 };
 
-export const findOneById = async (IdleDeadline, userId) => {
-    return await Transaction.findOne({ _id: IdleDeadline, userId })
+export const findOneById = async (id, userId) => {
+    return await Transaction.findOne({ _id: id, userId })
         .lean()
 };
 

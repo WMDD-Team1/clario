@@ -7,7 +7,7 @@ export const getAll = async (req, res) => {
 
 
         const user = AuthService.getUserByAuth0Id(userId);
-        if (!user){
+        if (!user) {
             return res.status(404).json({ message: 'User not found in local DB' });
         }
 
@@ -18,6 +18,24 @@ export const getAll = async (req, res) => {
         console.error("Error fetching transactions: ", err);
         res.status(500).json({
             message: "Internal Server Error"
-        })
+        });
+    }
+}
+
+export const getById = async (req, res) => {
+    try {
+        const { id: transactionId } = req.params;
+        const { sub: userId } = req.auth;
+
+        const result = TransactionService.findOneById(transactionId, userId);
+
+        if (!result) return res.status(404).json({message: "Transaction not found"});
+
+        res.status(200).json(result);
+    } catch (err) {
+        console.error("Error fetching transactions: ", err);
+        res.status(500).json({
+            message: "Internal Server Error"
+        });
     }
 }
