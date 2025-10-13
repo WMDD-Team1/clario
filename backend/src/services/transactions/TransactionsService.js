@@ -14,7 +14,6 @@ export const findAll = async (userId, page, limit) => {
 
     const data = transactions.map((transaction) => ({
         ...transaction.toJSON(),
-        projectName: transaction.projectId?.name || null,
     }))
 
     return {

@@ -11,5 +11,6 @@ router.get("/", TransactionController.getAll);
 router.get("/:id", TransactionController.getById);
 router.post("/", TransactionController.create);
 router.patch("/:id", TransactionController.update);
+router.patch("/:id/archive", TransactionController.archive);
 
 export default router;

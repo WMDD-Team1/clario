@@ -67,7 +67,7 @@ TransactionSchema.set("toJSON", {
 	transform: (_, ret) => {
 		ret.id = ret._id;
 		delete ret._id;
-		// delete ret.userId;
+		delete ret.userId;
 	},
 });
 export default mongoose.model("Transaction", TransactionSchema);
