@@ -4,9 +4,9 @@ import { archiveSchema, transactionSchema } from '../../validations/index.js';
 export const getAll = async (req, res) => {
     try {
         const user = req.user;
-        const { page = 1, limit = 10 } = req.query;
+        const { page = 1, limit = 10, ...filters } = req.query;
 
-        const result = await TransactionService.findAll(user.id, parseInt(page), parseInt(limit));
+        const result = await TransactionService.findAll(user.id, parseInt(page), parseInt(limit), filters);
 
         res.status(200).json(result);
     } catch (err) {

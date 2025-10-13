@@ -1,15 +1,15 @@
 import { Transaction } from "../../models/index.js";
 
 // CRUD
-export const findAll = async (userId, page, limit) => {
+export const findAll = async (userId, page, limit, filters) => {
     const skip = (page - 1) * limit;
     const [transactions, total] = await Promise.all([
-        Transaction.find({ userId })
+        Transaction.find({ ...filters, userId })
             .skip(skip)
             .limit(limit)
             .sort({ date: 1 })
             .populate("projectId", "name _id"),
-        Transaction.countDocuments({ userId }),
+        Transaction.countDocuments({ ...filters, userId }),
     ])
 
     const data = transactions.map((transaction) => ({
