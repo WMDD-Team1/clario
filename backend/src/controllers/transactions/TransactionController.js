@@ -60,10 +60,10 @@ export const create = async (req, res) => {
 export const update = async (req, res) => {
     try {
         const { id: transactionId } = req.params;
-        const { sub: userId } = req.auth;
+        const user = req.user;
 
         const parsedData = transactionSchema.partial().parse(req.body);
-        const result = await TransactionService.update(transactionId, userId, parsedData);
+        const result = await TransactionService.update(transactionId, user.id, parsedData);
 
         if (!result) return res.status(404).json({ message: "Transaction not found" });
 
