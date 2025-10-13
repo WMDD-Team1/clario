@@ -233,3 +233,120 @@
  *           format: date
  *           example: 2025-12-31
  */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Transaction:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: Unique identifier for the transaction
+ *           example: 670a12b4d9e4fa1234abcd56
+ *         projectId:
+ *           type: string
+ *           description: Linked project ID
+ *           example: "670a12b4d9e4fa1234abcd99"
+ *         type:
+ *           type: string
+ *           enum: [income, expense]
+ *           example: "expense"
+ *         date:
+ *           type: string
+ *           format: date
+ *           example: 2025-10-05
+ *         categoryId:
+ *           type: string
+ *           description: Linked category ID
+ *           example: "670a12b4d9e4fa1234abcd99"
+ *         amount:
+ *           type: number
+ *           example: 200
+ *         origin:
+ *           type: string
+ *           example: "Freelancer payment"
+ *         paymentMethod:
+ *           type: string
+ *           example: "Credit Card"
+ *         notes:
+ *           type: string
+ *           maxLength: 200
+ *           example: "Payment for October (max 200 characters)"
+ *         status:
+ *           type: string
+ *           enum: [pending, paid]
+ *           example: "paid"
+ *         paymentDate:
+ *           type: string
+ *           format: date
+ *           example: 2025-10-05
+ *         attachmentURL:
+ *           type: string
+ *           format: uri
+ *           example: "https://example.com/attachment.pdf"
+ *         isArchived:
+ *           type: boolean
+ *           example: false
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           example: 2025-10-05T12:34:56.000Z
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *           example: 2025-10-05T12:34:56.000Z
+ *    
+ *     TransactionInput:
+ *       type: object
+ *       required:
+ *         - type
+ *         - date
+ *         - categoryId
+ *         - amount
+ *         - origin
+ *       properties:
+ *         projectId:
+ *           type: string
+ *           example: "670a12b4d9e4fa1234abcd99"
+ *         type:
+ *           type: string
+ *           enum: [income, expense]
+ *           example: "expense"
+ *         date:
+ *           type: string
+ *           format: date
+ *           example: 2025-10-05
+ *         categoryId:
+ *           type: string
+ *           example: "670a12b4d9e4fa1234abcd99"
+ *         amount:
+ *           type: number
+ *           example: 200
+ *         origin:
+ *           type: string
+ *           example: "Freelancer payment"
+ *         paymentMethod:
+ *           type: string
+ *           example: "Credit Card"
+ *         notes:
+ *           type: string
+ *           maxLength: 200
+ *           example: "Payment for October (max 200 characters)"
+ *         status:
+ *           type: string
+ *           enum: [pending, paid]
+ *           example: "paid"
+ *         paymentDate:
+ *           type: string
+ *           format: date
+ *           example: 2025-10-05
+ *         attachmentURL:
+ *           type: string
+ *           format: uri
+ *           example: "https://example.com/attachment.pdf"
+ *         isArchived:
+ *           type: boolean
+ *           example: false
+ */

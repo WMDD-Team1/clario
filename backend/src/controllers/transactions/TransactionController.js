@@ -1,12 +1,12 @@
 import { TransactionService } from '../../services/index.js';
-import { transactionSchema } from '../../validations/index.js';
+import { archiveSchema, transactionSchema } from '../../validations/index.js';
 
 export const getAll = async (req, res) => {
     try {
         const user = req.user;
-        const { page = 1, limit = 10 } = req.query;
+        const { page = 1, limit = 10, ...filters } = req.query;
 
-        const result = await TransactionService.findAll(user.id, parseInt(page), parseInt(limit));
+        const result = await TransactionService.findAll(user.id, parseInt(page), parseInt(limit), filters);
 
         res.status(200).json(result);
     } catch (err) {
@@ -78,3 +78,21 @@ export const update = async (req, res) => {
         });
     }
 };
+
+export const archive = async (req, res) => {
+    try {
+        const user = req.user;
+        const { id: transactionId } = req.params;
+        const { isArchived } = archiveSchema.parse(req.body);
+
+        const result = await TransactionService.archive(transactionId, user.id, isArchived);
+        if (!result) return res.status(404).json({ message: "Transaction not found" });
+
+        res.status(200).json(result);
+    } catch (err) {
+        console.error("Error archiving transaction: ", err);
+        res.status(500).json({
+            message: "Internal Server Error",
+        });
+    }
+}
