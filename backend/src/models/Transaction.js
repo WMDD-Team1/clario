@@ -41,25 +41,20 @@ const TransactionSchema = new mongoose.Schema(
 		},
 		status: {
 			type: String,
-			enum: ["Pending", "Paid"],
-			default: "Pending",
+			enum: ["pending", "paid"],
+			default: "pending",
 		},
 		paymentDate: {
 			type: Date,
 			required: false,
 		},
-		reimbursable: {
-			type: Boolean,
-			required: true,
-		},
-		reimburseTransactionId: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: "Transaction",
-			required: false,
-		},
 		attachmentURL: {
 			type: String,
-		}
+		},
+		isArchived: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	{
 		timestamps: true,
@@ -72,6 +67,7 @@ TransactionSchema.set("toJSON", {
 	transform: (_, ret) => {
 		ret.id = ret._id;
 		delete ret._id;
+		delete ret.userId;
 	},
 });
 export default mongoose.model("Transaction", TransactionSchema);

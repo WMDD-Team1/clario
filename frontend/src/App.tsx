@@ -1,8 +1,9 @@
-import { Route, Routes } from "react-router-dom";
-import { PrivateRoute } from "./api/auth/PrivateRoute";
-import { Dashboard } from "./pages/Dashboard";
-import { Landing } from "./pages/Landing";
-import {IncomeExpenses} from "./pages/IncomeExpenses"
+import { Route, Routes } from 'react-router-dom';
+import { PrivateRoute } from './api/auth/PrivateRoute';
+import { Dashboard } from './pages/Dashboard';
+import { Landing } from './pages/Landing';
+import { IncomeExpenses } from './pages/IncomeExpenses';
+import Clients from '@pages/Clients';
 
 function App() {
   return (
@@ -33,8 +34,16 @@ function App() {
           </PrivateRoute>
         }
       />
+
+      <Route
+        path="/clients"
+        element={
+          <PrivateRoute>
+            <Clients />
+          </PrivateRoute>
+        }
+      />
     </Routes>
-    
   );
 }
 

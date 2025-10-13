@@ -2,10 +2,7 @@ import mongoose from "mongoose";
 
 const ClientSchema = new mongoose.Schema(
 	{
-		userId: {
-			type: String,
-			required: true,
-		},
+		userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
 		type: {
 			type: String,
 			enum: ["Individual", "Company"],
