@@ -1,15 +1,10 @@
-import { AuthService, TransactionService } from '../../services/index.js';
+import { TransactionService } from '../../services/index.js';
+import { transactionSchema } from '../../validations/index.js';
 
 export const getAll = async (req, res) => {
     try {
-        const { sub: userId } = req.auth;
+        const user = req.user;
         const { page = 1, limit = 10 } = req.query;
-
-
-        const user = AuthService.getUserByAuth0Id(userId);
-        if (!user) {
-            return res.status(404).json({ message: 'User not found in local DB' });
-        }
 
         const result = await TransactionService.findAll(user.id, parseInt(page), parseInt(limit));
 
@@ -24,12 +19,12 @@ export const getAll = async (req, res) => {
 
 export const getById = async (req, res) => {
     try {
+        const user = req.user;
         const { id: transactionId } = req.params;
-        const { sub: userId } = req.auth;
 
-        const result = TransactionService.findOneById(transactionId, userId);
+        const result = await TransactionService.findOneById(transactionId, user.id);
 
-        if (!result) return res.status(404).json({message: "Transaction not found"});
+        if (!result) return res.status(404).json({ message: "Transaction not found" });
 
         res.status(200).json(result);
     } catch (err) {
@@ -39,3 +34,47 @@ export const getById = async (req, res) => {
         });
     }
 }
+
+export const create = async (req, res) => {
+    try {
+        const user = req.user;
+
+        const parsedData = transactionSchema.parse(req.body);
+
+        const result = await TransactionService.create(parsedData, user.id);
+        res.status(201).json(result);
+    } catch (err) {
+        console.error("Error creating transaction: ", err);
+        if (err.name === 'ZodError') {
+            return res.status(400).json({
+                message: "Invalid data",
+                error: err.message,
+            });
+        }
+        res.status(500).json({
+            message: "Internal Server Error",
+        });
+    }
+}
+
+export const update = async (req, res) => {
+    try {
+        const { id: transactionId } = req.params;
+        const { sub: userId } = req.auth;
+
+        const parsedData = transactionSchema.partial().parse(req.body);
+        const result = await TransactionService.update(transactionId, userId, parsedData);
+
+        if (!result) return res.status(404).json({ message: "Transaction not found" });
+
+        res.status(200).json(result);
+    } catch (err) {
+        console.error("Error updating transaction: ", err);
+        if (err.name === 'ValidationError') {
+            return res.status(400).json({ message: err.message });
+        }
+        res.status(500).json({
+            message: "Internal Server Error",
+        });
+    }
+};

@@ -41,8 +41,8 @@ const TransactionSchema = new mongoose.Schema(
 		},
 		status: {
 			type: String,
-			enum: ["Pending", "Paid"],
-			default: "Pending",
+			enum: ["pending", "paid"],
+			default: "pending",
 		},
 		paymentDate: {
 			type: Date,
@@ -67,6 +67,7 @@ TransactionSchema.set("toJSON", {
 	transform: (_, ret) => {
 		ret.id = ret._id;
 		delete ret._id;
+		// delete ret.userId;
 	},
 });
 export default mongoose.model("Transaction", TransactionSchema);

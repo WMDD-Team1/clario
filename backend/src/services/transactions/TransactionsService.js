@@ -8,13 +8,12 @@ export const findAll = async (userId, page, limit) => {
             .skip(skip)
             .limit(limit)
             .sort({ date: 1 })
-            .populate("projectId", "name _id")
-            .lean(),
+            .populate("projectId", "name _id"),
         Transaction.countDocuments({ userId }),
     ])
 
     const data = transactions.map((transaction) => ({
-        ...transaction,
+        ...transaction.toJSON(),
         projectName: transaction.projectId?.name || null,
     }))
 
@@ -30,8 +29,14 @@ export const findAll = async (userId, page, limit) => {
 };
 
 export const findOneById = async (id, userId) => {
-    return await Transaction.findOne({ _id: id, userId })
-        .lean()
+    const transaction = await Transaction
+        .findOne({ _id: id, userId })
+        .populate("projectId", "name _id");
+
+    return {
+        ...transaction.toJSON(),
+        projectName: transaction.projectId?.name || "null",
+    }
 };
 
 export const create = async (data, userId) => {
