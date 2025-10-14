@@ -4,13 +4,15 @@ import Client from "../../models/Client.js";
 export const findAllClients = async (userId, page, limit) => {
 	const skip = (page - 1) * limit;
 	const [clients, total] = await Promise.all([
-		Client.find({ userId }).skip(skip).limit(limit).sort({ name: 1 }).populate("projects", "_id"),
+		Client.find({ userId }).skip(skip).limit(limit).sort({ name: 1 }).populate("projects"),
+		// .populate("invoices")
 		Client.countDocuments({ userId }),
 	]);
 
 	const data = clients.map((client) => ({
 		...client.toJSON(),
 		projectCount: client.projects?.length || 0,
+		invoiceCount: client.invoices?.length || 0,
 	}));
 
 	return {

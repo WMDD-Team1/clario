@@ -45,7 +45,6 @@
  *           format: date-time
  *           example: 2025-09-25T12:34:56.000Z
  */
-
 /**
  * @swagger
  * components:
@@ -67,22 +66,31 @@
  *         email:
  *           type: string
  *           example: "bitna@methebest.com"
- *         contact:
+ *         phone:
  *           type: string
  *           example: "+1 (236) 123-1234"
  *         address:
+ *           type: object
+ *           properties:
+ *             street:
+ *               type: string
+ *               example: "123 Main St"
+ *             postalCode:
+ *               type: string
+ *               example: "V5K 1A1"
+ *             city:
+ *               type: string
+ *               example: "Vancouver"
+ *             country:
+ *               type: string
+ *               example: "Canada"
+ *         notes:
  *           type: string
- *           example: "123 Main St, Vancouver, BC"
- *         billingAddress:
- *           type: string
- *           example: "123 Main St, Vancouver, BC"
+ *           example: "Referred by Kentaro"
  *         isArchived:
  *           type: boolean
  *           description: Whether the client is archived (true = hidden, false = visible)
  *           example: false
- *         description:
- *           type: string
- *           example: "Kentaro recommended"
  *         projectCount:
  *           type: integer
  *           example: 3
@@ -112,13 +120,25 @@
  *         email:
  *           type: string
  *           example: "bitna@client.com"
- *         contact:
+ *         phone:
  *           type: string
- *           example: "+1 604-555-1212"
+ *           example: "16045551212"
  *         address:
- *           type: string
- *           example: "456 Commercial Dr, Vancouver"
- *         description:
+ *           type: object
+ *           properties:
+ *             street:
+ *               type: string
+ *               example: "456 Commercial Dr"
+ *             postalCode:
+ *               type: string
+ *               example: "V5K 1A1"
+ *             city:
+ *               type: string
+ *               example: "Vancouver"
+ *             country:
+ *               type: string
+ *               example: "Canada"
+ *         notes:
  *           type: string
  *           example: "Regular client"
  */
@@ -297,7 +317,7 @@
  *           type: string
  *           format: date-time
  *           example: 2025-10-05T12:34:56.000Z
- *    
+ *
  *     TransactionInput:
  *       type: object
  *       required:
