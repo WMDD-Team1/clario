@@ -2,37 +2,78 @@ import { useState } from "react"
 import { Header } from "./header"
 import { Sidebar } from "./sidebar"
 import { DashboardContent } from "./dashboard-content"
+import { AIInsights } from "./ai-insights"
+import { Reminders } from "./reminders"
+import { FinancialOverview } from "./financial-overview"
+import { MobileHeader } from "./mobile-header"
+import { MobileToggle, type TabKey } from "./mobile-toggle"
 import { MobileNav } from "./mobile-nav"
-
-const topNavItems = [
-  { id: "dashboard", label: "Dashboard" },
-  { id: "money-flow", label: "Money Flow" },
-  { id: "my-work", label: "My Work" },
-  { id: "settings", label: "Settings" },
-]
-
-const bottomNavItems = [
-  { id: "support", label: "Support & FAQ" },
-  { id: "logout", label: "Log Out" },
-]
+import { StatCard } from "./stat-card"
 
 export function DashboardLayout() {
-  const [activeItem, setActiveItem] = useState("dashboard")
+  const [active, setActive] = useState<TabKey>("dashboard")
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
+      {/* DESKTOP HEADER ANd LAYOUT */}
       <div className="hidden md:block">
-        <Sidebar items={topNavItems} activeItem={activeItem} onItemClick={setActiveItem} position="top" />
+        <Header />
+        <Sidebar
+          items={[
+            { id: "dashboard", label: "Dashboard" },
+            { id: "money-flow", label: "Money Flow" },
+            { id: "my-work", label: "My Work" },
+            { id: "settings", label: "Settings" },
+          ]}
+          activeItem={"dashboard"}
+          onItemClick={() => {}}
+          position="top"
+        />
+        <Sidebar
+          items={[
+            { id: "support", label: "Support & FAQ" },
+            { id: "logout", label: "Log Out" },
+          ]}
+          activeItem={"dashboard"}
+          onItemClick={() => {}}
+          position="bottom"
+        />
+
+        {/* Main content */}
+        <main className="pt-5 md:pl-25 min-h-screen pb-24 md:pb-0">
+          {/* Greeting above tabs */}
+          <h1 className="text-2xl font-semibold text-gray-900 mt-4 mb-6">
+            Hi Arlette Welcome Back,
+          </h1>
+          <DashboardContent />
+        </main>
       </div>
-      <div className="hidden md:block">
-        <Sidebar items={bottomNavItems} activeItem={activeItem} onItemClick={setActiveItem} position="bottom" />
+
+      {/* MOBILE VIEW */}
+      <div className="md:hidden">
+        <MobileHeader />
+        <MobileToggle value={active} onChange={setActive} />
+        <main className="p-4 pb-28 space-y-6">
+          {active === "insights" && <AIInsights />}
+
+          {active === "dashboard" && (
+            <div className="space-y-6">
+              <div className="grid grid-cols-2 gap-4">
+                <StatCard title="Income" value={"$12,000"} />
+                <StatCard title="Expense" value={"$8,000"} />
+                <StatCard title="Clients" value={"30"} />
+                <StatCard title="Active Projects" value={"5"} />
+                <StatCard title="Completed" value={"10"} />
+              </div>
+              <FinancialOverview />
+            </div>
+          )}
+
+          {active === "reminders" && <Reminders />}
+        </main>
       </div>
-      <main className="pt-5 md:pl-25 min-h-screen pb-24 md:pb-0">
-        <DashboardContent />
-      </main>
+
       <MobileNav />
     </div>
   )
 }
-
