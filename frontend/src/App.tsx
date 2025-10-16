@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import { PrivateRoute } from "./api/auth/PrivateRoute";
+import FinancialDashboard from "./pages/FinancialDashboard";
 import { Dashboard } from "./pages/Dashboard";
 import { Landing } from "./pages/Landing";
 
@@ -25,7 +26,10 @@ function App() {
       />
       {/* Temporary route for development - bypasses authentication */}
       <Route path="/dev-dashboard" element={<Dashboard />} />
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/financial-dashboard" element={<FinancialDashboard />} />
     </Routes>
+    
   );
 }
 

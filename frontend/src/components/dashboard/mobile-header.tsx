@@ -1,5 +1,5 @@
 import React from "react"
-
+import DashboardHeader from "./DashboardHeader";
 export function MobileHeader() {
   return (
     <header className="md:hidden flex flex-col items-start px-4 pt-4">
@@ -11,9 +11,7 @@ export function MobileHeader() {
       </div>
 
       {/* Greeting */}
-      <h1 className="text-xl font-serif font-semibold text-gray-900">
-        Hi Arlette Welcome Back,
-      </h1>
+      <DashboardHeader name="Arlette" />
     </header>
   )
 }

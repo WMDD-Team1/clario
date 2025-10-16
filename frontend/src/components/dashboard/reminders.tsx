@@ -13,15 +13,17 @@ export function Reminders() {
       <h3 className="text-lg font-semibold text-gray-900 mb-2">Reminders</h3>
       <div className="space-y-3">
         {reminders.map((r, idx) => (
-          <div key={idx} className="rounded-xl bg-gray-100 p-3">
+          <div key={idx} className="rounded-xl bg-gray-800 p-3">
             <div className="flex items-start gap-3">
               <span className="mt-1 inline-block w-2 h-2 rounded-full bg-gray-600" />
-              <div className="flex-1 min-w-0">
-                <p className="font-medium text-sm text-gray-800">{r.title}</p>
-                <p className="text-sm text-gray-600">{r.subtitle}</p>
+              <div className="flex-1 min-w-0 gap-y-12">
+                <div className="flex items-center justify-between">
+                  <p className="font-medium text-sm text-white">{r.title}</p>
+                  <span className="text-white">{r.client}</span>
+                </div> 
                 <div className="flex items-center justify-between text-xs text-gray-500 mt-1">
-                  <span>{r.client}</span>
-                  <span className="text-gray-800 font-semibold">{r.date}</span>
+                  <p className="text-sm text-white">{r.subtitle}</p>  
+                  <span className="text-white font-semibold">{r.date}</span>
                 </div>
               </div>
             </div>

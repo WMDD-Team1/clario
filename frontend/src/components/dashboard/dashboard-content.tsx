@@ -2,6 +2,7 @@ import { StatCard } from "./stat-card"
 import { AIInsights } from "./ai-insights"
 import { FinancialOverview } from "./financial-overview"
 import { Reminders } from "./reminders"
+import DashboardHeader from "./DashboardHeader";
 
 export function DashboardContent() {
   return (
@@ -9,12 +10,7 @@ export function DashboardContent() {
       {/* Header section */}
       <div className="mb-6 flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900 mt-4">
-            Hi Arlette, Welcome Back,
-          </h1>
-          <p className="text-gray-600 mt-2">
-            Here’s your business overview and latest insights.
-          </p>
+          <DashboardHeader name="Arlette" />
         </div>
 
         <div className="flex items-center gap-3 mt-4">

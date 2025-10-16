@@ -10,12 +10,13 @@ import { MobileToggle, type TabKey } from "./mobile-toggle"
 import { MobileNav } from "./mobile-nav"
 import { StatCard } from "./stat-card"
 
-export function DashboardLayout() {
+// eslint-disable-next-line no-undef
+export function DashboardLayout({ children }: { children?: React.ReactNode }) {
   const [active, setActive] = useState<TabKey>("dashboard")
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* DESKTOP HEADER ANd LAYOUT */}
+      {/* DESKTOP HEADER AND LAYOUT */}
       <div className="hidden md:block">
         <Header />
         <Sidebar
@@ -41,11 +42,8 @@ export function DashboardLayout() {
 
         {/* Main content */}
         <main className="pt-5 md:pl-25 min-h-screen pb-24 md:pb-0">
-          {/* Greeting above tabs */}
-          <h1 className="text-2xl font-semibold text-gray-900 mt-4 mb-6">
-            Hi Arlette Welcome Back,
-          </h1>
-          <DashboardContent />
+          {/* If children (like FinancialDashboard) are passed, render them instead */}
+          {children ? children : <DashboardContent />}
         </main>
       </div>
 
