@@ -9,7 +9,7 @@ const reminders = [
 
 export function Reminders() {
   return (
-    <div className=" p-4">
+    <div className="">
       <h3 className="text-lg font-semibold text-gray-900 mb-2">Reminders</h3>
       <div className="space-y-3">
         {reminders.map((r, idx) => (

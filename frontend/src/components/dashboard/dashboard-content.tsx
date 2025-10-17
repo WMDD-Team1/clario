@@ -8,26 +8,11 @@ export function DashboardContent() {
   return (
     <div className="px-6">
       {/* Header section */}
-      <div className="mb-6 flex items-start justify-between">
+      <div className="mb-6 flex items-start">
         <div>
           <DashboardHeader name="Arlette" />
         </div>
 
-        <div className="flex items-center gap-3 mt-4">
-          <label htmlFor="range" className="sr-only">
-            Range
-          </label>
-          <select
-            id="range"
-            className="h-10 rounded-xl border border-gray-300 bg-white px-3 text-sm text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
-            defaultValue="this-month"
-          >
-            <option value="this-week">This Week</option>
-            <option value="this-month">This Month</option>
-            <option value="last-month">Last Month</option>
-            <option value="this-year">This Year</option>
-          </select>
-        </div>
       </div>
 
       {/* Main grid */}
