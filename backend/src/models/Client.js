@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import "../models/Project.js";
 
 const ClientSchema = new mongoose.Schema(
 	{
@@ -45,7 +46,6 @@ ClientSchema.virtual("projects", {
 	ref: "Project",
 	localField: "_id",
 	foreignField: "clientId",
-	count: true,
 });
 ClientSchema.virtual("invoices", {
 	ref: "Invoice",

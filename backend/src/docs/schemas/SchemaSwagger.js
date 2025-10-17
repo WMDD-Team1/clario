@@ -94,6 +94,21 @@
  *         projectCount:
  *           type: integer
  *           example: 3
+ *         invoiceCount:
+ *           type: integer
+ *           example: 0
+ *         projects:
+ *           type: array
+ *           description: List of related projects (only returned in GET /api/clients/{id})
+ *           items:
+ *             type: object
+ *             properties:
+ *               _id:
+ *                 type: string
+ *                 example: "670b24c3a9e0fd3456cde789"
+ *               name:
+ *                 type: string
+ *                 example: "Freelancer Dashboard Redesign"
  *         createdAt:
  *           type: string
  *           format: date-time
