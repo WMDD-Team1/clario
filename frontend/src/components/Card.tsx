@@ -26,9 +26,9 @@ const Card: React.FC<CardProps> = ({
       <div>
         {cardTitle && <h2 className='text-[2.4rem]'>{cardTitle}</h2>}
         {cardDescription && <p>{cardDescription}</p>}
-        <Button onClick={()=>{
-          if (buttonLink) window.location.href = buttonLink;
-        }} buttonColor='lightButton' width='100%'>View Client</Button>
+        {buttonLink && <Button onClick={()=>{
+          window.location.href = buttonLink;
+        }} buttonColor='lightButton' width='100%'>View Client</Button>}
       </div>
     </div>
   );
