@@ -17,14 +17,20 @@ const UserSchema = new mongoose.Schema(
 		picture: { type: String },
 		currency: {
 			type: String,
-			default: null,
+			default: "CAD",
 		},
 		province: {
 			type: String,
 		},
 		userType: {
 			type: String,
-			enum: ["Freelancer", "Contractor"],
+			enum: ["Designer", "Developer", "Consultant", "Other"],
+			default: null,
+		},
+		defaultFeeType: { type: String, enum: ["Fixed price", "Milestone based", "Hourly", "Retainer"], default: null },
+		goal: {
+			type: String,
+			enum: [" Keep finances stable", "Grow my business", "Save time", "Stay tax-ready"],
 			default: null,
 		},
 		onBoardingCompletedAt: {
