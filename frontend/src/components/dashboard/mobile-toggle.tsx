@@ -9,13 +9,14 @@ interface Props {
 }
 
 const LABELS: Record<TabKey, string> = {
-  insights: "Insights",
-  dashboard: "Dashboard",
-  reminders: "Reminders",
+    reminders: "Reminders",
+    dashboard: "Dashboard",
+    insights: "Insights",
+  
 }
 
 export function MobileToggle({ value, onChange }: Props) {
-  const keys: TabKey[] = ["insights", "dashboard", "reminders"]
+  const keys: TabKey[] = ["reminders", "dashboard","insights"]
 
   return (
     <div className="md:hidden w-full mt-3 px-4">

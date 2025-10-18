@@ -1,17 +1,31 @@
+import React from "react"
+
 interface NavItem {
   id: string
   label: string
 }
 
 interface SidebarProps {
-  items: NavItem[]
-  activeItem: string
-  onItemClick: (id: string) => void
   position: "top" | "bottom"
 }
 
-export function Sidebar({ items, activeItem, onItemClick, position }: SidebarProps) {
+export function Sidebar({ position }: SidebarProps) {
+  // Define top and bottom items
+  const topItems: NavItem[] = [
+    { id: "dashboard", label: "Dashboard" },
+    { id: "money-flow", label: "Money Flow" },
+    { id: "my-work", label: "My Work" },
+    { id: "settings", label: "Settings" },
+  ]
+
+  const bottomItems: NavItem[] = [
+    { id: "support", label: "Support & FAQ" },
+    { id: "logout", label: "Log Out" },
+  ]
+
+  const items = position === "top" ? topItems : bottomItems
   const positionClasses = position === "top" ? "top-28" : "bottom-6"
+  const [activeItem, setActiveItem] = React.useState("dashboard")
 
   return (
     <aside className={`fixed left-6 ${positionClasses} z-20`}>
@@ -19,7 +33,7 @@ export function Sidebar({ items, activeItem, onItemClick, position }: SidebarPro
         {items.map((item) => (
           <div key={item.id} className="relative group">
             <button
-              onClick={() => onItemClick(item.id)}
+              onClick={() => setActiveItem(item.id)}
               className={`w-14 h-14 rounded-2xl transition-colors ${
                 activeItem === item.id ? "bg-gray-500" : "bg-gray-600 hover:bg-gray-500"
               }`}
