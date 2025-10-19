@@ -13,7 +13,7 @@ export const PrivateRoute = ({ children }: { children: ReactNode }) => {
 
   if (loading || isLoading) return <Loading />
   if (error) return <Error message={error}></Error>
-  if (!user) return <Error></Error> // For some reason all requests land here for 1 sec
+  if (!isAuthenticated) return <Navigate to="/" replace />
 
   return isAuthenticated ? children : <Navigate to="/" />;
 };
