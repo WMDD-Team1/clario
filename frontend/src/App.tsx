@@ -1,8 +1,9 @@
+import Clients from "@pages/Clients";
+import Projects from "@pages/Projects";
 import { Route, Routes } from "react-router-dom";
 import { PrivateRoute } from "./api/auth/PrivateRoute";
 import { Dashboard } from "./pages/Dashboard";
 import { Landing } from "./pages/Landing";
-import Clients from "@pages/Clients";
 
 function App() {
   return (
@@ -33,8 +34,16 @@ function App() {
           </PrivateRoute>
         }
       />
+      <Route
+        path="/projects"
+        element={
+          <PrivateRoute>
+            <Projects />
+          </PrivateRoute>
+        }
+      />
     </Routes>
-    
+
   );
 }
 
