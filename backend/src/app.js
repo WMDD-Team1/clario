@@ -5,7 +5,7 @@ import { setupSwagger } from "./swagger.js";
 import { router as authRoutes } from "./routes/auth/authRoutes.js";
 import { router as projectRoutes } from "./routes/projects/projectsRoutes.js";
 import { router as clientRoutes } from "./routes/clients/clientsRoutes.js";
-import { transactionRoutes } from "./routes/index.js";
+import { openaiRoutes, transactionRoutes } from "./routes/index.js";
 
 export const app = express();
 
@@ -23,6 +23,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/clients", clientRoutes);
 app.use("/api/transactions", transactionRoutes);
+app.use("/api/ai", openaiRoutes);
 
 // Swagger
 setupSwagger(app);

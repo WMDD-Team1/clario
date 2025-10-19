@@ -385,3 +385,24 @@
  *           type: boolean
  *           example: false
  */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     TransactionInsight:
+ *       type: object
+ *       properties:
+ *         title:
+ *           type: string
+ *           description: Insight title
+ *           example: Upcoming Income Expected
+ *         text:
+ *           type: string
+ *           description: Insight text
+ *           example: You have an incoming payment of $500 from invoice INV-003 expected to be received this month.
+ *         month:
+ *           type: string
+ *           enum: [This Month, Next Month]
+ *           example: "This Month"
+ */
