@@ -24,7 +24,7 @@ const UserSchema = new mongoose.Schema(
 		},
 		userType: {
 			type: String,
-			enum: ["Designer", "Developer", "Consultant", "Other"],
+			enum: ["Freelancer", "Contractor", "Developer", "Designer", "Consultant", "Other"],
 			default: null,
 		},
 		defaultFeeType: { type: String, enum: ["Fixed price", "Milestone based", "Hourly", "Retainer"], default: null },
