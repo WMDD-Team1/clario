@@ -8,6 +8,7 @@ import { fontSizeOptions } from '@components/style/font';
 import TextArea from '@components/TextArea';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
+import InfoRow from '@components/InfoRow';
 
 const Clients = () => {
   interface Project {
@@ -79,12 +80,14 @@ const Clients = () => {
   const [slide, setSlide] = useState('100%');
 
   const [slideDetail, setSlideDetail] = useState('100%');
+  const [slideEdit, setSlideEdit] = useState('100%');
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   const [clientId, setClientId] = useState('');
 
   const [pageWindowStart, setPageWindowStart] = useState(1);
   const PAGE_WINDOW_SIZE = 5;
+
   const { getAccessTokenSilently } = useAuth0();
 
   //--Get data from form--------------------------
@@ -155,6 +158,37 @@ const Clients = () => {
     setSlideDetail('100%');
   };
 
+  const updateClient = async () => {
+    const token = await getAccessTokenSilently({
+      authorizationParams: {
+        audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
+      },
+    });
+
+    const payload = {
+      name: oneClient.name,
+      email: oneClient.email,
+      type: 'Individual',
+      phone: oneClient.phone,
+      address: { ...oneClient.address },
+      notes: oneClient.notes,
+    };
+
+    const response = await axios.patch(
+      `${import.meta.env.VITE_API_BASE_URL}/clients/${clientId}`,
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    const data = await response.data;
+    console.log(data);
+    await fetchClients();
+    setSlideEdit('100%');
+  };
+
   useEffect(() => {
     fetchClients();
   }, [currentPage]);
@@ -171,21 +205,33 @@ const Clients = () => {
     address: Address;
     notes: string | null;
   }
-  const { register, handleSubmit, reset } = useForm<FormData>();
 
-  const onSubmit = async (formData: FormData) => {
+  function resetFormData() {
+    setOneClient({
+      id: '',
+      name: '',
+      type: 'Individual',
+      email: '',
+      phone: '',
+      address: { street: '', postalCode: '', city: '', country: '' },
+      notes: '',
+      isArchived: false,
+      projectCount: 0,
+      invoiceCount: 0,
+      projects: [],
+      createdAt: '',
+      updatedAt: '',
+    });
+  }
+
+  const onSubmit = async () => {
     const payload = {
-      name: formData.name,
-      email: formData.email,
-      type: 'Individual', // Need to confirm with designers
-      phone: formData.phone,
-      address: {
-        street: formData.address.street,
-        postalCode: formData.address.postalCode,
-        city: formData.address.city,
-        country: formData.address.country,
-      },
-      notes: formData.notes,
+      name: oneClient.name,
+      email: oneClient.email,
+      type: 'Individual',
+      phone: oneClient.phone,
+      address: { ...oneClient.address },
+      notes: oneClient.notes,
     };
 
     const token = await getAccessTokenSilently({
@@ -208,7 +254,8 @@ const Clients = () => {
 
       console.log(response.data);
 
-      reset();
+      resetFormData();
+
       await fetchClients();
       setSlide('100%');
     } catch (error) {
@@ -230,7 +277,10 @@ const Clients = () => {
         </div>
         <Button
           buttonColor="regularButton"
-          onClick={() => setSlide('0px')}
+          onClick={() => {
+            setSlide('0px');
+            resetFormData();
+          }}
           textColor="white"
           width="200px"
         >
@@ -360,24 +410,88 @@ const Clients = () => {
         >
           Add Client
         </h2>
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-between h-full">
+        <form
+          onSubmit={async (e) => {
+            e.preventDefault();
+            await onSubmit();
+          }}
+          className="flex flex-col justify-between h-full"
+        >
           <div className="flex flex-col gap-[1.5rem] p-[2rem]">
-            <Input color="bg-white" label="Client Name" {...register('name')} />
-            <Input color="bg-white" label="Phone" {...register('phone')} />
-            <Input color="bg-white" label="Email" type="email" {...register('email')} />
-            <TextArea label="Notes" color="bg-white" {...register('notes')} />
+            <Input
+              color="bg-white"
+              label="Client Name"
+              value={oneClient.name}
+              onChange={(e) => setOneClient({ ...oneClient, name: e.target.value })}
+            />
+            <Input
+              color="bg-white"
+              label="Phone"
+              value={oneClient.phone}
+              onChange={(e) => setOneClient({ ...oneClient, phone: e.target.value })}
+            />
+            <Input
+              color="bg-white"
+              label="Email"
+              type="email"
+              value={oneClient.email}
+              onChange={(e) => setOneClient({ ...oneClient, email: e.target.value })}
+            />
+            <TextArea
+              label="Notes"
+              color="bg-white"
+              value={oneClient.notes}
+              onChange={(e) => setOneClient({ ...oneClient, notes: e.target.value })}
+            />
 
             <p>Client's Address</p>
-            <Input color="bg-white" label="Street Address" {...register('address.street')} />
-            <Input color="bg-white" label="Postal Code" {...register('address.postalCode')} />
-            <Input color="bg-white" label="City" {...register('address.city')} />
-            <Input color="bg-white" label="Country" {...register('address.country')} />
+            <Input
+              color="bg-white"
+              label="Street Address"
+              value={oneClient.address?.street}
+              onChange={(e) =>
+                setOneClient({
+                  ...oneClient,
+                  address: { ...oneClient.address, street: e.target.value },
+                })
+              }
+            />
+            <Input
+              color="bg-white"
+              label="Postal Code"
+              value={oneClient.address?.postalCode}
+              onChange={(e) =>
+                setOneClient({
+                  ...oneClient,
+                  address: { ...oneClient.address, postalCode: e.target.value },
+                })
+              }
+            />
+            <Input
+              color="bg-white"
+              label="City"
+              value={oneClient.address?.city}
+              onChange={(e) =>
+                setOneClient({
+                  ...oneClient,
+                  address: { ...oneClient.address, city: e.target.value },
+                })
+              }
+            />
+            <Input
+              color="bg-white"
+              label="Country"
+              value={oneClient.address?.country}
+              onChange={(e) =>
+                setOneClient({
+                  ...oneClient,
+                  address: { ...oneClient.address, country: e.target.value },
+                })
+              }
+            />
           </div>
 
-          <div
-            className="flex flex-row justify-center gap-[1rem] sticky
-          bottom-0 w-full p-[2rem] bg-blue-50"
-          >
+          <div className="flex flex-row justify-center gap-[1rem] sticky bottom-0 w-full p-[2rem] bg-blue-50">
             <Button buttonColor="regularButton" type="submit" width="100%" textColor="white">
               Add
             </Button>
@@ -385,7 +499,21 @@ const Clients = () => {
               buttonColor="regularButton"
               onClick={() => {
                 setSlide('100%');
-                reset();
+                setOneClient({
+                  id: '',
+                  name: '',
+                  type: 'Individual',
+                  email: '',
+                  phone: '',
+                  address: { street: '', postalCode: '', city: '', country: '' },
+                  notes: '',
+                  isArchived: false,
+                  projectCount: 0,
+                  invoiceCount: 0,
+                  projects: [],
+                  createdAt: '',
+                  updatedAt: '',
+                });
               }}
               width="100%"
               textColor="white"
@@ -409,42 +537,14 @@ const Clients = () => {
         <div className="flex flex-col justify-between h-full">
           {oneClient && (
             <div className="p-[1rem]">
-              <div className="flex flex-row justify-between items-center border-b-2 p-[1rem] border-gray-200">
-                <p>Client Name</p>
-                <p>{oneClient.name}</p>
-              </div>
-              <div className="flex flex-row justify-between items-center border-b-2 p-[1rem] border-gray-200">
-                <p>Phone</p>
-                <p>{oneClient.phone}</p>
-              </div>
-              <div className="flex flex-row justify-between items-center border-b-2 p-[1rem] border-gray-200">
-                <p>Email</p>
-                <p>{oneClient.email}</p>
-              </div>
-
-              <div className="flex flex-col gap-[1rem] items-start border-b-2 p-[1rem] border-gray-200">
-                <p>Notes</p>
-                <p>{oneClient.notes}</p>
-              </div>
-              <div className="flex flex-row justify-between items-center border-b-2 p-[1rem] border-gray-200">
-                <p>Street Address</p>
-                <p>{oneClient.address?.street}</p>
-              </div>
-
-              <div className="flex flex-row justify-between items-center border-b-2 p-[1rem] border-gray-200">
-                <p>Postal Code</p>
-                <p>{oneClient.address?.postalCode}</p>
-              </div>
-
-              <div className="flex flex-row justify-between items-center border-b-2 p-[1rem] border-gray-200">
-                <p>City</p>
-                <p>{oneClient.address?.city}</p>
-              </div>
-
-              <div className="flex flex-row justify-between items-center border-b-2 p-[1rem] border-gray-200">
-                <p>Country</p>
-                <p>{oneClient.address?.country}</p>
-              </div>
+              <InfoRow label="Client Name" value={oneClient.name} />
+              <InfoRow label="Phone" value={oneClient.phone} />
+              <InfoRow label="Email" value={oneClient.email} />
+              <InfoRow label="Notes" value={oneClient.notes} />
+              <InfoRow label="Street Address" value={oneClient.address?.street} />
+              <InfoRow label="Postal Code" value={oneClient.address?.postalCode} />
+              <InfoRow label="City" value={oneClient.address?.city} />
+              <InfoRow label="Country" value={oneClient.address?.country} />
 
               <div className="flex flex-col items-start p-[1rem] border-gray-200 bg-blue-50 rounded-[1rem] my-[1rem]">
                 <p>Projects</p>
@@ -469,14 +569,18 @@ const Clients = () => {
             className="flex flex-row justify-center gap-[1rem] sticky
           bottom-0 w-full p-[2rem] bg-blue-50"
           >
-            <Button buttonColor="regularButton" width="100%" textColor="white">
+            <Button
+              buttonColor="regularButton"
+              width="100%"
+              textColor="white"
+              onClick={() => setSlideEdit('0px')}
+            >
               Edit
             </Button>
             <Button
               buttonColor="regularButton"
               onClick={() => {
                 setSlideDetail('100%');
-                reset();
               }}
               width="100%"
               textColor="white"
@@ -485,6 +589,110 @@ const Clients = () => {
             </Button>
           </div>
         </div>
+      </div>
+
+      {/*----Edit page-------------------------------------- */}
+      <div
+        className={`fixed top-0 right-0 h-full shadow-lg bg-white transition-transform duration-300 overflow-y-auto rounded-tl-[20px] rounded-bl-[20px]`}
+        style={{ transform: `translateX(${slideEdit})`, width: '450px' }}
+      >
+        <h2
+          className={`text-[${fontSizeOptions.h2}] text-center bg-blue-50 p-[1rem] sticky top-0 z-10`}
+        >
+          Edit Client
+        </h2>
+        <form className="flex flex-col justify-between h-full">
+          <div className="flex flex-col gap-[1.5rem] p-[2rem]">
+            <Input
+              color="bg-white"
+              label="Client Name"
+              value={oneClient.name}
+              onChange={(e) => setOneClient({ ...oneClient, name: e.target.value })}
+            />
+            <Input
+              color="bg-white"
+              label="Phone"
+              value={oneClient.phone}
+              onChange={(e) => setOneClient({ ...oneClient, phone: e.target.value })}
+            />
+            <Input
+              color="bg-white"
+              label="Email"
+              type="email"
+              value={oneClient.email}
+              onChange={(e) => setOneClient({ ...oneClient, email: e.target.value })}
+            />
+            <TextArea
+              label="Notes"
+              color="bg-white"
+              value={oneClient.notes}
+              onChange={(e) => setOneClient({ ...oneClient, notes: e.target.value })}
+            />
+
+            <p>Client's Address</p>
+            <Input
+              color="bg-white"
+              label="Street Address"
+              value={oneClient.address?.street}
+              onChange={(e) =>
+                setOneClient({
+                  ...oneClient,
+                  address: { ...oneClient.address, street: e.target.value },
+                })
+              }
+            />
+            <Input
+              color="bg-white"
+              label="Postal Code"
+              value={oneClient.address?.postalCode}
+              onChange={(e) =>
+                setOneClient({
+                  ...oneClient,
+                  address: { ...oneClient.address, postalCode: e.target.value },
+                })
+              }
+            />
+            <Input
+              color="bg-white"
+              label="City"
+              value={oneClient.address?.city}
+              onChange={(e) =>
+                setOneClient({
+                  ...oneClient,
+                  address: { ...oneClient.address, city: e.target.value },
+                })
+              }
+            />
+            <Input
+              color="bg-white"
+              label="Country"
+              value={oneClient.address?.country}
+              onChange={(e) =>
+                setOneClient({
+                  ...oneClient,
+                  address: { ...oneClient.address, country: e.target.value },
+                })
+              }
+            />
+          </div>
+
+          <div
+            className="flex flex-row justify-center gap-[1rem] sticky
+          bottom-0 w-full p-[2rem] bg-blue-50"
+          >
+            <Button buttonColor="regularButton"  width="100%" textColor="white" onClick={()=>updateClient()}>
+              Save
+            </Button>
+            <Button
+              buttonColor="regularButton"
+              onClick={() => setSlideEdit('100%')}
+              width="100%"
+              textColor="white"
+            >
+              Cancel
+            </Button>
+          </div>
+        </form>
       </div>
     </div>
   );
