@@ -426,17 +426,17 @@ const Clients = () => {
                 <p>Notes</p>
                 <p>{oneClient.notes}</p>
               </div>
-              <div className="flex flex-row justify-between items-center p-[1rem] border-gray-200">
+              <div className="flex flex-row justify-between items-center border-b-2 p-[1rem] border-gray-200">
                 <p>Street Address</p>
                 <p>{oneClient.address?.street}</p>
               </div>
 
-              <div className="flex flex-row justify-between items-center p-[1rem] border-gray-200">
+              <div className="flex flex-row justify-between items-center border-b-2 p-[1rem] border-gray-200">
                 <p>Postal Code</p>
                 <p>{oneClient.address?.postalCode}</p>
               </div>
 
-              <div className="flex flex-row justify-between items-center p-[1rem] border-gray-200">
+              <div className="flex flex-row justify-between items-center border-b-2 p-[1rem] border-gray-200">
                 <p>City</p>
                 <p>{oneClient.address?.city}</p>
               </div>
@@ -446,7 +446,7 @@ const Clients = () => {
                 <p>{oneClient.address?.country}</p>
               </div>
 
-              <div className="flex flex-col items-start p-[1rem] border-gray-200">
+              <div className="flex flex-col items-start p-[1rem] border-gray-200 bg-blue-50 rounded-[1rem] my-[1rem]">
                 <p>Projects</p>
                 <div>
                   {oneClient.projects?.map((project) => (
