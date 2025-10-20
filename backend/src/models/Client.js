@@ -1,11 +1,9 @@
 import mongoose from "mongoose";
+import "../models/Project.js";
 
 const ClientSchema = new mongoose.Schema(
 	{
-		userId: {
-			type: String,
-			required: true,
-		},
+		userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
 		type: {
 			type: String,
 			enum: ["Individual", "Company"],
@@ -19,28 +17,24 @@ const ClientSchema = new mongoose.Schema(
 			type: String,
 			required: true,
 		},
-		contact: {
+		phone: {
 			type: String,
 			default: null,
 		},
-
 		address: {
-			type: String,
-			default: null,
+			street: { type: String },
+			postalCode: { type: String },
+			city: { type: String },
+			country: { type: String },
 		},
-		billingAddress: {
-			type: String,
-			default: null,
-		},
-		// align with project schema isArchived :P
-		isArchived: {
-			type: Boolean,
-			default: false,
-		},
-		description: {
+		notes: {
 			type: String,
 			maxlength: 500,
 			default: null,
+		},
+		isArchived: {
+			type: Boolean,
+			default: false,
 		},
 	},
 
@@ -52,6 +46,12 @@ ClientSchema.virtual("projects", {
 	ref: "Project",
 	localField: "_id",
 	foreignField: "clientId",
+});
+ClientSchema.virtual("invoices", {
+	ref: "Invoice",
+	localField: "_id",
+	foreignField: "clientId",
+	count: true,
 });
 
 ClientSchema.set("toJSON", {

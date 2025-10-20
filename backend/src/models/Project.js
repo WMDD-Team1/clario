@@ -3,8 +3,7 @@ import mongoose from "mongoose";
 const ProjectSchema = new mongoose.Schema(
 	{
 		userId: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: "User",
+			type: String,
 			required: true,
 		},
 		clientId: {
@@ -40,8 +39,8 @@ const ProjectSchema = new mongoose.Schema(
 
 		status: {
 			type: String,
-			enum: ["Planned", "in-progress", "completed", "cancelled"],
-			default: "Planned",
+			enum: ["planned", "in-progress", "completed", "cancelled"],
+			default: "planned",
 		},
 		isArchived: {
 			type: Boolean,
@@ -50,18 +49,6 @@ const ProjectSchema = new mongoose.Schema(
 
 		startDate: Date,
 		endDate: Date,
-
-		// Invoice schedule
-		recurrence: {
-			type: {
-				type: String,
-				enum: ["none", "weekly", "monthly", "yearly", "custom"],
-				default: "none",
-			},
-			interval: { type: Number, default: 1 },
-			occurrences: { type: Number, default: null },
-			endDate: { type: Date, default: null },
-		},
 	},
 	{
 		timestamps: true,
