@@ -4,13 +4,15 @@ import Client from "../../models/Client.js";
 export const findAllClients = async (userId, page, limit) => {
 	const skip = (page - 1) * limit;
 	const [clients, total] = await Promise.all([
-		Client.find({ userId }).skip(skip).limit(limit).sort({ name: 1 }).populate("projects", "_id"),
+		Client.find({ userId }).skip(skip).limit(limit).sort({ name: 1 }).populate({ path: "projects" }),
+		// .populate("invoices")
 		Client.countDocuments({ userId }),
 	]);
 
 	const data = clients.map((client) => ({
 		...client.toJSON(),
 		projectCount: client.projects?.length || 0,
+		invoiceCount: client.invoices?.length || 0,
 	}));
 
 	return {
@@ -25,17 +27,24 @@ export const findAllClients = async (userId, page, limit) => {
 };
 
 export const findByClientId = async (id, userId) => {
-	return await Client.findOne({ _id: id, userId }).populate({
+	const data = await Client.findOne({ _id: id, userId }).populate({
 		path: "projects",
 		select: "_id name",
 	});
+
+	return data?.toJSON();
 };
 
-export const createNewClient = async (data, userId) => {
-	return await Client.create({
-		...data,
+export const createNewClient = async (payload, userId) => {
+	const data = await Client.create({
+		...payload,
 		userId,
 	});
+	return {
+		...data.toJSON(),
+		projectCount: 0,
+		invoiceCount: 0,
+	};
 };
 
 export const updateClientById = async (id, userId, data) => {

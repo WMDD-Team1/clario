@@ -1,4 +1,4 @@
-import { createUser, getUserByAuth0Id } from "../../services/auth/AuthService.js";
+import { createUser, getUserByAuth0Id, completeOnBoarding } from "../../services/auth/AuthService.js";
 
 export const signup = async (req, res) => {
 	try {
@@ -31,5 +31,24 @@ export const login = async (req, res) => {
 	} catch (err) {
 		console.error("Login Error: ", err);
 		return res.status(500).json({ message: "Internal Server Error" });
+	}
+};
+
+export const onboarding = async (req, res) => {
+	try {
+		const { id: userId } = req.user;
+		const data = req.body;
+		const updated = await completeOnBoarding(userId, data);
+
+		res.status(201).json({
+			message: "Onboarding completed successfully.",
+			data: updated,
+		});
+	} catch (err) {
+		console.error("Error completing onboarding:", err);
+		if (err.message === "Onboarding already completed") {
+			return res.status(400).json({ message: "Onboarding already completed" });
+		}
+		res.status(500).json({ message: "Internal Server Error" });
 	}
 };

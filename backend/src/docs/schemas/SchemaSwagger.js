@@ -45,7 +45,6 @@
  *           format: date-time
  *           example: 2025-09-25T12:34:56.000Z
  */
-
 /**
  * @swagger
  * components:
@@ -67,25 +66,49 @@
  *         email:
  *           type: string
  *           example: "bitna@methebest.com"
- *         contact:
+ *         phone:
  *           type: string
  *           example: "+1 (236) 123-1234"
  *         address:
+ *           type: object
+ *           properties:
+ *             street:
+ *               type: string
+ *               example: "123 Main St"
+ *             postalCode:
+ *               type: string
+ *               example: "V5K 1A1"
+ *             city:
+ *               type: string
+ *               example: "Vancouver"
+ *             country:
+ *               type: string
+ *               example: "Canada"
+ *         notes:
  *           type: string
- *           example: "123 Main St, Vancouver, BC"
- *         billingAddress:
- *           type: string
- *           example: "123 Main St, Vancouver, BC"
+ *           example: "Referred by Kentaro"
  *         isArchived:
  *           type: boolean
  *           description: Whether the client is archived (true = hidden, false = visible)
  *           example: false
- *         description:
- *           type: string
- *           example: "Kentaro recommended"
  *         projectCount:
  *           type: integer
  *           example: 3
+ *         invoiceCount:
+ *           type: integer
+ *           example: 0
+ *         projects:
+ *           type: array
+ *           description: List of related projects (only returned in GET /api/clients/{id})
+ *           items:
+ *             type: object
+ *             properties:
+ *               _id:
+ *                 type: string
+ *                 example: "670b24c3a9e0fd3456cde789"
+ *               name:
+ *                 type: string
+ *                 example: "Freelancer Dashboard Redesign"
  *         createdAt:
  *           type: string
  *           format: date-time
@@ -112,13 +135,25 @@
  *         email:
  *           type: string
  *           example: "bitna@client.com"
- *         contact:
+ *         phone:
  *           type: string
- *           example: "+1 604-555-1212"
+ *           example: "16045551212"
  *         address:
- *           type: string
- *           example: "456 Commercial Dr, Vancouver"
- *         description:
+ *           type: object
+ *           properties:
+ *             street:
+ *               type: string
+ *               example: "456 Commercial Dr"
+ *             postalCode:
+ *               type: string
+ *               example: "V5K 1A1"
+ *             city:
+ *               type: string
+ *               example: "Vancouver"
+ *             country:
+ *               type: string
+ *               example: "Canada"
+ *         notes:
  *           type: string
  *           example: "Regular client"
  */
@@ -297,7 +332,7 @@
  *           type: string
  *           format: date-time
  *           example: 2025-10-05T12:34:56.000Z
- *    
+ *
  *     TransactionInput:
  *       type: object
  *       required:
@@ -349,4 +384,25 @@
  *         isArchived:
  *           type: boolean
  *           example: false
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     TransactionInsight:
+ *       type: object
+ *       properties:
+ *         title:
+ *           type: string
+ *           description: Insight title
+ *           example: Upcoming Income Expected
+ *         text:
+ *           type: string
+ *           description: Insight text
+ *           example: You have an incoming payment of $500 from invoice INV-003 expected to be received this month.
+ *         month:
+ *           type: string
+ *           enum: [This Month, Next Month]
+ *           example: "This Month"
  */
