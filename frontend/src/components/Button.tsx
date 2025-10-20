@@ -23,7 +23,7 @@ const Button = ({
     <button
       type={type}
       onClick={onClick}
-      className={`p-[1rem] rounded-[1rem] ${colorOptions[buttonColor]} `}
+      className={`p-[1rem] rounded-[1rem] ${colorOptions[buttonColor]} cursor-pointer`}
       style={{width:width, color:textColor}}
     >
       {children}
