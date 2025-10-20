@@ -37,6 +37,27 @@ const UserSchema = new mongoose.Schema(
 			type: Date,
 			default: null,
 		},
+		settings: {
+			general: {
+				language: {
+					type: String,
+					enum: ["en", "fr"],
+					default: "en",
+				},
+				theme: {
+					type: String,
+					enum: ["light", "dark"],
+					default: "light",
+				},
+			},
+			finance: {
+				province: {
+					type: String,
+					enum: ["British Columbia", "Quebec"],
+					default: "British Columbia",
+				},
+			},
+		},
 	},
 	{
 		timestamps: true,

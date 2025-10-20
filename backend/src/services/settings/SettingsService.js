@@ -1,0 +1,73 @@
+import axios from "axios";
+import User from "../../models/User.js";
+import { getManagementToken } from "../../utils/auth0.js";
+
+export const updateAuth0Profile = async (auth0Id, updates) => {
+	const otken = await getManagementToken();
+
+	const allowedFields = ["name", "email", "picture"];
+	const payload = {};
+
+	allowedFields.forEach((key) => {
+		if (updates[key]) payload[key] = updates[key];
+	});
+
+	await axios.patch(`https://${process.env.AUTH0_DOMAIN}/api/v2/users/${auth0Id}`, payload, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+			"Content-Type": "application/json",
+		},
+	});
+	return payload;
+};
+
+export const updateUserProfile = async (userId, updates) => {
+	const user = await User.findById(userId);
+	if (!user) throw new Error("User not found");
+
+	await updateAuth0Profile(user.auth0Id, updates);
+
+	if (updates.name) user.name = updates.name;
+	if (updates.email) user.email = updates.email;
+	if (updates.picture) user.picture = updates.picture;
+
+	await user.save();
+
+	return user;
+};
+
+export const updateUserPreferences = async (userId, updates) => {
+	const user = await User.findById(userId);
+	if (!user) throw new Error("User not found");
+
+	if (updates.language) user.settings.general.language = updates.language;
+	if (updates.theme) user.settings.general.theme = updates.theme; // "light" | "dark"
+
+	await user.save();
+	return user;
+};
+
+export const updateUserFinanceSettings = async (userId, updates) => {
+	const user = await User.findById(userId);
+	if (!user) throw new Error("User not found");
+
+	if (updates.province) user.settings.finance.province = updates.province;
+
+	await user.save();
+	return user.settings.finance;
+};
+
+export const getUserSettings = async (userId) => {
+	const user = await User.findById(userId).select("name email picture settings").lean();
+
+	if (!user) throw new Error("User not found");
+
+	return {
+		profile: {
+			name: user.name,
+			email: user.email,
+			picture: user.picture,
+		},
+		settings: user.settings,
+	};
+};
