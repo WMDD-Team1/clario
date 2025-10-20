@@ -11,4 +11,4 @@ router.use(attachUser);
 router.patch("/profile", SettingController.updateProfile);
 router.patch("/preferences", SettingController.updatePreferences);
 router.patch("/finance", SettingController.updateFinanceSettings);
-router.get("/", SettingController.getUserSettings);
+router.get("/", SettingController.getSettings);

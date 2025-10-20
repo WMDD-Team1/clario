@@ -3,7 +3,7 @@ import User from "../../models/User.js";
 import { getManagementToken } from "../../utils/auth0.js";
 
 export const updateAuth0Profile = async (auth0Id, updates) => {
-	const otken = await getManagementToken();
+	const token = await getManagementToken();
 
 	const allowedFields = ["name", "email", "picture"];
 	const payload = {};
