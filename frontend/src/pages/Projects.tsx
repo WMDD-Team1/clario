@@ -216,7 +216,9 @@ const Projects = () => {
             </div>
 
             {/* Table */}
-            {view === 'projects' ? <Table headers={projectHeaders} data={projects} /> : <Table headers={clientHeaders} data={clients} />}
+            {view === 'projects'
+                ? <Table headers={projectHeaders} data={projects} />
+                : <Table headers={clientHeaders} data={clients} />}
 
         </>
     )
