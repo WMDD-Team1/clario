@@ -25,6 +25,11 @@ const MilestoneSchema = new mongoose.Schema(
 		description: { type: String },
 		amount: { type: Number, required: true },
 		dueDate: { type: Date },
+		status: {
+			type: String,
+			enum: ["Pending", "In-Progress", "Completed"],
+			default: "Pending",
+		},
 		generateInvoice: {
 			type: String,
 			enum: ["on_completion", "on_due_date"],
@@ -98,16 +103,6 @@ ProjectSchema.set("toJSON", {
 	transform: (_, ret) => {
 		ret.id = ret._id;
 		delete ret._id;
-
-		if (ret.clientId && typeof ret.clientId === "object") {
-			ret.client = {
-				id: ret.clientId._id?.toString() || ret.clientId.id,
-				name: ret.clientId.name,
-			};
-			delete ret.clientId;
-		}
-
-		return ret;
 	},
 });
 export default mongoose.model("Project", ProjectSchema);

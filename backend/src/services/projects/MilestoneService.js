@@ -16,9 +16,21 @@ export const updateMilestoneService = async (projectId, milestoneId, userId, dat
 	const milestone = project.milestones.id(milestoneId);
 	if (!milestone) throw new Error("Milestone not found");
 
+	const previousStatus = milestone.status;
+
 	Object.assign(milestone, data);
 	await project.save();
-	return milestone;
+
+	// invoice trigger
+	const { generateInvoice, status, dueDate } = milestone;
+	// on_completion
+	if (generateInvoice === "on_completion" && status === "Completed" && previousStatus !== "Completed") {
+		await createInvoiceService(userId, project.province, projectId, milestoneId);
+	}
+	if (generateInvoice === "on_due_date" && new Date() >= new Date(dueDate)) {
+		await createInvoiceService(userId, project.province, projectId, milestoneId);
+	}
+	return project;
 };
 
 export const deleteMilestoneService = async (projectId, milestoneId, userId) => {

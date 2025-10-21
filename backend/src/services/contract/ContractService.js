@@ -7,7 +7,7 @@ export const uploadContractService = async (file, userId, clientId, projectId) =
 	if (!file) throw new Error("No file uploaded");
 
 	// upload on firebase storage
-	const { fileName, fileUrl, fileType, size } = await uploadToFirebase(file);
+	const { fileName, fileUrl, fileType, size } = await uploadToFirebase(file, "contracts/original");
 	let projectInput = {};
 	let parsedText = [];
 
