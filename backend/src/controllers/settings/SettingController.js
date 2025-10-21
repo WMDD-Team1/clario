@@ -1,0 +1,66 @@
+import {
+	updateUserProfile,
+	updateUserPreferences,
+	updateUserFinanceSettings,
+	getUserSettings,
+} from "../../services/settings/SettingsService.js";
+
+export const updateProfile = async (req, res) => {
+	try {
+		const { id: userId } = req.user;
+		const data = await updateUserProfile(userId, req.body);
+
+		res.status(200).json({
+			message: "Profile updated successfully",
+			data,
+		});
+	} catch (err) {
+		console.error("Error updating profile:", err);
+		res.status(500).json({ message: "Internal Server Error" });
+	}
+};
+
+export const updatePreferences = async (req, res) => {
+	try {
+		const { id: userId } = req.user;
+		const data = await updateUserPreferences(userId, req.body);
+
+		res.status(200).json({
+			message: "Preferences updated successfully",
+			data,
+		});
+	} catch (err) {
+		console.error("Error updating preferences:", err);
+		res.status(500).json({ message: "Internal Server Error" });
+	}
+};
+
+export const updateFinanceSettings = async (req, res) => {
+	try {
+		const { id: userId } = req.user;
+		const updated = await updateUserFinanceSettings(userId, req.body);
+
+		res.status(200).json({
+			message: "Finance settings updated successfully",
+			data: updated,
+		});
+	} catch (err) {
+		console.error("Error updating finance settings:", err);
+		res.status(500).json({ message: "Internal Server Error" });
+	}
+};
+
+export const getSettings = async (req, res) => {
+	try {
+		const { id: userId } = req.user;
+		const settings = await getUserSettings(userId);
+
+		res.status(200).json({
+			message: "Settings fetched successfully",
+			data: settings,
+		});
+	} catch (err) {
+		console.error("Error fetching user settings:", err);
+		res.status(500).json({ message: "Internal Server Error" });
+	}
+};
