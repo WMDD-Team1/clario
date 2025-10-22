@@ -58,17 +58,13 @@
  *           example: 670a12b4d9e4fa1234abcd56
  *         name:
  *           type: string
- *           example: "Bitna Corporation"
- *         type:
- *           type: string
- *           enum: [Individual, Company]
- *           example: "Individual"
+ *           example: "Sarah Thompson"
  *         email:
  *           type: string
- *           example: "bitna@methebest.com"
+ *           example: "sarah@ecobuild.com"
  *         phone:
  *           type: string
- *           example: "+1 (236) 123-1234"
+ *           example: "+1 (604) 219-8457"
  *         address:
  *           type: object
  *           properties:
@@ -96,7 +92,7 @@
  *           example: 3
  *         invoiceCount:
  *           type: integer
- *           example: 0
+ *           example: 2
  *         projects:
  *           type: array
  *           description: List of related projects (only returned in GET /api/clients/{id})
@@ -109,6 +105,24 @@
  *               name:
  *                 type: string
  *                 example: "Freelancer Dashboard Redesign"
+ *               isArchived:
+ *                 type: boolean
+ *                 example: false
+ *         invoices:
+ *           type: array
+ *           description: List of related invoices (only returned in GET /api/clients/{id})
+ *           items:
+ *             type: object
+ *             properties:
+ *               _id:
+ *                 type: string
+ *                 example: "671b91f4a22beae1d9d1b789"
+ *               totalAmount:
+ *                 type: number
+ *                 example: 2400
+ *               status:
+ *                 type: string
+ *                 example: "Paid"
  *         createdAt:
  *           type: string
  *           format: date-time
@@ -123,15 +137,10 @@
  *       required:
  *         - name
  *         - email
- *         - type
  *       properties:
  *         name:
  *           type: string
  *           example: "Me The Best"
- *         type:
- *           type: string
- *           enum: [Individual, Company]
- *           example: "Company"
  *         email:
  *           type: string
  *           example: "bitna@client.com"
@@ -156,6 +165,9 @@
  *         notes:
  *           type: string
  *           example: "Regular client"
+ *         isArchived:
+ *           type: boolean
+ *           example: false
  */
 
 /**
@@ -514,4 +526,29 @@
  *         reason:
  *           type: string
  *           example: "No notice period or compensation specified upon termination."
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     PaginationMeta:
+ *       type: object
+ *       properties:
+ *         total:
+ *           type: integer
+ *           example: 42
+ *           description: Total number of items
+ *         page:
+ *           type: integer
+ *           example: 1
+ *           description: Current page number
+ *         limit:
+ *           type: integer
+ *           example: 10
+ *           description: Number of items per page
+ *         totalPages:
+ *           type: integer
+ *           example: 5
+ *           description: Total number of pages
  */
