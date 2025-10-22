@@ -10,28 +10,33 @@
  * /api/clients:
  *   get:
  *     summary: Get all clients
- *     description:
- *       Returns a paginated list of all clients belonging to the authenticated user. <br />
- *       Each client also includes a **projectCount** property (the number of projects linked to it). <br />
+ *     description: Returns clients with search, sort, filter, and pagination.
  *     tags: [Clients]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: query
  *         name: page
- *         schema:
- *           type: integer
- *           default: 1
- *         description: Page number for pagination
+ *         schema: { type: integer, default: 1 }
  *       - in: query
  *         name: limit
- *         schema:
- *           type: integer
- *           default: 10
- *         description: Number of clients per page
+ *         schema: { type: integer, default: 10 }
+ *       - in: query
+ *         name: search
+ *         schema: { type: string }
+ *         description: Search by name, email, phone, or country
+ *       - in: query
+ *         name: sortBy
+ *         schema: { type: string, enum: [name, projectCount, invoiceCount], default: name }
+ *       - in: query
+ *         name: sortOrder
+ *         schema: { type: string, enum: [asc, desc], default: asc }
+ *       - in: query
+ *         name: viewType
+ *         schema: { type: string, enum: [all, active, archived], default: all }
  *     responses:
  *       200:
- *         description: Successfully retrieved list of clients
+ *         description: Successfully retrieved clients
  *         content:
  *           application/json:
  *             schema:
@@ -42,18 +47,9 @@
  *                   items:
  *                     $ref: '#/components/schemas/Client'
  *                 meta:
- *                   type: object
- *                   properties:
- *                     total:
- *                       type: integer
- *                     page:
- *                       type: integer
- *                     limit:
- *                       type: integer
- *                     totalPages:
- *                       type: integer
+ *                   $ref: '#/components/schemas/PaginationMeta'
  *       401:
- *         description: Unauthorized (JWT missing or invalid)
+ *         description: Unauthorized
  *       500:
  *         description: Internal server error
  */
@@ -62,7 +58,7 @@
  * @swagger
  * /api/clients/{id}:
  *   get:
- *     summary: Get a specific client by ID
+ *     summary: Get client details
  *     tags: [Clients]
  *     security:
  *       - bearerAuth: []
@@ -70,20 +66,12 @@
  *       - in: path
  *         name: id
  *         required: true
- *         schema:
- *           type: string
- *         description: Client ID
+ *         schema: { type: string }
  *     responses:
  *       200:
  *         description: Successfully retrieved client
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Client'
  *       404:
  *         description: Client not found
- *       401:
- *         description: Unauthorized
  */
 
 /**
@@ -103,21 +91,15 @@
  *     responses:
  *       201:
  *         description: Client created successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Client'
  *       400:
- *         description: Invalid data
- *       401:
- *         description: Unauthorized
+ *         description: Invalid input
  */
 
 /**
  * @swagger
  * /api/clients/{id}:
  *   patch:
- *     summary: Update client information
+ *     summary: Update a client
  *     tags: [Clients]
  *     security:
  *       - bearerAuth: []
@@ -125,10 +107,7 @@
  *       - in: path
  *         name: id
  *         required: true
- *         schema:
- *           type: string
- *           example: 670a12b4d9e4fa1234abcd56
- *         description: Client ID
+ *         schema: { type: string }
  *     requestBody:
  *       required: true
  *       content:
@@ -138,22 +117,15 @@
  *     responses:
  *       200:
  *         description: Client updated successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Client'
  *       404:
  *         description: Client not found
- *       401:
- *         description: Unauthorized
  */
 
 /**
  * @swagger
  * /api/clients/{id}/archive:
  *   patch:
- *     summary: Archive or unarchive a client
- *     description: Toggle the `isArchived` status of a client.
+ *     summary: Archive / unarchive a client
  *     tags: [Clients]
  *     security:
  *       - bearerAuth: []
@@ -161,8 +133,7 @@
  *       - in: path
  *         name: id
  *         required: true
- *         schema:
- *           type: string
+ *         schema: { type: string }
  *     requestBody:
  *       required: true
  *       content:
@@ -170,14 +141,10 @@
  *           schema:
  *             type: object
  *             properties:
- *               isArchived:
- *                 type: boolean
- *                 example: true
+ *               isArchived: { type: boolean, example: true }
  *     responses:
  *       200:
- *         description: Client archived/unarchived successfully
+ *         description: Client archive status updated
  *       404:
  *         description: Client not found
- *       401:
- *         description: Unauthorized
  */
