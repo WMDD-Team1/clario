@@ -12,3 +12,4 @@ router.use(checkJWT);
 router.use(attachUser);
 
 router.post("/contract-upload", upload.single("file"), ContractController.uploadContract);
+router.post("/contract-analyze", ContractController.analyzeContract);

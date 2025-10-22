@@ -5,7 +5,7 @@ export const uploadToFirebase = async (file, folder = "contracts/original") => {
 	if (!file) throw new Error("No file provided");
 
 	const fileName = `${uuidv4()}-${file.originalname}`;
-	const filePath = bucket.file(`${folder}/${fileName}`);
+	const filePath = `${folder}/${fileName}`;
 	const fileRef = bucket.file(filePath);
 
 	await fileRef.save(file.buffer, {

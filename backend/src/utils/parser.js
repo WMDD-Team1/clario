@@ -1,7 +1,6 @@
 import { PDFExtract } from "pdf.js-extract";
 import Tesseract from "tesseract.js";
-import OpenAI from "openai";
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+import { openai } from "../config/openai.js";
 
 export const extractPdfText = async (fileUrl) => {
 	const pdfExtract = new PDFExtract();
@@ -57,9 +56,10 @@ export const extractContractFields = async (text) => {
 		const jsonStart = content.indexOf("{");
 		const jsonEnd = content.lastIndexOf("}");
 		const cleanJson = content.slice(jsonStart, jsonEnd + 1);
+		console.log(cleanJson);
 		return JSON.parse(cleanJson);
 	} catch (err) {
-		console.error("⚠️ JSON parse error from OpenAI:", err);
+		console.error("JSON parse error from OpenAI:", err);
 		console.log("Raw AI output:", res.choices[0].message.content);
 		return {};
 	}

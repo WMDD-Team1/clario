@@ -2,12 +2,14 @@ import { uploadToFirebase } from "../../utils/uploadFile.js";
 import { extractPdfText, extractImageText, extractContractFields } from "../../utils/parser.js";
 import Contract from "../../models/Contract.js";
 import Project from "../../models/Project.js";
+import { analyzeContractText } from "../../utils/analyze.js";
 
 export const uploadContractService = async (file, userId, clientId, projectId) => {
 	if (!file) throw new Error("No file uploaded");
 
 	// upload on firebase storage
 	const { fileName, fileUrl, fileType, size } = await uploadToFirebase(file, "contracts/original");
+
 	let projectInput = {};
 	let parsedText = [];
 
@@ -34,6 +36,7 @@ export const uploadContractService = async (file, userId, clientId, projectId) =
 		if (fullText.trim().length > 50) {
 			try {
 				projectInput = await extractContractFields(fullText);
+				console.log(projectInput);
 			} catch (err) {
 				console.error("AI field extraction error:", err);
 			}
@@ -45,8 +48,8 @@ export const uploadContractService = async (file, userId, clientId, projectId) =
 		userId,
 		clientId,
 		projectId,
-		fileName,
-		fileUrl,
+		contractName: fileName,
+		contractUrl: fileUrl,
 		fileType,
 		size,
 		status: projectId ? "uploaded" : "parsed",
@@ -54,8 +57,35 @@ export const uploadContractService = async (file, userId, clientId, projectId) =
 	});
 
 	if (projectId) {
-		await Project.findByIdAndUpdate(projectId, { active: true });
+		await Project.findByIdAndUpdate(projectId, { isActive: true });
 	}
 
+	console.log(projectInput);
 	return { projectInput };
+};
+
+export const analyzeContractService = async (contract) => {
+	const { contractUrl, fileType } = contract;
+	let pages = [];
+
+	if (fileType === "pdf") {
+		pages = await extractPdfText(contractUrl);
+	} else {
+		pages = await extractImageText(contractUrl);
+	}
+
+	const fullText = pages.map((page) => page.content).join("\n\n");
+	const risks = await analyzeContractText(fullText);
+
+	contract.aiAnalysis = {
+		riskyClauses: risks,
+	};
+	await contract.save();
+
+	return {
+		contractId: contract._id,
+		contractName: contract.contractName,
+		contractUrl: contract.contractUrl,
+		aiAnalysis: contract.aiAnalysis,
+	};
 };
