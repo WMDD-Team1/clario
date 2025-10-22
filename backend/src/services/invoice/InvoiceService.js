@@ -1,7 +1,7 @@
 import fs from "fs";
 import Invoice from "../../models/Invoice.js";
 import Project from "../../models/Project.js";
-import { generateInvoicePDF } from "../invoice/generateInvoicePDF.js";
+import { generateInvoicePDF } from "../../utils/generateInvoice.js";
 import { getTaxRateByProvince } from "../../utils/tax.js";
 import { uploadToFirebase } from "../../utils/uploadFile.js";
 
@@ -54,4 +54,16 @@ export const createInvoiceService = async (userId, province, projectId, mileston
 	fs.unlinkSync(pdfPath);
 
 	return newInvoice;
+};
+
+export const getInvoicesService = async (userId) => {
+	return await Invoice.find({ userId }).sort({ createdAt: -1 });
+};
+
+export const getInvoiceByIdService = async (invoiceId, userId) => {
+	return await Invoice.findOne({ _id: invoiceId, userId });
+};
+
+export const updateInvoiceStatusService = async (invoiceId, userId, status) => {
+	return await Invoice.findOneAndUpdate({ _id: invoiceId, userId }, { status }, { new: true });
 };
