@@ -8,26 +8,26 @@ const Sidebar = () => {
             icon: <Search />
         },
         {
-            route: "/projects",
+            route: "/my-work",
             icon: <Search />
         },
         {
-            route: "/dashboard",
+            route: "/dashboard1",
             icon: <Search />
         },
         {
-            route: "/dashboard",
+            route: "/dashboard2",
             icon: <Search />
         }
     ];
 
     const bottomMenu = [
         {
-            route: "/dashboard",
+            route: "/dashboard3",
             icon: <Search />
         },
         {
-            route: "/projects",
+            route: "/projects4",
             icon: <Search />
         },
     ];
