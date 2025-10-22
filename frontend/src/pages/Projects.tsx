@@ -154,7 +154,7 @@ const Projects = () => {
             {/* Cards */}
             <div className="grid grid-cols-5 gap-4 mb-10">
                 {view === 'projects' ? projectsInsights.map(
-                    (pi) => <InsightCard title={pi.title} value={pi.value}></InsightCard>
+                    (pi) => <InsightCard title={pi.title} value={pi.value} key={pi.title}></InsightCard>
                 ) : null}
             </div>
             {/* Table Filtering */}
