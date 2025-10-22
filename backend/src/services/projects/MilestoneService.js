@@ -23,12 +23,17 @@ export const updateMilestoneService = async (projectId, milestoneId, userId, dat
 
 	// invoice trigger
 	const { generateInvoice, status, dueDate } = milestone;
+
 	// on_completion
 	if (generateInvoice === "on_completion" && status === "Completed" && previousStatus !== "Completed") {
 		await createInvoiceService(userId, project.province, projectId, milestoneId);
 	}
-	if (generateInvoice === "on_due_date" && new Date() >= new Date(dueDate)) {
-		await createInvoiceService(userId, project.province, projectId, milestoneId);
+	// need to implement on_due_date
+
+	const allCompleted = project.milestones.every((m) => m.status === "Completed");
+	if (allCompleted) {
+		project.status = "Done";
+		await project.save();
 	}
 	return project;
 };

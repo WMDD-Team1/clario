@@ -13,6 +13,7 @@ export const uploadContractService = async (file, userId, clientId, projectId) =
 	let projectInput = {};
 	let parsedText = [];
 
+	// no proejct
 	if (!projectId) {
 		// parsing
 		if (fileType === "pdf") {
@@ -42,6 +43,31 @@ export const uploadContractService = async (file, userId, clientId, projectId) =
 			}
 		}
 	}
+	// with project
+	if (projectId) {
+		let existingContract = await Contract.findOne({ userId, projectId });
+
+		if (existingContract) {
+			if (existingContract.contractUrl) {
+				try {
+					await deleteFromFirebase(existingContract.contractUrl);
+				} catch (err) {
+					console.warn("Failed to delete old contract file:", err.message);
+				}
+			}
+
+			existingContract.contractUrl = fileUrl;
+			existingContract.fileType = fileType;
+			existingContract.size = size;
+			existingContract.aiAnalysis = undefined;
+			existingContract.contractName = fileName;
+			existingContract.updatedAt = new Date();
+
+			await existingContract.save();
+			await Project.findByIdAndUpdate(projectId, { isActive: true });
+			return { message: "Contract replaced successfully" };
+		}
+	}
 
 	// if needed later
 	const contract = await Contract.create({
@@ -60,7 +86,6 @@ export const uploadContractService = async (file, userId, clientId, projectId) =
 		await Project.findByIdAndUpdate(projectId, { isActive: true });
 	}
 
-	console.log(projectInput);
 	return { projectInput };
 };
 

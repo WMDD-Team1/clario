@@ -8,6 +8,7 @@ export const router = express.Router();
 router.use(checkJWT);
 router.use(attachUser);
 
+router.get("/overview", ProjectController.getOverview);
 router.get("/", ProjectController.getAllProjects);
 router.get("/:id", ProjectController.getProjectById);
 router.post("/", ProjectController.createProject);

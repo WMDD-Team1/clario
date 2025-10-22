@@ -4,6 +4,7 @@ import {
 	createNewProject,
 	updateProjectById,
 	archiveProjectById,
+	getOverviewService,
 } from "../../services/projects/ProjectsService.js";
 import { projectSchema } from "../../validations/projectSchema.js";
 
@@ -89,5 +90,16 @@ export const archiveProject = async (req, res) => {
 		res.status(500).json({
 			message: "Internal Server Error",
 		});
+	}
+};
+
+export const getOverview = async (req, res) => {
+	try {
+		const { id: userId } = req.user;
+		const result = await getOverviewService(userId);
+		res.status(200).json(result);
+	} catch (err) {
+		console.error("Error fetching project overview: ", err);
+		res.status(500).json({ message: "Internal Server Error" });
 	}
 };

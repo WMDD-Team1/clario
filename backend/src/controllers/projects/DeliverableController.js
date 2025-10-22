@@ -8,9 +8,10 @@ export const addDeliverable = async (req, res) => {
 	try {
 		const { projectId, milestoneId } = req.params;
 		const { id: userId } = req.user;
-		const deliverableData = req.body;
+		const data = req.body;
+		const file = req.file;
 
-		const milestone = await addDeliverableService(projectId, milestoneId, userId, deliverableData);
+		const milestone = await addDeliverableService(projectId, milestoneId, userId, data, file);
 		res.status(201).json({ message: "Deliverable added successfully", milestone });
 	} catch (err) {
 		console.error("Error adding deliverable:", err);

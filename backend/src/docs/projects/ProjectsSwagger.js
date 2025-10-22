@@ -248,3 +248,26 @@
  *       401:
  *         description: Unauthorized
  */
+
+/**
+ * @swagger
+ * /api/projects/overview:
+ *   get:
+ *     summary: Get project and client overview metrics
+ *     tags: [Projects]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Summary of project and client stats
+ *         content:
+ *           application/json:
+ *             example:
+ *               totalProjects: 8
+ *               activeProjects: 5
+ *               inactiveProjects: 2
+ *               archivedProjects: 1
+ *               totalClients: 4
+ *               totalBudget: 42000
+ *               activeBudget: 33000
+ */

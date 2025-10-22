@@ -1,15 +1,21 @@
 import Project from "../../models/Project.js";
+import { uploadToFirebase } from "../../utils/uploadFile.js";
 
-export const addDeliverableService = async (projectId, milestoneId, userId, deliverableData) => {
+export const addDeliverableService = async (projectId, milestoneId, userId, data, file) => {
 	const project = await Project.findOne({ _id: projectId, userId });
 	if (!project) throw new Error("Project not found");
 
 	const milestone = project.milestones.id(milestoneId);
 	if (!milestone) throw new Error("Milestone not found");
 
-	milestone.deliverables.push(deliverableData);
+	if (file) {
+		const { fileUrl } = await uploadToFirebase(file, "deliverables");
+		data.fileUrl = fileUrl;
+	}
+
+	milestone.deliverables.push(data);
 	await project.save();
-	return milestone;
+	return milestone.deliverables.at(-1).toJSON();
 };
 
 export const updateDeliverableService = async (projectId, milestoneId, deliverableId, userId, data) => {
