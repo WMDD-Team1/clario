@@ -4,15 +4,14 @@ import {
 	createNewProject,
 	updateProjectById,
 	archiveProjectById,
+	getOverviewService,
 } from "../../services/projects/ProjectsService.js";
 import { projectSchema } from "../../validations/projectSchema.js";
 
 export const getAllProjects = async (req, res) => {
 	try {
-		const { sub: userId } = req.auth;
-		const { page = 1, limit = 20 } = req.query;
-
-		const result = await findAllProjects(userId, parseInt(page), parseInt(limit));
+		const { id: userId } = req.user;
+		const result = await findAllProjects(userId, req.query);
 
 		res.status(200).json(result);
 	} catch (err) {
@@ -24,7 +23,7 @@ export const getAllProjects = async (req, res) => {
 export const getProjectById = async (req, res) => {
 	try {
 		const { id: projectId } = req.params;
-		const { sub: userId } = req.auth;
+		const { id: userId } = req.user;
 
 		const result = await findByProjectId(projectId, userId);
 
@@ -39,7 +38,7 @@ export const getProjectById = async (req, res) => {
 
 export const createProject = async (req, res) => {
 	try {
-		const { sub: userId } = req.auth;
+		const { id: userId } = req.user;
 		const parsed = projectSchema.parse(req.body);
 		const result = await createNewProject(parsed, userId);
 
@@ -56,7 +55,7 @@ export const createProject = async (req, res) => {
 export const updateProject = async (req, res) => {
 	try {
 		const { id: projectId } = req.params;
-		const { sub: userId } = req.auth;
+		const { id: userId } = req.user;
 
 		const parsed = projectSchema.partial().parse(req.body);
 		const result = await updateProjectById(projectId, userId, parsed);
@@ -75,18 +74,32 @@ export const updateProject = async (req, res) => {
 export const archiveProject = async (req, res) => {
 	try {
 		const { id: projectId } = req.params;
-		const { sub: userId } = req.auth;
+		const { id: userId } = req.user;
 		const { isArchived } = req.body;
 
 		const result = await archiveProjectById(projectId, userId, isArchived);
 
 		if (!result) return res.status(404).json({ message: "Project not found." });
 
-		res.status(200).json(result);
+		res.status(200).json({
+			message: `Project ${isArchived ? "archived" : "unarchived"} successfully.`,
+			project: result,
+		});
 	} catch (err) {
 		console.error("Error deleting project: ", err);
 		res.status(500).json({
 			message: "Internal Server Error",
 		});
+	}
+};
+
+export const getOverview = async (req, res) => {
+	try {
+		const { id: userId } = req.user;
+		const result = await getOverviewService(userId);
+		res.status(200).json(result);
+	} catch (err) {
+		console.error("Error fetching project overview: ", err);
+		res.status(500).json({ message: "Internal Server Error" });
 	}
 };

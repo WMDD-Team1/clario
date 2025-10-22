@@ -19,12 +19,17 @@
 		"express": "^5.1.0",
 		"express-jwt": "^8.5.1",
 		"firebase-admin": "^13.5.0",
+		"handlebars": "^4.7.8",
 		"jwks-rsa": "^3.2.0",
 		"jwt-decode": "^4.0.0",
 		"mongoose": "^8.18.3",
+		"multer": "^2.0.2",
 		"openai": "^6.5.0",
+		"pdf.js-extract": "^0.2.1",
+		"puppeteer": "^24.25.0",
 		"swagger-jsdoc": "^6.2.8",
 		"swagger-ui-express": "^5.0.1",
+		"tesseract.js": "^6.0.1",
 		"zod": "^4.1.11"
 	},
 	"devDependencies": {

@@ -167,106 +167,56 @@
  *       properties:
  *         id:
  *           type: string
- *           description: Unique identifier for the project
- *           example: 670a12b4d9e4fa1234abcd56
- *         userId:
- *           type: string
- *           description: Auth0 user ID associated with this project
- *           example: "auth0|68e7ff990c803370d5016be2"
- *         clientId:
- *           type: string
- *           description: Linked client ID
- *           example: "670a12b4d9e4fa1234abcd99"
+ *           example: 671a5b2345abcde98765f123
  *         name:
  *           type: string
- *           example: "Smart Document AI Assistant"
- *         type:
- *           type: string
- *           example: "Web Application"
+ *           example: "Website Redesign"
  *         description:
  *           type: string
- *           example: "End-to-end assistant for freelancers' contract and finance tracking"
- *         fee:
+ *           example: "Redesigning client’s e-commerce platform."
+ *         client:
+ *           type: object
+ *           properties:
+ *             id:
+ *               type: string
+ *             name:
+ *               type: string
+ *           example:
+ *             id: "671a5b2345abcde98765f123"
+ *             name: "Me The Best"
+ *         type:
+ *           type: string
+ *           example: "Web Development"
+ *         totalBudget:
  *           type: number
- *           example: 1200
- *         feeType:
- *           type: string
- *           enum: [milestone, deliverable, fixed, subscription, hourly]
- *           example: "fixed"
- *         taxable:
- *           type: boolean
- *           example: true
- *         color:
- *           type: string
- *           example: "#369FFF"
+ *           example: 8000
  *         status:
  *           type: string
- *           enum: [planned, in-progress, completed, cancelled]
- *           example: "in-progress"
+ *           enum: [Planning, In-Progress, Review, Done]
+ *           example: "In-Progress"
+ *         isActive:
+ *           type: boolean
+ *           example: true
  *         isArchived:
  *           type: boolean
- *           description: Whether the project is archived
  *           example: false
  *         startDate:
  *           type: string
  *           format: date
- *           example: 2025-10-01
- *         endDate:
+ *           example: "2025-10-01"
+ *         dueDate:
  *           type: string
  *           format: date
- *           example: 2025-12-31
+ *           example: "2025-12-31"
+ *         milestonesCount:
+ *           type: integer
+ *           example: 3
  *         createdAt:
  *           type: string
  *           format: date-time
- *           example: 2025-10-05T12:34:56.000Z
  *         updatedAt:
  *           type: string
  *           format: date-time
- *           example: 2025-10-05T12:34:56.000Z
- *
- *     ProjectInput:
- *       type: object
- *       required:
- *         - name
- *         - clientId
- *       properties:
- *         name:
- *           type: string
- *           example: "Clario Project"
- *         clientId:
- *           type: string
- *           example: "670a12b4d9e4fa1234abcd99"
- *         type:
- *           type: string
- *           example: "Web Development"
- *         description:
- *           type: string
- *           example: "Internal tool for automating freelancer contracts and invoicing."
- *         fee:
- *           type: number
- *           example: 1200
- *         feeType:
- *           type: string
- *           enum: [milestone, deliverable, fixed, subscription, hourly]
- *           example: "fixed"
- *         taxable:
- *           type: boolean
- *           example: true
- *         color:
- *           type: string
- *           example: "#ff0505"
- *         status:
- *           type: string
- *           enum: [planned, in-progress, completed, cancelled]
- *           example: "planned"
- *         startDate:
- *           type: string
- *           format: date
- *           example: 2025-10-01
- *         endDate:
- *           type: string
- *           format: date
- *           example: 2025-12-31
  */
 
 /**
@@ -405,4 +355,163 @@
  *           type: string
  *           enum: [This Month, Next Month]
  *           example: "This Month"
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Invoice:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           example: 671a1234bcdef9876543210
+ *         invoiceNumber:
+ *           type: integer
+ *           example: 102
+ *         clientName:
+ *           type: string
+ *           example: "Me The Best"
+ *         milestoneName:
+ *           type: string
+ *           example: "UI Design"
+ *         dueDate:
+ *           type: string
+ *           format: date
+ *           example: "2025-11-18"
+ *         amount:
+ *           type: number
+ *           example: 1200
+ *         taxAmount:
+ *           type: number
+ *           example: 60
+ *         totalAmount:
+ *           type: number
+ *           example: 1260
+ *         fileUrl:
+ *           type: string
+ *           format: url
+ *           example: "https://storage.googleapis.com/invoices/invoice_102.pdf"
+ *         status:
+ *           type: string
+ *           enum: [Pending, Paid, Overdue]
+ *           example: "Pending"
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Contract:
+ *       type: object
+ *       description: Represents a contract document uploaded and analyzed by AI
+ *       properties:
+ *         id:
+ *           type: string
+ *           example: 671a1234bcdef9876543210
+ *         userId:
+ *           type: string
+ *           description: Linked user ID (owner of the contract)
+ *           example: 650d1e4f5d1234567890abcd
+ *         clientId:
+ *           type: string
+ *           nullable: true
+ *           description: Linked client ID if available
+ *           example: 671a5b2345abcde98765f123
+ *         projectId:
+ *           type: string
+ *           nullable: true
+ *           description: Linked project ID if the contract is attached to one
+ *           example: 670a12b4d9e4fa1234abcd56
+ *         contractName:
+ *           type: string
+ *           example: "Freelance Agreement - Bitna Corp"
+ *         contractUrl:
+ *           type: string
+ *           format: uri
+ *           description: Public URL to access the uploaded contract file
+ *           example: "https://storage.googleapis.com/contracts/original/bitna_contract.pdf"
+ *         fileType:
+ *           type: string
+ *           enum: [pdf, docx, doc]
+ *           example: "pdf"
+ *         size:
+ *           type: number
+ *           description: File size in bytes
+ *           example: 254876
+ *         totalAmount:
+ *           type: number
+ *           example: 5000
+ *         paymentTerms:
+ *           type: string
+ *           example: "Payment due within 30 days after invoice submission."
+ *         deliveryDate:
+ *           type: string
+ *           format: date
+ *           example: "2025-12-31"
+ *         aiAnalysis:
+ *           type: object
+ *           description: AI-generated contract risk analysis summary
+ *           properties:
+ *             summary:
+ *               type: string
+ *               example: "Found 4 risky clauses (2 high risk)."
+ *             riskyClauses:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/RiskyClause'
+ *         version:
+ *           type: number
+ *           example: 1
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           example: 2025-10-21T22:32:02.475Z
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *           example: 2025-10-21T22:32:02.475Z
+ *
+ *     ContractInput:
+ *       type: object
+ *       required:
+ *         - file
+ *       properties:
+ *         file:
+ *           type: string
+ *           format: binary
+ *           description: Contract file to upload (PDF, DOCX, JPG, or PNG)
+ *         clientId:
+ *           type: string
+ *           example: "671a5b2345abcde98765f123"
+ *         projectId:
+ *           type: string
+ *           example: "670a12b4d9e4fa1234abcd56"
+ *
+ *     RiskyClause:
+ *       type: object
+ *       description: Represents a clause identified by AI as potentially risky
+ *       properties:
+ *         paragraph:
+ *           type: string
+ *           example: "Client may terminate this contract at any time without notice."
+ *         category:
+ *           type: string
+ *           enum:
+ *             - Payment Terms
+ *             - Timeline
+ *             - Termination
+ *             - Intellectual Property
+ *             - Revisions
+ *             - Confidentiality
+ *             - Other
+ *           example: "Termination"
+ *         riskLevel:
+ *           type: string
+ *           enum: [Low, Medium, High]
+ *           example: "High"
+ *         reason:
+ *           type: string
+ *           example: "No notice period or compensation specified upon termination."
  */
