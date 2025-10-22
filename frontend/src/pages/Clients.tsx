@@ -7,6 +7,7 @@ import axios from 'axios';
 import InfoRow from '@components/InfoRow';
 import Slide from '@components/Slide';
 import Select from '@components/Select';
+import InsightCard from '@components/InsightCard';
 
 const Clients = () => {
   interface Project {
@@ -82,10 +83,12 @@ const Clients = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   const [clientId, setClientId] = useState('');
-  const [selected, setSelected] = useState('');
+  const [select, setSelect] = useState('');
 
   const [pageWindowStart, setPageWindowStart] = useState(1);
   const PAGE_WINDOW_SIZE = 5;
+
+  const [searchText, setSearchText] = useState('');
 
   const { getAccessTokenSilently } = useAuth0();
 
@@ -284,10 +287,26 @@ const Clients = () => {
     }
   };
 
+  const filteredClients = clients.data
+    .filter((c) => !c.isArchived && c.name.toLowerCase().includes(searchText.toLowerCase()))
+    .sort((a, b) => {
+      switch (select) {
+        case 'Names(Newest-Oldest)':
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+
+        case 'Invoices(Fewest->Most)':
+          return a.invoiceCount - b.invoiceCount;
+        case 'Total Projects(Fewest->Most)':
+          return a.projectCount - b.projectCount;
+        default:
+          return 0;
+      }
+    });
+
   return (
     <div className="flex flex-col gap-[1rem] p-[1rem]">
-      <div className="flex flex-row justify-between items-center">
-        <div className="flex flex-row justify-between items-center gap-[2rem]">
+      <div className="flex flex-row justify-between sm:items-center items-start">
+        <div className="flex flex-row  flex-wrap justify-between items-center gap-[2rem]">
           <h2 className="text-2xl">My Work</h2>
           <div className="flex flex-row gap-[.5rem] justify-between items-center p-[.5rem] bg-gray-200 rounded-[1rem]">
             <p className="rounded-[1rem] pt-[.5rem] pb-[.5rem] pl-[2rem] pr-[2rem]">All Projects</p>
@@ -309,166 +328,143 @@ const Clients = () => {
         </Button>
       </div>
       <div className="flex flex-row flex-wrap items-center gap-[1rem]">
-        <Button
-          buttonColor="lightButton"
-          width="calc(20% - 0.8rem)"
-          textColor="black"
-          onClick={() => console.log('Total clicked')}
-        >
-          <div className="flex flex-col items-center justify-center gap-[.5rem]">
-            <p>Total</p>
-            <p>$12000</p>
-          </div>
-        </Button>
-
-        <Button
-          buttonColor="lightButton"
-          width="calc(20% - 0.8rem)"
-          textColor="black"
-          onClick={() => {}}
-        >
-          <div className="flex flex-col items-center justify-center gap-[.5rem]">
-            <p>Active</p>
-            <p>$8000</p>
-          </div>
-        </Button>
-
-        <Button
-          buttonColor="lightButton"
-          width="calc(20% - 0.8rem)"
-          textColor="black"
-          onClick={() => {}}
-        >
-          <div className="flex flex-col items-center justify-center gap-[.5rem]">
-            <p>Inactive</p>
-            <p>10</p>
-          </div>
-        </Button>
-
-        <Button
-          buttonColor="lightButton"
-          width="calc(20% - 0.8rem)"
-          textColor="black"
-          onClick={() => {}}
-        >
-          <div className="flex flex-col items-center justify-center gap-[.5rem]">
-            <p>Archive</p>
-            <p>5</p>
-          </div>
-        </Button>
-
-        <Button
-          buttonColor="lightButton"
-          width="calc(20% - 0.8rem)"
-          textColor="black"
-          onClick={() => {}}
-        >
-          <div className="flex flex-col items-center justify-center gap-[.5rem]">
-            <p>Clients</p>
-            <p>30</p>
-          </div>
-        </Button>
+        <InsightCard title="Total" value="$12000" />
+        <InsightCard title="Active" value="$8000" />
+        <InsightCard title="Inactive" value="10" />
+        <InsightCard title="Archive" value="5" />
+        <InsightCard title="Clients" value="30" />
       </div>
 
       {/* client-list------------------------------------------------- */}
       <div className="flex flex-row flex-nowrap items-center justify-start gap-[1rem]">
         <div className="w-[20rem]">
-          <Input placeholder="Search client" />
+          <Input
+            placeholder="Search client"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+          />
         </div>
         <Select
-          value={selected}
+          value={select}
           color="bg-white"
-          onChange={setSelected}
+          onChange={setSelect}
           placeHolder="Sort By"
-          options={[
-            'Names(Newest->Oldest)',
-            'Invoices(Fewest->Most)',
-            'Total Projects(Fewest->Most',
-          ]}
+          options={['Names(Newest-Oldest)', 'Invoices(Fewest-Most)', 'Total Projects(Fewest-Most)']}
         />
       </div>
 
-      <div className="rounded-[20px] border overflow-hidden border-gray-200">
-        <table className="text-center w-full">
-          <thead className="bg-gray-200">
-            <tr>
-              <th className="text-left px-4 py-4">Client Name</th>
-              <th className="px-4 py-2">Phone</th>
-              <th className="px-4 py-2">Email</th>
-              <th className="px-4 py-2">Country</th>
-              <th className="px-4 py-2">Invoices</th>
-              <th className="px-4 py-2">Total Projects</th>
-              <th className="px-4 py-2"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {clients.data
-              .filter((c) => c.isArchived == false)
-              .map((client, index) => (
-                <tr key={index} className="hover:bg-gray-100">
-                  <td className="text-left px-4 py-[1rem] border-t border-gray-200">
-                    {client.name}
-                  </td>
-                  <td className="px-4 border-t border-gray-200">{client.phone}</td>
-                  <td className="px-4 border-t border-gray-200">{client.email}</td>
-                  <td className="px-4 border-t border-gray-200">{client.address.country}</td>
-                  <td className="px-4 border-t border-gray-200">{client.invoiceCount}</td>
-                  <td className="px-4 border-t border-gray-200">{client.projectCount}</td>
-                  <td
-                    className="px-4 border-t border-gray-200"
-                    onClick={() => handleClientDetail(client.id)}
-                  >
-                    ...
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
-        <div className="bg-gray-200 w-full p-[1rem] flex felx-row flex-nowrap justify-between items-center">
-          <p>Total {clients.meta.total}</p>
-          <div className="flex felx-row flex-nowrap justify-between items-center gap-[1rem]">
-            <div
-              onClick={() => {
-                if (currentPage > 1) {
-                  setCurrentPage(currentPage - 1);
-                  if (currentPage - 1 < pageWindowStart) {
-                    setPageWindowStart(pageWindowStart - PAGE_WINDOW_SIZE);
-                  }
-                }
-              }}
-            >
-              {'<'}
-            </div>
-            {Array.from({
-              length: Math.min(PAGE_WINDOW_SIZE, clients.meta.totalPages - pageWindowStart + 1),
-            }).map((_, i) => {
-              const pageNumber = pageWindowStart + i;
-              return (
-                <div
-                  key={pageNumber}
-                  onClick={() => setCurrentPage(pageNumber)}
-                  className={`flex justify-center items-center p-[.5rem] border border-gray-400 rounded-[5px] h-[25px] w-[25px] hover:bg-gray-300 ${currentPage === pageNumber ? 'bg-gray-400' : 'bg-gray-200'}`}
-                >
-                  {pageNumber}
-                </div>
-              );
-            })}
+      {filteredClients.length == 0 ? (
+        <div className="flex flex-col flex-nowrap items-center gap-[1rem] p-[3rem] border-2 border-dashed border-blue-100 bg-blue-50 rounded-[20px]">
+          <p className='text-gray-400 text-center'>No clients added yet. Start by adding your first client to begin managing projects.</p>
+          <Button
+            buttonColor="regularButton"
+            onClick={() => {
+              setSlide('0px');
+              resetFormData();
+            }}
+            textColor="white"
+            width="200px"
+          >
+            Add Client
+          </Button>
+        </div>
+      ) : (
+        <div className="rounded-[20px] border overflow-hidden border-gray-200">
+          <div className="overflow-x-auto w-full">
+          <table className="text-center w-full min-[720px]">
+            <thead className="bg-gray-200">
+              <tr>
+                <th className="text-left px-4 py-4">Client Name</th>
+                <th className="px-4 py-2">Phone</th>
+                <th className="px-4 py-2">Email</th>
+                <th className="px-4 py-2">Country</th>
+                <th className="px-4 py-2">Invoices</th>
+                <th className="px-4 py-2">Total Projects</th>
+                <th className="px-4 py-2"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredClients
+                .sort((a, b) => {
+                  switch (select) {
+                    case 'Names(Newest-Oldest)':
+                      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
 
-            <div
-              onClick={() => {
-                if (currentPage < clients.meta.totalPages) {
-                  setCurrentPage(currentPage + 1);
-                  if (currentPage + 1 >= pageWindowStart + PAGE_WINDOW_SIZE) {
-                    setPageWindowStart(pageWindowStart + PAGE_WINDOW_SIZE);
+                    case 'Invoices(Fewest->Most)':
+                      return a.invoiceCount - b.invoiceCount;
+                    case 'Total Projects(Fewest->Most)':
+                      return a.projectCount - b.projectCount;
+                    default:
+                      return 0;
                   }
-                }
-              }}
-            >
-              {'>'}
+                })
+                .map((client, index) => (
+                  <tr key={index} className="hover:bg-gray-100">
+                    <td className="text-left px-4 py-[1rem] border-t border-gray-200">
+                      {client.name}
+                    </td>
+                    <td className="px-4 border-t border-gray-200">{client.phone}</td>
+                    <td className="px-4 border-t border-gray-200">{client.email}</td>
+                    <td className="px-4 border-t border-gray-200">{client.address.country}</td>
+                    <td className="px-4 border-t border-gray-200">{client.invoiceCount}</td>
+                    <td className="px-4 border-t border-gray-200">{client.projectCount}</td>
+                    <td
+                      className="px-4 border-t border-gray-200"
+                      onClick={() => handleClientDetail(client.id)}
+                    >
+                      ...
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+          </div>
+          <div className="bg-gray-200 w-full p-[1rem] flex felx-row flex-nowrap justify-between items-center">
+            <p>Total {clients.meta.total}</p>
+            <div className="flex felx-row flex-nowrap justify-between items-center gap-[1rem]">
+              <div
+                onClick={() => {
+                  if (currentPage > 1) {
+                    setCurrentPage(currentPage - 1);
+                    if (currentPage - 1 < pageWindowStart) {
+                      setPageWindowStart(pageWindowStart - PAGE_WINDOW_SIZE);
+                    }
+                  }
+                }}
+              >
+                {'<'}
+              </div>
+              {Array.from({
+                length: Math.min(PAGE_WINDOW_SIZE, clients.meta.totalPages - pageWindowStart + 1),
+              }).map((_, i) => {
+                const pageNumber = pageWindowStart + i;
+                return (
+                  <div
+                    key={pageNumber}
+                    onClick={() => setCurrentPage(pageNumber)}
+                    className={`flex justify-center items-center p-[.5rem] border border-gray-400 rounded-[5px] h-[25px] w-[25px] hover:bg-gray-300 ${currentPage === pageNumber ? 'bg-gray-400' : 'bg-gray-200'}`}
+                  >
+                    {pageNumber}
+                  </div>
+                );
+              })}
+
+              <div
+                onClick={() => {
+                  if (currentPage < clients.meta.totalPages) {
+                    setCurrentPage(currentPage + 1);
+                    if (currentPage + 1 >= pageWindowStart + PAGE_WINDOW_SIZE) {
+                      setPageWindowStart(pageWindowStart + PAGE_WINDOW_SIZE);
+                    }
+                  }
+                }}
+              >
+                {'>'}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       <Slide
         title="Add Client"
@@ -563,7 +559,7 @@ const Clients = () => {
         <InfoRow label="Client Name" value={oneClient.name} />
         <InfoRow label="Phone" value={oneClient.phone} />
         <InfoRow label="Email" value={oneClient.email} />
-        <InfoRow label="Notes" value={oneClient.notes} />
+        <InfoRow label="Notes" value={oneClient.notes} vertical = {true}/>
         <InfoRow label="Street Address" value={oneClient.address?.street} />
         <InfoRow label="Postal Code" value={oneClient.address?.postalCode} />
         <InfoRow label="City" value={oneClient.address?.city} />

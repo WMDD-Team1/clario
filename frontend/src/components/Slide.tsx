@@ -8,7 +8,7 @@ interface SlideProps {
   slide: string;
   onClose: () => void;
   onConfirm?: () => void;
-  width?: string;
+  // width?: string;
   confirmText?: string;
   cancelText?: string;
   showFooter?: boolean;
@@ -20,7 +20,7 @@ const Slide: React.FC<SlideProps> = ({
   slide,
   onClose,
   onConfirm,
-  width = '450px',
+  // width = '450px',
   confirmText = 'Add',
   cancelText = 'Cancel',
   showFooter = true,
@@ -35,15 +35,15 @@ const Slide: React.FC<SlideProps> = ({
       />
 
       <div
-        className="fixed top-0 right-0 h-full shadow-lg bg-white transition-transform duration-300 overflow-y-auto rounded-tl-[20px] rounded-bl-[20px] z-50 flex flex-col"
-        style={{ transform: `translateX(${slide})`, width }}
+        className="fixed top-0 right-0 h-full shadow-lg bg-white transition-transform duration-300 sm:rounded-tl-[20px] rounded-bl-[20px] z-50 flex flex-col sm:w-[450px]  w-full"
+        style={{ transform: `translateX(${slide})`}}
       >
         <h2
           className={`text-[${fontSizeOptions.h2}] text-center bg-blue-50 p-[1rem] sticky top-0 z-10`}
         >
           {title}
         </h2>
-        <div className="flex flex-col gap-[1.5rem] p-[2rem]">{children}</div>
+        <div className="flex flex-col gap-[1.5rem] p-[2rem] h-full overflow-y-auto">{children}</div>
 
         {showFooter && (
           <div className="flex flex-row justify-center gap-[1rem] sticky bottom-0 w-full p-[2rem] bg-blue-50">
