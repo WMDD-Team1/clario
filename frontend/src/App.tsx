@@ -1,10 +1,10 @@
 import Clients from "@pages/Clients";
-import Projects from "@pages/Projects";
 import { Route, Routes } from "react-router-dom";
 import { PrivateRoute } from "./api/auth/PrivateRoute";
 import { Dashboard } from "./pages/Dashboard";
 import { Landing } from "./pages/Landing";
 import { IncomeExpenses } from "@pages/IncomeExpenses";
+import MyWork from "@pages/MyWork";
 
 function App() {
   return (
@@ -45,10 +45,10 @@ function App() {
         }
       />
       <Route
-        path="/projects"
+        path="/my-work"
         element={
           <PrivateRoute>
-            <Projects />
+            <MyWork />
           </PrivateRoute>
         }
       />

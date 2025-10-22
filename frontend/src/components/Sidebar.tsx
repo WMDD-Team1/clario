@@ -8,7 +8,7 @@ const Sidebar = () => {
             icon: <Search />
         },
         {
-            route: "/projects",
+            route: "/my-work",
             icon: <Search />
         },
         {
