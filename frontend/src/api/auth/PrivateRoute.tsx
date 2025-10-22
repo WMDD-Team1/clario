@@ -2,8 +2,8 @@ import { useAppSelector } from '@/store/hooks';
 import { useAuth0 } from "@auth0/auth0-react";
 import Error from '@components/Error';
 import Header from '@components/Header';
-import Sidebar from '@components/Sidebar';
 import Loading from "@components/Loading";
+import Sidebar from '@components/Sidebar';
 import { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 
@@ -20,7 +20,7 @@ export const PrivateRoute = ({ children }: { children: ReactNode }) => {
   return isAuthenticated ? (<>
     <Header />
     <Sidebar />
-    <div className='grow-1 ml-[130px]'>
+    <div className='grow-1 ml-[170px] mr-[40px] mb-[40px]'>
       {children}
     </div>
   </>) : <Navigate to="/" />;
