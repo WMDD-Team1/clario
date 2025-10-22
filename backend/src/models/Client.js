@@ -4,11 +4,7 @@ import "../models/Project.js";
 const ClientSchema = new mongoose.Schema(
 	{
 		userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-		type: {
-			type: String,
-			enum: ["Individual", "Company"],
-			required: true,
-		},
+
 		name: {
 			type: String,
 			required: true,

@@ -1,18 +1,98 @@
 import React, { useEffect, useState } from 'react';
-import Card from '@components/Card';
 import Button from '@components/Button';
 import Input from '@components/Input';
 import { useAuth0 } from '@auth0/auth0-react';
-import { fontSizeOptions } from '@components/style/font';
+import TextArea from '@components/TextArea';
+import axios from 'axios';
+import InfoRow from '@components/InfoRow';
+import Slide from '@components/Slide';
+import Select from '@components/Select';
+import InsightCard from '@components/InsightCard';
 
 const Clients = () => {
-  const [clients, setClients] = useState<{ data: any[]; meta: any }>({
+  interface Project {
+    _id: string;
+    name: string;
+  }
+
+  interface Address {
+    street: string;
+    postalCode: string;
+    city: string;
+    country: string;
+  }
+
+  interface Client {
+    id: string;
+    name: string;
+    type: 'Individual' | 'Company';
+    email: string;
+    phone: string;
+    address: Address;
+    notes: string;
+    isArchived: boolean;
+    projectCount: number;
+    invoiceCount: number;
+    projects: Project[];
+    createdAt: string;
+    updatedAt: string;
+  }
+
+  interface Meta {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  }
+
+  interface ClientResponse {
+    data: Client[];
+    meta: Meta;
+  }
+
+  const [clients, setClients] = useState<ClientResponse>({
     data: [],
-    meta: {},
+    meta: {
+      total: 0,
+      page: 1,
+      limit: 10,
+      totalPages: 0,
+    },
   });
+
+  const [oneClient, setOneClient] = useState<Client>({
+    id: '',
+    name: '',
+    type: 'Individual',
+    email: '',
+    phone: '',
+    address: { street: '', postalCode: '', city: '', country: '' },
+    notes: '',
+    isArchived: false,
+    projectCount: 0,
+    invoiceCount: 0,
+    projects: [],
+    createdAt: '',
+    updatedAt: '',
+  });
+
   const [slide, setSlide] = useState('100%');
+
+  const [slideDetail, setSlideDetail] = useState('100%');
+  const [slideEdit, setSlideEdit] = useState('100%');
+  const [currentPage, setCurrentPage] = useState<number>(1);
+
+  const [clientId, setClientId] = useState('');
+  const [select, setSelect] = useState('');
+
+  const [pageWindowStart, setPageWindowStart] = useState(1);
+  const PAGE_WINDOW_SIZE = 5;
+
+  const [searchText, setSearchText] = useState('');
+
   const { getAccessTokenSilently } = useAuth0();
 
+  //--Get data from form--------------------------
   const fetchClients = async () => {
     const token = await getAccessTokenSilently({
       authorizationParams: {
@@ -20,35 +100,162 @@ const Clients = () => {
       },
     });
 
-    console.log(token);
+    // console.log(token);
 
-    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/clients`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_BASE_URL}/clients?page=${currentPage}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    });
-    const data = await response.json();
+    );
+    const data = await response.data;
     console.log(data);
     setClients(data);
   };
 
+  const handleClientDetail = async (id: string) => {
+    try {
+      const token = await getAccessTokenSilently({
+        authorizationParams: {
+          audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
+        },
+      });
+
+      const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/clients/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setOneClient(response.data);
+      setClientId(id);
+      setSlideDetail('0px');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // const fetchOneClient = async () => {
+  //   const token = await getAccessTokenSilently({
+  //     authorizationParams: {
+  //       audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
+  //     },
+  //   });
+
+  //   // console.log(token);
+
+  //   const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/clients/${clientId}`, {
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //   });
+  //   const data = await response.data;
+  //   console.log(data);
+  //   setOneClient(data);
+  // };
+
+  const deleteClient = async () => {
+    const token = await getAccessTokenSilently({
+      authorizationParams: {
+        audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
+      },
+    });
+
+    // console.log(token);
+
+    const response = await axios.patch(
+      `${import.meta.env.VITE_API_BASE_URL}/clients/${clientId}/archive`,
+      {
+        isArchived: true,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    const data = await response.data;
+    console.log(data);
+    await fetchClients();
+    setSlideDetail('100%');
+  };
+
+  const updateClient = async () => {
+    const token = await getAccessTokenSilently({
+      authorizationParams: {
+        audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
+      },
+    });
+
+    const payload = {
+      name: oneClient.name,
+      email: oneClient.email,
+      type: 'Individual',
+      phone: oneClient.phone,
+      address: { ...oneClient.address },
+      notes: oneClient.notes,
+    };
+
+    const response = await axios.patch(
+      `${import.meta.env.VITE_API_BASE_URL}/clients/${clientId}`,
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    const data = await response.data;
+    console.log(data);
+    await fetchClients();
+    setSlideEdit('100%');
+  };
+
   useEffect(() => {
     fetchClients();
-  }, []);
+  }, [currentPage]);
 
-  //--Get data from form--------------------------
+  // useEffect(() => {
+  //   fetchOneClient();
+  // }, [clientId]);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const form = e.currentTarget;
-    const formData = new FormData(form);
+  interface FormData {
+    name: string | null;
+    email: string | null;
+    type: 'Individual' | 'Company';
+    phone: string | null;
+    address: Address;
+    notes: string | null;
+  }
+
+  function resetFormData() {
+    setOneClient({
+      id: '',
+      name: '',
+      type: 'Individual',
+      email: '',
+      phone: '',
+      address: { street: '', postalCode: '', city: '', country: '' },
+      notes: '',
+      isArchived: false,
+      projectCount: 0,
+      invoiceCount: 0,
+      projects: [],
+      createdAt: '',
+      updatedAt: '',
+    });
+  }
+
+  const onSubmit = async () => {
     const payload = {
-      name: formData.get('clientName'),
-      type: formData.get('clientType'),
-      email: formData.get('clientEmail'),
-      contact: formData.get('clientContact'),
-      address: formData.get('clientAddress'),
-      description: formData.get('clientDescp'),
+      name: oneClient.name,
+      email: oneClient.email,
+      type: 'Individual',
+      phone: oneClient.phone,
+      address: { ...oneClient.address },
+      notes: oneClient.notes,
     };
 
     const token = await getAccessTokenSilently({
@@ -62,89 +269,395 @@ const Clients = () => {
     console.log(payload);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/clients`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify(payload),
+      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/clients`, payload, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
       });
 
-      const responseText = await response.text();
-      console.log(responseText);
+      console.log(response.data);
 
-      if (!response.ok) throw new Error('Failed to save client');
-      form.reset();
+      resetFormData();
+
       await fetchClients();
       setSlide('100%');
     } catch (error) {
-      console.log(error);
+      console.error('Error saving client:', error);
     }
   };
 
+  const filteredClients = clients.data
+    .filter((c) => !c.isArchived && c.name.toLowerCase().includes(searchText.toLowerCase()))
+    .sort((a, b) => {
+      switch (select) {
+        case 'Names(Newest-Oldest)':
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+
+        case 'Invoices(Fewest->Most)':
+          return a.invoiceCount - b.invoiceCount;
+        case 'Total Projects(Fewest->Most)':
+          return a.projectCount - b.projectCount;
+        default:
+          return 0;
+      }
+    });
+
   return (
-    <>
-      <div className="flex flex-row justify-end p-[1rem]">
-        <Button buttonColor="regularButton" onClick={() => setSlide('0px')}>
+    <div className="flex flex-col gap-[1rem] p-[1rem]">
+      <div className="flex flex-row justify-between sm:items-center items-start">
+        <div className="flex flex-row  flex-wrap justify-between items-center gap-[2rem]">
+          <h2 className="text-2xl">My Work</h2>
+          <div className="flex flex-row gap-[.5rem] justify-between items-center p-[.5rem] bg-gray-200 rounded-[1rem]">
+            <p className="rounded-[1rem] pt-[.5rem] pb-[.5rem] pl-[2rem] pr-[2rem]">All Projects</p>
+            <p className="bg-white rounded-[1rem] pt-[.5rem] pb-[.5rem] pl-[2rem] pr-[2rem]">
+              All Clients
+            </p>
+          </div>
+        </div>
+        <Button
+          buttonColor="regularButton"
+          onClick={() => {
+            setSlide('0px');
+            resetFormData();
+          }}
+          textColor="white"
+          width="200px"
+        >
           Add Client
         </Button>
       </div>
-      <div className="m-auto p-[1rem]">
-        <div className="flex flex-row flex-wrap gap-[1rem] justify-start w-full">
-          {clients.data.map((client) => (
-            <div className="w-[calc((100%-2rem)/3)]">
-              <Card style="card1">
-                <div className="flex flex-row justify-between mb-[1rem]">
-                  <div className="flex flex-col justify-center items-left gap-4">
-                    <div>
-                      <h2>Name</h2>
-                      <p className="text-2xl">{client.name}</p>
-                    </div>
+      <div className="flex flex-row flex-wrap items-center gap-[1rem]">
+        <InsightCard title="Total" value="$12000" />
+        <InsightCard title="Active" value="$8000" />
+        <InsightCard title="Inactive" value="10" />
+        <InsightCard title="Archive" value="5" />
+        <InsightCard title="Clients" value="30" />
+      </div>
 
-                    <div>
-                      <h2>Type</h2>
-                      <p className="text-2xl">{client.type}</p>
-                    </div>
+      {/* client-list------------------------------------------------- */}
+      <div className="flex flex-row flex-nowrap items-center justify-start gap-[1rem]">
+        <div className="w-[20rem]">
+          <Input
+            placeholder="Search client"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+          />
+        </div>
+        <Select
+          value={select}
+          color="bg-white"
+          onChange={setSelect}
+          placeHolder="Sort By"
+          options={['Names(Newest-Oldest)', 'Invoices(Fewest-Most)', 'Total Projects(Fewest-Most)']}
+        />
+      </div>
+
+      {filteredClients.length == 0 ? (
+        <div className="flex flex-col flex-nowrap items-center gap-[1rem] p-[3rem] border-2 border-dashed border-blue-100 bg-blue-50 rounded-[20px]">
+          <p className='text-gray-400 text-center'>No clients added yet. Start by adding your first client to begin managing projects.</p>
+          <Button
+            buttonColor="regularButton"
+            onClick={() => {
+              setSlide('0px');
+              resetFormData();
+            }}
+            textColor="white"
+            width="200px"
+          >
+            Add Client
+          </Button>
+        </div>
+      ) : (
+        <div className="rounded-[20px] border overflow-hidden border-gray-200">
+          <div className="overflow-x-auto w-full">
+          <table className="text-center w-full min-[720px]">
+            <thead className="bg-gray-200">
+              <tr>
+                <th className="text-left px-4 py-4">Client Name</th>
+                <th className="px-4 py-2">Phone</th>
+                <th className="px-4 py-2">Email</th>
+                <th className="px-4 py-2">Country</th>
+                <th className="px-4 py-2">Invoices</th>
+                <th className="px-4 py-2">Total Projects</th>
+                <th className="px-4 py-2"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredClients
+                .sort((a, b) => {
+                  switch (select) {
+                    case 'Names(Newest-Oldest)':
+                      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+
+                    case 'Invoices(Fewest->Most)':
+                      return a.invoiceCount - b.invoiceCount;
+                    case 'Total Projects(Fewest->Most)':
+                      return a.projectCount - b.projectCount;
+                    default:
+                      return 0;
+                  }
+                })
+                .map((client, index) => (
+                  <tr key={index} className="hover:bg-gray-100">
+                    <td className="text-left px-4 py-[1rem] border-t border-gray-200">
+                      {client.name}
+                    </td>
+                    <td className="px-4 border-t border-gray-200">{client.phone}</td>
+                    <td className="px-4 border-t border-gray-200">{client.email}</td>
+                    <td className="px-4 border-t border-gray-200">{client.address.country}</td>
+                    <td className="px-4 border-t border-gray-200">{client.invoiceCount}</td>
+                    <td className="px-4 border-t border-gray-200">{client.projectCount}</td>
+                    <td
+                      className="px-4 border-t border-gray-200"
+                      onClick={() => handleClientDetail(client.id)}
+                    >
+                      ...
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+          </div>
+          <div className="bg-gray-200 w-full p-[1rem] flex felx-row flex-nowrap justify-between items-center">
+            <p>Total {clients.meta.total}</p>
+            <div className="flex felx-row flex-nowrap justify-between items-center gap-[1rem]">
+              <div
+                onClick={() => {
+                  if (currentPage > 1) {
+                    setCurrentPage(currentPage - 1);
+                    if (currentPage - 1 < pageWindowStart) {
+                      setPageWindowStart(pageWindowStart - PAGE_WINDOW_SIZE);
+                    }
+                  }
+                }}
+              >
+                {'<'}
+              </div>
+              {Array.from({
+                length: Math.min(PAGE_WINDOW_SIZE, clients.meta.totalPages - pageWindowStart + 1),
+              }).map((_, i) => {
+                const pageNumber = pageWindowStart + i;
+                return (
+                  <div
+                    key={pageNumber}
+                    onClick={() => setCurrentPage(pageNumber)}
+                    className={`flex justify-center items-center p-[.5rem] border border-gray-400 rounded-[5px] h-[25px] w-[25px] hover:bg-gray-300 ${currentPage === pageNumber ? 'bg-gray-400' : 'bg-gray-200'}`}
+                  >
+                    {pageNumber}
                   </div>
-                  <div className=" flex flex-col justify-center items-center">
-                    <h2 className={`text-[${fontSizeOptions.h2}] font-semibold`}>5</h2>
-                    <p className="text-2xl">Projects</p>
-                  </div>
-                </div>
-              </Card>
+                );
+              })}
+
+              <div
+                onClick={() => {
+                  if (currentPage < clients.meta.totalPages) {
+                    setCurrentPage(currentPage + 1);
+                    if (currentPage + 1 >= pageWindowStart + PAGE_WINDOW_SIZE) {
+                      setPageWindowStart(pageWindowStart + PAGE_WINDOW_SIZE);
+                    }
+                  }
+                }}
+              >
+                {'>'}
+              </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      <Slide
+        title="Add Client"
+        confirmText="Add"
+        slide={slide}
+        onClose={() => setSlide('100%')}
+        onConfirm={onSubmit}
+      >
+        <div className="flex flex-col gap-[1.5rem]">
+          <Input
+            color="bg-white"
+            label="Client Name"
+            value={oneClient.name}
+            onChange={(e) => setOneClient({ ...oneClient, name: e.target.value })}
+          />
+          <Input
+            color="bg-white"
+            label="Phone"
+            value={oneClient.phone}
+            onChange={(e) => setOneClient({ ...oneClient, phone: e.target.value })}
+          />
+          <Input
+            color="bg-white"
+            label="Email"
+            type="email"
+            value={oneClient.email}
+            onChange={(e) => setOneClient({ ...oneClient, email: e.target.value })}
+          />
+          <TextArea
+            label="Notes"
+            color="bg-white"
+            value={oneClient.notes}
+            onChange={(e) => setOneClient({ ...oneClient, notes: e.target.value })}
+          />
+
+          <p>Client's Address</p>
+          <Input
+            color="bg-white"
+            label="Street Address"
+            value={oneClient.address?.street}
+            onChange={(e) =>
+              setOneClient({
+                ...oneClient,
+                address: { ...oneClient.address, street: e.target.value },
+              })
+            }
+          />
+          <Input
+            color="bg-white"
+            label="Postal Code"
+            value={oneClient.address?.postalCode}
+            onChange={(e) =>
+              setOneClient({
+                ...oneClient,
+                address: { ...oneClient.address, postalCode: e.target.value },
+              })
+            }
+          />
+          <Input
+            color="bg-white"
+            label="City"
+            value={oneClient.address?.city}
+            onChange={(e) =>
+              setOneClient({
+                ...oneClient,
+                address: { ...oneClient.address, city: e.target.value },
+              })
+            }
+          />
+          <Input
+            color="bg-white"
+            label="Country"
+            value={oneClient.address?.country}
+            onChange={(e) =>
+              setOneClient({
+                ...oneClient,
+                address: { ...oneClient.address, country: e.target.value },
+              })
+            }
+          />
+        </div>
+      </Slide>
+
+      {/* Client-details----------------------------------- */}
+      <Slide
+        title="Client Details"
+        slide={slideDetail}
+        onClose={() => setSlideDetail('100%')}
+        confirmText="Edit"
+        onConfirm={() => setSlideEdit('0px')}
+      >
+        <InfoRow label="Client Name" value={oneClient.name} />
+        <InfoRow label="Phone" value={oneClient.phone} />
+        <InfoRow label="Email" value={oneClient.email} />
+        <InfoRow label="Notes" value={oneClient.notes} vertical = {true}/>
+        <InfoRow label="Street Address" value={oneClient.address?.street} />
+        <InfoRow label="Postal Code" value={oneClient.address?.postalCode} />
+        <InfoRow label="City" value={oneClient.address?.city} />
+        <InfoRow label="Country" value={oneClient.address?.country} />
+
+        <div className="flex flex-col items-start p-[1rem] border-gray-200 bg-blue-50 rounded-[1rem] my-[1rem]">
+          <p>Projects</p>
+          {oneClient.projects?.map((project) => (
+            <p key={project._id}>{project.name}</p>
           ))}
         </div>
-      </div>
 
-      <div
-        className={`fixed top-0 right-0 h-full shadow-lg bg-white transition-transform duration-300`}
-        style={{ transform: `translateX(${slide})`, width: '400px' }}
+        <Button buttonColor="deleteButton" width="100%" textColor="white" onClick={deleteClient}>
+          Delete
+        </Button>
+      </Slide>
+
+      {/*----Edit page-------------------------------------- */}
+      <Slide
+        title="Edit Client"
+        confirmText="Save"
+        slide={slideEdit}
+        onClose={() => setSlideEdit('100%')}
+        onConfirm={updateClient}
       >
-        <div className='p-[1rem]'>
-        <h2 className={`text-[${fontSizeOptions.h2}] text-center bg-white`}>Add Client</h2>
-        </div>
-        <form
-          onSubmit={handleSubmit}
-          className="bg-gray-100 p-6 h-full"
-        >
-          <div className="flex flex-col gap-4">
-            <Input color="bg-white" label="Client Name" name="clientName"></Input>
-            <Input color="bg-white" label="Client Type" name="clientType"></Input>
-            <Input color="bg-white" label="Client Description" name="clientDescp"></Input>
-            <Input color="bg-white" label="Contact" name="clientContact"></Input>
-            <Input color="bg-white" label="E-mail" name="clientEmail" type="email"></Input>
-            <Input color="bg-white" label="Address" name="clientAddress"></Input>
-          </div>
-          <div className="flex flex-row justify-center gap-[1rem] mt-[2rem]">
-            <Button buttonColor="regularButton" onClick={() => setSlide('100%')} width="100%">
-              Back
-            </Button>
-            <Button buttonColor="regularButton" type="submit" width="100%">
-              Save
-            </Button>
-          </div>
-        </form>
-      </div>
-    </>
+        <Input
+          color="bg-white"
+          label="Client Name"
+          value={oneClient.name}
+          onChange={(e) => setOneClient({ ...oneClient, name: e.target.value })}
+        />
+        <Input
+          color="bg-white"
+          label="Phone"
+          value={oneClient.phone}
+          onChange={(e) => setOneClient({ ...oneClient, phone: e.target.value })}
+        />
+        <Input
+          color="bg-white"
+          label="Email"
+          type="email"
+          value={oneClient.email}
+          onChange={(e) => setOneClient({ ...oneClient, email: e.target.value })}
+        />
+        <TextArea
+          label="Notes"
+          color="bg-white"
+          value={oneClient.notes}
+          onChange={(e) => setOneClient({ ...oneClient, notes: e.target.value })}
+        />
+
+        <p>Client's Address</p>
+        <Input
+          color="bg-white"
+          label="Street Address"
+          value={oneClient.address?.street}
+          onChange={(e) =>
+            setOneClient({
+              ...oneClient,
+              address: { ...oneClient.address, street: e.target.value },
+            })
+          }
+        />
+        <Input
+          color="bg-white"
+          label="Postal Code"
+          value={oneClient.address?.postalCode}
+          onChange={(e) =>
+            setOneClient({
+              ...oneClient,
+              address: { ...oneClient.address, postalCode: e.target.value },
+            })
+          }
+        />
+        <Input
+          color="bg-white"
+          label="City"
+          value={oneClient.address?.city}
+          onChange={(e) =>
+            setOneClient({
+              ...oneClient,
+              address: { ...oneClient.address, city: e.target.value },
+            })
+          }
+        />
+        <Input
+          color="bg-white"
+          label="Country"
+          value={oneClient.address?.country}
+          onChange={(e) =>
+            setOneClient({
+              ...oneClient,
+              address: { ...oneClient.address, country: e.target.value },
+            })
+          }
+        />
+      </Slide>
+    </div>
   );
 };
 

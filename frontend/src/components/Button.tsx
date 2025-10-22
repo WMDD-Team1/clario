@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import { colorOptions } from "./style/color";
 
 interface ButtonProps {
-  buttonColor: 'lightButton' | 'darkButton' | 'regularButton';
+  buttonColor: 'lightButton' | 'darkButton' | 'regularButton' | 'deleteButton';
   children: ReactNode;
   onClick?: () => void;
   type?: "button" | "submit" | "reset";

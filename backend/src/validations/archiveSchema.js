@@ -1,5 +1,5 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const archiveSchema = z.object({
-    isArchived: z.boolean().default(false),
-})
+	isArchived: z.boolean().default(false),
+});

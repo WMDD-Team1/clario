@@ -1,9 +1,10 @@
-import { Route, Routes } from 'react-router-dom';
-import { PrivateRoute } from './api/auth/PrivateRoute';
-import { Dashboard } from './pages/Dashboard';
-import { Landing } from './pages/Landing';
-import { IncomeExpenses } from './pages/IncomeExpenses';
-import Clients from '@pages/Clients';
+import Clients from "@pages/Clients";
+import { Route, Routes } from "react-router-dom";
+import { PrivateRoute } from "./api/auth/PrivateRoute";
+import { Dashboard } from "./pages/Dashboard";
+import { Landing } from "./pages/Landing";
+import { IncomeExpenses } from "@pages/IncomeExpenses";
+import MyWork from "@pages/MyWork";
 
 function App() {
   return (
@@ -40,6 +41,14 @@ function App() {
         element={
           <PrivateRoute>
             <Clients />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/my-work"
+        element={
+          <PrivateRoute>
+            <MyWork />
           </PrivateRoute>
         }
       />

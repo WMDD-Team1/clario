@@ -24,7 +24,7 @@ const UserSchema = new mongoose.Schema(
 		},
 		userType: {
 			type: String,
-			enum: ["Designer", "Developer", "Consultant", "Other"],
+			enum: ["Freelancer", "Contractor", "Developer", "Designer", "Consultant", "Other"],
 			default: null,
 		},
 		defaultFeeType: { type: String, enum: ["Fixed price", "Milestone based", "Hourly", "Retainer"], default: null },
@@ -36,6 +36,27 @@ const UserSchema = new mongoose.Schema(
 		onBoardingCompletedAt: {
 			type: Date,
 			default: null,
+		},
+		settings: {
+			general: {
+				language: {
+					type: String,
+					enum: ["en", "fr"],
+					default: "en",
+				},
+				theme: {
+					type: String,
+					enum: ["light", "dark"],
+					default: "light",
+				},
+			},
+			finance: {
+				province: {
+					type: String,
+					enum: ["British Columbia", "Quebec"],
+					default: "British Columbia",
+				},
+			},
 		},
 	},
 	{

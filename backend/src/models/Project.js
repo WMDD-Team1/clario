@@ -1,5 +1,55 @@
 import mongoose from "mongoose";
 
+const DeliverableSchema = new mongoose.Schema(
+	{
+		name: { type: String, required: true },
+		description: { type: String },
+		fileUrl: { type: String, default: null },
+		dueDate: { type: Date },
+	},
+	{
+		_id: true,
+		toJSON: {
+			virtuals: true,
+			transform: (_, ret) => {
+				ret.id = ret._id;
+				delete ret._id;
+				return ret;
+			},
+		},
+	}
+);
+const MilestoneSchema = new mongoose.Schema(
+	{
+		name: { type: String, required: true },
+		description: { type: String },
+		amount: { type: Number, required: true },
+		dueDate: { type: Date },
+		status: {
+			type: String,
+			enum: ["Pending", "In-Progress", "Completed"],
+			default: "Pending",
+		},
+		generateInvoice: {
+			type: String,
+			enum: ["on_completion", "on_due_date"],
+			default: "on_completion",
+		},
+		deliverables: [DeliverableSchema],
+	},
+	{
+		_id: true,
+		toJSON: {
+			virtuals: true,
+			transform: (_, ret) => {
+				ret.id = ret._id;
+				delete ret._id;
+				return ret;
+			},
+		},
+	}
+);
+
 const ProjectSchema = new mongoose.Schema(
 	{
 		userId: {
@@ -16,31 +66,22 @@ const ProjectSchema = new mongoose.Schema(
 			type: String,
 			required: true,
 		},
+		description: String,
+
 		type: {
 			type: String,
 		},
 
-		description: String,
-		fee: {
-			type: Number,
-		},
-		feeType: {
-			type: String,
-			enum: ["milestone", "deliverable", "fixed", "subscription", "hourly"],
-		},
-		taxable: {
-			type: Boolean,
-			default: false,
-		},
-		color: {
-			type: String,
-			// may need default hex?
-		},
+		totalBudget: { type: Number },
 
 		status: {
 			type: String,
-			enum: ["planned", "in-progress", "completed", "cancelled"],
-			default: "planned",
+			enum: ["Planning", "In-Progress", "Review", "Done"],
+			default: "Planning",
+		},
+		isActive: {
+			type: Boolean,
+			default: false,
 		},
 		isArchived: {
 			type: Boolean,
@@ -48,7 +89,8 @@ const ProjectSchema = new mongoose.Schema(
 		},
 
 		startDate: Date,
-		endDate: Date,
+		dueDate: Date,
+		milestones: [MilestoneSchema],
 	},
 	{
 		timestamps: true,

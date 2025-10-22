@@ -1,38 +1,69 @@
 import Client from "../../models/Client.js";
 
 // CRUD
-export const findAllClients = async (userId, page, limit) => {
+export const findAllClients = async (userId, query = {}) => {
+	const { page = 1, limit = 10, search = "", sortBy = "name", sortOrder = "asc", viewType = "all" } = query;
+
 	const skip = (page - 1) * limit;
+
+	// filter
+	const filter = { userId };
+	if (viewType === "archived") filter.isArchived = true;
+	else if (viewType === "active") filter.isArchived = false;
+
+	// search
+	if (search.trim()) {
+		const regex = new RegExp(search, "i");
+		filter.$or = [{ name: regex }, { email: regex }, { phone: regex }, { "address.country": regex }];
+	}
+
+	// sort
+	const sortOptions = {};
+	const validSortFields = ["name"];
+	if (validSortFields.includes(sortBy)) {
+		sortOptions[sortBy] = sortOrder === "asc" ? 1 : -1;
+	} else {
+		sortOptions.name = 1;
+	}
+
 	const [clients, total] = await Promise.all([
-		Client.find({ userId }).skip(skip).limit(limit).sort({ name: 1 }).populate({ path: "projects" }),
-		// .populate("invoices")
-		Client.countDocuments({ userId }),
+		Client.find(filter)
+			.skip(skip)
+			.limit(limit)
+			.sort(sortOptions)
+			.populate({ path: "projects", select: "_id name isArchived" })
+			.populate({ path: "invoices", select: "_id totalAmount" }),
+		Client.countDocuments(filter),
 	]);
 
-	const data = clients.map((client) => ({
+	let data = clients.map((client) => ({
 		...client.toJSON(),
-		projectCount: client.projects?.length || 0,
+		projectCount: client.projects?.filter((p) => !p.isArchived)?.length || 0,
 		invoiceCount: client.invoices?.length || 0,
 	}));
+
+	if (["projectCount", "invoiceCount"].includes(sortBy)) {
+		const dir = sortOrder === "asc" ? 1 : -1;
+		data.sort((a, b) => (a[sortBy] - b[sortBy]) * dir);
+
+		data = data.slice((page - 1) * limit, page * limit);
+	}
 
 	return {
 		data,
 		meta: {
 			total,
-			page,
-			limit,
+			page: Number(page),
+			limit: Number(limit),
 			totalPages: Math.ceil(total / limit),
 		},
 	};
 };
 
 export const findByClientId = async (id, userId) => {
-	const data = await Client.findOne({ _id: id, userId }).populate({
-		path: "projects",
-		select: "_id name",
-	});
-
-	return data?.toJSON();
+	return await Client.findOne({ _id: id, userId })
+		.populate({ path: "projects", select: "_id name isArchived" })
+		.populate({ path: "invoices", select: "_id totalAmount status" });
 };
 
 export const createNewClient = async (payload, userId) => {
@@ -47,13 +78,13 @@ export const createNewClient = async (payload, userId) => {
 	};
 };
 
-export const updateClientById = async (id, userId, data) => {
+export const updateClientById = async (id, userId, payload) => {
 	return await Client.findOneAndUpdate(
 		{
 			_id: id,
 			userId,
 		},
-		data,
+		payload,
 		{ new: true }
 	);
 };

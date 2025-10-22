@@ -1,14 +1,13 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import Button from "@components/Button";
+import Loading from "@components/Loading";
 
 export const Landing = () => {
   const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
 
   if (isLoading) {
     return (
-      <div className="h-screen flex items-center justify-center">
-        <p className="text-lg">Loading...</p>
-      </div>
+      <Loading/>
     );
   }
 
@@ -26,6 +25,7 @@ export const Landing = () => {
       </p>
       <Button
         onClick={() => loginWithRedirect()}
+        buttonColor="darkButton"
         className="px-6 py-3 bg-white text-indigo-600 font-semibold rounded-lg shadow-md hover:bg-gray-100 transition"
       >
         Log In / Sign Up
