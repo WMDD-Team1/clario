@@ -10,30 +10,28 @@ export const findAllProjects = async (userId, query = {}) => {
 		sortBy = "createdAt",
 		sortOrder = "desc",
 		status,
-		isActive,
-		archived,
+		viewType = "all",
 	} = query;
 	const skip = (page - 1) * limit;
-
 	const filter = { userId };
 
-	if (archived === "true") filter.isArchived = true;
-	else if (archived === "false") filter.isArchived = false;
+	if (viewType === "active") filter.isActive = true;
+	else if (viewType === "archived") filter.isArchived = true;
 
-	if (isActive === "true") filter.isActive = true;
-	else if (isActive === "false") filter.isActive = false;
-
-	if (status) filter.status = status;
+	if (status && status !== "All") {
+		filter.status = status;
+	}
 
 	if (search.trim()) {
+		const regex = new RegExp(search, "i");
 		const clientMatches = await Client.find({
-			name: { $regex: search, $options: "i" },
+			name: regex,
 			userId,
 		}).select("_id");
 
 		const clientIds = clientMatches.map((c) => c._id);
 
-		filter.$or = [{ name: { $regex: search, $options: "i" } }, { clientId: { $in: clientIds } }];
+		filter.$or = [{ name: regex }, { clientId: { $in: clientIds } }];
 	}
 
 	const sortOptions = {};

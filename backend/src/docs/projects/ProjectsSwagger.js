@@ -4,93 +4,64 @@
  *   name: Projects
  *   description: Manage user projects and their associated clients, milestones, and deliverables.
  */
-
 /**
  * @swagger
  * /api/projects:
  *   get:
- *     summary: Get all projects for the authenticated user
- *     description:
- *       Returns a paginated and filterable list of projects created by the authenticated user.<br>
- *       Supports **search**, **status**, **archived**, **isActive**, and **sorting** options.
+ *     summary: Get all projects with search, filter, and sort
  *     tags: [Projects]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: query
- *         name: page
+ *         name: viewType
  *         schema:
- *           type: integer
- *           default: 1
- *         description: Page number for pagination
- *       - in: query
- *         name: limit
- *         schema:
- *           type: integer
- *           default: 10
- *         description: Number of projects per page
+ *           type: string
+ *           enum: [all, active, archived]
+ *         description: Filter projects by current tab (All, Active, Archived)
+ *         example: "active"
  *       - in: query
  *         name: search
  *         schema:
  *           type: string
- *         description: Search projects by project name or client name
+ *         description: Search by project or client name
+ *         example: "Website"
  *       - in: query
  *         name: status
  *         schema:
  *           type: string
- *           enum: [Planning, In-Progress, Review, Done]
- *         description: Filter by project status
- *       - in: query
- *         name: archived
- *         schema:
- *           type: string
- *           enum: ["true", "false"]
- *         description: Filter archived or non-archived projects
- *       - in: query
- *         name: isActive
- *         schema:
- *           type: string
- *           enum: ["true", "false"]
- *         description: Filter active or inactive projects
+ *           enum: [Planning, In-Progress, Review, Done, All]
+ *         description: Filter projects by status
  *       - in: query
  *         name: sortBy
  *         schema:
  *           type: string
- *           enum: [createdAt, startDate, dueDate, totalBudget, milestonesCount]
+ *           enum: [createdAt, startDate, dueDate, totalBudget, milestonesCount, name]
  *         description: Field to sort by
  *       - in: query
  *         name: sortOrder
  *         schema:
  *           type: string
  *           enum: [asc, desc]
- *         description: Sort order (ascending or descending)
+ *         description: Sort order
+ *         example: "desc"
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         description: Page number
+ *         example: 1
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         description: Number of items per page
+ *         example: 10
  *     responses:
  *       200:
- *         description: Successfully retrieved paginated projects list
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 data:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/Project'
- *                 meta:
- *                   type: object
- *                   properties:
- *                     total:
- *                       type: integer
- *                     page:
- *                       type: integer
- *                     limit:
- *                       type: integer
- *                     totalPages:
- *                       type: integer
- *       401:
- *         description: Unauthorized (JWT missing or invalid)
+ *         description: Successfully retrieved projects
  *       500:
- *         description: Internal server error
+ *         description: Internal Server Error
  */
 
 /**
