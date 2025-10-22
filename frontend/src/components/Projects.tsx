@@ -63,7 +63,7 @@ const Projects = () => {
     ]
     const projects: Project[] = [
         {
-            name: "Website Redesign – EcoBuild",
+            name: "Website Redesign - EcoBuild",
             startDate: "Aug 15, 2025",
             endDate: "Oct 30, 2025",
             clientName: "Sarah Thompson",
@@ -72,7 +72,7 @@ const Projects = () => {
             amount: "$4,800",
         },
         {
-            name: "Mobile App UI – FitTrack",
+            name: "Mobile App UI - FitTrack",
             startDate: "Sep 05, 2025",
             endDate: "Nov 20, 2025",
             clientName: "Daniel Roberts",
@@ -81,7 +81,7 @@ const Projects = () => {
             amount: "$3,200",
         },
         {
-            name: "Branding Package – Luna Café",
+            name: "Branding Package - Luna Café",
             startDate: "Jul 10, 2025",
             endDate: "Oct 30, 2025",
             clientName: "Olivia Martinez",
@@ -90,7 +90,7 @@ const Projects = () => {
             amount: "$2,750",
         },
         {
-            name: "E-Commerce Setup – StyleNest",
+            name: "E-Commerce Setup - StyleNest",
             startDate: "Jun 01, 2025",
             endDate: "Aug 10, 2025",
             clientName: "Michael Chen",
@@ -99,7 +99,7 @@ const Projects = () => {
             amount: "$6,500",
         },
         {
-            name: "Website Redesign – EcoBuild",
+            name: "Website Redesign - EcoBuild",
             startDate: "Aug 15, 2025",
             endDate: "Oct 30, 2025",
             clientName: "Sarah Thompson",
@@ -108,7 +108,7 @@ const Projects = () => {
             amount: "$4,800",
         },
         {
-            name: "Website Redesign – EcoBuild",
+            name: "Website Redesign - EcoBuild",
             startDate: "Aug 15, 2025",
             endDate: "Oct 30, 2025",
             clientName: "Sarah Thompson",
@@ -121,7 +121,7 @@ const Projects = () => {
     return (
         <>
             {/* Cards */}
-            <div className="grid grid-cols-5 gap-4 mb-10">
+            <div className="flex flex-col gap-4 mb-10 md:flex-row ">
                 {projectsInsights.map(
                     (pi) => <InsightCard title={pi.title} value={pi.value} key={pi.title}></InsightCard>
                 )}
