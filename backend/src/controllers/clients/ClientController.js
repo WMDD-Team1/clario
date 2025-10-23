@@ -11,9 +11,7 @@ import { clientSchema } from "../../validations/clientSchema.js";
 export const getAllClients = async (req, res) => {
 	try {
 		const { id: userId } = req.user;
-		const { page = 1, limit = 10 } = req.query;
-
-		const result = await findAllClients(userId, parseInt(page), parseInt(limit));
+		const result = await findAllClients(userId, req.query);
 
 		res.status(200).json(result);
 	} catch (err) {
@@ -28,7 +26,6 @@ export const getClientById = async (req, res) => {
 		const { id: userId } = req.user;
 
 		const result = await findByClientId(clientId, userId);
-
 		if (!result) return res.status(404).json({ message: "Client not found" });
 
 		res.status(200).json(result);
@@ -37,7 +34,6 @@ export const getClientById = async (req, res) => {
 
 		// when cliendId is string
 		if (err.name === "CastError") return res.status(400).json({ message: "Invalid client ID format" });
-
 		res.status(500).json({ message: "Internal Server Error" });
 	}
 };

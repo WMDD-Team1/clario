@@ -24,5 +24,19 @@ export const Dashboard = () => {
     logout({ logoutParams: { returnTo: window.location.origin } });
   };
 
-  return <DashboardLayout />;
+  return (
+    <>
+      <div className="h-screen flex flex-col items-center justify-center">
+        <h1 className="text-3xl font-bold mb-4">Hello, {appUser?.name} {appUser?.id}</h1>
+        <Button
+          buttonColor="darkButton"
+          width="10rem"
+          textColor="white"
+          onClick={handleLogout}
+        >
+          Log out
+        </Button>
+      </div>
+    </>
+  );
 };
