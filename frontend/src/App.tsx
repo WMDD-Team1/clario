@@ -3,8 +3,8 @@ import { Route, Routes } from "react-router-dom";
 import { PrivateRoute } from "./api/auth/PrivateRoute";
 import { Dashboard } from "./pages/Dashboard";
 import { Landing } from "./pages/Landing";
-import { IncomeExpenses } from "@pages/IncomeExpenses";
-import MyWork from "@pages/MyWork";
+import Settings from "./pages/Settings";
+import FinancialDashboard from "@pages/FinancialDashboard";
 
 function App() {
   return (
@@ -26,33 +26,13 @@ function App() {
           </PrivateRoute>
         }
       />
+      {/* Temporary route for development - bypasses authentication */}
+      <Route path="/dev-dashboard" element={<Dashboard />} />
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/financial-dashboard" element={<FinancialDashboard />} />
+        <Route path="/settings" element={<Settings />} />
+      </Routes>
 
-      <Route
-        path="/income&expenses"
-        element={
-          <PrivateRoute>
-            <IncomeExpenses />
-          </PrivateRoute>
-        }
-      />
-
-      <Route
-        path="/clients"
-        element={
-          <PrivateRoute>
-            <Clients />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/my-work"
-        element={
-          <PrivateRoute>
-            <MyWork />
-          </PrivateRoute>
-        }
-      />
-    </Routes>
   );
 }
 
