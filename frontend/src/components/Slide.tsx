@@ -35,7 +35,7 @@ const Slide: React.FC<SlideProps> = ({
       />
 
       <div
-        className="fixed top-0 right-0 h-full shadow-lg bg-white transition-transform duration-300 sm:rounded-tl-[20px] rounded-bl-[20px] z-50 flex flex-col sm:w-[450px]  w-full"
+        className="fixed top-0 right-0 h-full shadow-lg bg-white transition-transform duration-300 sm:rounded-tl-[20px] sm:rounded-bl-[20px] z-50 flex flex-col sm:w-[450px]  w-full overflow-hidden"
         style={{ transform: `translateX(${slide})`}}
       >
         <h2
