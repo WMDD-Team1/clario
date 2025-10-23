@@ -1,9 +1,8 @@
 import { Project } from "@/models";
-import InsightCard from "@components/InsightCard";
 import Table from "@components/Table";
 import { useState } from "react";
-import FiltersBar from "./FiltersBar";
 import EmptyState from "./EmptyState";
+import FiltersBar from "./FiltersBar";
 
 // CONSTS
 const STAGES = [
@@ -74,28 +73,6 @@ const PROJECT_HEADERS = [
 ]
 
 // Static sample data TO BE REPLACED WITH DYNAMIC WHEN BACKEND IS READY
-const projectInsights = [
-    {
-        title: "Total",
-        value: "$12.000"
-    },
-    {
-        title: "Active",
-        value: "$8.000"
-    },
-    {
-        title: "Inactive",
-        value: "10"
-    },
-    {
-        title: "Archive",
-        value: "5"
-    },
-    {
-        title: "Clients",
-        value: "30"
-    }
-];
 const projects: Project[] = [
     {
         name: "Website Redesign - EcoBuild",
@@ -172,17 +149,6 @@ const Projects = () => {
 
     return (
         <>
-            {/* Cards */}
-            <div className="grid grid-cols-2 gap-4 mb-10 md:grid-cols-5">
-                {projectInsights.map((pi, i) => (
-                    <InsightCard
-                        key={pi.title}
-                        title={pi.title}
-                        value={pi.value}
-                        className={i === 0 ? "col-span-2 md:col-span-1" : ""}
-                    />
-                ))}
-            </div>
             {/* Table Filtering */}
             <FiltersBar
                 currentFilter={currentFilter}
@@ -197,8 +163,8 @@ const Projects = () => {
             {/* Table */}
             {!projects || projects.length === 0 ? (
                 <EmptyState
-                    title="It’s a little quiet here 👀"
-                    description="Add your first client and let’s get things moving!"
+                    title="It's a little quiet here 👀"
+                    description="Add your first project and let's get things moving!"
                     buttonText="Add Project"
                     onAction={() => console.log("Open project modal")}
                 />

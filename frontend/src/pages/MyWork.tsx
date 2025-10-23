@@ -1,7 +1,32 @@
 import Button from '@components/Button';
+import InsightCard from '@components/InsightCard';
 import Projects from '@components/Projects';
 import ToggleButton from '@components/ToggleButton';
 import { useState } from 'react';
+
+// Static data to be replaced when backend is ready
+const myWorkInsights = [
+    {
+        title: "Total",
+        value: "$12.000"
+    },
+    {
+        title: "Active",
+        value: "$8.000"
+    },
+    {
+        title: "Inactive",
+        value: "10"
+    },
+    {
+        title: "Archive",
+        value: "5"
+    },
+    {
+        title: "Clients",
+        value: "30"
+    }
+];
 
 const MyWork = () => {
     const [views, setViews] = useState([
@@ -51,6 +76,21 @@ const MyWork = () => {
                 </section>
             </div>
 
+            {/* Insights */}
+
+            {/* Cards */}
+            <div className="grid grid-cols-2 gap-4 mb-10 md:grid-cols-5">
+                {myWorkInsights.map((pi, i) => (
+                    <InsightCard
+                        key={pi.title}
+                        title={pi.title}
+                        value={pi.value}
+                        className={i === 0 ? "col-span-2 md:col-span-1" : ""}
+                    />
+                ))}
+            </div>
+
+            {/* Projects or Clients */}
             <div>{view.key === 'projects' ? <Projects /> : null}</div>
         </>
     )

@@ -8,8 +8,8 @@ interface Props {
 }
 
 const EmptyState = ({
-    title = "It’s a little quiet here 👀",
-    description = "Add your first client and let’s get things moving!",
+    title = "It's a little quiet here 👀",
+    description = "Add your first client and let's get things moving!",
     buttonText = "Add Project",
     onAction,
 }: Props) => {
