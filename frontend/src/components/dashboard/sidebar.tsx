@@ -1,31 +1,35 @@
-import React from "react"
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 interface NavItem {
-  id: string
-  label: string
+  id: string;
+  label: string;
+  path?: string;
 }
 
 interface SidebarProps {
-  position: "top" | "bottom"
+  position: "top" | "bottom";
 }
 
 export function Sidebar({ position }: SidebarProps) {
-  // Define top and bottom items
+  const navigate = useNavigate();
+
+  
   const topItems: NavItem[] = [
-    { id: "dashboard", label: "Dashboard" },
+    { id: "dashboard", label: "Dashboard", path:"/dashboard" },
     { id: "money-flow", label: "Money Flow" },
     { id: "my-work", label: "My Work" },
-    { id: "settings", label: "Settings" },
-  ]
+    { id: "settings", label: "Settings", path: "/settings" }, 
+  ];
 
   const bottomItems: NavItem[] = [
     { id: "support", label: "Support & FAQ" },
     { id: "logout", label: "Log Out" },
-  ]
+  ];
 
-  const items = position === "top" ? topItems : bottomItems
-  const positionClasses = position === "top" ? "top-28" : "bottom-6"
-  const [activeItem, setActiveItem] = React.useState("dashboard")
+  const items = position === "top" ? topItems : bottomItems;
+  const positionClasses = position === "top" ? "top-28" : "bottom-6";
+  const [activeItem, setActiveItem] = React.useState("dashboard");
 
   return (
     <aside className={`fixed left-6 ${positionClasses} z-20`}>
@@ -33,9 +37,14 @@ export function Sidebar({ position }: SidebarProps) {
         {items.map((item) => (
           <div key={item.id} className="relative group">
             <button
-              onClick={() => setActiveItem(item.id)}
+              onClick={() => {
+                setActiveItem(item.id);
+                if (item.path) navigate(item.path); 
+              }}
               className={`w-14 h-14 rounded-2xl transition-colors ${
-                activeItem === item.id ? "bg-gray-500" : "bg-gray-600 hover:bg-gray-500"
+                activeItem === item.id
+                  ? "bg-gray-500"
+                  : "bg-gray-600 hover:bg-gray-500"
               }`}
               aria-label={item.label}
             />
@@ -48,5 +57,5 @@ export function Sidebar({ position }: SidebarProps) {
         ))}
       </div>
     </aside>
-  )
+  );
 }

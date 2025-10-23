@@ -3,6 +3,7 @@ import { PrivateRoute } from "./api/auth/PrivateRoute";
 import FinancialDashboard from "./pages/FinancialDashboard";
 import { Dashboard } from "./pages/Dashboard";
 import { Landing } from "./pages/Landing";
+import Settings from "./pages/Settings";
 
 function App() {
   return (
@@ -28,8 +29,9 @@ function App() {
       <Route path="/dev-dashboard" element={<Dashboard />} />
         <Route path="/" element={<Dashboard />} />
         <Route path="/financial-dashboard" element={<FinancialDashboard />} />
-    </Routes>
-    
+        <Route path="/settings" element={<Settings />} />
+      </Routes>
+
   );
 }
 
