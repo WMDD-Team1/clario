@@ -3,6 +3,7 @@ import { extractPdfText, extractImageText, extractContractFields } from "../../u
 import Contract from "../../models/Contract.js";
 import Project from "../../models/Project.js";
 import { analyzeContractText } from "../../utils/analyze.js";
+import { Client } from "../../models/Client.js";
 
 export const uploadContractService = async (file, userId, clientId, projectId) => {
 	if (!file) throw new Error("No file uploaded");
@@ -37,7 +38,19 @@ export const uploadContractService = async (file, userId, clientId, projectId) =
 		if (fullText.trim().length > 50) {
 			try {
 				projectInput = await extractContractFields(fullText);
-				console.log(projectInput);
+				if (projectInput.clientName) {
+					const client = await Client.findOne({
+						userId,
+						name: { $regex: new RegExp(`^${projectInput.clientName}$`, "i") },
+					}).select("_id name");
+
+					if (client) {
+						projectInput.clientId = client._id.toString();
+						projectInput.clientExist = true;
+					} else {
+						projectInput.clientExist = false;
+					}
+				}
 			} catch (err) {
 				console.error("AI field extraction error:", err);
 			}
