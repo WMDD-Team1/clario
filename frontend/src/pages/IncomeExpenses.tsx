@@ -1,85 +1,187 @@
-import { use, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '../components/Button';
 import Input from '@components/Input';
 import Select from '@components/Select';
+import TextArea from '@components/TextArea';
+import Slide from '@components/Slide';
 import { fontSizeOptions } from '@components/style/font';
+import Table from '@components/Table';
+import axios from 'axios';
+import { useAuth0 } from '@auth0/auth0-react';
 
 export const IncomeExpenses = () => {
-  const [event, setEvent] = useState('');
-  const [incomeType, setIncomeType] = useState('');
-  const [expenseType, setExpenseType] = useState('');
-  const [repeatOption, setRepeatOption] = useState('');
-  const [repeat, setRepeat] = useState(false);
   const [incomeSlide, setIncomeSlide] = useState('100%');
   const [expenseSlide, setExpenseSlide] = useState('100%');
   const [inDetailSlide, setIndetailSlide] = useState('100%');
   const [exDetailSlide, setExdetailSlide] = useState('100%');
+  const [incomeType, setIncomeType] = useState('');
+  const [expenseType, setExpenseType] = useState('');
+  const [repeat, setRepeat] = useState(false);
+  const [repeatOption, setRepeatOption] = useState('');
 
-  // const [rollBall, setRollBall] = useState('');
+  const reset = () => {
+    setIncomeSlide('100%');
+    setExpenseSlide('100%');
+    setIndetailSlide('100%');
+    setExdetailSlide('100%');
+    setRepeat(false);
+  };
 
   const addIncome = () => {
     reset();
     setIncomeSlide('0px');
-    // setExpenseSlide('100%');
-    // setExdetailSlide('100%');
   };
+
   const addExpenses = () => {
     reset();
     setExpenseSlide('0px');
-    // setIncomeSlide('100%');
-    // setIndetailSlide('100%');
-  };
-  const incomeDetail = () => {
-    // setIncomeSlide('100%');
-    setIndetailSlide('0px');
-  };
-  const expenseDetail = () => {
-    // setExpenseSlide('100%');
-    setExdetailSlide('0px');
   };
 
-  const cancelOperation = () => {
-    reset();
-  };
+  const incomeDetail = () => setIndetailSlide('0px');
+  const expenseDetail = () => setExdetailSlide('0px');
+  const cancelOperation = () => reset();
 
-  // -Reset-form---------------------------
-  const reset = () => {
-    setIndetailSlide('100%');
-    setExdetailSlide('100%');
-    setIncomeSlide('100%');
-    setExpenseSlide('100%');
-    setRepeat(false);
-    // setRollBall('');
-  };
+  const headers = [
+    { key: 'Date', value: 'Date' },
+    { key: 'Amount', value: 'Amount' },
+    { key: 'Category', value: 'Category' },
+    { key: 'Details', value: 'Details' },
+  ];
 
-  const viewLists = () => setEvent('viewLists');
+  const data = [
+    { Date: 'Sep 12', Amount: 100, Category: 'Salary', Details: 'view' },
+    { Date: 'Sep 12', Amount: 50, Category: 'Food', Details: 'view' },
+    { Date: 'Sep 12', Amount: 200, Category: 'Freelance', Details: 'view' },
+  ];
+
+  const { getAccessTokenSilently } = useAuth0();
+
+  interface TransactionFormat {
+    projectId: string;
+    type: 'expense' | 'income';
+    date: string;
+    categoryId: string;
+    amount: number;
+    origin: string;
+    paymentMethod: string;
+    notes: string;
+    status: string;
+    paymentDate: string;
+    attachmentURL: string;
+    isArchived: boolean;
+  }
+
+  const [oneTransaction, setOneTransaction] = useState<TransactionFormat>({
+    projectId: '',
+    type: 'income',
+    date: '',
+    categoryId: '',
+    amount: 0,
+    origin: '',
+    paymentMethod: '',
+    notes: '',
+    status: '',
+    paymentDate: '',
+    attachmentURL: '',
+    isArchived: false,
+  });
+
+  // ------fetch all transactions-------------
+
+  async function getTransactionData() {
+    const token = await getAccessTokenSilently({
+      authorizationParams: {
+        audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
+      },
+    });
+
+    const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/transactions`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await response.data;
+    console.log(data);
+  }
+
+  // ------fetch one transaction-------------
+  const getOneTransaction = async () => {};
+
+  // ------upload Transaction-------------
+  const addTransaction = async () => {
+    const payload = {
+      projectId: '670a12b4d9e4fa1234abcd99',
+      type: 'expense',
+      date: '2025-10-05',
+      categoryId: '670a12b4d9e4fa1234abcd99',
+      amount: 200,
+      origin: 'Freelancer payment',
+      paymentMethod: 'Credit Card',
+      notes: 'Payment for October (max 200 characters)',
+      status: 'paid',
+      paymentDate: '2025-10-05',
+      attachmentURL: 'https://example.com/attachment.pdf',
+      isArchived: false,
+    };
+
+    const token = await getAccessTokenSilently({
+      authorizationParams: {
+        audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
+      },
+    });
+
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/transactions`,
+        payload,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error saving client:', error);
+    }
+  };
 
   return (
     <div>
-      <>
-        <Button buttonColor="regularButton" onClick={addIncome}>
-          Add Income
-        </Button>
-        <Button buttonColor="regularButton" onClick={addExpenses}>
-          Add Expenses
-        </Button>
-        <Button buttonColor="regularButton" onClick={viewLists}>
-          View All
-        </Button>
-      </>
+      <div className="flex gap-[1rem] mb-4">
+        <div className="w-full flex flex-col flex-nowrap gap-[1rem]">
+          <div className="flex flex-row flex-nowrap justify-between items-center">
+            Income
+            <Button buttonColor="regularButton" onClick={addIncome} textColor="white">
+              Add Income
+            </Button>
+          </div>
 
-      <div
-        className={`fixed top-0 right-0 h-full shadow-lg bg-white transition-transform duration-300 rounded-tl-[20px] rounded-bl-[20px] p-[1rem]`}
-        style={{ transform: `translateX(${incomeSlide})`, width: '400px' }}
-      >
-        <h2 className={`text-[${fontSizeOptions.h2}] text-center bg-white`}>Add Income</h2>
+          <div>
+            <Table headers={headers} data={data} />
+          </div>
+        </div>
+
+        <div className="w-full">
+          <div className="flex flex-row flex-nowrap justify-between items-center">
+            Expense
+            <Button buttonColor="regularButton" onClick={addExpenses} textColor="white">
+              Add Expenses
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* Income Slide------------- */}
+      <Slide title="Add Income" slide={incomeSlide} onClose={cancelOperation}>
         <p>Add your Income Receipt here</p>
         <div>
-          <i></i>
           <p>Choose a file or drag & drop it here</p>
           <p>JPG, PNG or PDF formats up to 5MB</p>
         </div>
-        <div className="flex flex-row justify-center gap-[1rem] mt-[2rem]">
+        <div className="flex gap-4 mt-4">
           <Button buttonColor="regularButton" width="100%">
             Browse
           </Button>
@@ -87,17 +189,19 @@ export const IncomeExpenses = () => {
             Skip
           </Button>
         </div>
-      </div>
+      </Slide>
 
-      {/* Income form-------------------- */}
-      <div
-        className={`fixed top-0 right-0 h-full shadow-lg bg-white transition-transform duration-300 rounded-tl-[20px] rounded-bl-[20px] p-[1rem]`}
-        style={{ transform: `translateX(${inDetailSlide})`, width: '400px' }}
-      >
-        <form action="" className="flex flex-col gap-4">
-          <h2 className={`text-[${fontSizeOptions.h2}] text-center bg-white`}>Income Title</h2>
-          <Input color="bg-white" label="Income Title" id="incomeTitle" type="input"></Input>
-          <Input color="bg-white" label="Date" id="incomeDate" type="Date"></Input>
+      {/* Income Detail Form---------------*/}
+      <Slide title="Add Income" slide={inDetailSlide} onClose={cancelOperation}>
+        <form className="flex flex-col gap-4">
+          <Input
+            label="Income Title"
+            id="incomeTitle"
+            color="bg-white"
+            value={oneTransaction.name}
+            onChange={(e) => setOneTransaction({ ...oneTransaction, name: e.target.value })}
+          />
+          <Input label="Date" id="incomeDate" type="date" color="bg-white" />
           <Select
             label="Type of Income"
             id="incomeType"
@@ -107,57 +211,34 @@ export const IncomeExpenses = () => {
             color="bg-white"
             width="100%"
           />
-          {/* <h2>{incomeType}</h2> */}
-          <Input color="bg-white" label="Invoice No." id="incomeInvoice" type="input"></Input>
-          <Input
-            color="bg-white"
-            label="Base Amount"
-            id="incomeAmount"
-            type="number"
-            min={0}
-          ></Input>
-          <Input color="bg-white" label="Notes" id="incomeNotes" type="input"></Input>
-          <div className="flex flex-row justify-center gap-[1rem] mt-[2rem]">
-            <Button buttonColor="regularButton" type="submit" width="100%">
-              Add
-            </Button>
-            <Button buttonColor="regularButton" onClick={cancelOperation} width="100%">
-              Cancel
-            </Button>
-          </div>
+          <Input label="Invoice No." id="incomeInvoice" color="bg-white" />
+          <Input label="Base Amount" id="incomeAmount" type="number" min={0} color="bg-white" />
+          <TextArea label="Notes" id="incomeNotes" color="bg-white" rows={3} />
         </form>
-      </div>
+      </Slide>
 
-      <div
-        className={`fixed top-0 right-0 h-full shadow-lg bg-white transition-transform duration-300 rounded-tl-[20px] rounded-bl-[20px] p-[1rem]`}
-        style={{ transform: `translateX(${expenseSlide})`, width: '400px' }}
-      >
-        <h2 className={`text-[${fontSizeOptions.h2}] text-center bg-white`}>Add Expenses</h2>
+      {/* Expense Slide---------------- */}
+      <Slide title="Add Expenses" slide={expenseSlide} onClose={cancelOperation}>
         <p>Add your Expenses Receipt here</p>
         <div>
-          <i></i>
           <p>Choose a file or drag & drop it here</p>
           <p>JPG, PNG or PDF formats up to 5MB</p>
         </div>
-        <div className="flex flex-row justify-center gap-[1rem] mt-[2rem]">
+        <div className="flex gap-4 mt-4">
           <Button buttonColor="regularButton" width="100%">
             Browse
           </Button>
-          <Button buttonColor="regularButton" onClick={expenseDetail} width="100%">
+          <Button buttonColor="regularButton" width="100%" onClick={expenseDetail}>
             Skip
           </Button>
         </div>
-      </div>
+      </Slide>
 
-      {/* Expenses Form----------- */}
-      <div
-        className={`fixed top-0 right-0 h-full shadow-lg bg-white transition-transform duration-300 rounded-tl-[20px] rounded-bl-[20px] p-[1rem]`}
-        style={{ transform: `translateX(${exDetailSlide})`, width: '400px' }}
-      >
-        <form action="" className="flex flex-col gap-4">
-          <h2 className={`text-[${fontSizeOptions.h2}] text-center bg-white`}>Expense Title</h2>
-          <Input color="bg-white" label="Expense Title" id="expenseTitle" type="input" />
-          <Input color="bg-white" label="Date" id="expenseDate" type="Date" />
+      {/* Expense Detail Form-------------- */}
+      <Slide title="Add Expense" slide={exDetailSlide} onClose={cancelOperation}>
+        <form className="flex flex-col gap-4">
+          <Input label="Expense Title" id="expenseTitle" color="bg-white" />
+          <Input label="Date" id="expenseDate" type="date" color="bg-white" />
           <Select
             label="Type of Expense"
             id="expenseType"
@@ -167,49 +248,45 @@ export const IncomeExpenses = () => {
             color="bg-white"
             width="100%"
           />
-          {/* <h2>{expenseType}</h2> */}
-          <Input color="bg-white" label="Invoice No." id="expenseInvoice" type="input" />
-          <Input color="bg-white" label="Base Amount" id="expenseAmount" type="number" min={0} />
-          <div className="flex flex-col gap-4">
-            <div className='flex flex-row justify-between overflow-y-hidden'>
+          <Input label="Invoice No." id="expenseInvoice" color="bg-white" />
+          <Input label="Base Amount" id="expenseAmount" type="number" min={0} color="bg-white" />
+
+          {/* Recurring Expense -------------- */}
+          <div className="flex flex-col gap-2">
+            <div className="flex justify-between items-center">
               <p>Make this recurring expense</p>
-              <div className='flex flex-row flex-nowrap items-center justify-center gap-[1rem]'>
-                Off <i onClick={() => {setRepeat(repeat ? false : true);
-              }}
-                className='cursor-pointer'
-                  
-                  >
-                  <div className='border-[2px] w-[45px] h-[20px] rounded-[20px] flex flex-row items-center p-[.2rem]'>
-                    <div className={`w-[10px] h-[10px] bg-black rounded-[20px] transition-transform translate-x-[${repeat? '25px': ''}]`}></div>
-                  </div>
-                  </i>On
+              <div className="flex items-center gap-2">
+                Off
+                <div
+                  className="w-[45px] h-[20px] border-2 rounded-full flex items-center p-[2px] cursor-pointer"
+                  onClick={() => setRepeat(!repeat)}
+                >
+                  <div
+                    className={`w-[10px] h-[10px] bg-black rounded-full transition-transform ${
+                      repeat ? 'translate-x-[25px]' : ''
+                    }`}
+                  ></div>
+                </div>
+                On
               </div>
             </div>
-            <div className={`${repeat ? 'max-h-[200px] opacity-100' : 'max-h-0 opacity-0'} transition-all duration-300`}>
-                <Select
-                  label="Repeat Options"
-                  id="repeatExpenses"
-                  options={['Daily', 'Weekly', 'Monthly', 'Yearly']}
-                  value={repeatOption}
-                  onChange={setRepeatOption}
-                  color="bg-white"
-                  width="100%"
-                />
-                {/* <h2>{repeatOption}</h2> */}
-              </div>
-          
+
+            {repeat && (
+              <Select
+                label="Repeat Options"
+                id="repeatExpenses"
+                options={['Daily', 'Weekly', 'Monthly', 'Yearly']}
+                value={repeatOption}
+                onChange={setRepeatOption}
+                color="bg-white"
+                width="100%"
+              />
+            )}
           </div>
-          <Input color="bg-white" label="Notes" id="expenseNotes" type="input" />
-          <div className="flex flex-row justify-center gap-[1rem] mt-[2rem]">
-            <Button buttonColor="regularButton" type="submit" width="100%">
-              Add
-            </Button>
-            <Button buttonColor="regularButton" onClick={cancelOperation} width="100%">
-              Cancel
-            </Button>
-          </div>
+
+          <TextArea label="Notes" id="expenseNotes" color="bg-white" rows={3} />
         </form>
-      </div>
+      </Slide>
     </div>
   );
 };

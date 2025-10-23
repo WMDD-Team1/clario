@@ -20,7 +20,7 @@ const Select: React.FC<SelectProps> = ({id, label, options, value, onChange,colo
         <select style={{width: width}} className={`p-[1rem] rounded-[1rem] border-2 cursor-pointer`} id={id} value={value} onChange={e=>{onChange(e.target.value)}}>
             <option value="">{placeHolder}</option>
             {options.map((option)=>(
-                <option value={option}>
+                <option value={option} key={option}>
                     {option}
                 </option>
             ))}
