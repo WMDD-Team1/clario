@@ -1,9 +1,10 @@
+import Clients from "@pages/Clients";
 import { Route, Routes } from "react-router-dom";
 import { PrivateRoute } from "./api/auth/PrivateRoute";
-import FinancialDashboard from "./pages/FinancialDashboard";
 import { Dashboard } from "./pages/Dashboard";
 import { Landing } from "./pages/Landing";
 import Settings from "./pages/Settings";
+import FinancialDashboard from "@pages/FinancialDashboard";
 
 function App() {
   return (

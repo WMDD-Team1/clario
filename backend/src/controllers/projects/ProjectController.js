@@ -1,29 +1,19 @@
 import {
 	findAllProjects,
-	findByPorjectId,
+	findByProjectId,
 	createNewProject,
 	updateProjectById,
-	deleteProjectById,
 	archiveProjectById,
+	getOverviewService,
 } from "../../services/projects/ProjectsService.js";
+import { projectSchema } from "../../validations/projectSchema.js";
 
 export const getAllProjects = async (req, res) => {
 	try {
-		const { sub: userId } = req.auth;
-		const { page = 1, limit = 20 } = req.query;
+		const { id: userId } = req.user;
+		const result = await findAllProjects(userId, req.query);
 
-		const { projects, total, totalPages } = await findAllProjects(userId, parseInt(page), parseInt(limit));
-
-		res.status(200).json({
-			data: projects,
-			meta: {
-				total,
-				page: parseInt(page),
-				limit: parseInt(limit),
-				length: projects.length,
-				totalPages,
-			},
-		});
+		res.status(200).json(result);
 	} catch (err) {
 		console.error("Error fetching projects: ", err);
 		res.status(500).json({ message: "Internal Server Error" });
@@ -32,14 +22,14 @@ export const getAllProjects = async (req, res) => {
 
 export const getProjectById = async (req, res) => {
 	try {
-		const projectId = req.params.id;
-		const { sub: userId } = req.auth;
+		const { id: projectId } = req.params;
+		const { id: userId } = req.user;
 
-		const project = await findByPorjectId(projectId, userId);
+		const result = await findByProjectId(projectId, userId);
 
-		if (!project) return res.status(404).json({ message: "Project not found" });
+		if (!result) return res.status(404).json({ message: "Project not found" });
 
-		res.status(200).json(project);
+		res.status(200).json(result);
 	} catch (err) {
 		console.error("Error fetching project: ", err);
 		res.status(500).json({ message: "Internal Server Error" });
@@ -48,9 +38,11 @@ export const getProjectById = async (req, res) => {
 
 export const createProject = async (req, res) => {
 	try {
-		const { sub: userId } = req.auth;
-		const project = await createNewProject(req.body, userId);
-		res.status(201).json(project);
+		const { id: userId } = req.user;
+		const parsed = projectSchema.parse(req.body);
+		const result = await createNewProject(parsed, userId);
+
+		res.status(201).json(result);
 	} catch (err) {
 		console.error("Error creating project: ", err);
 		res.status(400).json({
@@ -62,13 +54,15 @@ export const createProject = async (req, res) => {
 
 export const updateProject = async (req, res) => {
 	try {
-		const projectId = req.params.id;
-		const { sub: userId } = req.auth;
-		const project = await updateProjectById(projectId, userId, req.body);
+		const { id: projectId } = req.params;
+		const { id: userId } = req.user;
 
-		if (!project) return res.status(404).json({ message: "Project not found." });
+		const parsed = projectSchema.partial().parse(req.body);
+		const result = await updateProjectById(projectId, userId, parsed);
 
-		res.status(200).json(project);
+		if (!result) return res.status(404).json({ message: "Project not found." });
+
+		res.status(200).json(result);
 	} catch (err) {
 		console.error("Error updating project: ", err);
 		res.status(500).json({
@@ -77,15 +71,20 @@ export const updateProject = async (req, res) => {
 	}
 };
 
-export const deleteProject = async (req, res) => {
+export const archiveProject = async (req, res) => {
 	try {
-		const projectId = req.params.id;
-		const { sub: userId } = req.auth;
-		const project = await deleteProjectById(projectId, userId);
+		const { id: projectId } = req.params;
+		const { id: userId } = req.user;
+		const { isArchived } = req.body;
 
-		if (!project) return res.status(404).json({ message: "Project not found." });
+		const result = await archiveProjectById(projectId, userId, isArchived);
 
-		res.status(200).json({ message: "Project deleted successfully." });
+		if (!result) return res.status(404).json({ message: "Project not found." });
+
+		res.status(200).json({
+			message: `Project ${isArchived ? "archived" : "unarchived"} successfully.`,
+			project: result,
+		});
 	} catch (err) {
 		console.error("Error deleting project: ", err);
 		res.status(500).json({
@@ -94,21 +93,13 @@ export const deleteProject = async (req, res) => {
 	}
 };
 
-export const toggleArchive = async (req, res) => {
+export const getOverview = async (req, res) => {
 	try {
-		const projectId = req.params.id;
-		const { sub: userId } = req.auth;
-		const { isArchived } = req.body;
-
-		const project = await archiveProjectById(projectId, userId, isArchived);
-
-		if (!project) return res.status(404).json({ message: "Project not found." });
-
-		res.status(200).json(project);
+		const { id: userId } = req.user;
+		const result = await getOverviewService(userId);
+		res.status(200).json(result);
 	} catch (err) {
-		console.error("Error deleting project: ", err);
-		res.status(500).json({
-			message: "Internal Server Error",
-		});
+		console.error("Error fetching project overview: ", err);
+		res.status(500).json({ message: "Internal Server Error" });
 	}
 };

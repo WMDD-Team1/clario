@@ -10,10 +10,8 @@ import { clientSchema } from "../../validations/clientSchema.js";
 
 export const getAllClients = async (req, res) => {
 	try {
-		const { sub: userId } = req.auth;
-		const { page = 1, limit = 10 } = req.query;
-
-		const result = await findAllClients(userId, parseInt(page), parseInt(limit));
+		const { id: userId } = req.user;
+		const result = await findAllClients(userId, req.query);
 
 		res.status(200).json(result);
 	} catch (err) {
@@ -25,10 +23,9 @@ export const getAllClients = async (req, res) => {
 export const getClientById = async (req, res) => {
 	try {
 		const { id: clientId } = req.params;
-		const { sub: userId } = req.auth;
+		const { id: userId } = req.user;
 
 		const result = await findByClientId(clientId, userId);
-
 		if (!result) return res.status(404).json({ message: "Client not found" });
 
 		res.status(200).json(result);
@@ -37,16 +34,14 @@ export const getClientById = async (req, res) => {
 
 		// when cliendId is string
 		if (err.name === "CastError") return res.status(400).json({ message: "Invalid client ID format" });
-
 		res.status(500).json({ message: "Internal Server Error" });
 	}
 };
 
 export const createClient = async (req, res) => {
 	try {
-		const { sub: userId } = req.auth;
+		const { id: userId } = req.user;
 		const parsed = clientSchema.parse(req.body);
-		console.log(parsed);
 		const result = await createNewClient(parsed, userId);
 		res.status(201).json(result);
 	} catch (err) {
@@ -61,7 +56,7 @@ export const createClient = async (req, res) => {
 export const updateClient = async (req, res) => {
 	try {
 		const { id: clientId } = req.params;
-		const { sub: userId } = req.auth;
+		const { id: userId } = req.user;
 
 		// only for allowed field ? humm.. except id?
 		const parsed = clientSchema.partial().parse(req.body);
@@ -81,7 +76,7 @@ export const updateClient = async (req, res) => {
 export const archiveClient = async (req, res) => {
 	try {
 		const { id: clientId } = req.params;
-		const { sub: userId } = req.auth;
+		const { id: userId } = req.user;
 		const { isArchived } = req.body;
 
 		const result = await archiveClientById(clientId, userId, isArchived);
