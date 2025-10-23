@@ -3,6 +3,7 @@ import InsightCard from "@components/InsightCard";
 import Table from "@components/Table";
 import { useState } from "react";
 import FiltersBar from "./FiltersBar";
+import EmptyState from "./EmptyState";
 
 // CONSTS
 const STAGES = [
@@ -155,6 +156,7 @@ const projects: Project[] = [
 const Projects = () => {
     const [filters, setFilters] = useState(["All", "Active", "Archived"]);
     const [currentFilter, setCurrentFilter] = useState("All");
+    const [currentPage, setCurrentPage] = useState(1);
     const [selectedStage, setSelectedStage] = useState({
         id: 'none',
         label: 'Stages'
@@ -193,7 +195,24 @@ const Projects = () => {
             />
 
             {/* Table */}
-            <Table headers={PROJECT_HEADERS} data={projects} />
+            {!projects || projects.length === 0 ? (
+                <EmptyState
+                    title="It’s a little quiet here 👀"
+                    description="Add your first client and let’s get things moving!"
+                    buttonText="Add Project"
+                    onAction={() => console.log("Open project modal")}
+                />
+            ) : (
+                <Table
+                    headers={PROJECT_HEADERS}
+                    data={projects}
+                    total={50}
+                    page={currentPage}
+                    pageSize={10}
+                    onPageChange={setCurrentPage} />
+            )}
+
+
 
         </>
     )
