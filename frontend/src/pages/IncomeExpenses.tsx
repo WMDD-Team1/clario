@@ -8,22 +8,23 @@ import { fontSizeOptions } from '@components/style/font';
 import Table from '@components/Table';
 import axios from 'axios';
 import { useAuth0 } from '@auth0/auth0-react';
+import ToggleButton from '@components/ToggleButton';
 
 export const IncomeExpenses = () => {
-  const [incomeSlide, setIncomeSlide] = useState('100%');
-  const [expenseSlide, setExpenseSlide] = useState('100%');
-  const [inDetailSlide, setIndetailSlide] = useState('100%');
-  const [exDetailSlide, setExdetailSlide] = useState('100%');
+  const [incomeSlide, setIncomeSlide] = useState('110%');
+  const [expenseSlide, setExpenseSlide] = useState('110%');
+  const [inDetailSlide, setIndetailSlide] = useState('110%');
+  const [exDetailSlide, setExdetailSlide] = useState('110%');
   const [incomeType, setIncomeType] = useState('');
   const [expenseType, setExpenseType] = useState('');
   const [repeat, setRepeat] = useState(false);
   const [repeatOption, setRepeatOption] = useState('');
 
   const reset = () => {
-    setIncomeSlide('100%');
-    setExpenseSlide('100%');
-    setIndetailSlide('100%');
-    setExdetailSlide('100%');
+    setIncomeSlide('110%');
+    setExpenseSlide('110%');
+    setIndetailSlide('110%');
+    setExdetailSlide('110%');
     setRepeat(false);
   };
 
@@ -41,18 +42,11 @@ export const IncomeExpenses = () => {
   const expenseDetail = () => setExdetailSlide('0px');
   const cancelOperation = () => reset();
 
-  const headers = [
-    { key: 'Date', value: 'Date' },
-    { key: 'Amount', value: 'Amount' },
-    { key: 'Category', value: 'Category' },
-    { key: 'Details', value: 'Details' },
-  ];
-
-  const data = [
-    { Date: 'Sep 12', Amount: 100, Category: 'Salary', Details: 'view' },
-    { Date: 'Sep 12', Amount: 50, Category: 'Food', Details: 'view' },
-    { Date: 'Sep 12', Amount: 200, Category: 'Freelance', Details: 'view' },
-  ];
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedStage, setSelectedStage] = useState({
+    id: 'none',
+    label: 'Stages',
+  });
 
   const { getAccessTokenSilently } = useAuth0();
 
@@ -148,11 +142,51 @@ export const IncomeExpenses = () => {
     }
   };
 
+  const headers = [
+    { key: 'date', value: 'Date' },
+    { key: 'amount', value: 'Amount ($)' },
+    { key: 'category', value: 'Category' },
+    { key: 'details', value: 'Details' },
+  ];
+
+  // fake data
+  const data = [
+    { date: 'Oct 22', amount: 1200, category: 'Sales', details: 'View' },
+    { date: 'Oct 21', amount: 850, category: 'Marketing', details: 'View' },
+    { date: 'Oct 20', amount: 430, category: 'Development', details: 'View' },
+    { date: 'Oct 19', amount: 2200, category: 'Sales', details: 'View' },
+    { date: 'Oct 18', amount: 150, category: 'Support', details: 'View' },
+    { date: 'Oct 17', amount: 760, category: 'Development', details: 'View' },
+    { date: 'Oct 16', amount: 340, category: 'Marketing', details: 'View' },
+    { date: 'Oct 15', amount: 980, category: 'Sales', details: 'View' },
+    { date: 'Oct 14', amount: 420, category: 'Support', details: 'View' },
+    { date: 'Oct 13', amount: 1300, category: 'Development', details: 'View' },
+  ];
+
+  const options = [
+        {key: 'income', label:'Income'},
+        {key: 'expense', label:'Expense'},
+      ]
+
+  const [selectedOption, setSelectedOption] = useState(options[1]);
+
+  const handleToggle = (option: { key: string; label: string }) => {
+    setSelectedOption(option);
+  };
+
   return (
     <div>
-      <div className="flex gap-[1rem] mb-4">
-        <div className="w-full flex flex-col flex-nowrap gap-[1rem]">
-          <div className="flex flex-row flex-nowrap justify-between items-center">
+      <div className='md:hidden flex justify-center mb-[1rem]'>
+      <ToggleButton
+      options={options}
+
+      option={selectedOption}
+      onClick={handleToggle}
+      />
+      </div>
+      <div className="flex flex-row flex-wrap gap-[1rem]">
+        <div className="flex-1 flex flex-col flex-nowrap gap-[1rem]">
+          <div className="md:flex flex-row flex-nowrap justify-between items-center hidden">
             Income
             <Button buttonColor="regularButton" onClick={addIncome} textColor="white">
               Add Income
@@ -160,47 +194,70 @@ export const IncomeExpenses = () => {
           </div>
 
           <div>
-            <Table headers={headers} data={data} />
+            <Table
+              headers={headers}
+              data={data}
+              total={30}
+              page={currentPage}
+              pageSize={10}
+              onPageChange={setCurrentPage}
+            />
           </div>
         </div>
 
-        <div className="w-full">
-          <div className="flex flex-row flex-nowrap justify-between items-center">
+        <div className="flex-1 flex flex-col flex-nowrap gap-[1rem]">
+          <div className="md:flex flex-row flex-nowrap justify-between items-center hidden">
             Expense
             <Button buttonColor="regularButton" onClick={addExpenses} textColor="white">
               Add Expenses
             </Button>
           </div>
+          <div>
+            <Table
+              headers={headers}
+              data={data}
+              total={30}
+              page={currentPage}
+              pageSize={10}
+              onPageChange={setCurrentPage}
+            />
+          </div>
         </div>
       </div>
 
       {/* Income Slide------------- */}
-      <Slide title="Add Income" slide={incomeSlide} onClose={cancelOperation}>
-        <p>Add your Income Receipt here</p>
-        <div>
-          <p>Choose a file or drag & drop it here</p>
-          <p>JPG, PNG or PDF formats up to 5MB</p>
-        </div>
-        <div className="flex gap-4 mt-4">
-          <Button buttonColor="regularButton" width="100%">
-            Browse
-          </Button>
-          <Button buttonColor="regularButton" width="100%" onClick={incomeDetail}>
-            Skip
-          </Button>
+      <Slide
+        title="Add Income"
+        slide={incomeSlide}
+        confirmText="Browse"
+        onConfirm={cancelOperation}
+        extralText="Skip"
+        onExtra={incomeDetail}
+        onClose={cancelOperation}
+      >
+        <div className="flex flex-col flex-nowrap items-center justify-center gap-[1rem] h-full">
+          <p>Add your Income Receipt here</p>
+          <div className="flex flex-col flex-nowrap items-center gap-[1rem] p-[3rem] border-2 border-dashed border-blue-100 bg-blue-50 rounded-[20px]">
+            <img src="/cloud-upload.svg" alt="" className="w-25 h-25 hidden sm:block" />
+            <img src="/Camera.svg" alt="" className="w-25 h-25 sm:hidden" />
+            <p className="sm:hidden">Take a Picture and Upload</p>
+            <p className="font-bold hidden sm:block">Choose a file or drag & drop it here</p>
+            <p className="text-gray-400 hidden sm:block">JPG, PNG or PDF formats up to 5MB</p>
+          </div>
         </div>
       </Slide>
 
       {/* Income Detail Form---------------*/}
-      <Slide title="Add Income" slide={inDetailSlide} onClose={cancelOperation}>
+      <Slide
+      title="Add Income"
+      slide={inDetailSlide}
+      confirmText="cancel"
+      onConfirm={cancelOperation}
+      extralText="Add"
+      onExtra={incomeDetail}
+      onClose={cancelOperation}>
         <form className="flex flex-col gap-4">
-          <Input
-            label="Income Title"
-            id="incomeTitle"
-            color="bg-white"
-            value={oneTransaction.name}
-            onChange={(e) => setOneTransaction({ ...oneTransaction, name: e.target.value })}
-          />
+          <Input label="Income Title" id="incomeTitle" color="bg-white" />
           <Input label="Date" id="incomeDate" type="date" color="bg-white" />
           <Select
             label="Type of Income"
@@ -218,24 +275,35 @@ export const IncomeExpenses = () => {
       </Slide>
 
       {/* Expense Slide---------------- */}
-      <Slide title="Add Expenses" slide={expenseSlide} onClose={cancelOperation}>
-        <p>Add your Expenses Receipt here</p>
-        <div>
-          <p>Choose a file or drag & drop it here</p>
-          <p>JPG, PNG or PDF formats up to 5MB</p>
-        </div>
-        <div className="flex gap-4 mt-4">
-          <Button buttonColor="regularButton" width="100%">
-            Browse
-          </Button>
-          <Button buttonColor="regularButton" width="100%" onClick={expenseDetail}>
-            Skip
-          </Button>
+      <Slide
+        title="Add Expenses"
+        slide={expenseSlide}
+        confirmText="Browse"
+        onConfirm={cancelOperation}
+        extralText="Skip"
+        onExtra={expenseDetail}
+        onClose={cancelOperation}
+      >
+        <div className="flex flex-col flex-nowrap items-center justify-center gap-[1rem] h-full">
+          <p>Add your Expenses Receipt here</p>
+
+          <div className="flex flex-col flex-nowrap items-center gap-[1rem] p-[3rem] border-2 border-dashed border-blue-100 bg-blue-50 rounded-[20px]">
+            <img src="/cloud-upload.svg" alt="upload" className="w-25 h-25" />
+            <p className="font-bold">Choose a file or drag & drop it here</p>
+            <p className="text-gray-400">JPG, PNG or PDF formats up to 5MB</p>
+          </div>
         </div>
       </Slide>
 
       {/* Expense Detail Form-------------- */}
-      <Slide title="Add Expense" slide={exDetailSlide} onClose={cancelOperation}>
+      <Slide
+      title="Add Expense"
+      slide={exDetailSlide}
+      confirmText="cancel"
+      onConfirm={cancelOperation}
+      extralText="Add"
+      onExtra={incomeDetail}
+      onClose={cancelOperation}>
         <form className="flex flex-col gap-4">
           <Input label="Expense Title" id="expenseTitle" color="bg-white" />
           <Input label="Date" id="expenseDate" type="date" color="bg-white" />

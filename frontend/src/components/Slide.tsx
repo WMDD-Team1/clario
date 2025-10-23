@@ -8,10 +8,13 @@ interface SlideProps {
   slide: string;
   onClose: () => void;
   onConfirm?: () => void;
+  onExtra?: () => void;
   // width?: string;
   confirmText?: string;
-  cancelText?: string;
+  extralText?: string;
   showFooter?: boolean;
+  showExtral?: boolean;
+  showConfirm?: boolean;
 }
 
 const Slide: React.FC<SlideProps> = ({
@@ -20,10 +23,13 @@ const Slide: React.FC<SlideProps> = ({
   slide,
   onClose,
   onConfirm,
+  onExtra,
   // width = '450px',
   confirmText = 'Add',
-  cancelText = 'Cancel',
+  extralText = 'Cancel',
   showFooter = true,
+  showExtral = true,
+  showConfirm = true,
 }) => {
   return (
     <>
@@ -35,31 +41,37 @@ const Slide: React.FC<SlideProps> = ({
       />
 
       <div
-        className="fixed top-0 right-0 h-full shadow-lg bg-white transition-transform duration-300 sm:rounded-tl-[20px] sm:rounded-bl-[20px] z-50 flex flex-col sm:w-[450px]  w-full overflow-hidden"
-        style={{ transform: `translateX(${slide})`}}
+        className="fixed top-0 right-0 h-full shadow-lg bg-white transition-transform duration-300 sm:rounded-tl-[20px] sm:rounded-bl-[20px] z-50 flex flex-col sm:w-[450px]  w-full"
+        style={{ transform: `translateX(${slide})` }}
       >
+        <div className="absolute top-16 sm:left-[-1rem] left-[2rem] bg-blue-300 w-12 h-12 rounded-full cursor-pointer flex items-center justify-center shadow-md z-60">
+          <img src="/Forward.svg" alt="forward" className="w-8 h-8" onClick={onClose}/>
+        </div>
         <h2
-          className={`text-[${fontSizeOptions.h2}] text-center bg-blue-50 p-[1rem] sticky top-0 z-10`}
+          className={`text-[${fontSizeOptions.h2}] text-center bg-blue-50 p-[1rem] sticky top-0 z-10 sm:rounded-tl-[20px]`}
         >
           {title}
         </h2>
         <div className="flex flex-col gap-[1.5rem] p-[2rem] h-full overflow-y-auto">{children}</div>
 
         {showFooter && (
-          <div className="flex flex-row justify-center gap-[1rem] sticky bottom-0 w-full p-[2rem] bg-blue-50">
-            {onConfirm && (
+          <div className="flex flex-row justify-center gap-[1rem] sticky bottom-0 w-full p-[2rem] bg-blue-50 sm:rounded-bl-[20px]">
+            {showConfirm && onConfirm && (
               <Button
-                buttonColor="regularButton"
+                buttonColor="whiteButton"
                 width="100%"
-                textColor="white"
+                textColor="gray"
                 onClick={onConfirm}
               >
                 {confirmText}
               </Button>
             )}
-            <Button buttonColor="regularButton" onClick={onClose} width="100%" textColor="white">
-              {cancelText}
-            </Button>
+
+            {showExtral && onExtra && (
+              <Button buttonColor="regularButton" onClick={onExtra} width="100%" textColor="white">
+                {extralText}
+              </Button>
+            )}
           </div>
         )}
       </div>

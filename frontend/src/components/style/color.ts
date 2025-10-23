@@ -4,6 +4,7 @@ export const colorOptions = {
     lightButton: 'bg-gray-100',
     blueButton: 'bg-blue-500',
     deleteButton: 'bg-red-500',
+    whiteButton: 'bg-white',
     white: 'bg-white',
     black: 'bg-black',
     card1: 'bg-amber-200',
