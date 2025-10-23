@@ -96,6 +96,10 @@ const Clients = () => {
 
   const [activeTab, setActiveTab] = useState<string>('Unarchived');
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchText, activeTab]);
+
   //--Get data from form--------------------------
   const fetchClients = async () => {
     const token = await getAccessTokenSilently({
@@ -340,11 +344,26 @@ const Clients = () => {
         </Button>
       </div>
       <div className="flex flex-row flex-wrap items-center gap-[1rem]">
-        <InsightCard title="Total" value="$12000" />
-        <InsightCard title="Active" value="$8000" />
-        <InsightCard title="Inactive" value="10" />
-        <InsightCard title="Archive" value="5" />
-        <InsightCard title="Clients" value="30" />
+        <InsightCard
+        title="Total"
+        value={`$${(12000).toLocaleString()}`}
+        />
+        <InsightCard
+        title="Active"
+        value={`$${(8000).toLocaleString()}`}
+        />
+        <InsightCard
+          title="Inactive"
+          value={`${clients.data.filter((c) => !c.isArchived).length}`}
+        />
+        <InsightCard
+        title="Archive"
+        value={`${clients.data.filter((c) => c.isArchived).length}`}
+        />
+        <InsightCard
+        title="Clients"
+        value={`${clients.data.length}`}
+        />
       </div>
 
       {/* client-list------------------------------------------------- */}
@@ -411,25 +430,23 @@ const Clients = () => {
                   </thead>
                   <tbody>
                     {pagedClients.map((client, index) => (
-                        <tr key={index} className="hover:bg-gray-100">
-                          <td className="text-left px-4 py-[1rem] border-t border-gray-200">
-                            {client.name}
-                          </td>
-                          <td className="px-4 border-t border-gray-200">{client.phone}</td>
-                          <td className="px-4 border-t border-gray-200">{client.email}</td>
-                          <td className="px-4 border-t border-gray-200">
-                            {client.address.country}
-                          </td>
-                          <td className="px-4 border-t border-gray-200">{client.invoiceCount}</td>
-                          <td className="px-4 border-t border-gray-200">{client.projectCount}</td>
-                          <td
-                            className="px-4 border-t border-gray-200"
-                            onClick={() => handleClientDetail(client.id)}
-                          >
-                            ...
-                          </td>
-                        </tr>
-                      ))}
+                      <tr key={index} className="hover:bg-gray-100">
+                        <td className="text-left px-4 py-[1rem] border-t border-gray-200">
+                          {client.name}
+                        </td>
+                        <td className="px-4 border-t border-gray-200">{client.phone}</td>
+                        <td className="px-4 border-t border-gray-200">{client.email}</td>
+                        <td className="px-4 border-t border-gray-200">{client.address.country}</td>
+                        <td className="px-4 border-t border-gray-200">{client.invoiceCount}</td>
+                        <td className="px-4 border-t border-gray-200">{client.projectCount}</td>
+                        <td
+                          className="px-4 border-t border-gray-200"
+                          onClick={() => handleClientDetail(client.id)}
+                        >
+                          ...
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
@@ -449,10 +466,7 @@ const Clients = () => {
                     {'<'}
                   </div>
                   {Array.from({
-                    length: Math.min(
-                      PAGE_WINDOW_SIZE,
-                      totalPages - pageWindowStart + 1,
-                    ),
+                    length: Math.min(PAGE_WINDOW_SIZE, totalPages - pageWindowStart + 1),
                   }).map((_, i) => {
                     const pageNumber = pageWindowStart + i;
                     return (
