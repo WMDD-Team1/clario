@@ -5,11 +5,20 @@ import { Dashboard } from "./pages/Dashboard";
 import { Landing } from "./pages/Landing";
 import { IncomeExpenses } from "@pages/IncomeExpenses";
 import MyWork from "@pages/MyWork";
+import Logout from "@pages/Logout";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Landing />} />
+      <Route
+        path="/logout"
+        element={
+          <PrivateRoute>
+            <Logout />
+          </PrivateRoute>
+        }
+      />
       <Route
         path="/callback"
         element={
