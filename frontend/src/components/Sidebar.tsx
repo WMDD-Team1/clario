@@ -1,34 +1,57 @@
 import { Search } from 'lucide-react';
 import Menu from './Menu';
+import {
+    DashboardActiveIcon,
+    DashboardInactiveIcon,
+    FaqInactiveIcon,
+    LogOutIcon,
+    MoneyActiveIcon,
+    MoneyInactiveIcon,
+    SettingsInactiveIcon,
+    WorkActiveIcon,
+    WorkInactiveIcon,
+} from "@/assets/icons";
 
 const Sidebar = () => {
     const topMenu = [
         {
             route: "/dashboard",
-            icon: <Search />
+            activeIcon: <DashboardActiveIcon />,
+            inactiveIcon: <DashboardInactiveIcon/>,
+            tooltip: "Dashboard"
         },
         {
             route: "/my-work",
-            icon: <Search />
+            activeIcon: <WorkActiveIcon />,
+            inactiveIcon: <WorkInactiveIcon/>,
+            tooltip: "My Work"
         },
         {
             route: "/dashboard1",
-            icon: <Search />
+            activeIcon: <MoneyActiveIcon />,
+            inactiveIcon: <MoneyInactiveIcon/>,
+            tooltip: ""
         },
         {
             route: "/dashboard2",
-            icon: <Search />
+            activeIcon: <SettingsInactiveIcon />,
+            inactiveIcon: <SettingsInactiveIcon/>,
+            tooltip: ""
         }
     ];
 
     const bottomMenu = [
         {
             route: "/dashboard3",
-            icon: <Search />
+            activeIcon: <FaqInactiveIcon />,
+            inactiveIcon: <FaqInactiveIcon/>,
+            tooltip: ""
         },
         {
             route: "/projects4",
-            icon: <Search />
+            activeIcon: <LogOutIcon />,
+            inactiveIcon: <LogOutIcon/>,
+            tooltip: "Log out"
         },
     ];
 
