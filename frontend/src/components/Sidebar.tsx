@@ -48,7 +48,7 @@ const Sidebar = () => {
             tooltip: ""
         },
         {
-            route: "/projects4",
+            route: "/logout",
             activeIcon: <LogOutIcon />,
             inactiveIcon: <LogOutIcon/>,
             tooltip: "Log out"
