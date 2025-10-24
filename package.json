@@ -11,7 +11,8 @@
   },
   "dependencies": {
     "@auth0/auth0-react": "^2.6.0",
-    "react-redux": "^9.2.0",
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "lucide-react": "^0.546.0",
+    "react-redux": "^9.2.0"
   }
 }
