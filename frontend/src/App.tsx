@@ -66,7 +66,6 @@ function App() {
           </PrivateRoute>
         }
       />
-    </Routes>
       {/* <Route
         path="/financial-dashboard"
         element={
@@ -91,7 +90,6 @@ function App() {
           </PrivateRoute>
         }
       />
-
       {/* Dev-only shortcut */}
       <Route path="/dev-dashboard" element={<Dashboard />} />
     </Routes>

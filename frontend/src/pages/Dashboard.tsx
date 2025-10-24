@@ -16,8 +16,8 @@ export const Dashboard = () => {
   const { data: appUser } = useAppSelector((state: RootState) => state.user);
 
   const balanceData = [
-    { value: 3250, label: "Available" },
-    { value: 2000, label: "Spent" },
+    { name: "Expense", value: 2000, color: "#9CA3AF" },
+    { name: "Balance", value: 3250, color: "#4B5563" },
   ];
 
   const flowData = [
@@ -46,104 +46,113 @@ export const Dashboard = () => {
   ];
 
   return (
-  <DashboardShell>
-    <WelcomeBanner userName={user?.name || "User"} />
+    <DashboardShell>
+      <div className="flex flex-col gap-6 w-full overflow-hidden">
+        {/* Welcome */}
+        <WelcomeBanner userName={user?.name || "User"} />
 
-    {/* ===== TOP STATS (spans across left + center columns) */}
-    <div className="flex flex-wrap justify-between gap-4 pb-8 w-full xl:col-span-2">
-      {[
-        { label: "Income", value: "$12,000" },
-        { label: "Expense", value: "$8,000" },
-        { label: "Completed", value: "10" },
-        { label: "Active Projects", value: "5" },
-        { label: "Clients", value: "30" },
-      ].map((stat, index) => (
-        <div
-          key={index}
-          className="flex-1 min-w-[150px] sm:min-w-[180px] md:min-w-[200px] lg:min-w-[220px] flex flex-col justify-center items-center py-4 rounded-2xl shadow-sm border border-gray-100 bg-white"
-        >
-          <p className="font-semibold text-gray-600 text-sm">{stat.label}</p>
-          <p className="text-xl font-bold text-gray-800">{stat.value}</p>
-        </div>
-      ))}
-    </div>
+        {/* === Main Body (Left + Center + Right) === */}
+        <div className="flex flex-col xl:flex-row gap-6">
+          {/* ==== Left + Center Section ==== */}
+          <div className="flex flex-col flex-1 min-w-0 gap-6">
+            {/* --- Top Stats Row --- */}
+            <div className="w-full flex flex-wrap justify-between gap-4 pb-2">
+              {[
+                { label: "Income", value: "$12,000" },
+                { label: "Expense", value: "$8,000" },
+                { label: "Completed", value: "10" },
+                { label: "Active Projects", value: "5" },
+                { label: "Clients", value: "30" },
+              ].map((stat, index) => (
+                <div
+                  key={index}
+                  className="flex-1 min-w-[160px] sm:min-w-[180px] md:min-w-[200px] lg:min-w-[220px]
+                  flex flex-col justify-center items-center py-4 rounded-2xl shadow-sm border border-gray-100 bg-white"
+                >
+                  <p className="font-semibold text-gray-600 text-sm">{stat.label}</p>
+                  <p className="text-xl font-bold text-gray-800">{stat.value}</p>
+                </div>
+              ))}
+            </div>
 
-    {/* MAIN CONTENT GRID */}
-    <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-      {/* LEFT COLUMN - Insights */}
-      <div className="space-y-4">
-        <h2 className="text-lg font-semibold text-gray-700">Insights of Your Work</h2>
-      {/* Earning Trend */}
-      <Card style="card1">
-        <div className="flex justify-between items-center mb-2">
-          <div className="flex items-center gap-2 bg-blue-600 text-white text-sm font-medium px-3 py-1 rounded-full shadow-sm">
-            <Sparkles className="w-4 h-4 text-white" />
-            Earning Trend
+            {/* --- Insights + Charts Row --- */}
+            <div className="flex flex-col lg:flex-row gap-6 w-full">
+              {/* Insights (Left) - Smaller width */}
+              <div className="flex flex-col flex-[0.8] gap-3">
+                <h2 className="text-lg font-semibold text-gray-700">
+                  Insights of Your Work
+                </h2>
+
+              {[
+                {
+                  title: "Earning Trend",
+                  period: "This Month",
+                  text:
+                    "Your income grew 18% compared to last month mostly from Project A. You're trending toward a more stable cashflow.",
+                },
+                {
+                  title: "Client Dependency",
+                  period: "This Month",
+                  text:
+                    "75% of your total income came from a single client this month — consider diversifying your portfolio.",
+                },
+                {
+                  title: "Income Projection",
+                  period: "Next Month",
+                  text:
+                    "You have $2,800 in confirmed recurring income for the next 30 days.",
+                },
+                {
+                  title: "Payment Timeliness",
+                  period: "Next Month",
+                  text:
+                    "Client B usually pays 8 days late — consider updating your contract terms.",
+                },
+              ].map((item, idx) => (
+                <Card key={idx} style="card1">
+                  <div className="py-3 px-4 shadow-sm rounded-xl border border-gray-100 bg-white scale-[0.98]">
+                    <div className="flex justify-between items-center mb-1">
+                      <div className="flex items-center gap-2 bg-blue-600 text-white text-xs font-medium px-2 py-1 rounded-full shadow-sm">
+                        <Sparkles className="w-3 h-3 text-white" />
+                        {item.title}
+                      </div>
+                      <span className="text-xs font-semibold text-gray-600">
+                        {item.period}
+                      </span>
+                    </div>
+                    <p className="text-xs text-gray-600 leading-snug">{item.text}</p>
+                  </div>
+                </Card>
+              ))}
+              </div>
+              {/* Charts (Center) - Wider width */}
+              <div className="flex flex-col flex-[1.2] gap-6">
+                {/* Balance + Top Expenses */}
+                <div className="flex flex-col md:flex-row gap-4">
+                  <div className="flex-1">
+                    <BalanceChart data={balanceData} />
+                  </div>
+                  <div className="flex-1">
+                    <ExpensesTable expenses={expenses} />
+                  </div>
+                </div>
+
+                {/* Money Flow */}
+                <div>
+                  <MoneyFlowChart data={flowData} />
+                </div>
+              </div>
+            </div>
           </div>
-          <span className="text-sm font-semibold text-gray-600">This Month</span>
-        </div>
-        <p className="text-sm text-gray-600 leading-snug">
-          Your income grew 18% compared to last month mostly from Project A. Youre trending toward a more stable cashflow.
-        </p>
-      </Card>
 
-      {/* Client Dependency */}
-      <Card style="card1">
-        <div className="flex justify-between items-center mb-2">
-          <div className="flex items-center gap-2 bg-blue-600 text-white text-sm font-medium px-3 py-1 rounded-full shadow-sm">
-            <Sparkles className="w-4 h-4 text-white" />
-            Client Dependency
+          {/* ==== Right Column - Reminders ==== */}
+          <div className="flex flex-col w-full xl:w-[26%] gap-4">
+            <RemindersList reminders={reminders} />
           </div>
-          <span className="text-sm font-semibold text-gray-600">This Month</span>
         </div>
-        <p className="text-sm text-gray-600 leading-snug">
-          75% of your total income came from a single client this month — consider diversifying your portfolio.
-        </p>
-      </Card>
-
-      {/* Income Projection */}
-      <Card style="card1">
-        <div className="flex justify-between items-center mb-2">
-          <div className="flex items-center gap-2 bg-blue-600 text-white text-sm font-medium px-3 py-1 rounded-full shadow-sm">
-            <Sparkles className="w-4 h-4 text-white" />
-            Income Projection
-          </div>
-          <span className="text-sm font-semibold text-gray-600">Next Month</span>
-        </div>
-        <p className="text-sm text-gray-600 leading-snug">
-          You have $2,800 in confirmed recurring income for the next 30 days.
-        </p>
-      </Card>
-
-      {/* Payment Timeliness */}
-      <Card style="card1">
-        <div className="flex justify-between items-center mb-2">
-          <div className="flex items-center gap-2 bg-blue-600 text-white text-sm font-medium px-3 py-1 rounded-full shadow-sm">
-            <Sparkles className="w-4 h-4 text-white" />
-            Payment Timeliness
-          </div>
-          <span className="text-sm font-semibold text-gray-600">Next Month</span>
-        </div>
-        <p className="text-sm text-gray-600 leading-snug">
-          Client B usually pays 8 days late — consider updating your contract terms.
-        </p>
-      </Card>      
-</div>
-
-      {/* CENTER COLUMN - Charts */}
-      <div className="space-y-6">
-        <div className="grid md:grid-cols-2 gap-4">
-          <BalanceChart data={balanceData} />
-          <ExpensesTable expenses={expenses} />
-        </div>
-        <MoneyFlowChart data={flowData} />
       </div>
-
-      {/* RIGHT COLUMN - Reminders */}
-      <div className="space-y-4">
-        <RemindersList reminders={reminders} />
-      </div>
-    </div>
-  </DashboardShell>
+    </DashboardShell>
   );
 };
+
+export default Dashboard;
