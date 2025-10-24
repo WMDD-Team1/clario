@@ -2,6 +2,9 @@ import { Route, Routes } from "react-router-dom";
 import { PrivateRoute } from "./api/auth/PrivateRoute";
 import { Dashboard } from "./pages/Dashboard";
 import { Landing } from "./pages/Landing";
+import { IncomeExpenses } from "@pages/IncomeExpenses";
+import MyWork from "@pages/MyWork";
+import Logout from "@pages/Logout";
 // import FinancialDashboard from "@pages/FinancialDashboard";
 // import Settings from "@pages/Settings";
 import Clients from "@pages/Clients";
@@ -11,6 +14,14 @@ function App() {
     <Routes>
       {/* Public route */}
       <Route path="/" element={<Landing />} />
+      <Route
+        path="/logout"
+        element={
+          <PrivateRoute>
+            <Logout />
+          </PrivateRoute>
+        }
+      />
 
       {/* Auth routes */}
       <Route
@@ -29,6 +40,33 @@ function App() {
           </PrivateRoute>
         }
       />
+
+      <Route
+        path="/income&expenses"
+        element={
+          <PrivateRoute>
+            <IncomeExpenses />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/clients"
+        element={
+          <PrivateRoute>
+            <Clients />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/my-work"
+        element={
+          <PrivateRoute>
+            <MyWork />
+          </PrivateRoute>
+        }
+      />
+    </Routes>
       {/* <Route
         path="/financial-dashboard"
         element={
