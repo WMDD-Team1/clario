@@ -1,5 +1,21 @@
 import mongoose from "mongoose";
 
+const CategorySchema = new mongoose.Schema(
+	{
+		name: { type: String, required: true },
+		type: { type: String, enum: ["income", "expense"], required: true },
+	},
+	{ _id: true }
+);
+CategorySchema.set("toJSON", {
+	virtuals: true,
+	versionKey: false,
+	transform: (_, ret) => {
+		ret.id = ret._id;
+		delete ret._id;
+	},
+});
+
 const UserSchema = new mongoose.Schema(
 	{
 		auth0Id: {
@@ -56,6 +72,7 @@ const UserSchema = new mongoose.Schema(
 					enum: ["British Columbia", "Quebec"],
 					default: "British Columbia",
 				},
+				categories: { type: [CategorySchema], default: [] },
 			},
 		},
 	},
