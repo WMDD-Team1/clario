@@ -15,7 +15,7 @@ export const transactionSchema = z.object({
     date: z.coerce.date({ required_error: "Date is required" }),
     categoryId: objectIdSchema.optional(),
     origin: z.string().min(1, "Origin cannot be empty"),
-    amount: z.number({
+    baseAmount: z.number({
         required_error: "Amount is required",
         invalid_type_error: "Amount must be a number",
     }),

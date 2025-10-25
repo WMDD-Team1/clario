@@ -1,4 +1,5 @@
 import { Transaction } from "../../models/index.js";
+import { SettingsService } from "../index.js";
 
 // CRUD
 export const findAll = async (userId, page, limit, filters) => {
@@ -39,13 +40,41 @@ export const findOneById = async (id, userId) => {
 };
 
 export const create = async (data, userId) => {
+    const { baseAmount, type } = data;
+
+    let taxAmount = 0;
+    let totalAmount = data.baseAmount;
+    if (type === 'income') {
+        const settings = await SettingsService.getUserSettings(userId);
+        const province = settings.finance?.province || "British Columbia";
+        const taxRate = province === "British Columbia" ? 0.12 : 0.14975;
+
+        taxAmount = baseAmount * taxRate;
+        totalAmount = baseAmount + taxAmount;
+    }
+
     return await Transaction.create({
         ...data,
+        taxAmount,
+        totalAmount,
         userId,
     })
 };
 
 export const update = async (id, userId, data) => {
+    const { baseAmount } = data;
+    if (baseAmount) {
+        const settings = await SettingsService.getUserSettings(userId);
+        const province = settings.finance?.province || "British Columbia";
+        const taxRate = province === "British Columbia" ? 0.12 : 0.14975;
+
+        const taxAmount = baseAmount * taxRate;
+        const totalAmount = baseAmount + taxAmount;
+
+        data.taxAmount = taxAmount;
+        data.totalAmount = totalAmount;
+    }
+
     return await Transaction.findOneAndUpdate(
         {
             _id: id,

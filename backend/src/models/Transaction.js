@@ -27,7 +27,15 @@ const TransactionSchema = new mongoose.Schema(
 		origin: {
 			type: String,
 		},
-		amount: {
+		baseAmount: {
+			type: Number,
+			required: true,
+		},
+		taxAmount: {
+			type: Number,
+			required: true,
+		},
+		totalAmount: {
 			type: Number,
 			required: true,
 		},
