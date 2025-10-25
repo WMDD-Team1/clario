@@ -18,4 +18,4 @@ const InsightCard = ({ title, value, className }: Props) => {
     )
 }
 
-export default InsightCard
+export default InsightCard;
