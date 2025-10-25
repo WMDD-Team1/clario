@@ -271,10 +271,10 @@
  *           type: string
  *           maxLength: 200
  *           example: "Payment for October (max 200 characters)"
- *         status:
+ *         recurrence:
  *           type: string
- *           enum: [pending, paid]
- *           example: "paid"
+ *           enum: [weekly, monthly]
+ *           example: "weekly"
  *         paymentDate:
  *           type: string
  *           format: date
@@ -331,10 +331,6 @@
  *           type: string
  *           maxLength: 200
  *           example: "Payment for October (max 200 characters)"
- *         status:
- *           type: string
- *           enum: [pending, paid]
- *           example: "paid"
  *         paymentDate:
  *           type: string
  *           format: date
@@ -584,7 +580,7 @@
  *           type: string
  *           format: date
  *           example: 2025-10-05
- *         active:
+ *         isArchived:
  *           type: boolean
  *           example: false
  *         createdAt:

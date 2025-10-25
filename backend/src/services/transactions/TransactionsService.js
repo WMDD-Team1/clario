@@ -29,14 +29,9 @@ export const findAll = async (userId, page, limit, filters) => {
 };
 
 export const findOneById = async (id, userId) => {
-    const transaction = await Transaction
+    return await Transaction
         .findOne({ _id: id, userId })
         .populate("projectId", "name _id");
-
-    return {
-        ...transaction.toJSON(),
-        projectName: transaction.projectId?.name || "null",
-    }
 };
 
 export const create = async (data, userId) => {

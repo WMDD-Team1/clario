@@ -1,5 +1,5 @@
 import { RecurrenceService } from '../../services/index.js';
-import { archiveSchema, transactionSchema } from '../../validations/index.js';
+import { archiveSchema, recurrenceSchema } from '../../validations/index.js';
 
 export const getAll = async (req, res) => {
     try {
@@ -20,9 +20,9 @@ export const getAll = async (req, res) => {
 export const getById = async (req, res) => {
     try {
         const user = req.user;
-        const { id: transactionId } = req.params;
+        const { id: recurrenceId } = req.params;
 
-        const result = await RecurrenceService.findOneById(transactionId, user.id);
+        const result = await RecurrenceService.findOneById(recurrenceId, user.id);
 
         if (!result) return res.status(404).json({ message: "Recurrence not found" });
 
@@ -39,13 +39,13 @@ export const create = async (req, res) => {
     try {
         const user = req.user;
 
-        const parsedData = transactionSchema.parse(req.body);
+        const parsedData = recurrenceSchema.parse(req.body);
 
         const result = await RecurrenceService.create(parsedData, user.id);
         res.status(201).json(result);
     } catch (err) {
         console.error("Error creating recurrence: ", err);
-        if (err.name === 'ZodError') {
+        if (err.name === 'ZodError' || err.name  === 'TypeError') {
             return res.status(400).json({
                 message: "Invalid data",
                 error: err.message,
@@ -59,19 +59,22 @@ export const create = async (req, res) => {
 
 export const update = async (req, res) => {
     try {
-        const { id: transactionId } = req.params;
+        const { id: recurrenceId } = req.params;
         const user = req.user;
 
-        const parsedData = transactionSchema.partial().parse(req.body);
-        const result = await RecurrenceService.update(transactionId, user.id, parsedData);
+        const parsedData = recurrenceSchema.partial().parse(req.body);
+        const result = await RecurrenceService.update(recurrenceId, user.id, parsedData);
 
         if (!result) return res.status(404).json({ message: "Recurrence not found" });
 
         res.status(200).json(result);
     } catch (err) {
         console.error("Error updating recurrence: ", err);
-        if (err.name === 'ValidationError') {
-            return res.status(400).json({ message: err.message });
+        if (err.name === 'ZodError') {
+            return res.status(400).json({
+                message: "Invalid data",
+                error: err.message,
+            });
         }
         res.status(500).json({
             message: "Internal Server Error",
@@ -82,10 +85,10 @@ export const update = async (req, res) => {
 export const archive = async (req, res) => {
     try {
         const user = req.user;
-        const { id: transactionId } = req.params;
+        const { id: recurrenceId } = req.params;
         const { isArchived } = archiveSchema.parse(req.body);
 
-        const result = await RecurrenceService.archive(transactionId, user.id, isArchived);
+        const result = await RecurrenceService.archive(recurrenceId, user.id, isArchived);
         if (!result) return res.status(404).json({ message: "Recurrence not found" });
 
         res.status(200).json(result);

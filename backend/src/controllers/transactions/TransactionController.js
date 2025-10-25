@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { TransactionService } from '../../services/index.js';
 import { archiveSchema, transactionSchema } from '../../validations/index.js';
 
@@ -21,6 +22,10 @@ export const getById = async (req, res) => {
     try {
         const user = req.user;
         const { id: transactionId } = req.params;
+
+        if (!mongoose.Types.ObjectId.isValid(transactionId)) {
+            return res.status(400).json({ message: "Invalid transactionId" });
+        }
 
         const result = await TransactionService.findOneById(transactionId, user.id);
 
@@ -62,6 +67,10 @@ export const update = async (req, res) => {
         const { id: transactionId } = req.params;
         const user = req.user;
 
+        if (!mongoose.Types.ObjectId.isValid(transactionId)) {
+            return res.status(400).json({ message: "Invalid transactionId" });
+        }
+
         const parsedData = transactionSchema.partial().parse(req.body);
         const result = await TransactionService.update(transactionId, user.id, parsedData);
 
@@ -70,8 +79,11 @@ export const update = async (req, res) => {
         res.status(200).json(result);
     } catch (err) {
         console.error("Error updating transaction: ", err);
-        if (err.name === 'ValidationError') {
-            return res.status(400).json({ message: err.message });
+        if (err.name === 'ZodError') {
+            return res.status(400).json({
+                message: "Invalid data",
+                error: err.message,
+            });
         }
         res.status(500).json({
             message: "Internal Server Error",
@@ -84,6 +96,10 @@ export const archive = async (req, res) => {
         const user = req.user;
         const { id: transactionId } = req.params;
         const { isArchived } = archiveSchema.parse(req.body);
+
+        if (!mongoose.Types.ObjectId.isValid(transactionId)) {
+            return res.status(400).json({ message: "Invalid transactionId" });
+        }
 
         const result = await TransactionService.archive(transactionId, user.id, isArchived);
         if (!result) return res.status(404).json({ message: "Transaction not found" });

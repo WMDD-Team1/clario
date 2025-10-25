@@ -47,13 +47,9 @@ const TransactionSchema = new mongoose.Schema(
 			maxlength: 200,
 			required: false,
 		},
-		status: {
+		frequency: {
 			type: String,
-			enum: ["pending", "paid"],
-			default: "pending",
-		},
-		paymentDate: {
-			type: Date,
+			enum: ["weekly", "monthly"],
 			required: false,
 		},
 		attachmentURL: {
