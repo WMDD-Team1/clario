@@ -5,7 +5,7 @@ import DashboardShell from "@/components/DashboardShell";
 import Card from "@/components/Card";
 import { BalanceChart } from "@/components/BalanceChart";
 import { ExpensesTable } from "@/components/ExpensesTable";
-import { MoneyFlowChart } from "@/components/MoneyFlowChart";
+import  MoneyFlowChart  from "@/components/MoneyFlowChart";
 import { Sparkles } from "lucide-react";
 import { RemindersList } from "@/components/RemindersList";
 import { WelcomeBanner } from "@/components/WelcomeBanner";
@@ -56,7 +56,8 @@ export const Dashboard = () => {
           {/* ==== Left + Center Section ==== */}
           <div className="flex flex-col flex-1 min-w-0 gap-6">
             {/* --- Top Stats Row --- */}
-            <div className="w-full flex flex-wrap justify-between gap-4 pb-2">
+            {/* --- Top Stats Row (auto-fit, responsive) --- */}
+            <div className="w-full flex flex-wrap justify-between gap-4 pb-2 overflow-hidden">
               {[
                 { label: "Income", value: "$12,000" },
                 { label: "Expense", value: "$8,000" },
@@ -66,14 +67,15 @@ export const Dashboard = () => {
               ].map((stat, index) => (
                 <div
                   key={index}
-                  className="flex-1 min-w-[160px] sm:min-w-[180px] md:min-w-[200px] lg:min-w-[220px]
-                  flex flex-col justify-center items-center py-4 rounded-2xl shadow-sm border border-gray-100 bg-white"
+                  className="flex-1 min-w-[180px] max-w-[220px] flex flex-col justify-center items-center 
+                  py-4 rounded-2xl shadow-sm border border-gray-100 bg-white transition-all duration-200"
                 >
                   <p className="font-semibold text-gray-600 text-sm">{stat.label}</p>
                   <p className="text-xl font-bold text-gray-800">{stat.value}</p>
                 </div>
               ))}
             </div>
+
 
             {/* --- Insights + Charts Row --- */}
             <div className="flex flex-col lg:flex-row gap-6 w-full">
@@ -109,20 +111,21 @@ export const Dashboard = () => {
                     "Client B usually pays 8 days late — consider updating your contract terms.",
                 },
               ].map((item, idx) => (
-                <Card key={idx} style="card1">
-                  <div className="py-3 px-4 shadow-sm rounded-xl border border-gray-100 bg-white scale-[0.98]">
-                    <div className="flex justify-between items-center mb-1">
-                      <div className="flex items-center gap-2 bg-blue-600 text-white text-xs font-medium px-2 py-1 rounded-full shadow-sm">
-                        <Sparkles className="w-3 h-3 text-white" />
-                        {item.title}
-                      </div>
-                      <span className="text-xs font-semibold text-gray-600">
-                        {item.period}
-                      </span>
+              <Card key={idx} style="card1">
+                <div className="py-3 px-4 shadow-sm rounded-xl border border-gray-100 bg-white scale-[0.98]">
+                  <div className="flex justify-between items-center mb-1">
+                    <div className="flex items-center gap-2 bg-blue-600 text-white text-xs font-medium px-2 py-1 rounded-full shadow-sm">
+                      <Sparkles className="w-3 h-3 text-white" />
+                      {item.title}
                     </div>
-                    <p className="text-xs text-gray-600 leading-snug">{item.text}</p>
+                    <span className="text-xs font-semibold text-gray-600">
+                      {item.period}
+                    </span>
                   </div>
-                </Card>
+                  <p className="text-xs text-gray-600 leading-snug">{item.text}</p>
+                </div>
+              </Card>
+
               ))}
               </div>
               {/* Charts (Center) - Wider width */}
