@@ -8,8 +8,7 @@ export const findAll = async (userId, page, limit, filters) => {
         Transaction.find({ ...filters, userId })
             .skip(skip)
             .limit(limit)
-            .sort({ date: 1 })
-            .populate("projectId", "name _id"),
+            .sort({ date: 1 }),
         Transaction.countDocuments({ ...filters, userId }),
     ])
 
@@ -31,7 +30,7 @@ export const findAll = async (userId, page, limit, filters) => {
 export const findOneById = async (id, userId) => {
     return await Transaction
         .findOne({ _id: id, userId })
-        .populate("projectId", "name _id");
+        .populate("projectId");
 };
 
 export const create = async (data, userId) => {
