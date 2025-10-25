@@ -36,7 +36,7 @@ const Sidebar = () => {
             route: "/dashboard2",
             activeIcon: <SettingsInactiveIcon />,
             inactiveIcon: <SettingsInactiveIcon/>,
-            tooltip: ""
+            tooltip: "Settings"
         }
     ];
 
@@ -45,7 +45,7 @@ const Sidebar = () => {
             route: "/dashboard3",
             activeIcon: <FaqInactiveIcon />,
             inactiveIcon: <FaqInactiveIcon/>,
-            tooltip: ""
+            tooltip: "Support & FAQ"
         },
         {
             route: "/logout",

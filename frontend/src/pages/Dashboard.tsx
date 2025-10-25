@@ -5,7 +5,7 @@ import DashboardShell from "@/components/DashboardShell";
 import Card from "@/components/Card";
 import { BalanceChart } from "@/components/BalanceChart";
 import { ExpensesTable } from "@/components/ExpensesTable";
-import  MoneyFlowChart  from "@/components/MoneyFlowChart";
+import MoneyFlowAreaChart from "@/components/MoneyFlowAreaChart";
 import { Sparkles } from "lucide-react";
 import { RemindersList } from "@/components/RemindersList";
 import { WelcomeBanner } from "@/components/WelcomeBanner";
@@ -112,7 +112,7 @@ export const Dashboard = () => {
                 },
               ].map((item, idx) => (
               <Card key={idx} style="card1">
-                <div className="py-3 px-4 shadow-sm rounded-xl border border-gray-100 bg-white scale-[0.98]">
+                <div className="py-3 px-4 rounded-xl bg-white">
                   <div className="flex justify-between items-center mb-1">
                     <div className="flex items-center gap-2 bg-blue-600 text-white text-xs font-medium px-2 py-1 rounded-full shadow-sm">
                       <Sparkles className="w-3 h-3 text-white" />
@@ -142,7 +142,7 @@ export const Dashboard = () => {
 
                 {/* Money Flow */}
                 <div>
-                  <MoneyFlowChart data={flowData} />
+                  <MoneyFlowAreaChart data={flowData} />
                 </div>
               </div>
             </div>

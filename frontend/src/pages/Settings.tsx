@@ -1,173 +1,255 @@
-// import React, { useState } from "react";
-// import DashboardShell from "@/components/DashboardShell";
+import React, { useState } from "react";
+import DashboardShell from "@/components/DashboardShell";
+import Button from "@/components/Button";
+import ToggleButton from "@/components/ToggleButton";
 
-// const Settings: React.FC = () => {
-//   const [activeSection, setActiveSection] = useState<"profile" | "finance">("profile");
+const Settings: React.FC = () => {
+  const [activeSection, setActiveSection] = useState({
+    key: "general",
+    label: "General",
+  });
 
-//   const sectionButton =
-//     "px-5 py-2 rounded-xl font-medium transition-colors focus:outline-none";
+  // Backend-ready placeholders
+  const [profile, setProfile] = useState({
+    name: "Yosimar Yotún",
+    email: "bebexito@emoxito.com",
+  });
 
-//   const fieldRow =
-//     "flex justify-between items-center py-3 border-b border-gray-300 text-sm";
+  const [preferences, setPreferences] = useState({
+    language: "English",
+    mode: "Bright Mode",
+  });
 
-//   const label = "text-gray-700 font-medium";
-//   const value = "text-gray-600";
+  const [finance, setFinance] = useState({
+    expenseCategories: [
+      "Software & Tools",
+      "Equipment & Hardware",
+      "Subscriptions",
+      "Professional Services",
+    ],
+    incomeCategories: ["Project Income", "Recurring Income", "Consulting"],
+    taxRegime: "British Columbia",
+  });
 
-//   const smallButton =
-//     "text-gray-700 bg-gray-200 text-sm font-medium px-4 py-1.5 rounded-full hover:bg-gray-300 transition";
+  // Empty handlers for backend integration
+  const handleEdit = (section: string) => {};
+  const handleExportData = () => {};
 
-//   return (
-//     <DashboardLayout>
-//       <div className="p-10">
-//         {/* Header */}
-//         <h1 className="text-3xl font-serif font-semibold mb-8">Settings</h1>
+  return (
+    <DashboardShell>
+      <div className="flex flex-col gap-8 p-6 md:p-10 max-w mx-auto">
+        {/* Header */}
+        <h1 className="text-2xl md:text-3xl font-semibold text-gray-800">
+          Settings
+        </h1>
+        {/* Tabs */}
+        <ToggleButton
+          options={[
+            { key: "general", label: "General" },
+            { key: "finance", label: "Finance" },
+          ]}
+          option={activeSection}
+          onClick={setActiveSection}
+        />
 
-//         {/* Section Tabs */}
-//         <div className="flex mb-10 bg-black rounded-xl w-fit p-1">
-//         <button
-//             onClick={() => setActiveSection("profile")}
-//             className={`px-6 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
-//             activeSection === "profile"
-//                 ? "bg-white text-black shadow-sm"
-//                 : "bg-transparent text-white"
-//             }`}
-//         >
-//             Section 1
-//         </button>
-//         <button
-//             onClick={() => setActiveSection("finance")}
-//             className={`px-6 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
-//             activeSection === "finance"
-//                 ? "bg-white text-black shadow-sm"
-//                 : "bg-transparent text-white"
-//             }`}
-//         >
-//             Section 2
-//         </button>
-//         </div>
+        {/* ========== GENERAL SECTION ========== */}
+        {activeSection.key === "general" && (
+          <div className="flex flex-col gap-10">
+            {/* Profile Section */}
+            <section>
+              <div className="divide-y divide-gray-200 border-b border-gray-200">
+                {/* Name */}
+                <div className="flex items-center py-4">
+                  <span className="flex-1 text-gray-700">Name</span>
+                  <span className="flex-1 text-center text-gray-500">
+                    {profile.name}
+                  </span>
+                  <div className="flex-1 flex justify-end">
+                    <Button
+                      textColor="white"
+                      buttonColor="regularButton"
+                      onClick={() => handleEdit("profile-name")}
+                    >
+                      Edit
+                    </Button>
+                  </div>
+                </div>
 
-//         {/* Profile & Preferences */}
-//         {activeSection === "profile" && (
-//           <div className="space-y-10">
-//             {/* Profile */}
-//             <section>
-//               <h2 className="text-lg font-semibold mb-4">Profile</h2>
-//               <div className="border-t border-gray-300 space-between">
-//                 <div className={fieldRow}>
-//                   <span className={label}>Name</span>
-//                 <div className="">
-//                     <span className={value}>Yosimar Yotún</span>
-//                 </div>
-//                   <div className="flex items-center gap-4">
-//                     <button className={smallButton}>Edit</button>
-//                   </div>
-//                 </div>
-//                 <div className={fieldRow}>
-//                   <span className={label}>Email</span>
-//                   <div className="flex items-center gap-4">
-//                     <span className={value}>bebexito@emoxito.com</span>
-//                     <button className={smallButton}>Edit</button>
-//                   </div>
-//                 </div>
-//                 <div className={fieldRow}>
-//                   <span className={label}>Password</span>
-//                   <div className="flex items-center gap-4">
-//                     <span className={value}>****************************</span>
-//                     <button className={smallButton}>Change Password</button>
-//                   </div>
-//                 </div>
-//               </div>
-//             </section>
+                {/* Email */}
+                <div className="flex items-center py-4">
+                  <span className="flex-1 text-gray-700">Email</span>
+                  <span className="flex-1 text-center text-gray-500">
+                    {profile.email}
+                  </span>
+                  <div className="flex-1 flex justify-end">
+                    <Button
+                      textColor="white"
+                      buttonColor="regularButton"
+                      onClick={() => handleEdit("profile-email")}
+                    >
+                      Edit
+                    </Button>
+                  </div>
+                </div>
 
-//             {/* Preferences */}
-//             <section>
-//               <h2 className="text-lg font-semibold mb-4">Preferences</h2>
-//               <div className="border-t border-gray-300">
-//                 <div className={fieldRow}>
-//                   <span className={label}>Language</span>
-//                   <div className="flex items-center gap-4">
-//                     <span className={value}>English</span>
-//                     <button className={smallButton}>Change</button>
-//                   </div>
-//                 </div>
-//                 <div className={fieldRow}>
-//                   <span className={label}>Mode</span>
-//                   <div className="flex items-center gap-4">
-//                     <span className={value}>Bright Mode</span>
-//                     <button className={smallButton}>Change</button>
-//                   </div>
-//                 </div>
-//               </div>
-//             </section>
-//           </div>
-//         )}
+                {/* Password */}
+                <div className="flex items-center py-4">
+                  <span className="flex-1 text-gray-700">Password</span>
+                  <span className="flex-1 text-center text-gray-500">
+                    ••••••••••••••••••••••••••••
+                  </span>
+                  <div className="flex-1 flex justify-end">
+                    <Button
+                      textColor="white"
+                      buttonColor="regularButton"
+                      onClick={() => handleEdit("password")}
+                    >
+                      Change password
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </section>
 
-//         {/* Finances */}
-//         {activeSection === "finance" && (
-//           <div className="space-y-10">
-//             <section>
-//               <div className={fieldRow}>
-//                 <span className={label}>Expenses Categories</span>
-//                 <div className="flex-start space-between">
-//                                       {[
-//                     "Software & Tools",
-//                     "Equipment & Hardware",
-//                     "Subscriptions",
-//                     "Professional Services",
-//                   ].map((tag) => (
-//                     <span
-//                       key={tag}
-//                       className="border border-gray-400 text-gray-700 rounded-full px-3 py-1 text-xs"
-//                     >
-//                       {tag}
-//                     </span>
-//                   ))}
-//                 </div>
-//                 <div className="flex flex-wrap justify-end items-center gap-2 max-w-[70%]">
-//                   <button className={smallButton}>Add/Edit</button>
-//                 </div>
-//               </div>
+            {/* Preferences Section */}
+            <section>
+              <div className="divide-y divide-gray-200 border-b border-gray-200">
+                {/* Language */}
+                <div className="flex items-center py-4">
+                  <span className="flex-1 text-gray-700">Language</span>
+                  <span className="flex-1 text-center text-gray-500">
+                    {preferences.language}
+                  </span>
+                  <div className="flex-1 flex justify-end">
+                    <Button
+                      textColor="white"
+                      buttonColor="regularButton"
+                      onClick={() => handleEdit("language")}
+                    >
+                      Change
+                    </Button>
+                  </div>
+                </div>
 
-//               <div className={fieldRow}>
-//                 <span className={label}>Income Categories</span>
-//                 <div className="flex flex-wrap justify-end items-center gap-2 max-w-[70%]">
-//                   {["Project Income", "Recurring Income", "Consulting"].map(
-//                     (tag) => (
-//                       <span
-//                         key={tag}
-//                         className="border border-gray-400 text-gray-700 rounded-full px-3 py-1 text-xs"
-//                       >
-//                         {tag}
-//                       </span>
-//                     )
-//                   )}
-//                   <button className={smallButton}>Add/Edit</button>
-//                 </div>
-//               </div>
+                {/* Mode */}
+                <div className="flex items-center py-4">
+                  <span className="flex-1 text-gray-700">Mode</span>
+                  <span className="flex-1 text-center text-gray-500">
+                    {preferences.mode}
+                  </span>
+                  <div className="flex-1 flex justify-end">
+                    <Button
+                      textColor="white"
+                      buttonColor="regularButton"
+                      onClick={() => handleEdit("mode")}
+                    >
+                      Change
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        )}
 
-//               <div className={fieldRow}>
-//                 <span className={label}>Tax Regime</span>
-//                 <div className="flex items-center gap-4">
-//                   <span className={value}>British Columbia</span>
-//                   <button className={smallButton}>Edit</button>
-//                 </div>
-//               </div>
+        {/* ========== FINANCE SECTION ========== */}
+        {activeSection.key === "finance" && (
+          <div className="flex flex-col gap-10">
+            {/* Expense Categories */}
+            <section>
+              <div className="flex items-center py-4 border-b border-gray-200">
+                <span className="flex-1 text-gray-700">Expense Categories</span>
+                <div className="flex-1 justify-center flex flex-wrap gap-2 text-center">
+                  {finance.expenseCategories.map((cat) => (
+                    <span
+                      key={cat}
+                      className="px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-700"
+                    >
+                      {cat}
+                    </span>
+                  ))}
+                </div>
+                <div className="flex-1 flex justify-end">
+                  <Button
+                    textColor="white"
+                    buttonColor="regularButton"
+                    onClick={() => handleEdit("expenseCategories")}
+                  >
+                    Add / Edit
+                  </Button>
+                </div>
+              </div>
+            </section>
 
-//               <div className={fieldRow}>
-//                 <span className={label}>Export Data</span>
-//                 <button
-//                   className="bg-gray-200 text-gray-500 text-sm font-medium px-4 py-1.5 rounded-full cursor-not-allowed"
-//                   disabled
-//                 >
-//                   Export
-//                 </button>
-//               </div>
-//             </section>
-//           </div>
-//         )}
-//       </div>
-//     </DashboardLayout>
-//   );
-// };
+            {/* Income Categories */}
+            <section>
+              <div className="flex items-center py-4 border-b border-gray-200">
+                <span className="flex-1 text-gray-700">Income Categories</span>
+                <div className="flex-1 justify-center flex flex-wrap gap-2 text-center">
+                  {finance.incomeCategories.map((cat) => (
+                    <span
+                      key={cat}
+                      className="px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-700"
+                    >
+                      {cat}
+                    </span>
+                  ))}
+                </div>
+                <div className="flex-1 flex justify-end">
+                  <Button
+                    textColor="white"
+                    buttonColor="regularButton"
+                    onClick={() => handleEdit("incomeCategories")}
+                  >
+                    Add / Edit
+                  </Button>
+                </div>
+              </div>
+            </section>
 
-// export default Settings;
+            {/* Tax Regime */}
+            <section>
+              <div className="flex items-center py-4 border-b border-gray-200">
+                <span className="flex-1 text-gray-700">Tax Regime</span>
+                <span className="flex-1 text-center text-gray-500">
+                  {finance.taxRegime}
+                </span>
+                <div className="flex-1 flex justify-end">
+                  <Button
+                    textColor="white"
+                    buttonColor="regularButton"
+                    onClick={() => handleEdit("taxRegime")}
+                  >
+                    Edit
+                  </Button>
+                </div>
+              </div>
+            </section>
+
+            {/* Export Data */}
+            <section>
+              <div className="flex items-center py-4 border-b border-gray-200">
+                <span className="flex-1 text-gray-700">Export Data</span>
+                <p className="flex-1 text-center text-gray-500 text-sm">
+                  You can export your financial records and reports for
+                  bookkeeping or analysis.
+                </p>
+                <div className="flex-1 flex justify-end">
+                  <Button
+                    textColor="white"
+                    buttonColor="regularButton"
+                    onClick={handleExportData}
+                  >
+                    Export
+                  </Button>
+                </div>
+              </div>
+            </section>
+          </div>
+        )}
+      </div>
+    </DashboardShell>
+  );
+};
+
+export default Settings;
