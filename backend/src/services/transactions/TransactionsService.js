@@ -1,5 +1,5 @@
 import { Transaction } from "../../models/index.js";
-import { SettingsService } from "../index.js";
+import { SettingsService, TransactionService } from "../index.js";
 
 // CRUD
 export const findAll = async (userId, page, limit, filters) => {
@@ -57,7 +57,9 @@ export const create = async (data, userId) => {
 
 export const update = async (id, userId, data) => {
     const { baseAmount } = data;
-    if (baseAmount) {
+    const transaction = await findOneById(id, userId);
+    data.totalAmount = baseAmount;
+    if (baseAmount && transaction.type === 'income') {
         const settings = await SettingsService.getUserSettings(userId);
         const province = settings.finance?.province || "British Columbia";
         const taxRate = province === "British Columbia" ? 0.12 : 0.14975;
