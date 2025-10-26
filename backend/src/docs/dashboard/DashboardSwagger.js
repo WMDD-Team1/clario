@@ -7,42 +7,10 @@
 
 /**
  * @swagger
- * components:
- *   schemas:
- *     Reminder:
- *       type: object
- *       properties:
- *         projectId:
- *           type: string
- *           example: "671b0f5f5c4a2b2c9d831f12"
- *         milestoneId:
- *           type: string
- *           example: "671b0f7a5c4a2b2c9d831f33"
- *         milestoneName:
- *           type: string
- *           example: "Website Launch"
- *         clientName:
- *           type: string
- *           example: "NorthFace"
- *         dueDate:
- *           type: string
- *           format: date-time
- *           example: "2025-10-28T00:00:00.000Z"
- *
- *     ReminderListResponse:
- *       type: array
- *       items:
- *         $ref: '#/components/schemas/Reminder'
- */
-
-/**
- * @swagger
  * /api/dashboard/reminders:
  *   get:
- *     summary: Get upcoming milestone reminders for the logged-in user
- *     description: |
- *       Returns a list of upcoming milestones (due soon) across all user projects.
- *       Optionally, you can filter reminders by specifying how many days ahead to look (default is 7 days).
+ *     summary: Get upcoming deliverable reminders
+ *     description: Returns a list of deliverables whose due dates are approaching within a given time range.
  *     tags: [Dashboard]
  *     security:
  *       - bearerAuth: []
@@ -52,16 +20,70 @@
  *         schema:
  *           type: integer
  *           default: 7
- *         description: Number of days ahead to include milestones
+ *         description: Number of days ahead to check for deliverables due
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Current page number
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Number of reminders per page
  *     responses:
  *       200:
- *         description: Successfully retrieved reminders
+ *         description: Successfully retrieved paginated deliverable reminders
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/ReminderListResponse'
- *       401:
- *         description: Unauthorized — Invalid or missing token
- *       500:
- *         description: Internal server error
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       projectId:
+ *                         type: string
+ *                         example: "68f905a85b172898eadea040"
+ *                       milestoneId:
+ *                         type: string
+ *                         example: "68f905e15b172898eadea049"
+ *                       deliverableId:
+ *                         type: string
+ *                         example: "68f905e15b172898eadea111"
+ *                       deliverableName:
+ *                         type: string
+ *                         example: "Final UI Mockups"
+ *                       milestoneName:
+ *                         type: string
+ *                         example: "Design Phase"
+ *                       clientName:
+ *                         type: string
+ *                         example: "Me The Best"
+ *                       dueDate:
+ *                         type: string
+ *                         format: date-time
+ *                         example: "2025-11-05T00:00:00.000Z"
+ *                 meta:
+ *                   type: object
+ *                   properties:
+ *                     total:
+ *                       type: integer
+ *                       example: 25
+ *                     page:
+ *                       type: integer
+ *                       example: 1
+ *                     limit:
+ *                       type: integer
+ *                       example: 10
+ *                     totalPages:
+ *                       type: integer
+ *                       example: 3
+ *                     hasNextPage:
+ *                       type: boolean
+ *                       example: true
  */

@@ -5,7 +5,6 @@ export const getReminders = async (req, res) => {
 		const { days = 7, page = 1, limit = 10 } = req.query;
 
 		const result = await getUpcomingReminders(userId, Number(days), Number(page), Number(limit));
-
 		res.status(200).json(result);
 	} catch (err) {
 		console.error("Error fetching reminders:", err);

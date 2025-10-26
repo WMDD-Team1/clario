@@ -11,18 +11,22 @@ export const getUpcomingReminders = async (userId, daysAhead = 7, page = 1, limi
 		.lean();
 
 	const allReminders = projects.flatMap((project) =>
-		(project.milestones || [])
-			.filter((m) => {
-				const due = new Date(m.dueDate);
-				return m.dueDate && due >= now && due <= future;
-			})
-			.map((m) => ({
-				projectId: project._id,
-				milestoneId: m._id,
-				milestoneName: m.name,
-				clientName: project.clientId?.name || "Unknown",
-				dueDate: m.dueDate,
-			}))
+		(project.milestones || []).flatMap((m) =>
+			(m.deliverables || [])
+				.filter((d) => {
+					const due = new Date(d.dueDate);
+					return d.dueDate && due >= now && due <= future;
+				})
+				.map((d) => ({
+					projectId: project._id,
+					milestoneId: m._id,
+					deliverableId: d._id,
+					deliverableName: d.name,
+					milestoneName: m.name,
+					clientName: project.clientId?.name || "Unknown",
+					dueDate: d.dueDate,
+				}))
+		)
 	);
 
 	allReminders.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
