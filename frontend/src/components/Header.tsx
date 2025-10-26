@@ -16,7 +16,7 @@ const Header = () => {
                 <img src="/clario.svg" alt="Clario logo" />
             </div>
             <div className='flex items-center justify-between gap-[20px]'>
-                <SearchBar isSearchOpen={isSearchOpen} onSearchOpen={setIsSearchOpen} />
+                <SearchBar isSearchOpen={isSearchOpen} onSearchOpen={setIsSearchOpen} onChange={() => console.log()} />
                 <div className={`transition-all duration-3000 ${isSearchOpen ? "hidden md:block" : "block"
                     }`}>
                     <UserPicture imgURL={data?.picture} />

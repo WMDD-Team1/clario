@@ -5,9 +5,10 @@ interface Props {
     isSearchOpen: boolean;
     placeholder?: string;
     onSearchOpen: (i: boolean) => void;
+    onChange: (search: string) => void;
 }
 
-export default function SearchBar({ needCollapse = true, isSearchOpen, placeholder = "Search...", onSearchOpen }: Props) {
+export default function SearchBar({ needCollapse = true, isSearchOpen, placeholder = "Search...", onSearchOpen, onChange }: Props) {
 
     return (
         <div
@@ -35,6 +36,7 @@ export default function SearchBar({ needCollapse = true, isSearchOpen, placehold
                     placeholder={placeholder}
                     className="bg-transparent flex-1 outline-none text-gray-700 placeholder-gray-400 text-sm"
                     autoFocus={isSearchOpen}
+                    onChange={(event) => onChange(event.target.value)}
                 />
                 {/* Close button (only when expanded on mobile) */}
                 {isSearchOpen && (

@@ -10,6 +10,9 @@ import App from "./App";
 import "./index.css";
 import { store } from "./store";
 import { UserLoader } from "@components/UserLoader";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 function InitApi() {
   const { getAccessTokenSilently } = useAuth0();
@@ -30,7 +33,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <AuthProvider>
           <InitApi />
           <UserLoader>
-            <App />
+            <QueryClientProvider client={queryClient}>
+
+              <App />
+            </QueryClientProvider>
           </UserLoader>
         </AuthProvider>
       </BrowserRouter>
