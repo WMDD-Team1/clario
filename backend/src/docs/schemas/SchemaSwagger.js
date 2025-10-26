@@ -275,10 +275,6 @@
  *           type: string
  *           enum: [weekly, monthly]
  *           example: "weekly"
- *         paymentDate:
- *           type: string
- *           format: date
- *           example: 2025-10-05
  *         attachmentURL:
  *           type: string
  *           format: uri
@@ -331,17 +327,10 @@
  *           type: string
  *           maxLength: 200
  *           example: "Payment for October (max 200 characters)"
- *         paymentDate:
- *           type: string
- *           format: date
- *           example: 2025-10-05
  *         attachmentURL:
  *           type: string
  *           format: uri
  *           example: "https://example.com/attachment.pdf"
- *         isArchived:
- *           type: boolean
- *           example: false
  */
 
 /**
