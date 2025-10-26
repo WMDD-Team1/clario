@@ -44,9 +44,12 @@ export const create = async (data, userId) => {
     await TransactionService.update(transactionId, userId, { frequency: frequency });
     data.templateTransactionId = transaction._id;
 
+    const nextRun = getNextRunDate(frequency);
+
     return await Recurrence.create({
         ...data,
         userId,
+        nextRun,
     })
 };
 
@@ -80,4 +83,25 @@ export const archive = async (id, userId, isArchived) => {
         { isArchived },
         { new: true }
     );
+};
+
+const getNextRunDate = (frequency) => {
+    const now = new Date();
+    let nextRun;
+
+    switch (frequency) {
+        case 'daily':
+            nextRun = new Date(now.setDate(now.getDate() + 1));
+            break;
+        case 'weekly':
+            nextRun = new Date(now.setDate(now.getDate() + 7));
+            break;
+        case 'monthly':
+            nextRun = new Date(now.setMonth(now.getMonth() + 1));
+            break;
+        default:
+            throw new Error('Invalid frequency');
+    }
+
+    return nextRun;
 };

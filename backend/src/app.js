@@ -1,6 +1,7 @@
 import cors from "cors";
 import express from "express";
 import morgan from "morgan";
+import "./jobs/recurrence.jobs.js";
 import { router as authRoutes } from "./routes/auth/authRoutes.js";
 import { router as clientRoutes } from "./routes/clients/clientsRoutes.js";
 import { router as contractRoutes } from "./routes/contract/contractRoutes.js";

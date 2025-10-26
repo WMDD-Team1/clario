@@ -1,5 +1,5 @@
 import { Transaction } from "../../models/index.js";
-import { SettingsService, TransactionService } from "../index.js";
+import { SettingsService } from "../index.js";
 
 // CRUD
 export const findAll = async (userId, page, limit, filters) => {
