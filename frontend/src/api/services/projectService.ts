@@ -8,7 +8,6 @@ export const fetchAllProjects = async (params?: {
     viewType?: string ,
     search?: string,
 }): Promise<ListApi<ProjectApiResponse[]>> => {
-    console.log(params);
     let data: ListApi<ProjectApiResponse[]> = {
         data: [],
         meta: {

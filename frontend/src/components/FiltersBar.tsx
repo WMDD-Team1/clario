@@ -6,11 +6,14 @@ interface Props {
     currentFilter: string;
     filters: string[];
     onFilter: (filter: string) => void;
+    selectedStage: { id: string, label: string };
+    selectedSort: { id: string, label: string };
     sortOptions: { id: string, label: string }[];
     onSortChange: (option: { id: string, label: string }) => void;
     stageOptions: { id: string, label: string }[];
     onStageChange: (option: { id: string, label: string }) => void;
     onSearchChange: (search: string) => void;
+    searchValue?: string;
 }
 
 const FiltersBar = ({
@@ -22,6 +25,9 @@ const FiltersBar = ({
     stageOptions,
     onStageChange,
     onSearchChange,
+    selectedStage,
+    selectedSort,
+    searchValue,
 }: Props) => {
     return (
         <div className="flex flex-col items-center mb-6 md:flex-row md:justify-between">
@@ -39,17 +45,20 @@ const FiltersBar = ({
                     isSearchOpen={false}
                     placeholder="Search by project name or client..."
                     onSearchOpen={() => console.log()}
-                    onChange={onSearchChange}/>
+                    onChange={onSearchChange}
+                    searchValue={searchValue}/>
 
                 {/* Sort By */}
                 <SelectionFilter
                     className="hidden md:block"
+                    selectedValue={selectedSort}
                     options={sortOptions}
                     onSelect={onSortChange} />
 
                 {/* Stages */}
                 <SelectionFilter
                     className="hidden md:block"
+                    selectedValue={selectedStage}
                     options={stageOptions}
                     onSelect={onStageChange} />
             </div>
