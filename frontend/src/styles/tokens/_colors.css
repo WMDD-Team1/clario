@@ -1,0 +1,132 @@
+:root {
+  /* --- text - light --- */
+  --page-title: #0c111d;
+  --page-subtitle: #0c111d;
+  --section-title: #182230;
+  --primary-text: #0c111d;
+  --secondary-text: #182230;
+  --tertiary-text: #344054;
+  --sub-text: #98a2b3;
+  --text-alpha: #f5f9ff;
+  --sublight: #e4e7ec;
+  --brand-subtext: #023dca;
+  --sublight-2: #e5e7eb;
+
+  /* --- components - light --- */
+  --background: #f5f9ff;
+  --border: #667085;
+  --outlined-icon: #02005d;
+  --background-alternate: #dbe7fb;
+  --background-focus: #02357c;
+  --brand-equivalence: #0665ec;
+  --background-button: #a7c8f7;
+  --background-toggle2: #ffffff;
+
+  /* --- general colors - light --- */
+  --full-bg: #f5f9ff;
+  --brand-alpha: #0665ec;
+  --brand-beta: #98a2b3;
+  --general-alpha: #ffffff;
+  --general-alpha0: #ffffff;
+
+  /* --- status - light --- */
+  --success-background1: #dbfae6;
+  --success-contrast1: #079455;
+  --warning-background1: #feefc7;
+  --warning-contrast1: #dc6803;
+  --error-background1: #fee4e2;
+  --error-contrast1: #f04438;
+  --error-accent1: #d92d20;
+
+  /* --- primitive grays (light mode) --- */
+  --primitive-colors-gray-light-mode-1: #ffffff;
+  --primitive-colors-gray-light-mode-25: #f5f9ff;
+  --primitive-colors-gray-light-mode-50: #f9fafb;
+  --primitive-colors-gray-light-mode-100: #f2f4f7;
+  --primitive-colors-gray-light-mode-200: #e4e7ec;
+  --primitive-colors-gray-light-mode-400: #98a2b3;
+  --primitive-colors-gray-light-mode-500: #667085;
+  --primitive-colors-gray-light-mode-600: #475467;
+  --primitive-colors-gray-light-mode-700: #344054;
+  --primitive-colors-gray-light-mode-800: #182230;
+  --primitive-colors-gray-light-mode-900: #101828;
+  --primitive-colors-gray-light-mode-950: #0c111d;
+
+  /* --- primitive brand primary --- */
+  --primitive-colors-brand-primary-025: #f5f9ff;
+  --primitive-colors-brand-primary-50: #eef5fe;
+  --primitive-colors-brand-primary-51: #dbe7fb;
+  --primitive-colors-brand-primary-75: #dbe7fb;
+  --primitive-colors-brand-primary-95: #a7c8f7;
+  --primitive-colors-brand-primary-100: #88d9ff;
+  --primitive-colors-brand-primary-200: #66bfff;
+  --primitive-colors-brand-primary-300: #44a2ff;
+  --primitive-colors-brand-primary-400: #2284ff;
+  --primitive-colors-brand-primary-500-base: #0665ec;
+  --primitive-colors-brand-primary-600: #022cd2;
+  --primitive-colors-brand-primary-700: #023dca;
+  --primitive-colors-brand-primary-800: #001da7;
+  --primitive-colors-brand-primary-900: #000583;
+  --primitive-colors-brand-primary-925: #02357c;
+  --primitive-colors-brand-primary-950: #02005d;
+
+  /* --- primitive accent colors --- */
+  --primitive-colors-accent-colors-1: #ff76f4;
+  --primitive-colors-accent-colors-2: #ff7600;
+  --primitive-colors-accent-colors-3: #ffd647;
+  --primitive-colors-accent-colors-4: #00d923;
+  --primitive-colors-accent-colors-5: #14e5e2;
+  --primitive-colors-accent-colors-6: #9966ff;
+
+  /* --- primitive status --- */
+  --primitive-colors-success-50: #ecfdf3;
+  --primitive-colors-success-100: #dbfae6;
+  --primitive-colors-success-500: #17b26a;
+  --primitive-colors-success-600: #079455;
+  --primitive-colors-error-50: #fef3f2;
+  --primitive-colors-error-100: #fee4e2;
+  --primitive-colors-error-500: #f04438;
+  --primitive-colors-error-600: #d92d20;
+  --primitive-colors-warning-50: #fffaeb;
+  --primitive-colors-warning-100: #feefc7;
+  --primitive-colors-warning-500: #f79009;
+  --primitive-colors-warning-600: #dc6803;
+}
+
+/* 🌙 dark mode */
+[data-theme='dark'] {
+  --page-title: #f5f9ff;
+  --page-subtitle: #f5f5f6;
+  --section-title: #f0f1f1;
+  --primary-text: #f5f9ff;
+  --secondary-text: #f5f5f6;
+  --tertiary-text: #cecfd2;
+  --sub-text: #667085;
+  --text-alpha: #ffffff;
+  --sublight: #667085;
+  --brand-subtext: #a7c8f7;
+  --sublight-2: #61646c;
+
+  --background: #1f242f;
+  --border: #98a2b3;
+  --outlined-icon: #94969c;
+  --background-alternate: #333741;
+  --background-focus: #667085;
+  --brand-equivalence: #2284ff;
+  --background-button: #a7c8f7;
+  --background-toggle2: #182230;
+
+  --full-bg: #0c111d;
+  --brand-alpha: #f5f9ff;
+  --brand-beta: #0665ec;
+  --general-alpha: #1f242f;
+  --general-alpha0: #1f242f;
+
+  --success-background1: #17b26a;
+  --success-contrast1: #dbfae6;
+  --warning-background1: #f79009;
+  --warning-contrast1: #feefc7;
+  --error-background1: #f04438;
+  --error-contrast1: #fee4e2;
+  --error-accent1: #d92d20;
+}

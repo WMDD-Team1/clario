@@ -271,10 +271,10 @@
  *           type: string
  *           maxLength: 200
  *           example: "Payment for October (max 200 characters)"
- *         status:
+ *         recurrence:
  *           type: string
- *           enum: [pending, paid]
- *           example: "paid"
+ *           enum: [weekly, monthly]
+ *           example: "weekly"
  *         paymentDate:
  *           type: string
  *           format: date
@@ -331,10 +331,6 @@
  *           type: string
  *           maxLength: 200
  *           example: "Payment for October (max 200 characters)"
- *         status:
- *           type: string
- *           enum: [pending, paid]
- *           example: "paid"
  *         paymentDate:
  *           type: string
  *           format: date
@@ -551,4 +547,68 @@
  *           type: integer
  *           example: 5
  *           description: Total number of pages
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Recurrence:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: Unique identifier for the recurrence
+ *           example: 670a12b4d9e4fa1234abcd56
+ *         templateTransactionId:
+ *           type: string
+ *           description: Recurrent expense ID
+ *           example: "670a12b4d9e4fa1234abcd99"
+ *         frequency:
+ *           type: string
+ *           enum: [weekly, monthly]
+ *           example: "monthly"
+ *         endDate:
+ *           type: string
+ *           format: date
+ *           example: 2025-10-05
+ *         lastRun:
+ *           type: string
+ *           format: date
+ *           example: 2025-10-05
+ *         nextRun:
+ *           type: string
+ *           format: date
+ *           example: 2025-10-05
+ *         isArchived:
+ *           type: boolean
+ *           example: false
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           example: 2025-10-05T12:34:56.000Z
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *           example: 2025-10-05T12:34:56.000Z
+ *
+ *     RecurrenceInput:
+ *       type: object
+ *       required:
+ *         - templateTransactionId
+ *         - frequency
+ *         - endDate
+ *       properties:
+ *         templateTransactionId:
+ *           type: string
+ *           description: Recurrent expense ID
+ *           example: "670a12b4d9e4fa1234abcd99"
+ *         frequency:
+ *           type: string
+ *           enum: [weekly, monthly]
+ *           example: "monthly"
+ *         endDate:
+ *           type: string
+ *           format: date
+ *           example: 2025-10-05
  */

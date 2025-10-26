@@ -3,18 +3,19 @@ import React from 'react'
 interface Props {
     title: string;
     value: string;
+    className?: string;
 }
 
-const InsightCard = ({ title, value }: Props) => {
+const InsightCard = ({ title, value, className }: Props) => {
     return (
         <div
             key={title}
-            className="bg-linear-to-t from-[#0665ECD9] to-[#0665EC] rounded-xl text-center py-6 hover:shadow-md transition text-white grow"
+            className={`bg-linear-to-t bg-white rounded-xl text-center py-6 hover:shadow-md transition ${className}`}
         >
-            <p className="text-sm">{title}</p>
-            <p className="text-xl font-semibold mt-1">{value}</p>
+            <p className="text-sm text-[#344054]">{title}</p>
+            <p className="text-xl font-semibold mt-1 text-[#0665EC]">{value}</p>
         </div>
     )
 }
 
-export default InsightCard
+export default InsightCard;

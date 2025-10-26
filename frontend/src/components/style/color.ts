@@ -6,7 +6,7 @@ export const colorOptions = {
     deleteButton: 'bg-red-500',
     white: 'bg-white',
     black: 'bg-black',
-    card1: 'bg-amber-200',
+    card1: 'bg-white',
     card2: 'bg-amber-300',
     card3: 'bg-amber-400',
     inputBorderColor: 'border-neutral-300'

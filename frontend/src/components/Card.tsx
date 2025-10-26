@@ -4,6 +4,7 @@ import Button from './Button';
 
 interface CardProps {
   imgURL?: string;
+  className?: string;
   cardTitle?: string;
   cardDescription?: string;
   buttonLink?: string;

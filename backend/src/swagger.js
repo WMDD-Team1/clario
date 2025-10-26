@@ -23,6 +23,7 @@ const swaggerDefinition = {
 		{ name: "Deliverables", description: "Deliverable uploads, updates, and file tracking" },
 		{ name: "Invoices", description: "Invoice generation and payment tracking" },
 		{ name: "Transactions", description: "Income and expense management" },
+		{ name: "Recurrences", description: "Set recurrent expenses" },
 		{ name: "Settings", description: "User preferences, categories, and system settings" },
 		{ name: "OpenAI", description: "AI integrations — document extraction & clause analysis" },
 	],

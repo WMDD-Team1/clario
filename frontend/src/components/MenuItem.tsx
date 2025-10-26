@@ -1,20 +1,24 @@
+import { Tooltip } from '@mui/material';
 import { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface Props {
-    children: ReactNode
+    children: ReactNode;
     route: string;
+    onClick: (route: string) => void;
+    tooltip?: string;
 }
 
-const MenuItem = ({ route, children }: Props) => {
-    const navigate = useNavigate();
+const MenuItem = ({ route, children, onClick, tooltip }: Props) => {
 
     return (
-        <li className='cursor-pointer hover:bg-amber-200 block'
-            key={route}
-            onClick={() => navigate(route)}>
-            {children}
-        </li>
+        <Tooltip title={tooltip} arrow placement="right">
+            <li className="relative group cursor-pointer rounded-lg transition"
+                key={route}
+                onClick={() => onClick(route)}>
+                {children}
+            </li>
+        </Tooltip>
     )
 }
 

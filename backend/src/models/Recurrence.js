@@ -26,7 +26,7 @@ const RecurrenceSchema = new mongoose.Schema(
         nextRun: {
             type: Date,
         },
-        active: {
+        isArchived: {
             type: Boolean,
             default: true,
         }

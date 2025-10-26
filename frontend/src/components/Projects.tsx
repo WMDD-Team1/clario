@@ -1,192 +1,92 @@
-import { Project } from "@/models";
-import InsightCard from "@components/InsightCard";
+import { FILTERS, PROJECT_HEADERS, SORT_OPTIONS, STAGES } from "@/constants";
+import { fetchAllProjects } from "@api/index";
 import Table from "@components/Table";
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { useDebounce } from "use-debounce";
+import EmptyState from "./EmptyState";
+import FiltersBar from "./FiltersBar";
+import Spinner from "./Spinner";
 
 const Projects = () => {
-    const [filters, setFilters] = useState(["All", "Active", "Archived"]);
-    const [currentFilter, setCurrentFilter] = useState("All");
+    const [currentFilter, setCurrentFilter] = useState(FILTERS[0]);
+    const [search, setSearch] = useState<string>();
+    const [debouncedSearch] = useDebounce(search, 400);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [selectedStage, setSelectedStage] = useState(STAGES[0]);
+    const [selectedSort, setSelectedSort] = useState(SORT_OPTIONS[0]);
 
-    // Static sample data
-    const projectsInsights = [
-        {
-            title: "Total",
-            value: "$12.000"
-        },
-        {
-            title: "Active",
-            value: "$8.000"
-        },
-        {
-            title: "Inactive",
-            value: "10"
-        },
-        {
-            title: "Archive",
-            value: "5"
-        },
-        {
-            title: "Clients",
-            value: "30"
-        }
-    ];
+    const { isLoading, error, data, isFetching } = useQuery({
+        queryKey: ['projects', {
+            status: selectedStage.id,
+            sortBy: selectedSort.id,
+            page: currentPage,
+            viewType: currentFilter.toLowerCase(),
+            search: debouncedSearch,
+        }],
 
-    const projectHeaders = [
-        {
-            key: "name",
-            value: "Name"
-        },
-        {
-            key: "startDate",
-            value: "Started",
-        },
-        {
-            key: "endDate",
-            value: "End Date",
-        },
-        {
-            key: "clientName",
-            value: "Client",
-        },
-        {
-            key: "status",
-            value: "Stage",
-        },
-        {
-            key: "milestonesCount",
-            value: "Milestones",
-        },
-        {
-            key: "amount",
-            value: "Total Amount",
-        }
-    ]
-    const projects: Project[] = [
-        {
-            name: "Website Redesign - EcoBuild",
-            startDate: "Aug 15, 2025",
-            endDate: "Oct 30, 2025",
-            clientName: "Sarah Thompson",
-            status: "In Progress",
-            milestonesCount: 3,
-            amount: "$4,800",
-        },
-        {
-            name: "Mobile App UI - FitTrack",
-            startDate: "Sep 05, 2025",
-            endDate: "Nov 20, 2025",
-            clientName: "Daniel Roberts",
-            status: "Planning",
-            milestonesCount: 2,
-            amount: "$3,200",
-        },
-        {
-            name: "Branding Package - Luna Café",
-            startDate: "Jul 10, 2025",
-            endDate: "Oct 30, 2025",
-            clientName: "Olivia Martinez",
-            status: "Review",
-            milestonesCount: 3,
-            amount: "$2,750",
-        },
-        {
-            name: "E-Commerce Setup - StyleNest",
-            startDate: "Jun 01, 2025",
-            endDate: "Aug 10, 2025",
-            clientName: "Michael Chen",
-            status: "Done",
-            milestonesCount: 3,
-            amount: "$6,500",
-        },
-        {
-            name: "Website Redesign - EcoBuild",
-            startDate: "Aug 15, 2025",
-            endDate: "Oct 30, 2025",
-            clientName: "Sarah Thompson",
-            status: "In Progress",
-            milestonesCount: 3,
-            amount: "$4,800",
-        },
-        {
-            name: "Website Redesign - EcoBuild",
-            startDate: "Aug 15, 2025",
-            endDate: "Oct 30, 2025",
-            clientName: "Sarah Thompson",
-            status: "In Progress",
-            milestonesCount: 3,
-            amount: "$4,800",
-        },
-    ];
+        queryFn: () =>
+            fetchAllProjects({
+                status: selectedStage.id !== 'none' ? selectedStage.id : undefined,
+                sortBy: selectedSort.id !== 'none' ? selectedSort.id : undefined,
+                viewType: currentFilter.toLowerCase(),
+                page: currentPage,
+                search: debouncedSearch
+            }),
+    })
+
+    const projects = data?.data ?? [];
+    const meta = data?.meta ?? {
+        total: 0,
+        page: 1,
+        limit: 10,
+        totalPages: 1
+    };
+
+    if (isLoading) return <Spinner message="Loading projects..." />;
+
+    if (error) return 'An error has occurred: ' + error.message
+
+    console.log("search:", search);
+    console.log("debounced:", debouncedSearch);
 
     return (
         <>
-            {/* Cards */}
-            <div className="flex flex-col gap-4 mb-10 md:flex-row ">
-                {projectsInsights.map(
-                    (pi) => <InsightCard title={pi.title} value={pi.value} key={pi.title}></InsightCard>
-                )}
-            </div>
+            {isFetching && (
+                <p className="text-sm text-gray-400 mb-2">Updating projects...</p>
+            )}
             {/* Table Filtering */}
-            <div className="flex flex-wrap justify-between items-center mb-6">
-                {/* Left Filter Group */}
-                <div className="flex bg-gray-100 rounded-xl p-1">
-                    {filters.map((label) => (
-                        <button
-                            key={label}
-                            className={`px-4 py-2 rounded-lg text-sm font-medium transition ${label === currentFilter ? "bg-gray-500 text-white" : "text-gray-700 hover:bg-gray-200"
-                                }`}
-                            onClick={() => setCurrentFilter(label)}>
-                            {label}
-                        </button>
-                    ))}
-                </div>
-
-                {/* Right Controls */}
-                <div className="flex items-center gap-3 mt-4 md:mt-0">
-                    {/* Search */}
-                    <div className="flex items-center bg-white border border-gray-300 rounded-xl px-3 py-2 w-64 shadow-sm">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-4 w-4 text-gray-400 mr-2"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"
-                            />
-                        </svg>
-                        <input
-                            type="text"
-                            placeholder="Search by project name or client"
-                            className="outline-none text-sm flex-1 bg-transparent"
-                        />
-                    </div>
-
-                    {/* Sort By */}
-                    <select className="border border-gray-300 text-sm rounded-xl px-4 py-2 shadow-sm focus:ring-2 focus:ring-primary focus:outline-none">
-                        <option>Sort By</option>
-                        <option>Name</option>
-                        <option>Date</option>
-                        <option>Budget</option>
-                    </select>
-
-                    {/* Stages */}
-                    <select className="border border-gray-300 text-sm rounded-xl px-4 py-2 shadow-sm focus:ring-2 focus:ring-primary focus:outline-none">
-                        <option>Stages</option>
-                        <option>Planning</option>
-                        <option>In Progress</option>
-                        <option>Completed</option>
-                    </select>
-                </div>
-            </div>
+            <FiltersBar
+                currentFilter={currentFilter}
+                filters={FILTERS}
+                onFilter={setCurrentFilter}
+                sortOptions={SORT_OPTIONS}
+                onSortChange={setSelectedSort}
+                stageOptions={STAGES}
+                onStageChange={setSelectedStage}
+                onSearchChange={setSearch}
+                selectedStage={selectedStage}
+                selectedSort={selectedSort}
+                searchValue={search}
+            />
 
             {/* Table */}
-            <Table headers={projectHeaders} data={projects} />
-
+            {!projects.length ? (
+                <EmptyState
+                    title="It's a little quiet here"
+                    description="Add your first project and let's get things moving!"
+                    buttonText="Add Project"
+                    onAction={() => console.log("Open project modal")}
+                />
+            ) : (
+                <Table
+                    headers={PROJECT_HEADERS}
+                    data={projects}
+                    total={meta.total}
+                    page={meta.page}
+                    pageSize={meta.limit}
+                    onPageChange={setCurrentPage} />
+            )}
         </>
     )
 }
