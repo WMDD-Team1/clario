@@ -2,18 +2,31 @@ import SearchBar from './SearchBar';
 import SelectionFilter from './SelectionFilter';
 import SwitchTab from './SwitchTab';
 
-interface Props {
+// 💡 Reusable type for dropdown options
+interface Option {
+    id: string;
+    label: string;
+}
+
+interface FiltersBarProps {
+    // Tabs (All / Active / Archived)
     currentFilter: string;
     filters: string[];
     onFilter: (filter: string) => void;
-    selectedStage: { id: string, label: string };
-    selectedSort: { id: string, label: string };
-    sortOptions: { id: string, label: string }[];
-    onSortChange: (option: { id: string, label: string }) => void;
-    stageOptions: { id: string, label: string }[];
-    onStageChange: (option: { id: string, label: string }) => void;
-    onSearchChange: (search: string) => void;
+
+    // Sorting
+    sortOptions: Option[];
+    selectedSort: Option;
+    onSortChange: (option: Option) => void;
+
+    // Stages
+    stageOptions: Option[];
+    selectedStage: Option;
+    onStageChange: (option: Option) => void;
+
+    // Search
     searchValue?: string;
+    onSearchChange: (value: string) => void;
 }
 
 const FiltersBar = ({
@@ -21,14 +34,14 @@ const FiltersBar = ({
     filters,
     onFilter,
     sortOptions,
+    selectedSort,
     onSortChange,
     stageOptions,
-    onStageChange,
-    onSearchChange,
     selectedStage,
-    selectedSort,
+    onStageChange,
     searchValue,
-}: Props) => {
+    onSearchChange,
+}: FiltersBarProps) => {
     return (
         <div className="flex flex-col items-center mb-6 md:flex-row md:justify-between">
             {/* Left Filter Group */}
@@ -46,7 +59,7 @@ const FiltersBar = ({
                     placeholder="Search by project name or client..."
                     onSearchOpen={() => console.log()}
                     onChange={onSearchChange}
-                    searchValue={searchValue}/>
+                    searchValue={searchValue} />
 
                 {/* Sort By */}
                 <SelectionFilter
