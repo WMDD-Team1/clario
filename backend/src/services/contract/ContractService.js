@@ -3,7 +3,7 @@ import { extractPdfText, extractImageText, extractContractFields } from "../../u
 import Contract from "../../models/Contract.js";
 import Project from "../../models/Project.js";
 import { analyzeContractText } from "../../utils/analyze.js";
-import { Client } from "../../models/Client.js";
+import Client from "../../models/Client.js";
 
 export const uploadContractService = async (file, userId, clientId, projectId) => {
 	if (!file) throw new Error("No file uploaded");
