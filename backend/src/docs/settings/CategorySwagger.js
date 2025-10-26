@@ -1,8 +1,8 @@
 /**
  * @swagger
  * tags:
- *   name: Categories
- *   description: Manage income and expense categories for a user
+ *   name: Settings - Categories
+ *   description: Manage income and expense categories embedded in user settings
  */
 
 /**
@@ -20,16 +20,8 @@
  *           example: "Software Subscriptions"
  *         type:
  *           type: string
- *           enum: [Income, Expense]
- *           example: "Expense"
- *         createdAt:
- *           type: string
- *           format: date-time
- *           example: "2025-10-20T05:35:21.000Z"
- *         updatedAt:
- *           type: string
- *           format: date-time
- *           example: "2025-10-20T05:35:21.000Z"
+ *           enum: [income, expense]
+ *           example: "expense"
  *
  *     CategoryInput:
  *       type: object
@@ -39,11 +31,13 @@
  *       properties:
  *         name:
  *           type: string
+ *           description: Name of the category
  *           example: "Client Payments"
  *         type:
  *           type: string
- *           enum: [Income, Expense]
- *           example: "Income"
+ *           description: Type of the category
+ *           enum: [income, expense]
+ *           example: "income"
  *
  *     CategoryListResponse:
  *       type: object
@@ -60,10 +54,10 @@
 
 /**
  * @swagger
- * /api/categories:
+ * /api/settings/categories:
  *   get:
  *     summary: Get all categories grouped by type
- *     tags: [Categories]
+ *     tags: [Settings - Categories]
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -75,14 +69,10 @@
  *               $ref: '#/components/schemas/CategoryListResponse'
  *       401:
  *         description: Unauthorized
- */
-
-/**
- * @swagger
- * /api/categories:
+ *
  *   post:
  *     summary: Create a new category
- *     tags: [Categories]
+ *     tags: [Settings - Categories]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -106,10 +96,10 @@
 
 /**
  * @swagger
- * /api/categories/{id}:
+ * /api/settings/categories/{id}:
  *   patch:
  *     summary: Update a category
- *     tags: [Categories]
+ *     tags: [Settings - Categories]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -118,7 +108,7 @@
  *         required: true
  *         schema:
  *           type: string
- *         description: Category ID
+ *         description: Category ID (embedded subdocument _id)
  *     requestBody:
  *       required: true
  *       content:
@@ -128,6 +118,10 @@
  *     responses:
  *       200:
  *         description: Category updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Category'
  *       404:
  *         description: Category not found
  *       401:
@@ -135,7 +129,7 @@
  *
  *   delete:
  *     summary: Delete a category
- *     tags: [Categories]
+ *     tags: [Settings - Categories]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -144,7 +138,7 @@
  *         required: true
  *         schema:
  *           type: string
- *         description: Category ID
+ *         description: Category ID (embedded subdocument _id)
  *     responses:
  *       200:
  *         description: Category deleted successfully

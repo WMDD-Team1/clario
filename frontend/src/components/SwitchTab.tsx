@@ -20,4 +20,4 @@ const SwitchTab = ({ currentFilter, filters, onFilter }: Props) => {
     )
 }
 
-export default SwitchTab
+export default SwitchTab;

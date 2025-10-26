@@ -1,4 +1,3 @@
-
 interface Props {
     className: string;
     options: { id: string; label: string }[]
@@ -16,4 +15,4 @@ const SelectionFilter = ({ className, options, onSelect }: Props) => {
     )
 }
 
-export default SelectionFilter
+export default SelectionFilter;
