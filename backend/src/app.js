@@ -9,7 +9,6 @@ import { openaiRoutes, recurrencesRoutes, transactionRoutes } from "./routes/ind
 import { router as invoiceRoutes } from "./routes/invoice/invoiceRoutes.js";
 import { router as milestoneRoutes } from "./routes/projects/milestoneRoutes.js";
 import { router as projectRoutes } from "./routes/projects/projectsRoutes.js";
-import { router as categoryRoutes } from "./routes/settings/categoryRoutes.js";
 import { router as settingRoutes } from "./routes/settings/settingRoutes.js";
 import { setupSwagger } from "./swagger.js";
 
@@ -34,7 +33,6 @@ app.use("/api/clients", clientRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/ai", openaiRoutes);
 app.use("/api/settings", settingRoutes);
-app.use("/api/categories", categoryRoutes);
 app.use("/api/recurrences", recurrencesRoutes);
 
 // Swagger
