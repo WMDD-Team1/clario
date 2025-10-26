@@ -1,9 +1,6 @@
 @import 'tailwindcss';
+@import './styles/tokens/_colors.css';
 
 body {
-    background-color: #F5F9FF;
-}
-
-@theme {
-    
+  background-color: #f5f9ff;
 }
