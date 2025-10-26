@@ -7,6 +7,9 @@ import MoneyInactiveIcon from "./money-inactive.svg?react";
 import SettingsInactiveIcon from "./settings-inactive.svg?react";
 import WorkActiveIcon from "./work-active.svg?react";
 import WorkInactiveIcon from "./work-inactive.svg?react";
+import Camera from "./camera.svg?react";
+import Forward from "./forward.svg?react";
+import CloudUpload from "./cloud-upload.svg?react";
 
 export {
   DashboardActiveIcon,
@@ -18,4 +21,7 @@ export {
   SettingsInactiveIcon,
   WorkActiveIcon,
   WorkInactiveIcon,
+  Camera,
+  Forward,
+  CloudUpload
 };

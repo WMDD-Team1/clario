@@ -9,6 +9,7 @@ import Table from '@components/Table';
 import axios from 'axios';
 import { useAuth0 } from '@auth0/auth0-react';
 import ToggleButton from '@components/ToggleButton';
+import { Camera, CloudUpload } from '@assets/icons/index';
 
 export const IncomeExpenses = () => {
   const [incomeSlide, setIncomeSlide] = useState('110%');
@@ -42,11 +43,6 @@ export const IncomeExpenses = () => {
   const expenseDetail = () => setExdetailSlide('0px');
   const cancelOperation = () => reset();
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [selectedStage, setSelectedStage] = useState({
-    id: 'none',
-    label: 'Stages',
-  });
 
   const { getAccessTokenSilently } = useAuth0();
 
@@ -98,6 +94,8 @@ export const IncomeExpenses = () => {
     console.log(data);
   }
 
+  getTransactionData();
+
   // ------fetch one transaction-------------
   const getOneTransaction = async () => {};
 
@@ -112,7 +110,6 @@ export const IncomeExpenses = () => {
       origin: 'Freelancer payment',
       paymentMethod: 'Credit Card',
       notes: 'Payment for October (max 200 characters)',
-      status: 'paid',
       paymentDate: '2025-10-05',
       attachmentURL: 'https://example.com/attachment.pdf',
       isArchived: false,
@@ -142,6 +139,14 @@ export const IncomeExpenses = () => {
     }
   };
 
+  addTransaction();
+
+  const [page, setPage] = useState(1);
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
+
   const headers = [
     { key: 'date', value: 'Date' },
     { key: 'amount', value: 'Amount ($)' },
@@ -164,9 +169,9 @@ export const IncomeExpenses = () => {
   ];
 
   const options = [
-        {key: 'income', label:'Income'},
-        {key: 'expense', label:'Expense'},
-      ]
+    { key: 'income', label: 'Income' },
+    { key: 'expense', label: 'Expense' },
+  ];
 
   const [selectedOption, setSelectedOption] = useState(options[1]);
 
@@ -176,13 +181,8 @@ export const IncomeExpenses = () => {
 
   return (
     <div>
-      <div className='md:hidden flex justify-center mb-[1rem]'>
-      <ToggleButton
-      options={options}
-
-      option={selectedOption}
-      onClick={handleToggle}
-      />
+      <div className="md:hidden flex justify-center mb-[1rem]">
+        <ToggleButton options={options} option={selectedOption} onClick={handleToggle} />
       </div>
       <div className="flex flex-row flex-wrap gap-[1rem]">
         <div className="flex-1 flex flex-col flex-nowrap gap-[1rem]">
@@ -197,10 +197,10 @@ export const IncomeExpenses = () => {
             <Table
               headers={headers}
               data={data}
-              total={30}
-              page={currentPage}
+              total={42}
+              page={page}
               pageSize={10}
-              onPageChange={setCurrentPage}
+              onPageChange={handlePageChange}
             />
           </div>
         </div>
@@ -216,10 +216,10 @@ export const IncomeExpenses = () => {
             <Table
               headers={headers}
               data={data}
-              total={30}
-              page={currentPage}
+              total={42}
+              page={page}
               pageSize={10}
-              onPageChange={setCurrentPage}
+              onPageChange={handlePageChange}
             />
           </div>
         </div>
@@ -238,8 +238,8 @@ export const IncomeExpenses = () => {
         <div className="flex flex-col flex-nowrap items-center justify-center gap-[1rem] h-full">
           <p>Add your Income Receipt here</p>
           <div className="flex flex-col flex-nowrap items-center gap-[1rem] p-[3rem] border-2 border-dashed border-blue-100 bg-blue-50 rounded-[20px]">
-            <img src="/cloud-upload.svg" alt="" className="w-25 h-25 hidden sm:block" />
-            <img src="/Camera.svg" alt="" className="w-25 h-25 sm:hidden" />
+            <CloudUpload className="w-25 h-25 hidden sm:block" />
+            <Camera className="w-25 h-25 sm:hidden" />
             <p className="sm:hidden">Take a Picture and Upload</p>
             <p className="font-bold hidden sm:block">Choose a file or drag & drop it here</p>
             <p className="text-gray-400 hidden sm:block">JPG, PNG or PDF formats up to 5MB</p>
@@ -249,13 +249,14 @@ export const IncomeExpenses = () => {
 
       {/* Income Detail Form---------------*/}
       <Slide
-      title="Add Income"
-      slide={inDetailSlide}
-      confirmText="cancel"
-      onConfirm={cancelOperation}
-      extralText="Add"
-      onExtra={incomeDetail}
-      onClose={cancelOperation}>
+        title="Add Income"
+        slide={inDetailSlide}
+        confirmText="cancel"
+        onConfirm={cancelOperation}
+        extralText="Add"
+        onExtra={incomeDetail}
+        onClose={cancelOperation}
+      >
         <form className="flex flex-col gap-4">
           <Input label="Income Title" id="incomeTitle" color="bg-white" />
           <Input label="Date" id="incomeDate" type="date" color="bg-white" />
@@ -288,7 +289,8 @@ export const IncomeExpenses = () => {
           <p>Add your Expenses Receipt here</p>
 
           <div className="flex flex-col flex-nowrap items-center gap-[1rem] p-[3rem] border-2 border-dashed border-blue-100 bg-blue-50 rounded-[20px]">
-            <img src="/cloud-upload.svg" alt="upload" className="w-25 h-25" />
+            <CloudUpload className="w-25 h-25 hidden sm:block" />
+            <Camera className="w-25 h-25 sm:hidden" />
             <p className="font-bold">Choose a file or drag & drop it here</p>
             <p className="text-gray-400">JPG, PNG or PDF formats up to 5MB</p>
           </div>
@@ -297,13 +299,14 @@ export const IncomeExpenses = () => {
 
       {/* Expense Detail Form-------------- */}
       <Slide
-      title="Add Expense"
-      slide={exDetailSlide}
-      confirmText="cancel"
-      onConfirm={cancelOperation}
-      extralText="Add"
-      onExtra={incomeDetail}
-      onClose={cancelOperation}>
+        title="Add Expense"
+        slide={exDetailSlide}
+        confirmText="cancel"
+        onConfirm={cancelOperation}
+        extralText="Add"
+        onExtra={incomeDetail}
+        onClose={cancelOperation}
+      >
         <form className="flex flex-col gap-4">
           <Input label="Expense Title" id="expenseTitle" color="bg-white" />
           <Input label="Date" id="expenseDate" type="date" color="bg-white" />

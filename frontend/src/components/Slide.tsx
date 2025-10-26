@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import Button from './Button';
 import { fontSizeOptions } from './style/font';
+import { Forward } from '@assets/icons/index';
 
 interface SlideProps {
   title: string;
@@ -45,7 +46,7 @@ const Slide: React.FC<SlideProps> = ({
         style={{ transform: `translateX(${slide})` }}
       >
         <div className="absolute top-16 sm:left-[-1rem] left-[2rem] bg-blue-300 w-12 h-12 rounded-full cursor-pointer flex items-center justify-center shadow-md z-60">
-          <img src="/Forward.svg" alt="forward" className="w-8 h-8" onClick={onClose}/>
+          <Forward className="w-8 h-8" onClick={onClose}/>
         </div>
         <h2
           className={`text-[${fontSizeOptions.h2}] text-center bg-blue-50 p-[1rem] sticky top-0 z-10 sm:rounded-tl-[20px]`}
