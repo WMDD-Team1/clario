@@ -47,9 +47,6 @@ const Projects = () => {
 
     if (error) return 'An error has occurred: ' + error.message
 
-    console.log("search:", search);
-    console.log("debounced:", debouncedSearch);
-
     return (
         <>
             {/* Table Filtering */}
