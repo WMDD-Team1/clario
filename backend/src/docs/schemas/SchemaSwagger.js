@@ -250,6 +250,9 @@
  *           type: string
  *           enum: [income, expense]
  *           example: "expense"
+ *         title:
+ *           type: string
+ *           example: "Internet payment"
  *         date:
  *           type: string
  *           format: date
@@ -307,6 +310,9 @@
  *           type: string
  *           enum: [income, expense]
  *           example: "expense"
+ *         title:
+ *           type: string
+ *           example: "Internet payment"
  *         date:
  *           type: string
  *           format: date

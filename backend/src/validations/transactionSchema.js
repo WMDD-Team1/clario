@@ -5,6 +5,7 @@ export const transactionSchema = z.object({
     type: z.enum(["income", "expense"], {
         required_error: "Transaction type is required",
     }),
+    title: z.string(),
     projectId: z.string()
         .refine((val) => mongoose.Types.ObjectId.isValid(val), {
             message: "Invalid projectId",
