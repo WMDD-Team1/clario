@@ -16,7 +16,7 @@ const Projects = () => {
     const [selectedStage, setSelectedStage] = useState(STAGES[0]);
     const [selectedSort, setSelectedSort] = useState(SORT_OPTIONS[0]);
 
-    const { isLoading, error, data, isFetching } = useQuery({
+    const { isLoading, error, data } = useQuery({
         queryKey: ['projects', {
             status: selectedStage.id,
             sortBy: selectedSort.id,
@@ -52,9 +52,6 @@ const Projects = () => {
 
     return (
         <>
-            {isFetching && (
-                <p className="text-sm text-gray-400 mb-2">Updating projects...</p>
-            )}
             {/* Table Filtering */}
             <FiltersBar
                 currentFilter={currentFilter}

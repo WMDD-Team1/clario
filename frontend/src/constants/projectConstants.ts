@@ -48,7 +48,7 @@ export const PROJECT_HEADERS = [
         value: "Started",
     },
     {
-        key: "endDate",
+        key: "dueDate",
         value: "End Date",
     },
     {
@@ -64,7 +64,7 @@ export const PROJECT_HEADERS = [
         value: "Milestones",
     },
     {
-        key: "amount",
+        key: "totalBudget",
         value: "Total Amount",
     }
 ];
