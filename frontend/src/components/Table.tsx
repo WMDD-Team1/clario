@@ -26,7 +26,7 @@ const Table = ({
     return (
         <div className="w-full bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
             {/* Table */}
-            <div className="border border-gray-200 rounded-2xl bg-white shadow-sm overflow-hidden">
+            <div className="border-gray-200 rounded-tl-2xl rounded-tr-2xl bg-white overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full min-w-max text-left border-collapse">
                         <thead className="bg-[#f6f9ff] text-gray-700 text-sm font-medium">

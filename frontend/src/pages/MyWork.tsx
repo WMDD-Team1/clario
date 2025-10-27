@@ -1,6 +1,7 @@
 import Button from '@components/Button';
 import InsightCard from '@components/InsightCard';
 import Projects from '@components/Projects';
+import Clients from '@components/Clients';
 import ToggleButton from '@components/ToggleButton';
 import { useState } from 'react';
 
@@ -92,6 +93,7 @@ const MyWork = () => {
 
             {/* Projects or Clients */}
             <div>{view.key === 'projects' ? <Projects /> : null}</div>
+            <div>{view.key === 'clients' ? <Clients /> : null}</div>
         </>
     )
 }

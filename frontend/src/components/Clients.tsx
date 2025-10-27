@@ -6,10 +6,10 @@ import TextArea from '@components/TextArea';
 import axios from 'axios';
 import InfoRow from '@components/InfoRow';
 import Slide from '@components/Slide';
-import Select from '@components/Select';
-import InsightCard from '@components/InsightCard';
-import ToggleButton from '@components/ToggleButton';
-import TabSwitcher from '@components/TabSwitcher';
+import FiltersBar from '@components/FiltersBar';
+import Table from '@components/Table';
+import { DotsButton } from '@assets/icons';
+import EmptyState from './EmptyState';
 
 const Clients = () => {
   interface Project {
@@ -52,6 +52,11 @@ const Clients = () => {
     meta: Meta;
   }
 
+  interface Option {
+    id: string;
+    label: string;
+  }
+
   const [clients, setClients] = useState<ClientResponse>({
     data: [],
     meta: {
@@ -79,36 +84,33 @@ const Clients = () => {
   });
 
   const [slide, setSlide] = useState('100%');
-
   const [slideDetail, setSlideDetail] = useState('100%');
   const [slideEdit, setSlideEdit] = useState('100%');
   const [currentPage, setCurrentPage] = useState<number>(1);
-
   const [clientId, setClientId] = useState('');
-  const [select, setSelect] = useState('');
-
-  const [pageWindowStart, setPageWindowStart] = useState(1);
-  const PAGE_WINDOW_SIZE = 5;
-
   const [searchText, setSearchText] = useState('');
+  const [activeTab, setActiveTab] = useState<string>('Active');
 
   const { getAccessTokenSilently } = useAuth0();
 
-  const [activeTab, setActiveTab] = useState<string>('Unarchived');
+  const sortOptions: Option[] = [
+    { id: 'newest', label: 'Names (Newest-Oldest)' },
+    { id: 'invoices', label: 'Invoices (Fewest→Most)' },
+    { id: 'projects', label: 'Total Projects (Fewest→Most)' },
+  ];
+
+  const [selectedSort, setSelectedSort] = useState<Option>(sortOptions[0]);
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchText, activeTab]);
+  }, [searchText, activeTab, selectedSort]);
 
-  //--Get data from form--------------------------
   const fetchClients = async () => {
     const token = await getAccessTokenSilently({
       authorizationParams: {
         audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
       },
     });
-
-    // console.log(token);
 
     const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/clients?limit=1000`, {
       headers: {
@@ -136,7 +138,7 @@ const Clients = () => {
 
       setOneClient(response.data);
       setClientId(id);
-      setSlideDetail('0px');
+      // setSlideDetail('0px');
     } catch (error) {
       console.error(error);
     }
@@ -153,6 +155,30 @@ const Clients = () => {
       `${import.meta.env.VITE_API_BASE_URL}/clients/${clientId}/archive`,
       {
         isArchived: true,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    const data = await response.data;
+    console.log(data);
+    await fetchClients();
+    setSlideDetail('100%');
+  };
+
+  const unarchiveClient = async () => {
+    const token = await getAccessTokenSilently({
+      authorizationParams: {
+        audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
+      },
+    });
+
+    const response = await axios.patch(
+      `${import.meta.env.VITE_API_BASE_URL}/clients/${clientId}`,
+      {
+        isArchived: false,
       },
       {
         headers: {
@@ -199,20 +225,7 @@ const Clients = () => {
 
   useEffect(() => {
     fetchClients();
-  }, [currentPage]);
-
-  // useEffect(() => {
-  //   fetchOneClient();
-  // }, [clientId]);
-
-  interface FormData {
-    name: string | null;
-    email: string | null;
-    type: 'Individual' | 'Company';
-    phone: string | null;
-    address: Address;
-    notes: string | null;
-  }
+  }, []);
 
   function resetFormData() {
     setOneClient({
@@ -275,26 +288,31 @@ const Clients = () => {
 
   const filteredClients = clients.data
     .filter((c) => {
-      const name = c.name.toLowerCase();
-      const search = searchText.toLowerCase();
+      const name = c.name?.toLowerCase() || '';
+      const search = searchText.toLowerCase().trim();
 
-      if (activeTab === 'Unarchived') {
-        return !c.isArchived && name.includes(search);
+      const matchesSearch = search === '' || name.includes(search);
+
+      if (activeTab === 'Active') {
+        return !c.isArchived && matchesSearch;
       } else if (activeTab === 'Archived') {
-        return c.isArchived && name.includes(search);
+        return c.isArchived && matchesSearch;
       } else if (activeTab === 'All Clients') {
-        return name.includes(search);
+        return matchesSearch;
       }
       return false;
     })
     .sort((a, b) => {
-      switch (select) {
-        case 'Names(Newest-Oldest)':
+      switch (selectedSort.id) {
+        case 'name-asc':
+          return a.name.localeCompare(b.name);
+        case 'name-desc':
+          return b.name.localeCompare(a.name);
+        case 'newest':
           return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-
-        case 'Invoices(Fewest->Most)':
+        case 'invoices':
           return a.invoiceCount - b.invoiceCount;
-        case 'Total Projects(Fewest->Most)':
+        case 'projects':
           return a.projectCount - b.projectCount;
         default:
           return 0;
@@ -308,6 +326,12 @@ const Clients = () => {
 
   const totalPages = Math.ceil(filteredClients.length / CLIENTS_PER_PAGE);
 
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(1);
+    }
+  }, [filteredClients.length]);
+
   const options = [
     { key: 'projects', label: 'All Projects' },
     { key: 'clients', label: 'All Clients' },
@@ -315,190 +339,120 @@ const Clients = () => {
 
   const [selectedOption, setSelectedOption] = useState(options[1]);
 
-  const handleToggle = (option: { key: string; label: string }) => {
-    setSelectedOption(option);
-  };
+  // Table configuration
+  const tableHeaders = [
+    { key: 'name', value: 'Client Name' },
+    { key: 'phone', value: 'Phone' },
+    { key: 'email', value: 'Email' },
+    { key: 'country', value: 'Country' },
+    { key: 'invoiceCount', value: 'Invoices' },
+    { key: 'projectCount', value: 'Total Projects' },
+    { key: 'actions', value: '' },
+  ];
+
+  const [openDotsId, setOpenDotsId] = useState<string | null>(null);
+
+  const tableData = pagedClients.map((client) => ({
+    name: client.name,
+    phone: client.phone,
+    email: client.email,
+    country: client.address.country,
+    invoiceCount: client.invoiceCount,
+    projectCount: client.projectCount,
+    actions: (
+      <div className="relative hidden md:block">
+        <DotsButton
+          className="h-[1rem] cursor-pointer"
+          onClick={() => {
+            setOpenDotsId(openDotsId === client.id ? null : client.id);
+            handleClientDetail(client.id);
+          }}
+        />
+
+        {openDotsId === client.id && (
+          <>
+            <div className="fixed inset-0 z-10" onClick={() => setOpenDotsId(null)}></div>
+            <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg z-20 p-[1rem] rounded-[1rem] hidden md:block cursor-pointer">
+              <div
+                className="cursor-pointer px-4 py-2 hover:bg-blue-100 rounded-[.5rem]"
+                onClick={() => {
+                  // handleClientDetail(client.id);
+                  setSlideDetail('0px');
+                  setOpenDotsId(null);
+                }}
+              >
+                View
+              </div>
+              <div
+                className="cursor-pointer px-4 py-2 hover:bg-blue-100 rounded-[.5rem]"
+                onClick={() => {
+                  // handleClientDetail(client.id);
+                  setSlideEdit('0px');
+                  setOpenDotsId(null);
+                }}
+              >
+                Edit
+              </div>
+              <div
+                className="cursor-pointer px-4 py-2 hover:bg-red-100 rounded-[.5rem]"
+                onClick={() => {
+                  // handleClientDetail(client.id);
+                  {
+                    !client.isArchived ? deleteClient() : unarchiveClient();
+                  }
+                  setOpenDotsId(null);
+                }}
+              >
+                {!client.isArchived ? 'Archive' : 'Unarchive'}
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+    ),
+  }));
 
   return (
-    <div className="flex flex-col gap-[1rem] p-[1rem]">
-      <div className="flex flex-row justify-between items-start ml:items-center">
-        <div className="flex flex-row  flex-wrap justify-between items-center gap-[2rem]">
-          <h2 className="text-2xl">
-            {selectedOption.key === 'projects' && 'My Work'}
-            {selectedOption.key === 'clients' && 'My Clients'}
-          </h2>
-          <ToggleButton options={options} option={selectedOption} onClick={handleToggle} />
-        </div>
-        <Button
-          buttonColor="regularButton"
-          // need to switch to project page------------------------------
-          onClick={() => {
-            setSlide('0px');
-            resetFormData();
-          }}
-          textColor="white"
-          width="200px"
-        >
-          {selectedOption.key === 'projects' && 'Add Project'}
-          {selectedOption.key === 'clients' && 'Add Clients'}
-        </Button>
-      </div>
-      <div className="flex flex-row flex-wrap items-center gap-[1rem]">
-        <InsightCard
-        title="Total"
-        value={`$${(12000).toLocaleString()}`}
-        />
-        <InsightCard
-        title="Active"
-        value={`$${(8000).toLocaleString()}`}
-        />
-        <InsightCard
-          title="Inactive"
-          value={`${clients.data.filter((c) => !c.isArchived).length}`}
-        />
-        <InsightCard
-        title="Archive"
-        value={`${clients.data.filter((c) => c.isArchived).length}`}
-        />
-        <InsightCard
-        title="Clients"
-        value={`${clients.data.length}`}
-        />
-      </div>
-
-      {/* client-list------------------------------------------------- */}
+    <div className="flex flex-col gap-[1rem]">
       {selectedOption.key === 'clients' && (
         <>
-          <div className="flex flex-row flex-wrap items-center justify-start gap-[1rem]">
-            <TabSwitcher
-              tabs={['All Clients', 'Unarchived', 'Archived']}
-              activeTab={activeTab}
-              onChange={setActiveTab}
-            />
-            <div className="w-[20rem]">
-              <Input
-                placeholder="Search client"
-                value={searchText}
-                onChange={(e) => setSearchText(e.target.value)}
-              />
-            </div>
-            <Select
-              width="150px"
-              value={select}
-              color="bg-white"
-              onChange={setSelect}
-              placeHolder="Sort By"
-              options={[
-                'Names(Newest-Oldest)',
-                'Invoices(Fewest-Most)',
-                'Total Projects(Fewest-Most)',
-              ]}
-            />
-          </div>
+          <FiltersBar
+            currentFilter={activeTab}
+            filters={['All Clients', 'Active', 'Archived']}
+            onFilter={(filter) => {
+              setActiveTab(filter);
+              setSearchText('');
+            }}
+            sortOptions={sortOptions}
+            selectedSort={selectedSort}
+            onSortChange={setSelectedSort}
+            searchValue={searchText}
+            onSearchChange={setSearchText}
+            searchPlaceholder="Search by client name"
+          />
 
-          {filteredClients.length == 0 ? (
-            <div className="flex flex-col flex-nowrap items-center gap-[1rem] p-[3rem] border-2 border-dashed border-blue-100 bg-blue-50 rounded-[20px]">
-              <p className="text-gray-400 text-center">
-                No clients added yet. Start by adding your first client to begin managing projects.
-              </p>
-              <Button
-                buttonColor="regularButton"
-                onClick={() => {
-                  setSlide('0px');
-                  resetFormData();
-                }}
-                textColor="white"
-                width="200px"
-              >
-                Add Client
-              </Button>
-            </div>
+          {filteredClients.length === 0 ? (
+            <EmptyState
+              description="No clients added yet. Start by adding your first client to begin managing projects."
+              buttonText="Add Client"
+              onAction={() => {
+                setSlide('0px');
+                resetFormData();
+              }}
+            />
           ) : (
-            <div className="rounded-[20px] border overflow-hidden border-gray-200">
-              <div className="overflow-x-auto w-full">
-                <table className="text-center w-full min-[720px]">
-                  <thead className="bg-gray-200">
-                    <tr>
-                      <th className="text-left px-4 py-4">Client Name</th>
-                      <th className="px-4 py-2">Phone</th>
-                      <th className="px-4 py-2">Email</th>
-                      <th className="px-4 py-2">Country</th>
-                      <th className="px-4 py-2">Invoices</th>
-                      <th className="px-4 py-2">Total Projects</th>
-                      <th className="px-4 py-2"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {pagedClients.map((client, index) => (
-                      <tr key={index} className="hover:bg-gray-100">
-                        <td className="text-left px-4 py-[1rem] border-t border-gray-200">
-                          {client.name}
-                        </td>
-                        <td className="px-4 border-t border-gray-200">{client.phone}</td>
-                        <td className="px-4 border-t border-gray-200">{client.email}</td>
-                        <td className="px-4 border-t border-gray-200">{client.address.country}</td>
-                        <td className="px-4 border-t border-gray-200">{client.invoiceCount}</td>
-                        <td className="px-4 border-t border-gray-200">{client.projectCount}</td>
-                        <td
-                          className="px-4 border-t border-gray-200"
-                          onClick={() => handleClientDetail(client.id)}
-                        >
-                          ...
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              <div className="bg-gray-200 w-full p-[1rem] flex felx-row flex-nowrap justify-between items-center">
-                <p>Total {filteredClients.length}</p>
-                <div className="flex felx-row flex-nowrap justify-between items-center gap-[1rem]">
-                  <div
-                    onClick={() => {
-                      if (currentPage > 1) {
-                        setCurrentPage(currentPage - 1);
-                        if (currentPage - 1 < pageWindowStart) {
-                          setPageWindowStart(pageWindowStart - PAGE_WINDOW_SIZE);
-                        }
-                      }
-                    }}
-                  >
-                    {'<'}
-                  </div>
-                  {Array.from({
-                    length: Math.min(PAGE_WINDOW_SIZE, totalPages - pageWindowStart + 1),
-                  }).map((_, i) => {
-                    const pageNumber = pageWindowStart + i;
-                    return (
-                      <div
-                        key={pageNumber}
-                        onClick={() => setCurrentPage(pageNumber)}
-                        className={`flex justify-center items-center p-[.5rem] border border-gray-400 rounded-[5px] h-[25px] w-[25px] hover:bg-gray-300 ${currentPage === pageNumber ? 'bg-gray-400' : 'bg-gray-200'}`}
-                      >
-                        {pageNumber}
-                      </div>
-                    );
-                  })}
-
-                  <div
-                    onClick={() => {
-                      if (currentPage < totalPages) {
-                        setCurrentPage(currentPage + 1);
-                        if (currentPage + 1 >= pageWindowStart + PAGE_WINDOW_SIZE) {
-                          setPageWindowStart(pageWindowStart + PAGE_WINDOW_SIZE);
-                        }
-                      }
-                    }}
-                  >
-                    {'>'}
-                  </div>
-                </div>
-              </div>
-            </div>
+            <Table
+              headers={tableHeaders}
+              data={tableData}
+              total={filteredClients.length}
+              page={currentPage}
+              pageSize={CLIENTS_PER_PAGE}
+              onPageChange={setCurrentPage}
+            />
           )}
         </>
       )}
-      {/* Add-Client----------------------------------- */}
+
       <Slide
         title="Add Client"
         confirmText="Add"
@@ -581,7 +535,6 @@ const Clients = () => {
         </div>
       </Slide>
 
-      {/* Client-details----------------------------------- */}
       <Slide
         title="Client Details"
         slide={slideDetail}
@@ -605,12 +558,18 @@ const Clients = () => {
           ))}
         </div>
 
-        <Button buttonColor="deleteButton" width="100%" textColor="white" onClick={deleteClient}>
-          Delete
+        <Button
+          buttonColor={!oneClient.isArchived ? 'deleteButton' : 'regularButton'}
+          width="100%"
+          textColor="white"
+          onClick={() => {
+            !oneClient.isArchived ? deleteClient() : unarchiveClient();
+          }}
+        >
+          {!oneClient.isArchived ? 'Archive' : 'Unarchive'}
         </Button>
       </Slide>
 
-      {/*----Edit page-------------------------------------- */}
       <Slide
         title="Edit Client"
         confirmText="Save"
@@ -690,9 +649,6 @@ const Clients = () => {
           }
         />
       </Slide>
-
-      {/* Projects------------- */}
-      {selectedOption.key === 'projects' && <></>}
     </div>
   );
 };

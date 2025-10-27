@@ -7,7 +7,7 @@ import MyWork from "@pages/MyWork";
 import Logout from "@pages/Logout";
 import FinancialDashboard from "@pages/FinancialDashboard";
 import Settings from "@pages/Settings";
-import Clients from "@pages/Clients";
+import Clients from "@components/Clients";
 
 function App() {
   return (
