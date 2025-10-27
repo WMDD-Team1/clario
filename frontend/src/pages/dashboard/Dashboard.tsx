@@ -7,10 +7,11 @@ import Card from '@/components/Card';
 import { BalanceChart } from '@/components/BalanceChart';
 import { ExpensesTable } from '@/components/ExpensesTable';
 import MoneyFlowAreaChart from '@/components/MoneyFlowAreaChart';
+import { Sparkles } from 'lucide-react';
 import { WelcomeBanner } from '@/components/WelcomeBanner';
 import type { RootState } from '@/store';
-import Overview from './components/Overview';
 import { RemindersList } from './components/RemindersList';
+import Overview from './components/Overview';
 import Insight from './components/Insight';
 
 export const Dashboard = () => {
@@ -48,7 +49,7 @@ export const Dashboard = () => {
     { title: 'UX Research - Pet Care', client: 'Pet Care', dueDate: '10/25/2025' },
   ];
 
-  // === MOBILE TAB RENDER FUNCTIONS ===
+  //Mobile View
   const renderDashboard = () => (
     <div className="flex flex-col gap-6">
       <div className="grid grid-cols-2 gap-3 sm:gap-4">
@@ -83,24 +84,67 @@ export const Dashboard = () => {
     </div>
   );
 
-  const renderReminders = () => <RemindersList reminders={reminders} />;
-  const renderInsights = () => <Insight />;
+  const renderReminders = () => <RemindersList />;
+
+  const renderInsights = () => (
+    <div className="flex flex-col gap-3">
+      {[
+        {
+          title: 'Earning Trend',
+          period: 'This Month',
+          text: "Your income grew 18% compared to last month mostly from Project A. You're trending toward a more stable cashflow.",
+        },
+        {
+          title: 'Client Dependency',
+          period: 'This Month',
+          text: '75% of your total income came from a single client this month — consider diversifying your portfolio.',
+        },
+        {
+          title: 'Income Projection',
+          period: 'Next Month',
+          text: 'You have $2,800 in confirmed recurring income for the next 30 days.',
+        },
+        {
+          title: 'Payment Timeliness',
+          period: 'Next Month',
+          text: 'Client B usually pays 8 days late — consider updating your contract terms.',
+        },
+      ].map((item, idx) => (
+        <Card key={idx} style="card1">
+          <div className="py-3 px-4 rounded-xl bg-white">
+            <div className="flex justify-between items-center mb-1">
+              <div className="flex items-center gap-2 bg-blue-600 text-white text-xs font-medium px-2 py-1 rounded-full shadow-sm">
+                <Sparkles className="w-3 h-3 text-white" />
+                {item.title}
+              </div>
+              <span className="text-xs font-semibold text-gray-600">{item.period}</span>
+            </div>
+            <p className="text-xs text-gray-600 leading-snug">{item.text}</p>
+          </div>
+        </Card>
+      ))}
+    </div>
+  );
 
   return (
     <>
-      {/* === DESKTOP VIEW === */}
+      {/* === DESKTOP VIEW (unchanged) === */}
       <div className="hidden sm:block">
         <div className="flex flex-col gap-6 w-full overflow-hidden">
+          {/* Welcome */}
           <WelcomeBanner userName={user?.name || 'User'} />
 
+          {/* === Main Body (Left + Center + Right) === */}
           <div className="flex flex-col xl:flex-row gap-6">
-            {/* LEFT + CENTER SECTION */}
+            {/* ==== Left + Center Section ==== */}
             <div className="flex flex-col flex-1 min-w-0 gap-6">
+              {/* --- Top Stats Row --- */}
               <Overview />
-
+              {/* --- Insights + Charts Row --- */}
               <div className="flex flex-col lg:flex-row gap-6 w-full">
+                {/* Insights (Left) */}
                 <Insight />
-
+                {/* Charts (Center) */}
                 <div className="flex flex-col flex-[1.2] gap-6">
                   <div className="flex flex-col md:flex-row gap-4">
                     <div className="flex-1">
@@ -110,26 +154,29 @@ export const Dashboard = () => {
                       <ExpensesTable expenses={expenses} />
                     </div>
                   </div>
-
-                  <MoneyFlowAreaChart data={flowData} />
+                  <div>
+                    <MoneyFlowAreaChart data={flowData} />
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* RIGHT COLUMN - REMINDERS */}
+            {/* ==== Right Column - Reminders ==== */}
             <div className="flex flex-col w-full xl:w-[26%] gap-4">
-              <RemindersList reminders={reminders} />
+              <RemindersList />
             </div>
           </div>
         </div>
       </div>
 
-      {/* === MOBILE VIEW === */}
+      {/* === MOBILE VIEW (≤580px) === */}
       <div className="block sm:hidden px-4 pb-10">
+        {/* Placeholder for hidden header */}
         <div className="h-10"></div>
+
         <h2 className="text-xl font-semibold mt-4 mb-2">Hi {user?.name || 'User'}, Welcome Back</h2>
 
-        {/* TAB SWITCHER */}
+        {/* Toggle */}
         <div className="flex justify-center w-full mt-4 mb-6">
           <div className="flex bg-gray-800 text-white rounded-full p-1 w-full max-w-md justify-between">
             {['insights', 'dashboard', 'reminders'].map((tab) => (
@@ -148,7 +195,7 @@ export const Dashboard = () => {
           </div>
         </div>
 
-        {/* TAB CONTENT */}
+        {/* Content */}
         {activeTab === 'reminders' && renderReminders()}
         {activeTab === 'dashboard' && renderDashboard()}
         {activeTab === 'insights' && renderInsights()}

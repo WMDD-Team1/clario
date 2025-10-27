@@ -607,3 +607,33 @@
  *           format: date
  *           example: 2025-10-05
  */
+
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     DashboardOverview:
+ *       type: object
+ *       properties:
+ *         income:
+ *           type: number
+ *           example: 120000
+ *           description: Total income of the user (base amount sum)
+ *         expense:
+ *           type: number
+ *           example: 80000
+ *           description: Total expense of the user
+ *         taxes:
+ *           type: number
+ *           example: 2000
+ *           description: Total calculated tax amount from income
+ *         recurringIncome:
+ *           type: number
+ *           example: 1200
+ *           description: Total amount of recurring income transactions
+ *         recurringExpense:
+ *           type: number
+ *           example: 800
+ *           description: Total amount of recurring expense transactions
+ */
