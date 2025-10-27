@@ -10,8 +10,9 @@ import FiltersBar from '@components/FiltersBar';
 import Table from '@components/Table';
 import { DotsButton } from '@assets/icons';
 import EmptyState from './EmptyState';
+import { string } from 'zod';
 
-const Clients = () => {
+const Clients = ({ slide, setSlide}: { slide: string; setSlide: (value: string) => void}) => {
   interface Project {
     _id: string;
     name: string;
@@ -83,7 +84,7 @@ const Clients = () => {
     updatedAt: '',
   });
 
-  const [slide, setSlide] = useState('100%');
+  // const [slide, setSlide] = useState('100%');
   const [slideDetail, setSlideDetail] = useState('100%');
   const [slideEdit, setSlideEdit] = useState('100%');
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -226,6 +227,10 @@ const Clients = () => {
   useEffect(() => {
     fetchClients();
   }, []);
+
+  useEffect(()=>{
+    resetFormData()
+  },[slide])
 
   function resetFormData() {
     setOneClient({

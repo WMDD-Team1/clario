@@ -46,6 +46,7 @@ const MyWork = () => {
         label: "All Projects",
     });
     const [isOpen, setIsOpen] = useState(false);
+    const [slide, setSlide] = useState('100%');
 
     return (
         <>
@@ -57,7 +58,11 @@ const MyWork = () => {
                     </div>
                     <Button
                         buttonColor="regularButton"
-                        onClick={() => setIsOpen(true)}
+                        onClick={() => {
+                            setIsOpen(true);
+                            view.key === 'clients' ? setSlide('0px') : ()=>{};
+                        
+                        }}
                         textColor="white"
                         width="200px"
                     >
@@ -99,7 +104,7 @@ const MyWork = () => {
 
             {/* Projects or Clients */}
             <div>{view.key === 'projects' ? <Projects /> : null}</div>
-            <div>{view.key === 'clients' ? <Clients /> : null}</div>
+            <div>{view.key === 'clients' ? <Clients slide={slide} setSlide = {(value:string)=>setSlide(value)}/> : null}</div>
         </>
     )
 }
