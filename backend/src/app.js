@@ -7,6 +7,7 @@ import { router as clientRoutes } from "./routes/clients/clientsRoutes.js";
 import { router as contractRoutes } from "./routes/contract/contractRoutes.js";
 import { openaiRoutes, recurrencesRoutes, transactionRoutes } from "./routes/index.js";
 import { router as invoiceRoutes } from "./routes/invoice/invoiceRoutes.js";
+import { router as dashboardRoutes } from "./routes/dashboard/dashboardRoutes.js";
 import { router as milestoneRoutes } from "./routes/projects/milestoneRoutes.js";
 import { router as projectRoutes } from "./routes/projects/projectsRoutes.js";
 import { router as settingRoutes } from "./routes/settings/settingRoutes.js";
@@ -25,6 +26,7 @@ if (process.env.CORS_ENABLED === "true") {
 }
 
 app.use("/api/auth", authRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/projects", milestoneRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/contracts", contractRoutes);

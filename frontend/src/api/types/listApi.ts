@@ -1,11 +1,11 @@
-export interface ListApi<T> {
-    data: T;
-    meta: Metadata;
+export interface ListApi<T, M extends Metadata = Metadata> {
+  data: T;
+  meta: M;
 }
 
 export interface Metadata {
-    total: number;
-    page: number;
-    limit: number;
-    totalPages: number
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
 }

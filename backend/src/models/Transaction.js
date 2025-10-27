@@ -7,6 +7,9 @@ const TransactionSchema = new mongoose.Schema(
 			ref: "User",
 			required: true,
 		},
+		title: {
+			type: String,
+		},
 		type: {
 			type: String,
 			enum: ["income", "expense"],
