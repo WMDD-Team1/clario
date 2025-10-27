@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import Button from '../components/Button';
 import Input from '@components/Input';
 import Select from '@components/Select';
@@ -10,6 +10,7 @@ import axios from 'axios';
 import { useAuth0 } from '@auth0/auth0-react';
 import ToggleButton from '@components/ToggleButton';
 import { Camera, CloudUpload } from '@assets/icons/index';
+import { da } from 'zod/v4/locales';
 
 export const IncomeExpenses = () => {
   const [incomeSlide, setIncomeSlide] = useState('110%');
@@ -20,6 +21,27 @@ export const IncomeExpenses = () => {
   const [expenseType, setExpenseType] = useState('');
   const [repeat, setRepeat] = useState(false);
   const [repeatOption, setRepeatOption] = useState('');
+
+  interface Meta {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  }
+
+  interface TransactionResponse {
+    data: TransactionFormat[];
+    meta: Meta;
+  }
+  const [allTransactions, setAllTransactions] = useState<TransactionResponse>({
+    data: [],
+    meta: {
+      total: 0,
+      page: 1,
+      limit: 10,
+      totalPages: 0,
+    },
+  });
 
   const reset = () => {
     setIncomeSlide('110%');
@@ -43,76 +65,120 @@ export const IncomeExpenses = () => {
   const expenseDetail = () => setExdetailSlide('0px');
   const cancelOperation = () => reset();
 
-
   const { getAccessTokenSilently } = useAuth0();
-
-  interface TransactionFormat {
-    projectId: string;
-    type: 'expense' | 'income';
-    date: string;
-    categoryId: string;
-    amount: number;
-    origin: string;
-    paymentMethod: string;
-    notes: string;
-    status: string;
-    paymentDate: string;
-    attachmentURL: string;
-    isArchived: boolean;
-  }
-
-  const [oneTransaction, setOneTransaction] = useState<TransactionFormat>({
-    projectId: '',
-    type: 'income',
-    date: '',
-    categoryId: '',
-    amount: 0,
-    origin: '',
-    paymentMethod: '',
-    notes: '',
-    status: '',
-    paymentDate: '',
-    attachmentURL: '',
-    isArchived: false,
-  });
 
   // ------fetch all transactions-------------
 
   async function getTransactionData() {
-    const token = await getAccessTokenSilently({
-      authorizationParams: {
-        audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
-      },
-    });
+    try {
+      const token = await getAccessTokenSilently({
+        authorizationParams: {
+          audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
+        },
+      });
 
-    const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/transactions`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const data = await response.data;
-    console.log(data);
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_BASE_URL}/transactions?limit=1000`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      const transactionResponse = response.data;
+      // console.log('Transaction response:', transactionResponse);
+
+      setAllTransactions(transactionResponse);
+    } catch (error) {
+      console.error('Error fetching transactions:', error);
+    }
   }
 
-  getTransactionData();
+  useEffect(() => {
+    getTransactionData();
+  }, []);
 
   // ------fetch one transaction-------------
   const getOneTransaction = async () => {};
+
+  interface TransactionFormat {
+    id: string;
+    projectId: string;
+    type: 'expense' | 'income';
+    title: string;
+    date: string;
+    categoryId: string;
+    baseAmount: number;
+    origin: string;
+    paymentMethod: string;
+    notes: string;
+    recurrence?: string;
+    attachmentURL?: string;
+    isArchived: boolean;
+    createdAt: string;
+    updatedAt: string;
+  }
+
+  const [oneTransaction, setOneTransaction] = useState<TransactionFormat>({
+    id: '',
+    projectId: '',
+    type: 'income',
+    title: '',
+    date: '',
+    categoryId: '',
+    baseAmount: 0,
+    origin: '',
+    paymentMethod: '',
+    notes: '',
+    recurrence: '',
+    attachmentURL: '',
+    isArchived: false,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  });
+
+  const resetForm = () => {
+    setOneTransaction({
+      id: '',
+      projectId: '',
+      type: 'income',
+      title: '',
+      date: '',
+      categoryId: '',
+      baseAmount: 0,
+      origin: '',
+      paymentMethod: '',
+      notes: '',
+      recurrence: '',
+      attachmentURL: '',
+      isArchived: false,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
+
+    setRepeatOption('');
+  };
+
+  //Fetch CategoryID
+  const getCategoryId = async () => {};
 
   // ------upload Transaction-------------
   const addTransaction = async () => {
     const payload = {
       projectId: '670a12b4d9e4fa1234abcd99',
-      type: 'expense',
-      date: '2025-10-05',
+      type: oneTransaction.type,
+      title: oneTransaction.title,
+      date: oneTransaction.date,
       categoryId: '670a12b4d9e4fa1234abcd99',
-      amount: 200,
-      origin: 'Freelancer payment',
+      // Tell Daniel to change amout to baseAmount
+      baseAmount: oneTransaction.baseAmount,
+      origin: oneTransaction.origin,
       paymentMethod: 'Credit Card',
-      notes: 'Payment for October (max 200 characters)',
-      paymentDate: '2025-10-05',
+      notes: oneTransaction.notes,
       attachmentURL: 'https://example.com/attachment.pdf',
-      isArchived: false,
+      //// Tell Daniel to add recurrence
+      // recurrence: oneTransaction.recurrence || ''
     };
 
     const token = await getAccessTokenSilently({
@@ -134,17 +200,21 @@ export const IncomeExpenses = () => {
       );
 
       console.log(response.data);
+      resetForm();
+      getTransactionData();
     } catch (error) {
       console.error('Error saving client:', error);
     }
   };
 
-  addTransaction();
+  const [incomePage, setIncomePage] = useState(1);
+  const [expensePage, setExpensePage] = useState(1);
 
-  const [page, setPage] = useState(1);
-
-  const handlePageChange = (newPage: number) => {
-    setPage(newPage);
+  const handleIncomePageChange = (newPage: number) => {
+    setIncomePage(newPage);
+  };
+  const handleExpensePageChange = (newPage: number) => {
+    setExpensePage(newPage);
   };
 
   const headers = [
@@ -154,19 +224,49 @@ export const IncomeExpenses = () => {
     { key: 'details', value: 'Details' },
   ];
 
+  console.log(allTransactions.data);
   // fake data
-  const data = [
-    { date: 'Oct 22', amount: 1200, category: 'Sales', details: 'View' },
-    { date: 'Oct 21', amount: 850, category: 'Marketing', details: 'View' },
-    { date: 'Oct 20', amount: 430, category: 'Development', details: 'View' },
-    { date: 'Oct 19', amount: 2200, category: 'Sales', details: 'View' },
-    { date: 'Oct 18', amount: 150, category: 'Support', details: 'View' },
-    { date: 'Oct 17', amount: 760, category: 'Development', details: 'View' },
-    { date: 'Oct 16', amount: 340, category: 'Marketing', details: 'View' },
-    { date: 'Oct 15', amount: 980, category: 'Sales', details: 'View' },
-    { date: 'Oct 14', amount: 420, category: 'Support', details: 'View' },
-    { date: 'Oct 13', amount: 1300, category: 'Development', details: 'View' },
-  ];
+
+
+  //Add filter logic-------
+  const incomeData = allTransactions?.data?.filter((transaction) => transaction.type == 'income');
+  const incomeFilteredData = incomeData
+    .map((transaction) => {
+      const dateObj = new Date(transaction.date);
+      const formattedDate = dateObj.toLocaleDateString('en-US', {
+        month: 'short',
+        day: '2-digit',
+      });
+
+      return {
+        date: formattedDate,
+        amount: Number(transaction.baseAmount),
+        category: transaction.categoryId,
+        details: 'View',
+      };
+    })
+    .slice((incomePage - 1) * 10, (incomePage - 1) * 10 + 10);
+
+
+  //Add filter logic-----------------
+  const expenseData = allTransactions?.data?.filter((transaction) => transaction.type == 'expense');
+
+  const expenseFilteredData = expenseData.map((transaction) => {
+        const dateObj = new Date(transaction.date);
+        const formattedDate = dateObj.toLocaleDateString('en-US', {
+          month: 'short',
+          day: '2-digit',
+        });
+
+        return {
+          date: formattedDate,
+          amount: Number(transaction.baseAmount),
+          category: transaction.categoryId,
+          details: 'View',
+        };
+      }).slice((expensePage - 1) * 10, (expensePage - 1) * 10 + 10);
+
+  console.log(expenseFilteredData);
 
   const options = [
     { key: 'income', label: 'Income' },
@@ -187,8 +287,15 @@ export const IncomeExpenses = () => {
       <div className="flex flex-row flex-wrap gap-[1rem]">
         <div className="flex-1 flex flex-col flex-nowrap gap-[1rem]">
           <div className="md:flex flex-row flex-nowrap justify-between items-center hidden">
-            Income
-            <Button buttonColor="regularButton" onClick={addIncome} textColor="white">
+            <h2 className='text-2xl'>Income</h2>
+            <Button
+              buttonColor="regularButton"
+              onClick={() => {
+                addIncome();
+                resetForm();
+              }}
+              textColor="white"
+            >
               Add Income
             </Button>
           </div>
@@ -196,30 +303,37 @@ export const IncomeExpenses = () => {
           <div>
             <Table
               headers={headers}
-              data={data}
-              total={42}
-              page={page}
+              data={incomeFilteredData}
+              total={incomeData.length}
+              page={incomePage}
               pageSize={10}
-              onPageChange={handlePageChange}
+              onPageChange={handleIncomePageChange}
             />
           </div>
         </div>
 
         <div className="flex-1 flex flex-col flex-nowrap gap-[1rem]">
           <div className="md:flex flex-row flex-nowrap justify-between items-center hidden">
-            Expense
-            <Button buttonColor="regularButton" onClick={addExpenses} textColor="white">
+            <h2 className='text-2xl'>Expense</h2>
+            <Button
+              buttonColor="regularButton"
+              onClick={() => {
+                addExpenses();
+                resetForm();
+              }}
+              textColor="white"
+            >
               Add Expenses
             </Button>
           </div>
           <div>
             <Table
               headers={headers}
-              data={data}
-              total={42}
-              page={page}
+              data={expenseFilteredData}
+              total={expenseData.length}
+              page={expensePage}
               pageSize={10}
-              onPageChange={handlePageChange}
+              onPageChange={handleExpensePageChange}
             />
           </div>
         </div>
@@ -254,24 +368,66 @@ export const IncomeExpenses = () => {
         confirmText="cancel"
         onConfirm={cancelOperation}
         extralText="Add"
-        onExtra={incomeDetail}
+        onExtra={async () => {
+          setOneTransaction({ ...oneTransaction, type: 'income' });
+          addTransaction();
+        }}
         onClose={cancelOperation}
       >
         <form className="flex flex-col gap-4">
-          <Input label="Income Title" id="incomeTitle" color="bg-white" />
-          <Input label="Date" id="incomeDate" type="date" color="bg-white" />
+          <Input
+            label="Income Title"
+            id="incomeTitle"
+            color="bg-white"
+            value={oneTransaction.title}
+            onChange={(e) => setOneTransaction({ ...oneTransaction, title: e.target.value })}
+          />
+          <Input
+            label="Date"
+            id="incomeDate"
+            type="date"
+            color="bg-white"
+            value={oneTransaction.date}
+            onChange={(e) => setOneTransaction({ ...oneTransaction, date: e.target.value })}
+          />
           <Select
             label="Type of Income"
             id="incomeType"
             options={['Salary', 'Investment', 'Gift', 'Freelance']}
-            value={incomeType}
-            onChange={setIncomeType}
+            value={oneTransaction.categoryId}
+            onChange={(value) => {
+              setIncomeType(value);
+              setOneTransaction({ ...oneTransaction, categoryId: value });
+            }}
             color="bg-white"
             width="100%"
           />
-          <Input label="Invoice No." id="incomeInvoice" color="bg-white" />
-          <Input label="Base Amount" id="incomeAmount" type="number" min={0} color="bg-white" />
-          <TextArea label="Notes" id="incomeNotes" color="bg-white" rows={3} />
+          <Input
+            label="Invoice No."
+            id="incomeInvoice"
+            color="bg-white"
+            value={oneTransaction.origin}
+            onChange={(e) => setOneTransaction({ ...oneTransaction, origin: e.target.value })}
+          />
+          <Input
+            label="Base Amount"
+            id="incomeAmount"
+            type="number"
+            min={0}
+            color="bg-white"
+            value={oneTransaction.baseAmount}
+            onChange={(e) =>
+              setOneTransaction({ ...oneTransaction, baseAmount: Number(e.target.value) })
+            }
+          />
+          <TextArea
+            label="Notes"
+            id="incomeNotes"
+            color="bg-white"
+            rows={3}
+            value={oneTransaction.notes}
+            onChange={(e) => setOneTransaction({ ...oneTransaction, notes: e.target.value })}
+          />
         </form>
       </Slide>
 
@@ -304,25 +460,60 @@ export const IncomeExpenses = () => {
         confirmText="cancel"
         onConfirm={cancelOperation}
         extralText="Add"
-        onExtra={incomeDetail}
+        onExtra={() => {
+          setOneTransaction({ ...oneTransaction, type: 'expense' });
+          addTransaction();
+        }}
         onClose={cancelOperation}
       >
         <form className="flex flex-col gap-4">
-          <Input label="Expense Title" id="expenseTitle" color="bg-white" />
-          <Input label="Date" id="expenseDate" type="date" color="bg-white" />
+          <Input
+            label="Expense Title"
+            id="expenseTitle"
+            color="bg-white"
+            value={oneTransaction.title}
+            onChange={(e) => setOneTransaction({ ...oneTransaction, title: e.target.value })}
+          />
+          <Input
+            label="Date"
+            id="expenseDate"
+            type="date"
+            color="bg-white"
+            value={oneTransaction.date}
+            onChange={(e) => setOneTransaction({ ...oneTransaction, date: e.target.value })}
+          />
           <Select
             label="Type of Expense"
             id="expenseType"
             options={['Food', 'Rent', 'Transportation', 'Entertainment', 'Others']}
-            value={expenseType}
-            onChange={setExpenseType}
+            value={oneTransaction.categoryId}
+            onChange={(value) => {
+              setExpenseType(value);
+              setOneTransaction({ ...oneTransaction, categoryId: value });
+            }}
             color="bg-white"
             width="100%"
           />
-          <Input label="Invoice No." id="expenseInvoice" color="bg-white" />
-          <Input label="Base Amount" id="expenseAmount" type="number" min={0} color="bg-white" />
+          <Input
+            label="Invoice No."
+            id="expenseInvoice"
+            color="bg-white"
+            value={oneTransaction.origin}
+            onChange={(e) => setOneTransaction({ ...oneTransaction, origin: e.target.value })}
+          />
+          <Input
+            label="Base Amount"
+            id="expenseAmount"
+            type="number"
+            min={0}
+            color="bg-white"
+            value={oneTransaction.baseAmount}
+            onChange={(e) =>
+              setOneTransaction({ ...oneTransaction, baseAmount: Number(e.target.value) })
+            }
+          />
 
-          {/* Recurring Expense -------------- */}
+          {/* Recurring Expense */}
           <div className="flex flex-col gap-2">
             <div className="flex justify-between items-center">
               <p>Make this recurring expense</p>
@@ -348,14 +539,24 @@ export const IncomeExpenses = () => {
                 id="repeatExpenses"
                 options={['Daily', 'Weekly', 'Monthly', 'Yearly']}
                 value={repeatOption}
-                onChange={setRepeatOption}
+                onChange={(value) => {
+                  setRepeatOption(value);
+                  setOneTransaction({ ...oneTransaction, recurrence: value });
+                }}
                 color="bg-white"
                 width="100%"
               />
             )}
           </div>
 
-          <TextArea label="Notes" id="expenseNotes" color="bg-white" rows={3} />
+          <TextArea
+            label="Notes"
+            id="expenseNotes"
+            color="bg-white"
+            rows={3}
+            value={oneTransaction.notes}
+            onChange={(e) => setOneTransaction({ ...oneTransaction, notes: e.target.value })}
+          />
         </form>
       </Slide>
     </div>
