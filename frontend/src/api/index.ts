@@ -10,4 +10,4 @@ export * from './adapters/userAdapter';
 // types
 export * from './types/userApi';
 export * from './types/projectApi';
-export * from './types/ListApi';
+export * from './types/listApi';
