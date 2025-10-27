@@ -1,13 +1,13 @@
-import { Route, Routes } from "react-router-dom";
-import { PrivateRoute } from "./api/auth/PrivateRoute";
-import { Dashboard } from "./pages/Dashboard";
-import { Landing } from "./pages/Landing";
-import { IncomeExpenses } from "@pages/IncomeExpenses";
-import MyWork from "@pages/MyWork";
-import Logout from "@pages/Logout";
-import FinancialDashboard from "@pages/FinancialDashboard";
-import Settings from "@pages/Settings";
-import Clients from "@pages/Clients";
+import { Route, Routes } from 'react-router-dom';
+import { PrivateRoute } from './api/auth/PrivateRoute';
+import { Dashboard } from '@pages/dashboard/Dashboard';
+import { Landing } from './pages/Landing';
+import { IncomeExpenses } from '@pages/IncomeExpenses';
+import MyWork from '@pages/MyWork';
+import Logout from '@pages/Logout';
+import FinancialDashboard from '@pages/FinancialDashboard';
+import Settings from '@pages/Settings';
+import Clients from '@pages/Clients';
 
 function App() {
   return (
