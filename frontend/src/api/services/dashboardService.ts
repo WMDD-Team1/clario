@@ -47,7 +47,7 @@ export const fetchOverview = async (): Promise<OverviewResponse | null> => {
 
 export const fetchInsights = async (): Promise<InsightListResponse> => {
   try {
-    const res = await api.get<InsightListResponse>('/ai/transactions');
+    const res = await api.post<InsightListResponse>('/ai/transactions');
     return res.data;
   } catch (err) {
     console.error('Error fetching insights:', err);
