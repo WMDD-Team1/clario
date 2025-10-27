@@ -2,9 +2,8 @@
 import React, { useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useAppSelector } from '@/store/hooks';
-import DashboardShell from '@/components/DashboardShell';
 import Card from '@/components/Card';
-import { BalanceChart } from '@/components/BalanceChart';
+import BalanceChart from '@components/BalanceChart';
 import { ExpensesTable } from '@/components/ExpensesTable';
 import MoneyFlowAreaChart from '@/components/MoneyFlowAreaChart';
 import { Sparkles } from 'lucide-react';
@@ -22,31 +21,6 @@ export const Dashboard = () => {
   const balanceData = [
     { name: 'Expense', value: 2000, color: '#9CA3AF' },
     { name: 'Balance', value: 3250, color: '#4B5563' },
-  ];
-
-  const flowData = [
-    { name: 'May', income: 1000, expense: 800 },
-    { name: 'Jun', income: 2000, expense: 1200 },
-    { name: 'Jul', income: 1500, expense: 1000 },
-    { name: 'Aug', income: 3000, expense: 2000 },
-    { name: 'Sep', income: 2700, expense: 2300 },
-    { name: 'Oct', income: 3100, expense: 2500 },
-  ];
-
-  const expenses = [
-    { label: 'Office Rent', date: '10/20/2025', amount: 'CAD 800' },
-    { label: 'Other', date: '10/17/2025', amount: 'CAD 400' },
-    { label: 'Internet', date: '10/21/2025', amount: 'CAD 140' },
-    { label: 'Usability Test', date: '10/25/2025', amount: 'CAD 130' },
-  ];
-
-  const reminders = [
-    { title: 'Rebranding - ACME', client: 'ACME INC', dueDate: '10/11/2025' },
-    { title: 'Content - Clario', client: 'NorthFace', dueDate: '10/14/2025' },
-    { title: 'Web Development - Clario', client: 'Arvo', dueDate: '10/20/2025' },
-    { title: 'Branding - PropEase', client: 'PropEase', dueDate: '10/21/2025' },
-    { title: 'Web Redesign - Langara', client: 'Langara', dueDate: '10/23/2025' },
-    { title: 'UX Research - Pet Care', client: 'Pet Care', dueDate: '10/25/2025' },
   ];
 
   //Mobile View
@@ -71,20 +45,18 @@ export const Dashboard = () => {
       </div>
 
       <Card style="card1">
-        <BalanceChart data={balanceData} />
+        <BalanceChart />
       </Card>
 
       <Card style="card1">
-        <MoneyFlowAreaChart data={flowData} />
+        <MoneyFlowAreaChart />
       </Card>
 
       <Card style="card1">
-        <ExpensesTable expenses={expenses} />
+        <ExpensesTable />
       </Card>
     </div>
   );
-
-  const renderReminders = () => <RemindersList />;
 
   const renderInsights = () => (
     <div className="flex flex-col gap-3">
@@ -148,14 +120,14 @@ export const Dashboard = () => {
                 <div className="flex flex-col flex-[1.2] gap-6">
                   <div className="flex flex-col md:flex-row gap-4">
                     <div className="flex-1">
-                      <BalanceChart data={balanceData} />
+                      <BalanceChart />
                     </div>
                     <div className="flex-1">
-                      <ExpensesTable expenses={expenses} />
+                      <ExpensesTable />
                     </div>
                   </div>
                   <div>
-                    <MoneyFlowAreaChart data={flowData} />
+                    <MoneyFlowAreaChart />
                   </div>
                 </div>
               </div>
@@ -196,7 +168,7 @@ export const Dashboard = () => {
         </div>
 
         {/* Content */}
-        {activeTab === 'reminders' && renderReminders()}
+        {activeTab === 'reminders' && <RemindersList />}
         {activeTab === 'dashboard' && renderDashboard()}
         {activeTab === 'insights' && renderInsights()}
       </div>

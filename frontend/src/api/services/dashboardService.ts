@@ -1,12 +1,19 @@
 import { ListApi, Metadata } from '@api/types/listApi';
-import { InsightListResponse, OverviewResponse, ReminderResponse } from '@api/types/dashboardApi';
+import {
+  CurrentMonthResponse,
+  InsightListResponse,
+  MoneyFlowResponse,
+  OverviewResponse,
+  ReminderResponse,
+  TopExpensesResponse,
+} from '@api/types/dashboardApi';
 import api from '@api/api';
 
 export interface DashboardMetadata extends Metadata {
   hasNextPage: boolean;
 }
 
-export const fetchDashboardReminders = async (params?: {
+export const fetchReminders = async (params?: {
   page?: number;
   limit?: number;
   days?: number;
@@ -52,5 +59,33 @@ export const fetchInsights = async (): Promise<InsightListResponse> => {
   } catch (err) {
     console.error('Error fetching insights:', err);
     return { data: [], meta: { total: 0 } };
+  }
+};
+
+export const fetchCurrentMonth = async (): Promise<CurrentMonthResponse | null> => {
+  try {
+    const res = await api.get<CurrentMonthResponse>('/dashboard/current');
+    return res.data;
+  } catch (err) {
+    console.error('Error fetching current month stats:', err);
+    return null;
+  }
+};
+export const fetchMoneyFlow = async (): Promise<MoneyFlowResponse | null> => {
+  try {
+    const res = await api.get<MoneyFlowResponse>('/dashboard/money-flow');
+    return res.data;
+  } catch (err) {
+    console.error('Error fetching money flow:', err);
+    return null;
+  }
+};
+export const fetchTopExpenses = async (): Promise<TopExpensesResponse | null> => {
+  try {
+    const res = await api.get<TopExpensesResponse>('/dashboard/top-expenses');
+    return res.data;
+  } catch (err) {
+    console.error('Error fetching top expenses:', err);
+    return null;
   }
 };
