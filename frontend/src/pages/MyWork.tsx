@@ -75,7 +75,11 @@ const MyWork = () => {
                         <h2 className="text-2xl font-semibold text-black">My Work</h2>
                         <Button
                             buttonColor="regularButton"
-                            onClick={() => setIsOpen(true)}
+                            onClick={() => {
+                            setIsOpen(true);
+                            view.key === 'clients' ? setSlide('0px') : ()=>{};
+                        
+                        }}
                             textColor="white"
                             width="200px"
                         >
@@ -103,8 +107,7 @@ const MyWork = () => {
             </div>
 
             {/* Projects or Clients */}
-            <div>{view.key === 'projects' ? <Projects /> : null}</div>
-            <div>{view.key === 'clients' ? <Clients slide={slide} setSlide = {(value:string)=>setSlide(value)}/> : null}</div>
+            <div>{view.key === 'projects' ? <Projects /> : <Clients slide={slide} setSlide = {(value:string)=>setSlide(value)}/>}</div>
         </>
     )
 }
