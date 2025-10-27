@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import InfoRow from '@/components/InfoRow';
 import { ExpenseItem } from '@api/types/dashboardApi';
 import { fetchTopExpenses } from '@api/services/dashboardService';
+import InfoCard from './InfoCard';
 
 export const ExpensesTable: React.FC = () => {
   const [expenses, setExpenses] = useState<ExpenseItem[]>([]);
@@ -37,7 +37,7 @@ export const ExpensesTable: React.FC = () => {
       <h3 className="font-semibold text-lg mb-2">Top Expenses</h3>
       <div className="space-y-2  divide-y ">
         {expenses.map((expense, idx) => (
-          <InfoRow key={idx} expense={expense} />
+          <InfoCard key={idx} expense={expense} />
         ))}
       </div>
     </div>
