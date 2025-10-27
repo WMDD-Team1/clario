@@ -250,6 +250,9 @@
  *           type: string
  *           enum: [income, expense]
  *           example: "expense"
+ *         title:
+ *           type: string
+ *           example: "Internet payment"
  *         date:
  *           type: string
  *           format: date
@@ -275,10 +278,6 @@
  *           type: string
  *           enum: [weekly, monthly]
  *           example: "weekly"
- *         paymentDate:
- *           type: string
- *           format: date
- *           example: 2025-10-05
  *         attachmentURL:
  *           type: string
  *           format: uri
@@ -311,6 +310,9 @@
  *           type: string
  *           enum: [income, expense]
  *           example: "expense"
+ *         title:
+ *           type: string
+ *           example: "Internet payment"
  *         date:
  *           type: string
  *           format: date
@@ -331,17 +333,10 @@
  *           type: string
  *           maxLength: 200
  *           example: "Payment for October (max 200 characters)"
- *         paymentDate:
- *           type: string
- *           format: date
- *           example: 2025-10-05
  *         attachmentURL:
  *           type: string
  *           format: uri
  *           example: "https://example.com/attachment.pdf"
- *         isArchived:
- *           type: boolean
- *           example: false
  */
 
 /**
@@ -611,4 +606,34 @@
  *           type: string
  *           format: date
  *           example: 2025-10-05
+ */
+
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     DashboardOverview:
+ *       type: object
+ *       properties:
+ *         income:
+ *           type: number
+ *           example: 120000
+ *           description: Total income of the user (base amount sum)
+ *         expense:
+ *           type: number
+ *           example: 80000
+ *           description: Total expense of the user
+ *         taxes:
+ *           type: number
+ *           example: 2000
+ *           description: Total calculated tax amount from income
+ *         recurringIncome:
+ *           type: number
+ *           example: 1200
+ *           description: Total amount of recurring income transactions
+ *         recurringExpense:
+ *           type: number
+ *           example: 800
+ *           description: Total amount of recurring expense transactions
  */
