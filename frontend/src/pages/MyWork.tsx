@@ -1,4 +1,5 @@
 import Button from '@components/Button';
+import CreateProjectDrawer from '@components/forms/CreateProjectDrawer';
 import InsightCard from '@components/InsightCard';
 import Projects from '@components/Projects';
 import ToggleButton from '@components/ToggleButton';
@@ -43,6 +44,8 @@ const MyWork = () => {
         key: "projects",
         label: "All Projects",
     });
+    const [isOpen, setIsOpen] = useState(false);
+
     return (
         <>
             <div className='header mb-8'>
@@ -53,24 +56,27 @@ const MyWork = () => {
                     </div>
                     <Button
                         buttonColor="regularButton"
-                        onClick={() => console.log()}
+                        onClick={() => setIsOpen(true)}
                         textColor="white"
                         width="200px"
                     >
                         Add {view.key === 'projects' ? "Project" : "Client"}
                     </Button>
+                    {view.key === 'projects' ? <CreateProjectDrawer isOpen={isOpen} onClose={() => setIsOpen(false)} /> : null}
                 </section>
                 <section className='md:hidden transition'>
                     <div className="flex items-center justify-between mb-4">
                         <h2 className="text-2xl font-semibold text-black">My Work</h2>
                         <Button
                             buttonColor="regularButton"
-                            onClick={() => console.log()}
+                            onClick={() => setIsOpen(true)}
                             textColor="white"
                             width="200px"
                         >
                             Add {view.key === 'projects' ? "Project" : "Client"}
                         </Button>
+                        {view.key === 'projects' ? <CreateProjectDrawer isOpen={isOpen} onClose={() => setIsOpen(false)} /> : null}
+
                     </div>
                     <ToggleButton options={views} option={view} onClick={setView} />
                 </section>

@@ -2,14 +2,31 @@ import SearchBar from './SearchBar';
 import SelectionFilter from './SelectionFilter';
 import SwitchTab from './SwitchTab';
 
-interface Props {
+// 💡 Reusable type for dropdown options
+interface Option {
+    id: string;
+    label: string;
+}
+
+interface FiltersBarProps {
+    // Tabs (All / Active / Archived)
     currentFilter: string;
     filters: string[];
     onFilter: (filter: string) => void;
-    sortOptions: { id: string, label: string }[];
-    onSortChange: (option: { id: string, label: string }) => void;
-    stageOptions: { id: string, label: string }[];
-    onStageChange: (option: { id: string, label: string }) => void;
+
+    // Sorting
+    sortOptions: Option[];
+    selectedSort: Option;
+    onSortChange: (option: Option) => void;
+
+    // Stages
+    stageOptions: Option[];
+    selectedStage: Option;
+    onStageChange: (option: Option) => void;
+
+    // Search
+    searchValue?: string;
+    onSearchChange: (value: string) => void;
 }
 
 const FiltersBar = ({
@@ -17,10 +34,14 @@ const FiltersBar = ({
     filters,
     onFilter,
     sortOptions,
+    selectedSort,
     onSortChange,
     stageOptions,
+    selectedStage,
     onStageChange,
-}: Props) => {
+    searchValue,
+    onSearchChange,
+}: FiltersBarProps) => {
     return (
         <div className="flex flex-col items-center mb-6 md:flex-row md:justify-between">
             {/* Left Filter Group */}
@@ -36,17 +57,21 @@ const FiltersBar = ({
                     needCollapse={false}
                     isSearchOpen={false}
                     placeholder="Search by project name or client..."
-                    onSearchOpen={() => console.log()} />
+                    onSearchOpen={() => console.log()}
+                    onChange={onSearchChange}
+                    searchValue={searchValue} />
 
                 {/* Sort By */}
                 <SelectionFilter
                     className="hidden md:block"
+                    selectedValue={selectedSort}
                     options={sortOptions}
                     onSelect={onSortChange} />
 
                 {/* Stages */}
                 <SelectionFilter
                     className="hidden md:block"
+                    selectedValue={selectedStage}
                     options={stageOptions}
                     onSelect={onStageChange} />
             </div>

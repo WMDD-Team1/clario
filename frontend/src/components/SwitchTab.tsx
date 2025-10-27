@@ -10,7 +10,7 @@ const SwitchTab = ({ currentFilter, filters, onFilter }: Props) => {
             {filters.map((label) => (
                 <button
                     key={label}
-                    className={`grow px-4 py-2 rounded-[20px] text-sm transition ${label === currentFilter ? "bg-[#A7C8F7] text-[#023DCA]" : "text-[#5B5B5B] hover:bg-[#A7C8F7]"
+                    className={`grow px-4 py-2 rounded-[20px] text-sm transition ${label === currentFilter ? "bg-[#A7C8F7] text-[#023DCA]" : "text-[#5B5B5B]"
                         }`}
                     onClick={() => onFilter(label)}>
                     {label}
