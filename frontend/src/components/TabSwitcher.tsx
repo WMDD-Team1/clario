@@ -10,7 +10,7 @@ const TabSwitcher: React.FC<TabSwitcherProps> = ({ tabs, activeTab, onChange }) 
   return (
     <div className="flex justify-center  border-gray-200 border-2  rounded-2xl overflow-hidden">
       {tabs.map((tab) => (
-        <button
+        <div
           key={tab}
           onClick={() => onChange(tab)}
           className={`px-10 py-4
@@ -21,7 +21,7 @@ const TabSwitcher: React.FC<TabSwitcherProps> = ({ tabs, activeTab, onChange }) 
             }`}
         >
           {tab}
-        </button>
+        </div>
       ))}
     </div>
   );

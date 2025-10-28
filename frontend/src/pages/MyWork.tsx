@@ -2,6 +2,7 @@ import Button from '@components/Button';
 import CreateProjectDrawer from '@components/forms/CreateProjectDrawer';
 import InsightCard from '@components/InsightCard';
 import Projects from '@components/Projects';
+import Clients from '@components/Clients';
 import ToggleButton from '@components/ToggleButton';
 import { useState } from 'react';
 
@@ -45,6 +46,7 @@ const MyWork = () => {
         label: "All Projects",
     });
     const [isOpen, setIsOpen] = useState(false);
+    const [slide, setSlide] = useState('100%');
 
     return (
         <>
@@ -56,7 +58,11 @@ const MyWork = () => {
                     </div>
                     <Button
                         buttonColor="regularButton"
-                        onClick={() => setIsOpen(true)}
+                        onClick={() => {
+                            setIsOpen(true);
+                            view.key === 'clients' ? setSlide('0px') : ()=>{};
+                        
+                        }}
                         textColor="white"
                         width="200px"
                     >
@@ -69,7 +75,11 @@ const MyWork = () => {
                         <h2 className="text-2xl font-semibold text-black">My Work</h2>
                         <Button
                             buttonColor="regularButton"
-                            onClick={() => setIsOpen(true)}
+                            onClick={() => {
+                            setIsOpen(true);
+                            view.key === 'clients' ? setSlide('0px') : ()=>{};
+                        
+                        }}
                             textColor="white"
                             width="200px"
                         >
@@ -97,7 +107,7 @@ const MyWork = () => {
             </div>
 
             {/* Projects or Clients */}
-            <div>{view.key === 'projects' ? <Projects /> : null}</div>
+            <div>{view.key === 'projects' ? <Projects /> : <Clients slide={slide} setSlide = {(value:string)=>setSlide(value)}/>}</div>
         </>
     )
 }
