@@ -6,7 +6,6 @@ import Card from '@/components/Card';
 import BalanceChart from '@components/BalanceChart';
 import { ExpensesTable } from '@/components/ExpensesTable';
 import MoneyFlowAreaChart from '@/components/MoneyFlowAreaChart';
-import { Sparkles } from 'lucide-react';
 import { WelcomeBanner } from '@/components/WelcomeBanner';
 import type { RootState } from '@/store';
 import { RemindersList } from './components/RemindersList';
@@ -18,12 +17,6 @@ export const Dashboard = () => {
   const { data: appUser } = useAppSelector((state: RootState) => state.user);
   const [activeTab, setActiveTab] = useState<'reminders' | 'dashboard' | 'insights'>('dashboard');
 
-  const balanceData = [
-    { name: 'Expense', value: 2000, color: '#9CA3AF' },
-    { name: 'Balance', value: 3250, color: '#4B5563' },
-  ];
-
-  //Mobile View
   const renderDashboard = () => (
     <div className="flex flex-col gap-6">
       <div className="grid grid-cols-2 gap-3 sm:gap-4">
@@ -55,46 +48,6 @@ export const Dashboard = () => {
       <Card style="card1">
         <ExpensesTable />
       </Card>
-    </div>
-  );
-
-  const renderInsights = () => (
-    <div className="flex flex-col gap-3">
-      {[
-        {
-          title: 'Earning Trend',
-          period: 'This Month',
-          text: "Your income grew 18% compared to last month mostly from Project A. You're trending toward a more stable cashflow.",
-        },
-        {
-          title: 'Client Dependency',
-          period: 'This Month',
-          text: '75% of your total income came from a single client this month — consider diversifying your portfolio.',
-        },
-        {
-          title: 'Income Projection',
-          period: 'Next Month',
-          text: 'You have $2,800 in confirmed recurring income for the next 30 days.',
-        },
-        {
-          title: 'Payment Timeliness',
-          period: 'Next Month',
-          text: 'Client B usually pays 8 days late — consider updating your contract terms.',
-        },
-      ].map((item, idx) => (
-        <Card key={idx} style="card1">
-          <div className="py-3 px-4 rounded-xl bg-white">
-            <div className="flex justify-between items-center mb-1">
-              <div className="flex items-center gap-2 bg-blue-600 text-white text-xs font-medium px-2 py-1 rounded-full shadow-sm">
-                <Sparkles className="w-3 h-3 text-white" />
-                {item.title}
-              </div>
-              <span className="text-xs font-semibold text-gray-600">{item.period}</span>
-            </div>
-            <p className="text-xs text-gray-600 leading-snug">{item.text}</p>
-          </div>
-        </Card>
-      ))}
     </div>
   );
 
@@ -170,7 +123,7 @@ export const Dashboard = () => {
         {/* Content */}
         {activeTab === 'reminders' && <RemindersList />}
         {activeTab === 'dashboard' && renderDashboard()}
-        {activeTab === 'insights' && renderInsights()}
+        {activeTab === 'insights' && <Insight />}
       </div>
     </>
   );
