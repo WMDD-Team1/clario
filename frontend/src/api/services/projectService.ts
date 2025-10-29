@@ -40,3 +40,13 @@ export const createProject = async (data: any): Promise<ProjectApiResponse> => {
     }
     return data;
 }
+
+export const updateProject = async (id: string, data: any): Promise<ProjectApiResponse> => {
+    try {
+        const res = await api.patch<ProjectApiResponse>(`/projects/${id}`, data);
+        data = res.data;
+    } catch (err) {
+        console.log('Error creating project: ' + err);
+    }
+    return data;
+}

@@ -1,5 +1,5 @@
 import Button from '@components/Button';
-import CreateProjectDrawer from '@components/forms/CreateProjectDrawer';
+import ProjectDrawer from '@components/forms/ProjectDrawer';
 import InsightCard from '@components/InsightCard';
 import Projects from '@components/Projects';
 import Clients from '@components/Clients';
@@ -53,7 +53,7 @@ const MyWork = () => {
             <div className='header mb-8'>
                 <section className=" md:flex justify-between items-center hidden transition">
                     <div className="header-left flex items-center gap-4">
-                        <h2 className='text-[32px] font-serif'>My Work</h2>
+                        <h2>My Work</h2>
                         <ToggleButton options={views} option={view} onClick={setView} />
                     </div>
                     <Button
@@ -68,7 +68,7 @@ const MyWork = () => {
                     >
                         Add {view.key === 'projects' ? "Project" : "Client"}
                     </Button>
-                    {view.key === 'projects' ? <CreateProjectDrawer isOpen={isOpen} onClose={() => setIsOpen(false)} /> : null}
+                    {view.key === 'projects' ? <ProjectDrawer isOpen={isOpen} onClose={() => setIsOpen(false)}  mode="create"/> : null}
                 </section>
                 <section className='md:hidden transition'>
                     <div className="flex items-center justify-between mb-4">
@@ -85,7 +85,7 @@ const MyWork = () => {
                         >
                             Add {view.key === 'projects' ? "Project" : "Client"}
                         </Button>
-                        {view.key === 'projects' ? <CreateProjectDrawer isOpen={isOpen} onClose={() => setIsOpen(false)} /> : null}
+                        {view.key === 'projects' ? <ProjectDrawer isOpen={isOpen} onClose={() => setIsOpen(false)} mode="create"/> : null}
 
                     </div>
                     <ToggleButton options={views} option={view} onClick={setView} />
