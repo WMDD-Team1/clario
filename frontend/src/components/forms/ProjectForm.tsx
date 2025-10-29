@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Spinner from "../Spinner";
 import FormFooter from "./FormFooter";
+import Input from "@components/Input";
 
 // Validation schema
 const projectSchema = z.object({
@@ -68,11 +69,11 @@ export default function ProjectForm({ onCancel }: ProjectFormProps) {
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
             {/* Project Name */}
             <div>
-                <label className="block text-sm text-gray-500">Project Name</label>
-                <input
-                    {...register("name")}
+                <Input
+                    color="bg-white"
+                    label="Project Name"
                     placeholder="Project Name..."
-                    className="w-full border-b border-gray-300 focus:border-blue-500 outline-none py-1"
+                    register={register("name")}
                 />
                 {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
             </div>
