@@ -7,6 +7,7 @@ import MyWork from '@pages/MyWork';
 import Logout from '@pages/Logout';
 import FinancialDashboard from '@pages/FinancialDashboard';
 import Settings from '@pages/Settings';
+import ProjectDetails from '@pages/ProjectDetails';
 
 function App() {
   return (
@@ -53,6 +54,14 @@ function App() {
         element={
           <PrivateRoute>
             <MyWork />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/projects/:id"
+        element={
+          <PrivateRoute>
+            <ProjectDetails />
           </PrivateRoute>
         }
       />

@@ -26,6 +26,11 @@ export const fetchAllProjects = async (params?: {
     return data;
 }
 
+export const fetchProjectById = async (id: string): Promise<ProjectApiResponse> => {
+    const res = await api.get<ProjectApiResponse>(`/projects/${id}`);
+    return res.data;
+}
+
 export const createProject = async (data: any): Promise<ProjectApiResponse> => {
     try {
         const res = await api.post<ProjectApiResponse>("/projects", data);

@@ -7,6 +7,7 @@ import { useDebounce } from "use-debounce";
 import EmptyState from "./EmptyState";
 import FiltersBar from "./FiltersBar";
 import Spinner from "./Spinner";
+import { useNavigate } from "react-router-dom";
 
 const Projects = () => {
     const [currentFilter, setCurrentFilter] = useState(FILTERS[0]);
@@ -15,6 +16,8 @@ const Projects = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedStage, setSelectedStage] = useState(STAGES[0]);
     const [selectedSort, setSelectedSort] = useState(SORT_OPTIONS[0]);
+
+    const navigate = useNavigate();
 
     const { isLoading, error, data } = useQuery({
         queryKey: ['projects', {
@@ -46,6 +49,10 @@ const Projects = () => {
     if (isLoading) return <Spinner message="Loading projects..." />;
 
     if (error) return 'An error has occurred: ' + error.message
+
+    const handleProjectOnClick = (projectId: string) => {
+        navigate(`/projects/${projectId}`);
+    }
 
     return (
         <>
@@ -79,7 +86,8 @@ const Projects = () => {
                     total={meta.total}
                     page={meta.page}
                     pageSize={meta.limit}
-                    onPageChange={setCurrentPage} />
+                    onPageChange={setCurrentPage}
+                    onClickChildren={handleProjectOnClick} />
             )}
         </>
     )
