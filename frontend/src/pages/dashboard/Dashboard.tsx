@@ -99,7 +99,7 @@ export const Dashboard = () => {
         {/* Placeholder for hidden header */}
         <div className="h-10"></div>
 
-        <h2 className="text-xl font-semibold mt-4 mb-2">Hi {user?.name || 'User'}, Welcome Back</h2>
+        <h2>Hi {user?.name || 'User'}, Welcome Back</h2>
 
         {/* Toggle */}
         <div className="flex justify-center w-full mt-4 mb-6">
