@@ -103,8 +103,9 @@ const BalanceChart: React.FC = () => {
   if (loading) return <p>Loading balance...</p>;
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-5 flex flex-col items-center justify-center">
-      <h3 className="font-semibold mb-3 self-start">This Month Balance</h3>
+    <div className="flex flex-col justify-center items-center gap-[29px] w-[310.5px] h-[313px] p-5 shrink-0 rounded-2xl bg-white shadow-sm relative">
+      <h3 className="font-semibold mt-4 self-start">This Month Balance</h3>
+      <div className="w-full h-[250px] flex justify-center items-center relative z-[60]">
       <ResponsiveContainer width="100%" height={250}>
         <PieChart>
           <Pie
@@ -122,6 +123,7 @@ const BalanceChart: React.FC = () => {
           </Pie>
         </PieChart>
       </ResponsiveContainer>
+      </div>
     </div>
   );
 };
