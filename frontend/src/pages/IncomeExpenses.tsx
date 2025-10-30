@@ -4,13 +4,13 @@ import Input from '@components/Input';
 import Select from '@components/Select';
 import TextArea from '@components/TextArea';
 import Slide from '@components/Slide';
-import { fontSizeOptions } from '@components/style/font';
+// import { fontSizeOptions } from '@components/style/font';
 import Table from '@components/Table';
 import axios from 'axios';
 import { useAuth0 } from '@auth0/auth0-react';
 import ToggleButton from '@components/ToggleButton';
 import { Camera, CloudUpload } from '@assets/icons/index';
-import { da } from 'zod/v4/locales';
+import InfoRow from '@components/InfoRow';
 
 export const IncomeExpenses = () => {
   const [incomeSlide, setIncomeSlide] = useState('110%');
@@ -21,6 +21,7 @@ export const IncomeExpenses = () => {
   const [expenseType, setExpenseType] = useState('');
   const [repeat, setRepeat] = useState(false);
   const [repeatOption, setRepeatOption] = useState('');
+  const [incomeDetail, setIncomeDetail] = useState('110%');
 
   interface Meta {
     total: number;
@@ -43,11 +44,28 @@ export const IncomeExpenses = () => {
     },
   });
 
+  interface Category {
+    id: string;
+    name: string;
+    type: string;
+  }
+
+  interface categoriesResonse {
+    income: Category[];
+    expense: Category[];
+  }
+
+  const [allCategories, setAllCategories] = useState<categoriesResonse>({
+    income: [],
+    expense: [],
+  });
+
   const reset = () => {
     setIncomeSlide('110%');
     setExpenseSlide('110%');
     setIndetailSlide('110%');
     setExdetailSlide('110%');
+    setIncomeDetail('110%');
     setRepeat(false);
   };
 
@@ -61,7 +79,7 @@ export const IncomeExpenses = () => {
     setExpenseSlide('0px');
   };
 
-  const incomeDetail = () => setIndetailSlide('0px');
+  // const incomeDetail = () => setIndetailSlide('0px');
   const expenseDetail = () => setExdetailSlide('0px');
   const cancelOperation = () => reset();
 
@@ -103,7 +121,7 @@ export const IncomeExpenses = () => {
   const getOneTransaction = async () => {};
 
   interface TransactionFormat {
-    id: string;
+    id?: string;
     projectId: string;
     type: 'expense' | 'income';
     title: string;
@@ -115,9 +133,9 @@ export const IncomeExpenses = () => {
     notes: string;
     recurrence?: string;
     attachmentURL?: string;
-    isArchived: boolean;
-    createdAt: string;
-    updatedAt: string;
+    isArchived?: boolean;
+    createdAt?: string;
+    updatedAt?: string;
   }
 
   const [oneTransaction, setOneTransaction] = useState<TransactionFormat>({
@@ -160,27 +178,116 @@ export const IncomeExpenses = () => {
     setRepeatOption('');
   };
 
-  //Fetch CategoryID
-  const getCategoryId = async () => {};
+  const postCategories = async () => {
+    try {
+      const token = await getAccessTokenSilently({
+        authorizationParams: {
+          audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
+        },
+      });
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/settings/categories`,
+
+        {
+          name: 'Software & Tools',
+          type: 'expense',
+        },
+
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      const postCategoryResponse = response.data;
+      console.log('Categories post successfully:', postCategoryResponse);
+    } catch (error) {
+      console.error('Error posting categories:', error);
+    }
+  };
+
+  // useEffect(() => {
+  //   postCategories();
+  // }, []);
+
+  //Fetch Categories
+  const getCategories = async () => {
+    try {
+      const token = await getAccessTokenSilently({
+        authorizationParams: {
+          audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
+        },
+      });
+
+      const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/settings/categories`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const categoriesResponse = response.data;
+      console.log('Categories response:', categoriesResponse);
+
+      setAllCategories(categoriesResponse);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
+
+  useEffect(() => {
+    getCategories();
+  }, []);
+
+  const deleteCategory = async () => {
+    try {
+      const token = await getAccessTokenSilently({
+        authorizationParams: {
+          audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
+        },
+      });
+
+      const response = await axios.delete(
+        `${import.meta.env.VITE_API_BASE_URL}/settings/categories/69029ef9fa164996629c5e2b`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      const categoryDeletedResponse = response.data;
+      console.log('Categories response:', categoryDeletedResponse);
+
+      // setAllCategories(categoriesResponse);
+    } catch (error) {
+      console.error('Error deleting category:', error);
+    }
+  };
+
+  // useEffect(() => {
+  //   deleteCategory();
+  // }, []);
 
   // ------upload Transaction-------------
-  const addTransaction = async () => {
-    const payload = {
-      projectId: '670a12b4d9e4fa1234abcd99',
-      type: oneTransaction.type,
-      title: oneTransaction.title,
-      date: oneTransaction.date,
-      categoryId: '670a12b4d9e4fa1234abcd99',
-      // Tell Daniel to change amout to baseAmount
-      baseAmount: oneTransaction.baseAmount,
-      origin: oneTransaction.origin,
-      paymentMethod: 'Credit Card',
-      notes: oneTransaction.notes,
-      attachmentURL: 'https://example.com/attachment.pdf',
-      //// Tell Daniel to add recurrence
-      // recurrence: oneTransaction.recurrence || ''
-    };
 
+  let newTransaction = {
+    projectId: '670a12b4d9e4fa1234abcd99',
+    type: oneTransaction.type,
+    title: oneTransaction.title,
+    date: oneTransaction.date,
+    categoryId: oneTransaction.categoryId,
+    // Tell Daniel to change amout to baseAmount
+    baseAmount: oneTransaction.baseAmount,
+    origin: oneTransaction.origin,
+    paymentMethod: 'Credit Card',
+    notes: oneTransaction.notes,
+    attachmentURL: 'https://example.com/attachment.pdf',
+    //// Tell Daniel to add recurrence
+    // recurrence: oneTransaction.recurrence || ''
+  };
+  const addTransaction = async (payload: TransactionFormat) => {
     const token = await getAccessTokenSilently({
       authorizationParams: {
         audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
@@ -224,9 +331,8 @@ export const IncomeExpenses = () => {
     { key: 'details', value: 'Details' },
   ];
 
-  console.log(allTransactions.data);
+  // console.log(allTransactions.data);
   // fake data
-
 
   //Add filter logic-------
   const incomeData = allTransactions?.data?.filter((transaction) => transaction.type == 'income');
@@ -239,34 +345,42 @@ export const IncomeExpenses = () => {
       });
 
       return {
+        id: transaction.id,
         date: formattedDate,
         amount: Number(transaction.baseAmount),
-        category: transaction.categoryId,
+        category:
+          allCategories.income.find((incomeCategory) => transaction.categoryId == incomeCategory.id)
+            ?.name || 'Unknown',
         details: 'View',
       };
     })
     .slice((incomePage - 1) * 10, (incomePage - 1) * 10 + 10);
 
-
   //Add filter logic-----------------
   const expenseData = allTransactions?.data?.filter((transaction) => transaction.type == 'expense');
 
-  const expenseFilteredData = expenseData.map((transaction) => {
-        const dateObj = new Date(transaction.date);
-        const formattedDate = dateObj.toLocaleDateString('en-US', {
-          month: 'short',
-          day: '2-digit',
-        });
+  const expenseFilteredData = expenseData
+    .map((transaction) => {
+      const dateObj = new Date(transaction.date);
+      const formattedDate = dateObj.toLocaleDateString('en-US', {
+        month: 'short',
+        day: '2-digit',
+      });
 
-        return {
-          date: formattedDate,
-          amount: Number(transaction.baseAmount),
-          category: transaction.categoryId,
-          details: 'View',
-        };
-      }).slice((expensePage - 1) * 10, (expensePage - 1) * 10 + 10);
+      return {
+        id: transaction.id,
+        date: formattedDate,
+        amount: Number(transaction.baseAmount),
+        category:
+          allCategories.expense.find(
+            (expenseCategory) => transaction.categoryId == expenseCategory.id,
+          )?.name || 'Unknown',
+        details: 'View',
+      };
+    })
+    .slice((expensePage - 1) * 10, (expensePage - 1) * 10 + 10);
 
-  console.log(expenseFilteredData);
+  // console.log(expenseFilteredData);
 
   const options = [
     { key: 'income', label: 'Income' },
@@ -279,6 +393,34 @@ export const IncomeExpenses = () => {
     setSelectedOption(option);
   };
 
+  //--------handle Income Details------
+  const handleIncomeDetail = async (id: string) => {
+    try {
+      const token = await getAccessTokenSilently({
+        authorizationParams: {
+          audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
+        },
+      });
+
+      const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/transactions/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setOneTransaction(response.data);
+      setIncomeDetail('0px');
+    } catch (error) {
+      console.error(error);
+    }
+    console.log(oneTransaction);
+  };
+
+  //--------handle Expense Details------
+  const handleExpenseDetail = (id: string) => {
+    console.log(id);
+  };
+
   return (
     <div>
       <div className="md:hidden flex justify-center mb-[1rem]">
@@ -287,7 +429,7 @@ export const IncomeExpenses = () => {
       <div className="flex flex-row flex-wrap gap-[1rem]">
         <div className="flex-1 flex flex-col flex-nowrap gap-[1rem]">
           <div className="md:flex flex-row flex-nowrap justify-between items-center hidden">
-            <h2 className='text-2xl'>Income</h2>
+            <h2 className="text-2xl">Income</h2>
             <Button
               buttonColor="regularButton"
               onClick={() => {
@@ -302,6 +444,8 @@ export const IncomeExpenses = () => {
 
           <div>
             <Table
+              // --------------------------------------
+              onClickChildren={handleIncomeDetail}
               headers={headers}
               data={incomeFilteredData}
               total={incomeData.length}
@@ -314,7 +458,7 @@ export const IncomeExpenses = () => {
 
         <div className="flex-1 flex flex-col flex-nowrap gap-[1rem]">
           <div className="md:flex flex-row flex-nowrap justify-between items-center hidden">
-            <h2 className='text-2xl'>Expense</h2>
+            <h2 className="text-2xl">Expense</h2>
             <Button
               buttonColor="regularButton"
               onClick={() => {
@@ -328,6 +472,8 @@ export const IncomeExpenses = () => {
           </div>
           <div>
             <Table
+              // ----------------------------------------
+              onClickChildren={handleExpenseDetail}
               headers={headers}
               data={expenseFilteredData}
               total={expenseData.length}
@@ -346,7 +492,7 @@ export const IncomeExpenses = () => {
         confirmText="Browse"
         onConfirm={cancelOperation}
         extralText="Skip"
-        onExtra={incomeDetail}
+        onExtra={() => setIndetailSlide('0px')}
         onClose={cancelOperation}
       >
         <div className="flex flex-col flex-nowrap items-center justify-center gap-[1rem] h-full">
@@ -369,8 +515,9 @@ export const IncomeExpenses = () => {
         onConfirm={cancelOperation}
         extralText="Add"
         onExtra={async () => {
-          setOneTransaction({ ...oneTransaction, type: 'income' });
-          addTransaction();
+          newTransaction = { ...newTransaction, type: 'income' };
+          setOneTransaction(newTransaction);
+          addTransaction(newTransaction);
         }}
         onClose={cancelOperation}
       >
@@ -393,11 +540,22 @@ export const IncomeExpenses = () => {
           <Select
             label="Type of Income"
             id="incomeType"
-            options={['Salary', 'Investment', 'Gift', 'Freelance']}
-            value={oneTransaction.categoryId}
+            options={[
+              'Project Payment',
+              'Milestone Payment',
+              'Consultation Fee',
+              'Product Sale',
+              'Bonus / Incentive',
+            ]}
+            value={incomeType}
             onChange={(value) => {
               setIncomeType(value);
-              setOneTransaction({ ...oneTransaction, categoryId: value });
+              setOneTransaction({
+                ...oneTransaction,
+                categoryId:
+                  allCategories.income.find((incomeCategory) => incomeCategory.name == value)?.id ||
+                  '',
+              });
             }}
             color="bg-white"
             width="100%"
@@ -410,7 +568,7 @@ export const IncomeExpenses = () => {
             onChange={(e) => setOneTransaction({ ...oneTransaction, origin: e.target.value })}
           />
           <Input
-            label="Base Amount"
+            label="Amount"
             id="incomeAmount"
             type="number"
             min={0}
@@ -419,7 +577,9 @@ export const IncomeExpenses = () => {
             onChange={(e) =>
               setOneTransaction({ ...oneTransaction, baseAmount: Number(e.target.value) })
             }
-          />
+          >
+            {/* <div className='absolute top-[1rem] right-[1rem]'>CAD</div> */}
+            </Input>
           <TextArea
             label="Notes"
             id="incomeNotes"
@@ -461,8 +621,9 @@ export const IncomeExpenses = () => {
         onConfirm={cancelOperation}
         extralText="Add"
         onExtra={() => {
-          setOneTransaction({ ...oneTransaction, type: 'expense' });
-          addTransaction();
+          newTransaction = { ...newTransaction, type: 'expense' };
+          setOneTransaction(newTransaction);
+          addTransaction(newTransaction);
         }}
         onClose={cancelOperation}
       >
@@ -485,11 +646,24 @@ export const IncomeExpenses = () => {
           <Select
             label="Type of Expense"
             id="expenseType"
-            options={['Food', 'Rent', 'Transportation', 'Entertainment', 'Others']}
-            value={oneTransaction.categoryId}
+            options={[
+              'Software & Tools',
+              'Equipment / Hardware',
+              'Internet & Utilities',
+              'Marketing & Advertising',
+              'Subscription Fees',
+              'Travel & Transportation',
+              'Other Expenses',
+            ]}
+            value={expenseType}
             onChange={(value) => {
               setExpenseType(value);
-              setOneTransaction({ ...oneTransaction, categoryId: value });
+              setOneTransaction({
+                ...oneTransaction,
+                categoryId:
+                  allCategories.expense.find((expenseCategory) => expenseCategory.name == value)
+                    ?.id || '',
+              });
             }}
             color="bg-white"
             width="100%"
@@ -502,7 +676,7 @@ export const IncomeExpenses = () => {
             onChange={(e) => setOneTransaction({ ...oneTransaction, origin: e.target.value })}
           />
           <Input
-            label="Base Amount"
+            label="Amount"
             id="expenseAmount"
             type="number"
             min={0}
@@ -514,7 +688,7 @@ export const IncomeExpenses = () => {
           />
 
           {/* Recurring Expense */}
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-[1rem]">
             <div className="flex justify-between items-center">
               <p>Make this recurring expense</p>
               <div className="flex items-center gap-2">
@@ -535,9 +709,9 @@ export const IncomeExpenses = () => {
 
             {repeat && (
               <Select
-                label="Repeat Options"
+                label="Recurrence Type"
                 id="repeatExpenses"
-                options={['Daily', 'Weekly', 'Monthly', 'Yearly']}
+                options={['Weekly', 'Monthly', 'Yearly']}
                 value={repeatOption}
                 onChange={(value) => {
                   setRepeatOption(value);
@@ -558,6 +732,54 @@ export const IncomeExpenses = () => {
             onChange={(e) => setOneTransaction({ ...oneTransaction, notes: e.target.value })}
           />
         </form>
+      </Slide>
+
+      <Slide
+        title="Income"
+        slide={incomeDetail}
+        confirmText="Close"
+        onConfirm={cancelOperation}
+        extralText="Edit"
+        onExtra={() => {}}
+        onClose={cancelOperation}
+      >
+        <InfoRow label="Title" value={oneTransaction.title} />
+        <InfoRow
+          label="Date"
+          value={new Date(oneTransaction.date).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: '2-digit',
+          })}
+        />
+        <InfoRow
+          label="Type of Income"
+          value={
+            allCategories.income.find(
+              (incomeCategory) => oneTransaction.categoryId == incomeCategory.id,
+            )?.name || 'Unknown'
+          }
+        />
+        <InfoRow label="Invoice #" value={oneTransaction.origin} />
+
+        <div className="flex flex-col p-[1rem] border-gray-200 bg-blue-50 rounded-[1rem] my-[1rem]">
+          <p>Financial Breakdown</p>
+          <InfoRow
+            label="Base Amount"
+            value={`$ ${String(oneTransaction.baseAmount.toLocaleString())}`}
+          />
+          <InfoRow
+            label="Tax(5%)"
+            value={`$ ${String(((oneTransaction.baseAmount * 5) / 100).toLocaleString())}`}
+          />
+          <InfoRow
+            label="Total Income"
+            value={`$ ${String(((oneTransaction.baseAmount * 105) / 100).toLocaleString())}`}
+          />
+        </div>
+
+        <InfoRow label="Notes" value={oneTransaction.notes} vertical={true} />
+        <InfoRow label="Attachment" value={oneTransaction.attachmentURL} />
       </Slide>
     </div>
   );

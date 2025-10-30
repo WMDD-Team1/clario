@@ -1,11 +1,11 @@
 export interface ProjectApiResponse {
     userId: string;
-    clientId: string | null;
+    clientId: string | null | { id: string, name: string };
     name: string;
     description: string;
     type: string;
     totalBudget: number;
-        status: 'Planning' | 'In-Progress' | 'Review' | 'Done';
+    status: 'Planning' | 'In-Progress' | 'Review' | 'Done';
     isActive: boolean;
     isArchived: boolean;
     startDate: string; // ISO date string

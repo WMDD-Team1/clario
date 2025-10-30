@@ -10,6 +10,8 @@ import WorkInactiveIcon from "./work-inactive.svg?react";
 import Camera from "./camera.svg?react";
 import Forward from "./forward.svg?react";
 import CloudUpload from "./cloud-upload.svg?react";
+import MenuScale from "./menu-scale.svg?react";
+import DotsButton from "./dots-button.svg?react";
 
 export {
   DashboardActiveIcon,
@@ -23,5 +25,7 @@ export {
   WorkInactiveIcon,
   Camera,
   Forward,
-  CloudUpload
+  CloudUpload,
+  MenuScale,
+  DotsButton
 };

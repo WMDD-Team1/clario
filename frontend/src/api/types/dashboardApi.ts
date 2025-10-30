@@ -1,11 +1,9 @@
 export interface OverviewResponse {
-  totalProjects: number;
-  activeProjects: number;
-  inactiveProjects: number;
-  archivedProjects: number;
-  totalClients: number;
-  totalBudget: number;
-  activeBudget: number;
+  income: number;
+  expense: number;
+  taxes: number;
+  recurringIncome: number;
+  recurringExpense: number;
 }
 
 export interface ReminderResponse {
@@ -26,6 +24,35 @@ export interface InsightItem {
 
 export interface InsightListResponse {
   data: InsightItem[];
+  meta: {
+    total: number;
+  };
+}
+
+export interface CurrentMonthResponse {
+  income: number;
+  expense: number;
+}
+export interface MoneyFlowItem {
+  month: string;
+  income: number;
+  expense: number;
+}
+export interface MoneyFlowResponse {
+  data: MoneyFlowItem[];
+  meta: {
+    total: number;
+  };
+}
+export interface ExpenseItem {
+  title: string;
+  amount: number;
+  category: string;
+  date: string;
+}
+
+export interface TopExpensesResponse {
+  data: ExpenseItem[];
   meta: {
     total: number;
   };

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Reminder from '@components/Reminder';
 import { ReminderResponse } from '@api/types/dashboardApi';
-import { fetchDashboardReminders } from '@api/services/dashboardService';
+import { fetchReminders } from '@api/services/dashboardService';
 
 export const RemindersList: React.FC = () => {
   const [reminders, setReminders] = useState<ReminderResponse[]>([]);
@@ -12,7 +12,7 @@ export const RemindersList: React.FC = () => {
     const loadReminders = async () => {
       try {
         setLoading(true);
-        const res = await fetchDashboardReminders({ page: 1, limit: 10, days: 60 });
+        const res = await fetchReminders({ page: 1, limit: 10, days: 60 });
         setReminders(res.data);
       } catch (err) {
         console.error('Failed to fetch reminders:', err);

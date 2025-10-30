@@ -1,13 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from "react";
-import {
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  Sector,
-} from "recharts";
-
+import React, { useEffect, useState } from 'react';
+import { ResponsiveContainer, PieChart, Pie, Cell, Sector } from 'recharts';
+import { fetchCurrentMonth } from '@api/services/dashboardService';
+import { CurrentMonthResponse } from '@api/types/dashboardApi';
+import { formatCurrency } from '@utils/formatCurrency';
+type ChartItem = {
+  name: string;
+  value: number;
+  color: string;
+};
 type PieSectorData = {
   percent?: number;
   name?: string | number;
@@ -25,6 +25,11 @@ type PieSectorData = {
   fill?: string;
 };
 
+const COLORS = ['#0665EC', '#9966FF'];
+const DUMMY_DATA: ChartItem[] = [
+  { name: 'Income', value: 12000, color: COLORS[0] },
+  { name: 'Expense', value: 8000, color: COLORS[1] },
+];
 const renderActiveShape = ({
   cx,
   cy,
@@ -48,43 +53,54 @@ const renderActiveShape = ({
         endAngle={endAngle}
         fill={fill}
       />
-      <text
-        x={cx}
-        y={(cy ?? 0) - 8}
-        textAnchor="middle"
-        className="text-sm"
-        fill="#111"
-      >
+      <text x={cx} y={(cy ?? 0) - 8} textAnchor="middle" className="text-sm" fill="#111">
         {payload?.name}
       </text>
-      <text
-        x={cx}
-        y={(cy ?? 0) + 10}
-        textAnchor="middle"
-        className="text-xs"
-        fill="#666"
-      >
-        {`CAD ${value}`}
+      <text x={cx} y={(cy ?? 0) + 10} textAnchor="middle" className="text-xs" fill="#666">
+        {`CAD ${formatCurrency(value ?? 0, 0)}`}
       </text>
-      <text
-        x={cx}
-        y={(cy ?? 0) + 25}
-        textAnchor="middle"
-        className="text-xs"
-        fill="#888"
-      >
+      <text x={cx} y={(cy ?? 0) + 25} textAnchor="middle" className="text-xs" fill="#888">
         {`(${((percent ?? 0) * 100).toFixed(1)}%)`}
       </text>
     </g>
   );
 };
 
-export function BalanceChart({ data }: { data: any[] }) {
+const BalanceChart: React.FC = () => {
+  const [data, setData] = useState<ChartItem[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
 
-  const onPieEnter = (_: any, index: number) => {
+  const onPieEnter = (_: unknown, index: number) => {
     setActiveIndex(index);
   };
+
+  useEffect(() => {
+    const loadBalance = async () => {
+      try {
+        setLoading(true);
+        const res: CurrentMonthResponse | null = await fetchCurrentMonth();
+        const isEmpty = !res || (res.income === 0 && res.expense === 0);
+
+        const chartData: ChartItem[] = isEmpty
+          ? DUMMY_DATA
+          : [
+              { name: 'Income', value: res.income, color: COLORS[0] },
+              { name: 'Expense', value: res.expense, color: COLORS[1] },
+            ];
+
+        setData(chartData);
+      } catch (err) {
+        console.error('Failed to fetch current month balance:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadBalance();
+  }, []);
+
+  if (loading) return <p>Loading balance...</p>;
 
   return (
     <div className="bg-white rounded-2xl shadow-sm p-5 flex flex-col items-center justify-center">
@@ -101,11 +117,13 @@ export function BalanceChart({ data }: { data: any[] }) {
             onMouseEnter={onPieEnter}
           >
             {data.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={entry.color || "#4B5563"} />
+              <Cell key={`cell-${index}`} fill={entry.color || '#4B5563'} />
             ))}
           </Pie>
         </PieChart>
       </ResponsiveContainer>
     </div>
   );
-}
+};
+
+export default BalanceChart;

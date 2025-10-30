@@ -1,4 +1,4 @@
-export const formatCurrency = (value: number | string): string => {
+export const formatCurrency = (value: number | string, fractionDigits: number = 2): string => {
   const num = typeof value === 'string' ? parseFloat(value) : value;
 
   if (isNaN(num)) return '';
@@ -7,6 +7,7 @@ export const formatCurrency = (value: number | string): string => {
     // uncomment below if need prefix $
     // style: 'currency',
     currency: 'CAD',
-    minimumFractionDigits: 2,
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits,
   });
 };

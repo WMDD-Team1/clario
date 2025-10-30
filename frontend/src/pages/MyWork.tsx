@@ -1,7 +1,8 @@
 import Button from '@components/Button';
-import CreateProjectDrawer from '@components/forms/CreateProjectDrawer';
+import ProjectDrawer from '@components/forms/ProjectDrawer';
 import InsightCard from '@components/InsightCard';
 import Projects from '@components/Projects';
+import Clients from '@components/Clients';
 import ToggleButton from '@components/ToggleButton';
 import { useState } from 'react';
 
@@ -45,37 +46,46 @@ const MyWork = () => {
         label: "All Projects",
     });
     const [isOpen, setIsOpen] = useState(false);
+    const [slide, setSlide] = useState('100%');
 
     return (
         <>
             <div className='header mb-8'>
                 <section className=" md:flex justify-between items-center hidden transition">
                     <div className="header-left flex items-center gap-4">
-                        <h2 className='text-[32px] font-serif'>My Work</h2>
+                        <h2>My Work</h2>
                         <ToggleButton options={views} option={view} onClick={setView} />
                     </div>
                     <Button
                         buttonColor="regularButton"
-                        onClick={() => setIsOpen(true)}
+                        onClick={() => {
+                            setIsOpen(true);
+                            view.key === 'clients' ? setSlide('0px') : ()=>{};
+                        
+                        }}
                         textColor="white"
                         width="200px"
                     >
                         Add {view.key === 'projects' ? "Project" : "Client"}
                     </Button>
-                    {view.key === 'projects' ? <CreateProjectDrawer isOpen={isOpen} onClose={() => setIsOpen(false)} /> : null}
+                    {view.key === 'projects' ? <ProjectDrawer isOpen={isOpen} onClose={() => setIsOpen(false)}  mode="create"/> : null}
                 </section>
                 <section className='md:hidden transition'>
                     <div className="flex items-center justify-between mb-4">
                         <h2 className="text-2xl font-semibold text-black">My Work</h2>
                         <Button
                             buttonColor="regularButton"
-                            onClick={() => setIsOpen(true)}
+                            onClick={() => {
+                            setIsOpen(true);
+                            view.key === 'clients' ? setSlide('0px') : ()=>{};
+                        
+                        }}
                             textColor="white"
                             width="200px"
                         >
                             Add {view.key === 'projects' ? "Project" : "Client"}
                         </Button>
-                        {view.key === 'projects' ? <CreateProjectDrawer isOpen={isOpen} onClose={() => setIsOpen(false)} /> : null}
+                        {view.key === 'projects' ? <ProjectDrawer isOpen={isOpen} onClose={() => setIsOpen(false)} mode="create"/> : null}
 
                     </div>
                     <ToggleButton options={views} option={view} onClick={setView} />
@@ -97,7 +107,7 @@ const MyWork = () => {
             </div>
 
             {/* Projects or Clients */}
-            <div>{view.key === 'projects' ? <Projects /> : null}</div>
+            <div>{view.key === 'projects' ? <Projects /> : <Clients slide={slide} setSlide = {(value:string)=>setSlide(value)}/>}</div>
         </>
     )
 }

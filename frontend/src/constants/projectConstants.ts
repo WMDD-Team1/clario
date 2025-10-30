@@ -26,16 +26,16 @@ export const SORT_OPTIONS = [
         label: 'Sort By'
     },
     {
-        id: 'name',
-        label: 'Name'
+        id: 'startDate',
+        label: 'Date Started'
     },
     {
-        id: 'date',
-        label: 'Date'
+        id: 'dueDate',
+        label: 'Due Date'
     },
     {
-        id: 'budget',
-        label: 'Budget'
+        id: 'totalBudget',
+        label: 'Amount'
     },
 ]
 export const PROJECT_HEADERS = [
