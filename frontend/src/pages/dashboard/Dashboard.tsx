@@ -2,9 +2,8 @@
 import React, { useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useAppSelector } from '@/store/hooks';
-import DashboardShell from '@/components/DashboardShell';
 import Card from '@/components/Card';
-import { BalanceChart } from '@/components/BalanceChart';
+import  BalanceChart  from '@/components/BalanceChart';
 import { ExpensesTable } from '@/components/ExpensesTable';
 import MoneyFlowAreaChart from '@/components/MoneyFlowAreaChart';
 import { Sparkles } from 'lucide-react';
@@ -111,10 +110,10 @@ export const Dashboard = () => {
         },
       ].map((item, idx) => (
         <Card key={idx} style="card1">
-          <div className="py-3 px-4 rounded-xl bg-white">
+          <div className="py-3 px-4 rounded-xl bg-white width-full">
             <div className="flex justify-between items-center mb-1">
-              <div className="flex items-center gap-2 bg-blue-600 text-white text-xs font-medium px-2 py-1 rounded-full shadow-sm">
-                <Sparkles className="w-3 h-3 text-white" />
+              <div className="flex items-center gap-2 bg-white text-white text-xs font-medium px-2 py-1 rounded-full shadow-sm">
+                <Sparkles className="w-3 h-3 " />
                 {item.title}
               </div>
               <span className="text-xs font-semibold text-gray-600">{item.period}</span>
@@ -128,25 +127,25 @@ export const Dashboard = () => {
 
   return (
     <>
-      {/* === DESKTOP VIEW (unchanged) === */}
+      {/* DESKTOP VIEW */}
       <div className="hidden sm:block">
         <div className="flex flex-col gap-6 w-full overflow-hidden">
           {/* Welcome */}
           <WelcomeBanner userName={user?.name || 'User'} />
 
-          {/* === Main Body (Left + Center + Right) === */}
+          {/* Main Body (Left + Center + Right) */}
           <div className="flex flex-col xl:flex-row gap-6">
-            {/* ==== Left + Center Section ==== */}
-            <div className="flex flex-col flex-1 min-w-0 gap-6">
-              {/* --- Top Stats Row --- */}
+            {/* Left + Center Section */}
+            <div className="flex flex-col flex-1 min-w-0 gap-2">
+              {/* Top Stats Row */}
               <Overview />
-              {/* --- Insights + Charts Row --- */}
-              <div className="flex flex-col lg:flex-row gap-6 w-full">
+              {/* Insights + Charts Row */}
+              <div className="flex flex-col lg:flex-row gap-4 w-full">
                 {/* Insights (Left) */}
                 <Insight />
                 {/* Charts (Center) */}
-                <div className="flex flex-col flex-[1.2] gap-6">
-                  <div className="flex flex-col md:flex-row gap-4">
+                <div className="flex flex-col gap-4">
+                  <div className="flex flex-col flex-wrap md:flex-row gap-4">
                     <div className="flex-1">
                       <BalanceChart data={balanceData} />
                     </div>
@@ -161,7 +160,7 @@ export const Dashboard = () => {
               </div>
             </div>
 
-            {/* ==== Right Column - Reminders ==== */}
+            {/* Right Column - Reminders */}
             <div className="flex flex-col w-full xl:w-[26%] gap-4">
               <RemindersList />
             </div>
@@ -169,7 +168,7 @@ export const Dashboard = () => {
         </div>
       </div>
 
-      {/* === MOBILE VIEW (≤580px) === */}
+      {/* MOBILE VIEW */}
       <div className="block sm:hidden px-4 pb-10">
         {/* Placeholder for hidden header */}
         <div className="h-10"></div>

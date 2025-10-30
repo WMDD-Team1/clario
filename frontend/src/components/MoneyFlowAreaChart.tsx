@@ -1,84 +1,75 @@
-import { MoneyFlowItem } from '@api/types/dashboardApi';
-import React, { useEffect, useState } from 'react';
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { fetchMoneyFlow } from '@api/services/dashboardService';
-import { formatDate } from '@utils/formatDate';
+import React, { useEffect, useState } from "react";
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+import { fetchMoneyFlow } from "@api/services/dashboardService";
+import { formatDate } from "@utils/formatDate";
+import { MoneyFlowItem } from "@api/types/dashboardApi";
+
+const DUMMY_DATA: MoneyFlowItem[] = [
+  { month: "May", income: 5000, expense: 3500 },
+  { month: "Jun", income: 4200, expense: 3000 },
+  { month: "Jul", income: 6800, expense: 4700 },
+  { month: "Aug", income: 6100, expense: 4200 },
+  { month: "Sep", income: 7300, expense: 5000 },
+  { month: "Oct", income: 7900, expense: 6100 },
+];
 
 const MoneyFlowAreaChart: React.FC = () => {
-  const [data, setData] = useState<MoneyFlowItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [data, setData] = useState<MoneyFlowItem[]>(DUMMY_DATA);
 
-  const DUMMY_DATA: MoneyFlowItem[] = [
-    { month: '2025-05', income: 5000, expense: 3500 },
-    { month: '2025-06', income: 4200, expense: 3000 },
-    { month: '2025-07', income: 6800, expense: 4700 },
-    { month: '2025-08', income: 6100, expense: 4200 },
-    { month: '2025-09', income: 7300, expense: 5000 },
-    { month: '2025-10', income: 7900, expense: 6100 },
-  ];
   useEffect(() => {
     const loadMoneyFlow = async () => {
       try {
-        setLoading(true);
         const res = await fetchMoneyFlow();
+        console.log("Money Flow API response:", res);
 
-        const formatted =
-          res?.data?.map((item) => ({
-            month: formatDate(item.month, { shortMonth: true }),
+        if (res?.data?.length) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const formatted = res.data.map((item: any) => ({
+            month: formatDate(item.month, { shortMonth: true }) ?? item.month,
             income: item.income ?? 0,
             expense: item.expense ?? 0,
-          })) ?? [];
-
-        setData(formatted);
+          }));
+          setData(formatted);
+        } else {
+          setData(DUMMY_DATA);
+        }
       } catch (err) {
-        console.error('Failed to fetch money flow:', err);
+        console.error("Failed to fetch money flow:", err);
         setData(DUMMY_DATA);
-      } finally {
-        setLoading(false);
       }
     };
 
     loadMoneyFlow();
   }, []);
+
   return (
-    <div className="w-full h-80 bg-white rounded-2xl shadow-md p-6">
-      <h2 className="text-lg font-semibold text-gray-700 mb-4">Money Flow</h2>
-
-      <ResponsiveContainer width="100%" height="90%">
-        <AreaChart data={data} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
-          <defs>
-            <linearGradient id="colorIncome" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#656769ff" stopOpacity={0.6} />
-              <stop offset="95%" stopColor="#656769ff" stopOpacity={0} />
-            </linearGradient>
-            <linearGradient id="colorExpense" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#4c4646ff" stopOpacity={0.5} />
-              <stop offset="95%" stopColor="#4c4646ff" stopOpacity={0} />
-            </linearGradient>
-          </defs>
-
-          <XAxis dataKey="month" stroke="#9CA3AF" />
-          <YAxis stroke="#9CA3AF" />
-          <Tooltip
-            contentStyle={{
-              backgroundColor: '#fff',
-              borderRadius: '12px',
-            }}
-          />
+    <div className="h-[320px] w-full p-5 rounded-[20px] bg-white shadow-sm">
+      <h2 className="text-lg font-semibold mb-4">Money Flow</h2>
+      <ResponsiveContainer width="100%" height={250}>
+        <AreaChart data={data}>
+          <XAxis dataKey="month" />
+          <YAxis />
+          <Tooltip />
           <Area
             type="monotone"
             dataKey="income"
-            stroke="#656769ff"
-            fillOpacity={1}
-            fill="url(#colorIncome)"
+            stroke="#4F46E5"
+            fill="#C7D2FE"
+            fillOpacity={0.4}
           />
           <Area
             type="monotone"
             dataKey="expense"
-            stroke="#363535ff"
-            fillOpacity={1}
-            fill="url(#colorExpense)"
+            stroke="#EF4444"
+            fill="#FCA5A5"
+            fillOpacity={0.4}
           />
         </AreaChart>
       </ResponsiveContainer>
