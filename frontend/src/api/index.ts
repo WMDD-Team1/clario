@@ -4,6 +4,7 @@ export { default as api, attachAuthInterceptor } from './api';
 export * from './services/userService';
 export * from './services/projectService';
 export * from './services/clientService';
+export * from './services/milestoneService';
 
 // adapters
 export * from './adapters/userAdapter';

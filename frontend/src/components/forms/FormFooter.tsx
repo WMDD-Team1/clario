@@ -18,15 +18,15 @@ export default function FormFooter({
 }: FormFooterProps) {
     return (
         <div className="flex justify-between mt-6 pt-4 gap-2">
-            <Button buttonColor="regularButton" onClick={onCancel} width="45%" textColor="white">
-                Close
+            <Button buttonColor="lightButton" onClick={onCancel} width="45%" textColor="white">
+                <p className="text-[#98A2B3]">Cancel</p>
             </Button>
-            <Button buttonColor="lightButton"
+            <Button buttonColor="regularButton"
                     onClick={onSubmit} width="45%"
                     textColor="white"
                     disabled={disableSubmit}
                     type="submit">
-                Next
+                Create
             </Button>
         </div>
     );

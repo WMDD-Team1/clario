@@ -21,7 +21,7 @@ const FormDrawer = ({ title, isOpen, onClose, children }: FormDrawerProps) => {
                 >
                     {/* Header */}
                     <div className="relative p-5 bg-[var(--primitive-colors-brand-primary-75)] rounded-t-2xl h-[120px] flex items-center justify-center">
-                        <h2 className="text-lg font-semibold text-[var(--primitive-colors-gray-light-mode-950)] text-[28px]">{title}</h2>
+                        <h3 className="text-lg font-semibold text-[var(--primitive-colors-gray-light-mode-950)] text-[28px]">{title}</h3>
                     </div>
 
                     <div className=" absolute w-[40px] h-[40px] top-[100px] left-[30px] rounded bg-[var(--primitive-colors-brand-primary-95)] flex items-center justify-center">

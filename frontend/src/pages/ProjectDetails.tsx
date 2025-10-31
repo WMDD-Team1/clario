@@ -1,13 +1,21 @@
 import { fetchProjectById } from '@api/index';
-import ProjectDrawer from '@components/forms/ProjectDrawer';
+import ProjectDrawer from '@components/forms/Project/ProjectDrawer';
+import Invoices from '@components/Invoices';
 import Loader from '@components/Loader';
+import Milestones from '@components/Milestones';
+import ProjectBanner from '@components/ProjectBanner';
+import ToggleButton from '@components/ToggleButton';
 import { useQuery } from '@tanstack/react-query';
-import { ChevronLeft, Edit } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom';
 
 const ProjectDetails = () => {
     const { id } = useParams<{ id: string }>();
+    const [view, setView] = useState({
+        key: "milestones",
+        label: "Milestones",
+    });
     const [isFormOpen, setIsFormOpen] = useState(false)
     const navigate = useNavigate()
     const { data: project, isLoading, error } = useQuery({
@@ -24,17 +32,35 @@ const ProjectDetails = () => {
     if (error) return <p>Error getting your project</p>
     if (!project) return <p>No project was found</p>
 
+    const views = [
+        {
+            key: "milestones",
+            label: "Milestones",
+        },
+        {
+            key: "invoices",
+            label: "Invoices",
+        }
+    ]
+    console.log(project)
 
     return (
         <>
-            <div className='flex justify-start items-center gap-2'>
+            <div className='flex justify-start items-center gap-2 mb-7'>
                 <ChevronLeft size={30} onClick={(e) => navigate(-1)} className='cursor-pointer' />
                 <h2>{project.name}</h2>
             </div>
-            <div>
-                <Edit onClick={() => setIsFormOpen(true)} />
+            <div className='flex gap-5'>
+                <ProjectBanner project={project} onEdit={() => setIsFormOpen(true)} />
+                <div className='overflow-x-auto overflow-y-hidden'>
+                    <div className='sticky left-0'>
+                        <ToggleButton options={views} option={view} onClick={setView} />
+                    </div>
+                    <div className='mt-[20px]'>
+                        {view.key == 'milestones' ? <Milestones milestones={project.milestones ?? []} projectId={project.id} /> : <Invoices />}
+                    </div>
+                </div>
             </div>
-            <ProjectDrawer isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} mode="edit" project={project} />
 
         </>
     )

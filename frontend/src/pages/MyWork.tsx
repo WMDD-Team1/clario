@@ -1,5 +1,5 @@
 import Button from '@components/Button';
-import ProjectDrawer from '@components/forms/ProjectDrawer';
+import ProjectDrawer from '@components/forms/Project/ProjectDrawer';
 import InsightCard from '@components/InsightCard';
 import Projects from '@components/Projects';
 import Clients from '@components/Clients';

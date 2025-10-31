@@ -23,11 +23,10 @@ export interface MilestoneApiResponse {
     name: string;
     description: string;
     dueDate: string;
+    amount: number;
     status: "Pending" | "In-Progress" | "Completed";
     generateInvoice: "on_completion" | "on_due_date";
-    deliverables?: DeliverableApiResponse[];
-    createdAt: string;
-    updatedAt: string;
+    deliverables: DeliverableApiResponse[];
 }
 
 export interface DeliverableApiResponse {
