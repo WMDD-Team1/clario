@@ -12,6 +12,9 @@ import Forward from "./forward.svg?react";
 import CloudUpload from "./cloud-upload.svg?react";
 import MenuScale from "./menu-scale.svg?react";
 import DotsButton from "./dots-button.svg?react";
+import FileChange from "./file-change.svg?react";
+import Trash from "./trash.svg?react";
+import TransactionUploadSuccess from "./transaction-upload-success.svg?react";
 
 export {
   DashboardActiveIcon,
@@ -27,5 +30,9 @@ export {
   Forward,
   CloudUpload,
   MenuScale,
-  DotsButton
+  DotsButton,
+  FileChange,
+  Trash,
+  TransactionUploadSuccess
+
 };

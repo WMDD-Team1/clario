@@ -9,8 +9,17 @@ import Table from '@components/Table';
 import axios from 'axios';
 import { useAuth0 } from '@auth0/auth0-react';
 import ToggleButton from '@components/ToggleButton';
-import { Camera, CloudUpload } from '@assets/icons/index';
+import {
+  Camera,
+  CloudUpload,
+  FileChange,
+  Trash,
+  TransactionUploadSuccess,
+} from '@assets/icons/index';
 import InfoRow from '@components/InfoRow';
+import Loader from '@components/Loader';
+import Success from '@components/Success';
+import { set } from 'react-hook-form';
 
 export const IncomeExpenses = () => {
   const [incomeSlide, setIncomeSlide] = useState('110%');
@@ -21,7 +30,22 @@ export const IncomeExpenses = () => {
   const [expenseType, setExpenseType] = useState('');
   const [repeat, setRepeat] = useState(false);
   const [repeatOption, setRepeatOption] = useState('');
-  const [incomeDetail, setIncomeDetail] = useState('110%');
+  const [transactionDetail, setTransactionDetail] = useState('110%');
+  const [loader, setLoader] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  interface PostRecurrenceFormat {
+    templateTransactionId: string;
+    frequency: string;
+    endDate: string;
+  }
+
+  let initialRecurrence = {
+    templateTransactionId: '',
+    frequency: '',
+    endDate: '',
+  };
+  const [recurrence, setRecurrence] = useState<PostRecurrenceFormat>(initialRecurrence);
 
   interface Meta {
     total: number;
@@ -65,8 +89,16 @@ export const IncomeExpenses = () => {
     setExpenseSlide('110%');
     setIndetailSlide('110%');
     setExdetailSlide('110%');
-    setIncomeDetail('110%');
+    setTransactionDetail('110%');
     setRepeat(false);
+    setFile(null);
+    setFileName('');
+    setLoader(false);
+    setSuccess(false);
+    setExpenseType('');
+    setIncomeType('');
+    setRepeat(false);
+    setRecurrence(initialRecurrence);
   };
 
   const addIncome = () => {
@@ -212,7 +244,7 @@ export const IncomeExpenses = () => {
   //   postCategories();
   // }, []);
 
-  //Fetch Categories
+  //Fetch Categories-------
   const getCategories = async () => {
     try {
       const token = await getAccessTokenSilently({
@@ -240,6 +272,72 @@ export const IncomeExpenses = () => {
     getCategories();
   }, []);
 
+  interface RecurrenceFormat {
+    id: string;
+    templateTransactionId: string;
+    frequency: string;
+    endDate: string;
+    lastRun: string;
+    nextRun: string;
+    isArchived: boolean;
+    createdAt: string;
+    updatedAt: string;
+  }
+
+  interface AllRecurrences {
+    data: RecurrenceFormat[];
+    meta: Meta;
+  }
+
+  const [allRecurrences, setAllRecurrences] = useState<AllRecurrences>({
+    data: [],
+    meta: {
+      total: 0,
+      page: 1,
+      limit: 10,
+      totalPages: 0,
+    },
+  });
+  //Fetch recurrences-------
+  const getAllRecurrences = async () => {
+    try {
+      const token = await getAccessTokenSilently({
+        authorizationParams: {
+          audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
+        },
+      });
+
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_BASE_URL}/recurrences?limit=1000`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      const recurrencesResponse = response.data;
+      console.log('Categories response:', recurrencesResponse);
+
+      setAllRecurrences(recurrencesResponse);
+    } catch (error) {
+      console.error('Error fetching all recucrrences:', error);
+    }
+  };
+
+  useEffect(() => {
+    getAllRecurrences();
+  }, []);
+
+  console.log(allRecurrences);
+
+  const activeRepeatableTransaction = allRecurrences.data.find(
+    (recurrence) =>
+      //------initial isArchive should be false
+      recurrence.templateTransactionId == oneTransaction.id && recurrence.isArchived,
+  );
+
+  console.log(activeRepeatableTransaction);
   const deleteCategory = async () => {
     try {
       const token = await getAccessTokenSilently({
@@ -278,16 +376,16 @@ export const IncomeExpenses = () => {
     title: oneTransaction.title,
     date: oneTransaction.date,
     categoryId: oneTransaction.categoryId,
-    // Tell Daniel to change amout to baseAmount
     baseAmount: oneTransaction.baseAmount,
     origin: oneTransaction.origin,
     paymentMethod: 'Credit Card',
     notes: oneTransaction.notes,
     attachmentURL: 'https://example.com/attachment.pdf',
-    //// Tell Daniel to add recurrence
-    // recurrence: oneTransaction.recurrence || ''
   };
+
   const addTransaction = async (payload: TransactionFormat) => {
+    setLoader(true);
+    setSuccess(false);
     const token = await getAccessTokenSilently({
       authorizationParams: {
         audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
@@ -295,7 +393,7 @@ export const IncomeExpenses = () => {
     });
 
     try {
-      const response = await axios.post(
+      const transactionResponse = await axios.post(
         `${import.meta.env.VITE_API_BASE_URL}/transactions`,
         payload,
         {
@@ -306,11 +404,40 @@ export const IncomeExpenses = () => {
         },
       );
 
-      console.log(response.data);
-      resetForm();
+      console.log(transactionResponse.data);
+      if (repeat) {
+        const payload = {
+          templateTransactionId: transactionResponse.data.id,
+          frequency: recurrence.frequency,
+          //--------confirm if endate is needed?------
+          endDate: '2025-10-05',
+        };
+
+        console.log(payload);
+        try {
+          const recurrenceResponse = await axios.post(
+            `${import.meta.env.VITE_API_BASE_URL}/recurrences`,
+            payload,
+            {
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+              },
+            },
+          );
+        } catch (error) {
+          console.error('Error saving recurrence:', error);
+        }
+      }
+      // resetForm();
+      setOneTransaction(transactionResponse.data);
       getTransactionData();
+      getAllRecurrences();
+      setLoader(false);
+      setSuccess(true);
     } catch (error) {
-      console.error('Error saving client:', error);
+      setLoader(false);
+      console.error('Error saving transaction:', error);
     }
   };
 
@@ -394,7 +521,7 @@ export const IncomeExpenses = () => {
   };
 
   //--------handle Income Details------
-  const handleIncomeDetail = async (id: string) => {
+  const handleTransactionDetail = async (id: string) => {
     try {
       const token = await getAccessTokenSilently({
         authorizationParams: {
@@ -409,17 +536,38 @@ export const IncomeExpenses = () => {
       });
 
       setOneTransaction(response.data);
-      setIncomeDetail('0px');
+      setTransactionDetail('0px');
     } catch (error) {
       console.error(error);
     }
     console.log(oneTransaction);
   };
 
-  //--------handle Expense Details------
-  const handleExpenseDetail = (id: string) => {
-    console.log(id);
+  //-------handle file uploading------
+  const [fileName, setFileName] = useState('');
+  const [file, setFile] = useState<File | null>(null);
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFileName(file.name);
+      setFile(file);
+    }
   };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      setFileName(file.name);
+      setFile(file);
+    }
+  };
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => e.preventDefault();
+
+  useEffect(() => {
+    console.log(fileName);
+  }, [fileName]);
+  //------------------------------------------------
 
   return (
     <div>
@@ -445,7 +593,7 @@ export const IncomeExpenses = () => {
           <div>
             <Table
               // --------------------------------------
-              onClickChildren={handleIncomeDetail}
+              onClickChildren={handleTransactionDetail}
               headers={headers}
               data={incomeFilteredData}
               total={incomeData.length}
@@ -473,7 +621,7 @@ export const IncomeExpenses = () => {
           <div>
             <Table
               // ----------------------------------------
-              onClickChildren={handleExpenseDetail}
+              onClickChildren={handleTransactionDetail}
               headers={headers}
               data={expenseFilteredData}
               total={expenseData.length}
@@ -490,21 +638,60 @@ export const IncomeExpenses = () => {
         title="Add Income"
         slide={incomeSlide}
         confirmText="Browse"
-        onConfirm={cancelOperation}
-        extralText="Skip"
+        onConfirm={() => {
+          document.getElementById('fileInput')?.click();
+        }}
+        extralText={file ? 'Next' : 'Skip'}
         onExtra={() => setIndetailSlide('0px')}
         onClose={cancelOperation}
       >
         <div className="flex flex-col flex-nowrap items-center justify-center gap-[1rem] h-full">
           <p>Add your Income Receipt here</p>
-          <div className="flex flex-col flex-nowrap items-center gap-[1rem] p-[3rem] border-2 border-dashed border-blue-100 bg-blue-50 rounded-[20px]">
+          <div
+            className="flex flex-col flex-nowrap items-center gap-[1rem] p-[3rem] border-2 border-dashed border-blue-100 bg-blue-50 rounded-[20px] cursor-pointer"
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+            onClick={() => {
+              document.getElementById('fileInput')?.click();
+            }}
+          >
             <CloudUpload className="w-25 h-25 hidden sm:block" />
             <Camera className="w-25 h-25 sm:hidden" />
-            <p className="sm:hidden">Take a Picture and Upload</p>
             <p className="font-bold hidden sm:block">Choose a file or drag & drop it here</p>
+            <p className="font-bold sm:hidden">Take a Picture and Upload</p>
             <p className="text-gray-400 hidden sm:block">JPG, PNG or PDF formats up to 5MB</p>
           </div>
+
+          <Input
+            id="fileInput"
+            hidden={true}
+            type="file"
+            onChange={handleFileChange}
+            accept="image/*, application/pdf"
+            capture="environment"
+          />
         </div>
+        {file && (
+          <div>
+            <InfoRow label="Attachment" value={fileName} />
+            <div className="flex gap-[.5rem] items-center justify-end mt-[.1rem]">
+              <FileChange
+                className="cursor-pointer"
+                onClick={() => {
+                  document.getElementById('fileInput')?.click();
+                }}
+              />
+              |
+              <Trash
+                className="cursor-pointer"
+                onClick={() => {
+                  setFile(null);
+                  setFileName('');
+                }}
+              />
+            </div>
+          </div>
+        )}
       </Slide>
 
       {/* Income Detail Form---------------*/}
@@ -513,82 +700,122 @@ export const IncomeExpenses = () => {
         slide={inDetailSlide}
         confirmText="cancel"
         onConfirm={cancelOperation}
-        extralText="Add"
-        onExtra={async () => {
-          newTransaction = { ...newTransaction, type: 'income' };
-          setOneTransaction(newTransaction);
-          addTransaction(newTransaction);
+        extralText={success ? 'view' : 'Add'}
+        onExtra={() => {
+          if (success) {
+            setTransactionDetail('0px');
+          } else {
+            newTransaction = { ...newTransaction, type: 'income' };
+            setOneTransaction(newTransaction);
+            addTransaction(newTransaction);
+          }
         }}
         onClose={cancelOperation}
       >
-        <form className="flex flex-col gap-4">
-          <Input
-            label="Income Title"
-            id="incomeTitle"
-            color="bg-white"
-            value={oneTransaction.title}
-            onChange={(e) => setOneTransaction({ ...oneTransaction, title: e.target.value })}
-          />
-          <Input
-            label="Date"
-            id="incomeDate"
-            type="date"
-            color="bg-white"
-            value={oneTransaction.date}
-            onChange={(e) => setOneTransaction({ ...oneTransaction, date: e.target.value })}
-          />
-          <Select
-            label="Type of Income"
-            id="incomeType"
-            options={[
-              'Project Payment',
-              'Milestone Payment',
-              'Consultation Fee',
-              'Product Sale',
-              'Bonus / Incentive',
-            ]}
-            value={incomeType}
-            onChange={(value) => {
-              setIncomeType(value);
-              setOneTransaction({
-                ...oneTransaction,
-                categoryId:
-                  allCategories.income.find((incomeCategory) => incomeCategory.name == value)?.id ||
-                  '',
-              });
-            }}
-            color="bg-white"
-            width="100%"
-          />
-          <Input
-            label="Invoice No."
-            id="incomeInvoice"
-            color="bg-white"
-            value={oneTransaction.origin}
-            onChange={(e) => setOneTransaction({ ...oneTransaction, origin: e.target.value })}
-          />
-          <Input
-            label="Amount"
-            id="incomeAmount"
-            type="number"
-            min={0}
-            color="bg-white"
-            value={oneTransaction.baseAmount}
-            onChange={(e) =>
-              setOneTransaction({ ...oneTransaction, baseAmount: Number(e.target.value) })
-            }
+        {loader ? (
+          <div className="flex flex-col h-full justify-center">
+            <Loader />
+          </div>
+        ) : success ? (
+          <Success
+            title="Successful!"
+            p1="Your Income has been recorded"
+            p2={`It's saved in Income List`}
           >
-            {/* <div className='absolute top-[1rem] right-[1rem]'>CAD</div> */}
+            <TransactionUploadSuccess className="w-25 h-25" />
+          </Success>
+        ) : (
+          <form className="flex flex-col gap-4">
+            <Input
+              label="Income Title"
+              id="incomeTitle"
+              color="bg-white"
+              value={oneTransaction.title}
+              onChange={(e) => setOneTransaction({ ...oneTransaction, title: e.target.value })}
+            />
+            <Input
+              label="Date"
+              id="incomeDate"
+              type="date"
+              color="bg-white"
+              value={oneTransaction.date}
+              onChange={(e) => setOneTransaction({ ...oneTransaction, date: e.target.value })}
+            />
+            <Select
+              label="Type of Income"
+              id="incomeType"
+              options={[
+                'Project Payment',
+                'Milestone Payment',
+                'Consultation Fee',
+                'Product Sale',
+                'Bonus / Incentive',
+              ]}
+              value={incomeType}
+              onChange={(value) => {
+                setIncomeType(value);
+                setOneTransaction({
+                  ...oneTransaction,
+                  categoryId:
+                    allCategories.income.find((incomeCategory) => incomeCategory.name == value)
+                      ?.id || '',
+                });
+              }}
+              color="bg-white"
+              width="100%"
+            />
+            <Input
+              label="Invoice No."
+              id="incomeInvoice"
+              color="bg-white"
+              value={oneTransaction.origin}
+              onChange={(e) => setOneTransaction({ ...oneTransaction, origin: e.target.value })}
+            />
+            <Input
+              label="Amount"
+              id="incomeAmount"
+              type="number"
+              min={0}
+              color="bg-white"
+              value={oneTransaction.baseAmount}
+              onChange={(e) =>
+                setOneTransaction({ ...oneTransaction, baseAmount: Number(e.target.value) })
+              }
+            >
+              {/* <div className='absolute top-[1rem] right-[1rem]'>CAD</div> */}
             </Input>
-          <TextArea
-            label="Notes"
-            id="incomeNotes"
-            color="bg-white"
-            rows={3}
-            value={oneTransaction.notes}
-            onChange={(e) => setOneTransaction({ ...oneTransaction, notes: e.target.value })}
-          />
-        </form>
+            <TextArea
+              label="Notes"
+              id="incomeNotes"
+              color="bg-white"
+              rows={3}
+              value={oneTransaction.notes}
+              onChange={(e) => setOneTransaction({ ...oneTransaction, notes: e.target.value })}
+            />
+
+            {file && (
+              <div>
+                <InfoRow label="Attachment" value={fileName} />
+                <div className="flex gap-[.5rem] items-center justify-end mt-[.1rem]">
+                  <FileChange
+                    className="cursor-pointer"
+                    onClick={() => {
+                      document.getElementById('fileInput')?.click();
+                    }}
+                  />
+                  |
+                  <Trash
+                    className="cursor-pointer"
+                    onClick={() => {
+                      setFile(null);
+                      setFileName('');
+                    }}
+                  />
+                </div>
+              </div>
+            )}
+          </form>
+        )}
       </Slide>
 
       {/* Expense Slide---------------- */}
@@ -596,21 +823,61 @@ export const IncomeExpenses = () => {
         title="Add Expenses"
         slide={expenseSlide}
         confirmText="Browse"
-        onConfirm={cancelOperation}
-        extralText="Skip"
+        onConfirm={() => {
+          document.getElementById('fileInput')?.click();
+        }}
+        extralText={file ? 'Next' : 'Skip'}
         onExtra={expenseDetail}
         onClose={cancelOperation}
       >
         <div className="flex flex-col flex-nowrap items-center justify-center gap-[1rem] h-full">
           <p>Add your Expenses Receipt here</p>
 
-          <div className="flex flex-col flex-nowrap items-center gap-[1rem] p-[3rem] border-2 border-dashed border-blue-100 bg-blue-50 rounded-[20px]">
+          <div
+            className="flex flex-col flex-nowrap items-center gap-[1rem] p-[3rem] border-2 border-dashed border-blue-100 bg-blue-50 rounded-[20px] cursor-pointer"
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+            onClick={() => {
+              document.getElementById('fileInput')?.click();
+            }}
+          >
             <CloudUpload className="w-25 h-25 hidden sm:block" />
             <Camera className="w-25 h-25 sm:hidden" />
-            <p className="font-bold">Choose a file or drag & drop it here</p>
+            <p className="font-bold hidden sm:block">Choose a file or drag & drop it here</p>
+            <p className="font-bold sm:hidden">Take a Picture and Upload</p>
             <p className="text-gray-400">JPG, PNG or PDF formats up to 5MB</p>
           </div>
+
+          <Input
+            id="fileInput"
+            hidden={true}
+            type="file"
+            onChange={handleFileChange}
+            accept="image/*, application/pdf"
+            capture="environment"
+          />
         </div>
+        {file && (
+          <div>
+            <InfoRow label="Attachment" value={fileName} />
+            <div className="flex gap-[.5rem] items-center justify-end mt-[.1rem]">
+              <FileChange
+                className="cursor-pointer"
+                onClick={() => {
+                  document.getElementById('fileInput')?.click();
+                }}
+              />
+              |
+              <Trash
+                className="cursor-pointer"
+                onClick={() => {
+                  setFile(null);
+                  setFileName('');
+                }}
+              />
+            </div>
+          </div>
+        )}
       </Slide>
 
       {/* Expense Detail Form-------------- */}
@@ -619,124 +886,164 @@ export const IncomeExpenses = () => {
         slide={exDetailSlide}
         confirmText="cancel"
         onConfirm={cancelOperation}
-        extralText="Add"
+        extralText={success ? 'view' : 'Add'}
         onExtra={() => {
-          newTransaction = { ...newTransaction, type: 'expense' };
-          setOneTransaction(newTransaction);
-          addTransaction(newTransaction);
+          if (success) {
+            setTransactionDetail('0px');
+          } else {
+            newTransaction = { ...newTransaction, type: 'expense' };
+            setOneTransaction(newTransaction);
+            addTransaction(newTransaction);
+          }
         }}
         onClose={cancelOperation}
       >
-        <form className="flex flex-col gap-4">
-          <Input
-            label="Expense Title"
-            id="expenseTitle"
-            color="bg-white"
-            value={oneTransaction.title}
-            onChange={(e) => setOneTransaction({ ...oneTransaction, title: e.target.value })}
-          />
-          <Input
-            label="Date"
-            id="expenseDate"
-            type="date"
-            color="bg-white"
-            value={oneTransaction.date}
-            onChange={(e) => setOneTransaction({ ...oneTransaction, date: e.target.value })}
-          />
-          <Select
-            label="Type of Expense"
-            id="expenseType"
-            options={[
-              'Software & Tools',
-              'Equipment / Hardware',
-              'Internet & Utilities',
-              'Marketing & Advertising',
-              'Subscription Fees',
-              'Travel & Transportation',
-              'Other Expenses',
-            ]}
-            value={expenseType}
-            onChange={(value) => {
-              setExpenseType(value);
-              setOneTransaction({
-                ...oneTransaction,
-                categoryId:
-                  allCategories.expense.find((expenseCategory) => expenseCategory.name == value)
-                    ?.id || '',
-              });
-            }}
-            color="bg-white"
-            width="100%"
-          />
-          <Input
-            label="Invoice No."
-            id="expenseInvoice"
-            color="bg-white"
-            value={oneTransaction.origin}
-            onChange={(e) => setOneTransaction({ ...oneTransaction, origin: e.target.value })}
-          />
-          <Input
-            label="Amount"
-            id="expenseAmount"
-            type="number"
-            min={0}
-            color="bg-white"
-            value={oneTransaction.baseAmount}
-            onChange={(e) =>
-              setOneTransaction({ ...oneTransaction, baseAmount: Number(e.target.value) })
-            }
-          />
+        {loader ? (
+          <div className="flex flex-col h-full justify-center">
+            <Loader />
+          </div>
+        ) : success ? (
+          <Success
+            title="Successful!"
+            p1="Your Expense has been recorded"
+            p2={`It's saved in Expense List`}
+          >
+            <TransactionUploadSuccess className="w-25 h-25" />
+          </Success>
+        ) : (
+          <form className="flex flex-col gap-4">
+            <Input
+              label="Expense Title"
+              id="expenseTitle"
+              color="bg-white"
+              value={oneTransaction.title}
+              onChange={(e) => setOneTransaction({ ...oneTransaction, title: e.target.value })}
+            />
+            <Input
+              label="Date"
+              id="expenseDate"
+              type="date"
+              color="bg-white"
+              value={oneTransaction.date}
+              onChange={(e) => setOneTransaction({ ...oneTransaction, date: e.target.value })}
+            />
+            <Select
+              label="Type of Expense"
+              id="expenseType"
+              options={[
+                'Software & Tools',
+                'Equipment / Hardware',
+                'Internet & Utilities',
+                'Marketing & Advertising',
+                'Subscription Fees',
+                'Travel & Transportation',
+                'Other Expenses',
+              ]}
+              value={expenseType}
+              onChange={(value) => {
+                setExpenseType(value);
+                setOneTransaction({
+                  ...oneTransaction,
+                  categoryId:
+                    allCategories.expense.find((expenseCategory) => expenseCategory.name == value)
+                      ?.id || '',
+                });
+              }}
+              color="bg-white"
+              width="100%"
+            />
+            <Input
+              label="Invoice No."
+              id="expenseInvoice"
+              color="bg-white"
+              value={oneTransaction.origin}
+              onChange={(e) => setOneTransaction({ ...oneTransaction, origin: e.target.value })}
+            />
+            <Input
+              label="Amount"
+              id="expenseAmount"
+              type="number"
+              min={0}
+              color="bg-white"
+              value={oneTransaction.baseAmount}
+              onChange={(e) =>
+                setOneTransaction({ ...oneTransaction, baseAmount: Number(e.target.value) })
+              }
+            />
 
-          {/* Recurring Expense */}
-          <div className="flex flex-col gap-[1rem]">
-            <div className="flex justify-between items-center">
-              <p>Make this recurring expense</p>
-              <div className="flex items-center gap-2">
-                Off
-                <div
-                  className="w-[45px] h-[20px] border-2 rounded-full flex items-center p-[2px] cursor-pointer"
-                  onClick={() => setRepeat(!repeat)}
-                >
+            {/* Recurring Expense */}
+            <div className="flex flex-col gap-[1rem]">
+              <div className="flex justify-between items-center">
+                <p>Make this recurring expense</p>
+                <div className="flex items-center gap-2">
+                  Off
                   <div
-                    className={`w-[10px] h-[10px] bg-black rounded-full transition-transform ${
-                      repeat ? 'translate-x-[25px]' : ''
-                    }`}
-                  ></div>
+                    className="w-[45px] h-[20px] border-2 rounded-full flex items-center p-[2px] cursor-pointer"
+                    onClick={() => setRepeat(!repeat)}
+                  >
+                    <div
+                      className={`w-[10px] h-[10px] bg-black rounded-full transition-transform ${
+                        repeat ? 'translate-x-[25px]' : ''
+                      }`}
+                    ></div>
+                  </div>
+                  On
                 </div>
-                On
               </div>
+
+              {repeat && (
+                <Select
+                  label="Recurrence Type"
+                  id="repeatExpenses"
+                  options={['Weekly', 'Monthly']}
+                  value={repeatOption}
+                  onChange={(value) => {
+                    setRepeatOption(value);
+                    setRecurrence({ ...recurrence, frequency: value.toLowerCase() });
+                  }}
+                  color="bg-white"
+                  width="100%"
+                />
+              )}
             </div>
 
-            {repeat && (
-              <Select
-                label="Recurrence Type"
-                id="repeatExpenses"
-                options={['Weekly', 'Monthly', 'Yearly']}
-                value={repeatOption}
-                onChange={(value) => {
-                  setRepeatOption(value);
-                  setOneTransaction({ ...oneTransaction, recurrence: value });
-                }}
-                color="bg-white"
-                width="100%"
-              />
-            )}
-          </div>
+            <TextArea
+              label="Notes"
+              id="expenseNotes"
+              color="bg-white"
+              rows={3}
+              value={oneTransaction.notes}
+              onChange={(e) => setOneTransaction({ ...oneTransaction, notes: e.target.value })}
+            />
 
-          <TextArea
-            label="Notes"
-            id="expenseNotes"
-            color="bg-white"
-            rows={3}
-            value={oneTransaction.notes}
-            onChange={(e) => setOneTransaction({ ...oneTransaction, notes: e.target.value })}
-          />
-        </form>
+            {file && (
+              <div>
+                <InfoRow label="Attachment" value={fileName} />
+                <div className="flex gap-[.5rem] items-center justify-end mt-[.1rem]">
+                  <FileChange
+                    className="cursor-pointer"
+                    onClick={() => {
+                      document.getElementById('fileInput')?.click();
+                    }}
+                  />
+                  |
+                  <Trash
+                    className="cursor-pointer"
+                    onClick={() => {
+                      setFile(null);
+                      setFileName('');
+                    }}
+                  />
+                </div>
+              </div>
+            )}
+          </form>
+        )}
       </Slide>
 
       <Slide
-        title="Income"
-        slide={incomeDetail}
+        title={oneTransaction.type == 'income' ? 'Income' : 'Expense'}
+        slide={transactionDetail}
         confirmText="Close"
         onConfirm={cancelOperation}
         extralText="Edit"
@@ -753,14 +1060,21 @@ export const IncomeExpenses = () => {
           })}
         />
         <InfoRow
-          label="Type of Income"
+          label={`Type of ${oneTransaction.type == 'income' ? 'Income' : 'Expense'}`}
           value={
-            allCategories.income.find(
-              (incomeCategory) => oneTransaction.categoryId == incomeCategory.id,
-            )?.name || 'Unknown'
+            oneTransaction.type == 'income'
+              ? allCategories.income.find(
+                  (incomeCategory) => oneTransaction.categoryId == incomeCategory.id,
+                )?.name || 'Unknown'
+              : allCategories.expense.find(
+                  (expenseCategory) => oneTransaction.categoryId == expenseCategory.id,
+                )?.name || 'Unknown'
           }
         />
         <InfoRow label="Invoice #" value={oneTransaction.origin} />
+        {activeRepeatableTransaction && (
+          <InfoRow label="Repeat" value={activeRepeatableTransaction.frequency} />
+        )}
 
         <div className="flex flex-col p-[1rem] border-gray-200 bg-blue-50 rounded-[1rem] my-[1rem]">
           <p>Financial Breakdown</p>

@@ -42,10 +42,10 @@ const Slide: React.FC<SlideProps> = ({
       />
 
       <div
-        className="fixed top-0 right-0 h-full shadow-lg bg-white transition-transform duration-300 sm:rounded-tl-[20px] sm:rounded-bl-[20px] z-50 flex flex-col sm:w-[450px]  w-full"
+        className="fixed top-0 right-0 h-full shadow-lg bg-white transition-transform duration-300 sm:rounded-tl-[20px] sm:rounded-bl-[20px] z-50 flex flex-col gap-[1rem] sm:w-[450px]  w-full"
         style={{ transform: `translateX(${slide})` }}
       >
-        <div className="absolute top-16 sm:left-[-1rem] left-[2rem] bg-blue-300 w-12 h-12 rounded-[1rem] cursor-pointer flex items-center justify-center shadow-md z-60">
+        <div className="absolute top-14 sm:left-[-1rem] left-[2rem] bg-blue-300 w-12 h-12 rounded-[1rem] cursor-pointer flex items-center justify-center shadow-md z-60">
           <Forward className="w-8 h-8" onClick={onClose}/>
         </div>
         <h2
