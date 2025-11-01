@@ -52,6 +52,7 @@ const ProjectDetails = () => {
             </div>
             <div className='flex gap-5'>
                 <ProjectBanner project={project} onEdit={() => setIsFormOpen(true)} />
+                <ProjectDrawer isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} mode="edit" project={project}/>
                 <div className='overflow-x-auto overflow-y-hidden'>
                     <div className='sticky left-0'>
                         <ToggleButton options={views} option={view} onClick={setView} />

@@ -26,8 +26,22 @@ const ProjectBanner = ({ project, onEdit }: Props) => {
                 </div>
                 <div className="flex flex-col gap-[18px]">
                     <p className="flex justify-between"><span className="font-medium">Client:</span> <span>{clientName}</span></p>
-                    <p className="flex justify-between"><span className="font-medium">Date Started:</span> <span>{project.startDate}</span></p>
-                    <p className="flex justify-between"><span className="font-medium">Due Date:</span> <span>{project.dueDate}</span></p>
+                    <p className="flex justify-between"><span className="font-medium">Date Started:</span> <span>{
+                        new Date(project.startDate).toLocaleDateString("en-US", {
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric",
+
+                        })
+                    }</span></p>
+                    <p className="flex justify-between"><span className="font-medium">Due Date:</span> <span>{
+                        new Date(project.dueDate).toLocaleDateString("en-US", {
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric",
+
+                        })
+                    }</span></p>
                     <p className="flex justify-between"><span className="font-medium">Stage:</span> <span>{project.status}</span></p>
                     <p className="mt-2 text-gray-600 text-sm"><span>{project.description}</span></p>
                 </div>
