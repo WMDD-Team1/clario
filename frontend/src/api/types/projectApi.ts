@@ -33,8 +33,6 @@ export interface DeliverableApiResponse {
     id: string;
     name: string;
     description: string;
-    fileUrl: string;
+    fileUrls: string[];
     dueDate: string;
-    createdAt: string;
-    updatedAt: string;
 }

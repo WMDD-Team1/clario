@@ -97,7 +97,7 @@ export default function ProjectForm({ onCancel, milestone, projectId }: Props) {
 
             {/* Description */}
             <div>
-                <label className="block text-sm text-gray-500">Project Description</label>
+                <label className="block text-sm text-gray-500">Milestone Description</label>
                 <textarea
                     {...register("description")}
                     placeholder="Description..."

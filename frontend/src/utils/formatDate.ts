@@ -1,12 +1,21 @@
 export const formatDate = (
   isoDate: string,
-  options?: { shortMonth?: boolean; monthOnly?: boolean; noYear?: boolean },
+  options?: { shortMonth?: boolean; monthOnly?: boolean; noYear?: boolean, stringMonth?: boolean },
 ): string => {
   if (!isoDate) return '';
 
   const normalized = isoDate.length === 7 ? `${isoDate}-01` : isoDate;
   const date = new Date(normalized);
   if (isNaN(date.getTime())) return '';
+
+  // If wants Oct 11, 2025
+  if (options?.stringMonth) {
+    return date.toLocaleDateString("en-US", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  }
 
   // if wants Oct
   if (options?.shortMonth) {

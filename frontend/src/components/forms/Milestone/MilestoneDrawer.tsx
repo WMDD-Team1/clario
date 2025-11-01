@@ -24,7 +24,6 @@ const MilestoneDrawer = ({ isOpen, onClose, onEdit, mode, milestone, projectId }
             {mode === "view" && (
                 <MilestoneDetails
                     milestone={milestone!}
-                    projectId={projectId}
                     onEdit={() => onEdit?.(milestone!)}
                     onCancel={onClose}
                 />

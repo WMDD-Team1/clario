@@ -1,3 +1,4 @@
+import { formatDate } from "@utils/formatDate";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface RowData {
@@ -46,11 +47,7 @@ const Table = ({
                                     className="border-t border-gray-100 hover:bg-[#f9fbff] transition">
                                     {headers.map((header) => (
                                         <td key={header.key} className="px-6 py-4 whitespace-nowrap text-gray-600 text-sm">
-                                            {!header.key.toLocaleLowerCase().includes("date") ? row[header.key] : new Date(row[header.key]).toLocaleDateString("en-US", {
-                                                day: "2-digit",
-                                                month: "short",
-                                                year: "numeric",
-                                            })}
+                                            {!header.key.toLocaleLowerCase().includes("date") ? row[header.key] : formatDate(row[header.key], { stringMonth: true })}
                                         </td>
                                     ))}
                                 </tr>
@@ -99,7 +96,7 @@ const Table = ({
                             ? "text-gray-300 border-gray-200 cursor-not-allowed"
                             : "text-blue-600 border-gray-300 hover:bg-blue-50"
                             }`}
-                        onClick={() => page < totalPages && onPageChange(page + 1) }
+                        onClick={() => page < totalPages && onPageChange(page + 1)}
                         disabled={page === totalPages}
                     >
                         <ChevronRight size={18} />
