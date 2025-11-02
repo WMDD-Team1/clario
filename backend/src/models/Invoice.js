@@ -52,6 +52,7 @@ const InvoiceSchema = new mongoose.Schema(
 			enum: ["Pending", "Paid", "Overdue"],
 			default: "Pending",
 		},
+		sentAt: { type: Date, default: null },
 	},
 	{
 		timestamps: true,

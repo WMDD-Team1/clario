@@ -18,7 +18,6 @@ cron.schedule("0 0 * * *", async () => {
 
 		for (const project of projects) {
 			const user = await User.findById(project.userId).lean();
-			const province = user?.settings?.finance?.province || "British Columbia";
 
 			let updated = false;
 

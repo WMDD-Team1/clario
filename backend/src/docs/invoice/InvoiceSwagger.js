@@ -156,3 +156,34 @@
  *       401:
  *         description: Unauthorized
  */
+
+/**
+ * @swagger
+ * /api/invoices/{invoiceId}/send:
+ *   post:
+ *     summary: Send invoice via email
+ *     description: Sends the generated invoice PDF to the client’s email using Resend.
+ *     tags: [Invoices]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: invoiceId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the invoice to send
+ *     responses:
+ *       200:
+ *         description: Invoice email sent successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               message: "Invoice #12 sent to bitna@client.com"
+ *               sentAt: "2025-11-02T18:32:00.000Z"
+ *       404:
+ *         description: Invoice not found
+ *       500:
+ *         description: Failed to send invoice email
+ */

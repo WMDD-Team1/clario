@@ -1,7 +1,7 @@
 import fs from "fs";
 import Invoice from "../../models/Invoice.js";
 import Project from "../../models/Project.js";
-import { generateInvoicePDF } from "../../utils/generateHTML.js";
+import { generateEmail, generateInvoicePDF } from "../../utils/generateHTML.js";
 import { getTaxRateByProvince } from "../../utils/tax.js";
 import { uploadToFirebase } from "../../utils/fileHandler.js";
 import Transaction from "../../models/Transaction.js";
@@ -133,6 +133,7 @@ export const getInvoicesService = async (userId, projectId) => {
 };
 
 export const getInvoiceByIdService = async (invoiceId, userId) => {
+	console.log("====", await Invoice.findOne({ _id: invoiceId, userId }));
 	return await Invoice.findOne({ _id: invoiceId, userId });
 };
 
@@ -153,4 +154,25 @@ export const updateInvoiceStatusService = async (invoiceId, userId, status) => {
 		});
 	}
 	return updated;
+};
+
+export const sendInvoiceService = async (invoiceId, user) => {
+	const invoice = await Invoice.findOne({ _id: invoiceId, userId: user.id }).populate("clientId");
+	if (!invoice) throw new Error("Invoice not found");
+
+	const project = await Project.findById(invoice.projectId);
+	if (!project) throw new Error("Project not found");
+
+	const client = await Client.findById(project.clientId);
+	if (!client) throw new Error("Client not found");
+
+	await generateEmail({ invoice, client, project, user });
+
+	invoice.sentAt = new Date();
+	await invoice.save();
+
+	return {
+		message: `Invoice #${invoice.invoiceNumber} sent to ${client.email}`,
+		sentAt: invoice.sentAt,
+	};
 };
