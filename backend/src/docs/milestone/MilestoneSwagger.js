@@ -2,15 +2,14 @@
  * @swagger
  * tags:
  *   name: Milestones
- *   description: API endpoints for managing milestones within projects
+ *   description: Manage project milestones — creation, updates, completion, and archival.
  */
 
 /**
  * @swagger
- * /api/projects/{projectId}/milestones:
- *   post:
- *     summary: Create a milestone for a project
- *     description: Add a new milestone (with optional deliverables) to the specified project.
+ * /api/projects/{projectId}/milestones/{milestoneId}:
+ *   get:
+ *     summary: Get milestone by ID
  *     tags: [Milestones]
  *     security:
  *       - bearerAuth: []
@@ -20,7 +19,32 @@
  *         required: true
  *         schema:
  *           type: string
- *         description: The ID of the project
+ *       - in: path
+ *         name: milestoneId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Milestone retrieved successfully
+ *       404:
+ *         description: Milestone not found
+ */
+
+/**
+ * @swagger
+ * /api/projects/{projectId}/milestones:
+ *   post:
+ *     summary: Create a milestone for a project
+ *     tags: [Milestones]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: projectId
+ *         required: true
+ *         schema:
+ *           type: string
  *     requestBody:
  *       required: true
  *       content:
@@ -36,7 +60,7 @@
  *                 example: "Design Phase"
  *               description:
  *                 type: string
- *                 example: "Wireframes, mockups, and UI designs"
+ *                 example: "Wireframes and UI design"
  *               amount:
  *                 type: number
  *                 example: 1500
@@ -53,8 +77,6 @@
  *         description: Milestone created successfully
  *       400:
  *         description: Invalid input
- *       401:
- *         description: Unauthorized
  *       404:
  *         description: Project not found
  */
@@ -64,6 +86,7 @@
  * /api/projects/{projectId}/milestones/{milestoneId}:
  *   patch:
  *     summary: Update a milestone
+ *     description: Update milestone details or mark it as completed. If completed and set to generate invoice, an invoice will be created.
  *     tags: [Milestones]
  *     security:
  *       - bearerAuth: []
@@ -86,13 +109,11 @@
  *             properties:
  *               name:
  *                 type: string
- *                 example: "Development Phase"
  *               amount:
  *                 type: number
- *                 example: 2000
  *               dueDate:
  *                 type: string
- *                 example: "2025-12-01"
+ *                 format: date
  *               generateInvoice:
  *                 type: string
  *                 enum: [on_completion, on_due_date]
@@ -101,9 +122,14 @@
  *         description: Milestone updated successfully
  *       404:
  *         description: Milestone not found
- *
- *   delete:
- *     summary: Delete a milestone
+ */
+
+/**
+ * @swagger
+ * /api/projects/{projectId}/milestones/{milestoneId}/archive:
+ *   patch:
+ *     summary: Archive or restore a milestone
+ *     description: Toggles a milestone’s archived state (instead of deleting it).
  *     tags: [Milestones]
  *     security:
  *       - bearerAuth: []
@@ -120,7 +146,7 @@
  *           type: string
  *     responses:
  *       200:
- *         description: Milestone deleted successfully
+ *         description: Milestone archived or restored successfully
  *       404:
  *         description: Milestone not found
  */

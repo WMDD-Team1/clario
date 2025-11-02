@@ -202,6 +202,10 @@
  *         totalBudget:
  *           type: number
  *           example: 8000
+ *         upfrontAmount:
+ *           type: number
+ *           example: 1500
+ *           description: Initial upfront payment amount, if any
  *         status:
  *           type: string
  *           enum: [Planning, In-Progress, Review, Done]
@@ -226,9 +230,11 @@
  *         createdAt:
  *           type: string
  *           format: date-time
+ *           example: "2025-09-25T12:34:56.000Z"
  *         updatedAt:
  *           type: string
  *           format: date-time
+ *           example: "2025-10-01T09:42:31.000Z"
  */
 
 /**
@@ -408,89 +414,94 @@
  *   schemas:
  *     Contract:
  *       type: object
- *       description: Represents a contract document uploaded and analyzed by AI
+ *       description: Represents a contract document uploaded or generated for a project
  *       properties:
  *         id:
  *           type: string
  *           example: 671a1234bcdef9876543210
  *         userId:
  *           type: string
- *           description: Linked user ID (owner of the contract)
- *           example: 650d1e4f5d1234567890abcd
+ *           description: Linked user ID (contract owner)
+ *           example: 68e7fece77529efa3742ba6e
  *         clientId:
  *           type: string
  *           nullable: true
  *           description: Linked client ID if available
- *           example: 671a5b2345abcde98765f123
+ *           example: 690690a20e01bd957b22a951
  *         projectId:
  *           type: string
  *           nullable: true
  *           description: Linked project ID if the contract is attached to one
- *           example: 670a12b4d9e4fa1234abcd56
+ *           example: 6906946206f472ca6c4e16db
  *         contractName:
  *           type: string
- *           example: "Freelance Agreement - Bitna Corp"
+ *           description: Machine-safe contract file name (no spaces)
+ *           example: Website_Redesign-draft-contract.pdf
+ *         displayName:
+ *           type: string
+ *           description: Human-readable name for UI display
+ *           example: Website Redesign (Draft Contract)
  *         contractUrl:
  *           type: string
  *           format: uri
- *           description: Public URL to access the uploaded contract file
- *           example: "https://storage.googleapis.com/contracts/original/bitna_contract.pdf"
+ *           description: Public URL for the uploaded or generated contract
+ *           example: https://storage.googleapis.com/contracts/drafts/Website_Redesign-draft-contract.pdf
  *         fileType:
  *           type: string
- *           enum: [pdf, docx, doc]
- *           example: "pdf"
+ *           enum: [pdf, png, jpg, jpeg]
+ *           example: pdf
  *         size:
  *           type: number
- *           description: File size in bytes
- *           example: 254876
+ *           example: 65432
  *         totalAmount:
  *           type: number
  *           example: 5000
+ *         upfrontAmount:
+ *           type: number
+ *           example: 1500
+ *           description: Amount or percentage paid upfront
  *         paymentTerms:
  *           type: string
- *           example: "Payment due within 30 days after invoice submission."
+ *           example: Payment due within 30 days after invoice submission.
+ *         milestones:
+ *           type: array
+ *           description: List of milestones included in this contract
+ *           items:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: Design Phase
+ *               amount:
+ *                 type: number
+ *                 example: 1200
+ *               dueDate:
+ *                 type: string
+ *                 format: date
+ *                 example: 2025-12-15
  *         deliveryDate:
  *           type: string
  *           format: date
- *           example: "2025-12-31"
+ *           example: 2025-12-31
  *         aiAnalysis:
  *           type: object
- *           description: AI-generated contract risk analysis summary
+ *           description: AI-generated contract clause risk analysis
  *           properties:
  *             summary:
  *               type: string
- *               example: "Found 4 risky clauses (2 high risk)."
+ *               example: "Found 3 risky clauses (1 high risk)."
  *             riskyClauses:
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/RiskyClause'
- *         version:
- *           type: number
- *           example: 1
  *         createdAt:
  *           type: string
  *           format: date-time
- *           example: 2025-10-21T22:32:02.475Z
+ *           example: 2025-11-02T00:13:30.404Z
  *         updatedAt:
  *           type: string
  *           format: date-time
- *           example: 2025-10-21T22:32:02.475Z
- *
- *     ContractInput:
- *       type: object
- *       required:
- *         - file
- *       properties:
- *         file:
- *           type: string
- *           format: binary
- *           description: Contract file to upload (PDF, DOCX, JPG, or PNG)
- *         clientId:
- *           type: string
- *           example: "671a5b2345abcde98765f123"
- *         projectId:
- *           type: string
- *           example: "670a12b4d9e4fa1234abcd56"
+ *           example: 2025-11-02T00:13:30.404Z
  *
  *     RiskyClause:
  *       type: object
@@ -501,19 +512,12 @@
  *           example: "Client may terminate this contract at any time without notice."
  *         category:
  *           type: string
- *           enum:
- *             - Payment Terms
- *             - Timeline
- *             - Termination
- *             - Intellectual Property
- *             - Revisions
- *             - Confidentiality
- *             - Other
- *           example: "Termination"
+ *           enum: [Payment Terms, Timeline, Termination, Intellectual Property, Revisions, Confidentiality, Other]
+ *           example: Termination
  *         riskLevel:
  *           type: string
  *           enum: [Low, Medium, High]
- *           example: "High"
+ *           example: High
  *         reason:
  *           type: string
  *           example: "No notice period or compensation specified upon termination."
@@ -608,32 +612,61 @@
  *           example: 2025-10-05
  */
 
-
 /**
  * @swagger
  * components:
  *   schemas:
- *     DashboardOverview:
+ *     Deliverable:
  *       type: object
  *       properties:
- *         income:
+ *         id:
+ *           type: string
+ *         name:
+ *           type: string
+ *         description:
+ *           type: string
+ *         files:
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *               fileUrl:
+ *                 type: string
+ *               fileType:
+ *                 type: string
+ *               size:
+ *                 type: number
+ *               uploadedAt:
+ *                 type: string
+ *                 format: date-time
+ *         dueDate:
+ *           type: string
+ *           format: date
+ *         status:
+ *           type: string
+ *           enum: [Pending, Completed]
+
+ *     Milestone:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *         name:
+ *           type: string
+ *         description:
+ *           type: string
+ *         amount:
  *           type: number
- *           example: 120000
- *           description: Total income of the user (base amount sum)
- *         expense:
- *           type: number
- *           example: 80000
- *           description: Total expense of the user
- *         taxes:
- *           type: number
- *           example: 2000
- *           description: Total calculated tax amount from income
- *         recurringIncome:
- *           type: number
- *           example: 1200
- *           description: Total amount of recurring income transactions
- *         recurringExpense:
- *           type: number
- *           example: 800
- *           description: Total amount of recurring expense transactions
+ *         dueDate:
+ *           type: string
+ *           format: date
+ *         isArchived:
+ *           type: boolean
+ *         generateInvoice:
+ *           type: string
+ *           enum: [on_completion, on_due_date]
+ *         deliverables:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/Deliverable'
  */
