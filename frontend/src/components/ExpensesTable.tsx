@@ -33,10 +33,9 @@ export const ExpensesTable: React.FC = () => {
   return (
     <div
       className="
-        flex flex-col justify-start items-start
-        w-[310.5px] h-[313px] p-5 shrink-0
-        rounded-[20px] bg-white
-        shadow-[0_95px_27px_0_rgba(0,0,0,0),_0_61px_24px_0_rgba(0,0,0,0.01),_0_34px_21px_0_rgba(0,0,0,0.02),_0_15px_15px_0_rgba(0,0,0,0.04),_0_4px_8px_0_rgba(0,0,0,0.04)]
+        flex flex-col justify-start items-start 
+        w-full max-w-[310px] h-auto aspect-square sm:h-[313px] shrink-0 
+        rounded-[20px] bg-white shadow-sm hover:shadow-md p-4
       "
     >
       <h3 className="font-semibold text-base text-gray-700 mb-3">Top Expenses</h3>

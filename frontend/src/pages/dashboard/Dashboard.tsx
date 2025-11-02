@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useAppSelector } from '@/store/hooks';
 import Card from '@/components/Card';
-import  BalanceChart  from '@/components/BalanceChart';
+import BalanceChart from '@/components/BalanceChart';
 import { ExpensesTable } from '@/components/ExpensesTable';
 import MoneyFlowAreaChart from '@/components/MoneyFlowAreaChart';
 import { Sparkles } from 'lucide-react';
@@ -39,18 +39,9 @@ export const Dashboard = () => {
     { label: 'Usability Test', date: '10/25/2025', amount: 'CAD 130' },
   ];
 
-  const reminders = [
-    { title: 'Rebranding - ACME', client: 'ACME INC', dueDate: '10/11/2025' },
-    { title: 'Content - Clario', client: 'NorthFace', dueDate: '10/14/2025' },
-    { title: 'Web Development - Clario', client: 'Arvo', dueDate: '10/20/2025' },
-    { title: 'Branding - PropEase', client: 'PropEase', dueDate: '10/21/2025' },
-    { title: 'Web Redesign - Langara', client: 'Langara', dueDate: '10/23/2025' },
-    { title: 'UX Research - Pet Care', client: 'Pet Care', dueDate: '10/25/2025' },
-  ];
-
-  //Mobile View
+  // Mobile view rendering
   const renderDashboard = () => (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4">
       <div className="grid grid-cols-2 gap-3 sm:gap-4">
         {[
           { label: 'Income', value: '$12,000' },
@@ -113,10 +104,10 @@ export const Dashboard = () => {
           <div className="py-3 px-4 rounded-xl bg-white width-full">
             <div className="flex justify-between items-center mb-1">
               <div className="flex items-center gap-2 bg-white text-white text-xs font-medium px-2 py-1 rounded-full shadow-sm">
-                <Sparkles className="w-3 h-3 " />
+                <Sparkles className="w-3 h-3" />
                 {item.title}
               </div>
-              <span className="text-xs font-semibold text-gray-600">{item.period}</span>
+              <span className="text-xs font-semibold">{item.period}</span>
             </div>
             <p className="text-xs text-gray-600 leading-snug">{item.text}</p>
           </div>
@@ -125,57 +116,67 @@ export const Dashboard = () => {
     </div>
   );
 
+  // Desktop layout reorganized to match final design
   return (
     <>
+
       {/* DESKTOP VIEW */}
       <div className="hidden sm:block">
-        <div className="flex flex-col gap-6 w-full overflow-hidden">
-          {/* Welcome */}
+        <div className="flex flex-col w-full gap-4 overflow-hidden">
+          {/* Welcome Section */}
           <WelcomeBanner userName={user?.name || 'User'} />
 
-          {/* Main Body (Left + Center + Right) */}
-          <div className="flex flex-col xl:flex-row gap-6">
-            {/* Left + Center Section */}
-            <div className="flex flex-col flex-1 min-w-0 gap-2">
-              {/* Top Stats Row */}
+          {/* MAIN GRID — Overview + Insights + Charts (Left), Reminders (Right) */}
+          <div className="flex flex-col xl:flex-row gap-6 w-full items-start">
+            {/* LEFT SECTION (Main content area) */}
+            <div className="flex flex-col flex-1 gap-6 min-w-0">
+              {/* Overview Row – stays inside left section only */}
               <Overview />
-              {/* Insights + Charts Row */}
-              <div className="flex flex-col lg:flex-row gap-4 w-full">
-                {/* Insights (Left) */}
+
+            {/* Insights + Charts Row */}
+            <div className="flex flex-col lg:flex-row gap-4 w-full items-stretch">
+              {/* LEFT COLUMN – Insights */}
+              <div className="flex flex-col lg:w-[39%] xl:w-[39%] gap-4">
                 <Insight />
-                {/* Charts (Center) */}
-                <div className="flex flex-col gap-4">
-                  <div className="flex flex-col flex-wrap md:flex-row gap-4">
-                    <div className="flex-1">
-                      <BalanceChart data={balanceData} />
-                    </div>
-                    <div className="flex-1">
-                      <ExpensesTable expenses={expenses} />
-                    </div>
+              </div>
+
+              {/* CENTER COLUMN – Charts + Expenses + Money Flow */}
+              <div className="flex flex-col flex-1 gap-6 min-w-0">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+                  <div className="min-w-0">
+                    <BalanceChart data={balanceData} />
                   </div>
-                  <div>
-                    <MoneyFlowAreaChart data={flowData} />
+                  <div className="min-w-0">
+                    <ExpensesTable expenses={expenses} />
                   </div>
                 </div>
+
+                <MoneyFlowAreaChart data={flowData} />
               </div>
             </div>
+            </div>
 
-            {/* Right Column - Reminders */}
-            <div className="flex flex-col w-full xl:w-[26%] gap-4">
+            {/* RIGHT COLUMN – Reminders */}
+            <div className="flex flex-col xl:w-[25%] gap-4">
               <RemindersList />
             </div>
           </div>
         </div>
       </div>
 
+
+
+
       {/* MOBILE VIEW */}
       <div className="block sm:hidden px-4 pb-10">
-        {/* Placeholder for hidden header */}
+        {/* Placeholder header spacing */}
         <div className="h-10"></div>
 
-        <h2 className="text-xl font-semibold mt-4 mb-2">Hi {user?.name || 'User'}, Welcome Back</h2>
+        <h2 className="text-xl font-semibold mt-4 mb-2">
+          Hi {user?.name || 'User'}, Welcome Back
+        </h2>
 
-        {/* Toggle */}
+        {/* Toggle Buttons */}
         <div className="flex justify-center w-full mt-4 mb-6">
           <div className="flex bg-gray-800 text-white rounded-full p-1 w-full max-w-md justify-between">
             {['insights', 'dashboard', 'reminders'].map((tab) => (
@@ -194,7 +195,7 @@ export const Dashboard = () => {
           </div>
         </div>
 
-        {/* Content */}
+        {/* Conditional Content */}
         {activeTab === 'reminders' && renderReminders()}
         {activeTab === 'dashboard' && renderDashboard()}
         {activeTab === 'insights' && renderInsights()}

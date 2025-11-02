@@ -43,7 +43,7 @@ const Insight = () => {
   if (loading) return <p>Loading insights...</p>;
 
   return (
-    <div className="flex flex-col flex-[0.8] gap-4">
+    <div className="flex flex-col gap-4 w-full h-full max-w-full">
       <h2 className="text-lg font-semibold text-gray-700">Insights of Your Work</h2>
 
       {insights?.map((insight, idx) => (
