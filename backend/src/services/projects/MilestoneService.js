@@ -28,18 +28,14 @@ export const updateMilestoneService = async (projectId, milestoneId, user, data)
 	const milestone = project.milestones.id(milestoneId);
 	if (!milestone) throw new Error("Milestone not found");
 
+	Object.assign(milestone, data);
 	const previousCompleted = milestone.isCompleted;
 
-	Object.assign(milestone, data);
-	if (data.isCompleted === true) {
-		milestone.deliverables.forEach((d) => (d.status = "Completed"));
-	}
-
-	// invoice trigger
 	const { generateInvoice, dueDate } = milestone;
 
 	// on_completion
 	if (data.isCompleted && !previousCompleted) {
+		milestone.isCompleted = true;
 		milestone.deliverables.forEach((d) => (d.status = "Completed"));
 
 		if (generateInvoice === "on_completion") {
