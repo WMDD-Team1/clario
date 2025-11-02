@@ -112,7 +112,7 @@
 
 /**
  * @swagger
- * /api/invoices/{id}/status:
+ * /api/invoices/{invoiceId}/status:
  *   patch:
  *     summary: Update invoice payment status
  *     description: Updates invoice status to Paid or Pending. If set to Paid, triggers income transaction creation.
@@ -121,7 +121,7 @@
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: invoiceId
  *         required: true
  *         schema:
  *           type: string
@@ -142,6 +142,15 @@
  *     responses:
  *       200:
  *         description: Invoice status updated successfully and income triggered if applicable
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: "Invoice status updated"
+ *               result:
+ *                 id: "671a1234bcdef9876543210"
+ *                 invoiceNumber: 102
+ *                 status: "Paid"
+ *                 totalAmount: 1260
  *       404:
  *         description: Invoice not found
  *       401:
