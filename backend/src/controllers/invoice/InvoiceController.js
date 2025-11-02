@@ -8,10 +8,9 @@ import {
 export const createInvoice = async (req, res) => {
 	try {
 		const { projectId, milestoneId } = req.params;
-		const { id: userId, province } = req.user;
 
 		// validate body
-		const result = await createInvoiceService(userId, province, projectId, milestoneId);
+		const result = await createInvoiceService(req.user, projectId, milestoneId);
 
 		res.status(201).json({ message: "Milestone created successfully", result });
 	} catch (err) {
@@ -23,8 +22,9 @@ export const createInvoice = async (req, res) => {
 export const getInvoices = async (req, res) => {
 	try {
 		const { id: userId } = req.user;
-		const result = await getInvoicesService(userId);
-		res.status(200).json(result);
+		const { projectId } = req.params;
+		const data = await getInvoicesService(userId, projectId);
+		res.status(200).json(data);
 	} catch (err) {
 		console.error("Error fetching invoices:", err);
 		res.status(500).json({ message: "Internal Server Error" });

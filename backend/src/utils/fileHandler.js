@@ -9,6 +9,7 @@ export const uploadToFirebase = async (file, folder = "contracts/original") => {
 	const fileRef = bucket.file(filePath);
 
 	await fileRef.save(file.buffer, {
+		resumable: false,
 		metadata: { contentType: file.mimetype },
 		public: true,
 	});
@@ -18,11 +19,26 @@ export const uploadToFirebase = async (file, folder = "contracts/original") => {
 		expires: "03-01-2035",
 	});
 
+	const fileType = file.mimetype.split("/")[1];
+
 	return {
 		fileName,
 		fileUrl: url,
-		fileType: file.mimetype.split("/")[1],
+		fileType: fileType,
 		size: file.size,
 		path: filePath,
 	};
+};
+
+export const deleteFromFirebase = async (fileUrl) => {
+	if (!fileUrl) return;
+
+	const match = fileUrl.match(/\/o\/([^?]+)/);
+	if (!match || !match[1]) throw new Error("Invalid Firebase URL");
+
+	const filePath = decodeURIComponent(match[1]);
+	const fileRef = bucket.file(filePath);
+
+	await fileRef.delete({ ignoreNotFound: true });
+	return true;
 };
