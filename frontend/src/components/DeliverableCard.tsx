@@ -1,6 +1,6 @@
-import { Paperclip } from 'lucide-react';
+import { DeliverableApiResponse, MilestoneApiResponse } from '@api/index';
+import { CircleCheck, Paperclip } from 'lucide-react';
 import ActionMenu from './ActionMenu';
-import { deleteDeliverable, DeliverableApiResponse, MilestoneApiResponse } from '@api/index';
 
 interface Props {
     deliverable: DeliverableApiResponse;
@@ -21,9 +21,12 @@ export default function DeliverableCard({ deliverable, milestone, onEdit, onDele
         >
             {/* Header */}
             <div className="flex justify-between items-start mb-2">
-                <h4 className="font-medium text-[var(--page-title)] text-sm leading-tight">
-                    {deliverable?.name || "Deliverables Name"}
-                </h4>
+                <div className='flex gap-[10px]'>
+                    {deliverable.status === 'Completed' ? <CircleCheck className="w-5 h-5 text-[var(--primary-text)]" /> : null}
+                    <h4 className="font-[18px] text-[var(--page-title)] text-sm leading-tight">
+                        {deliverable?.name || "Deliverables Name"}
+                    </h4>
+                </div>
 
                 <div className="flex items-center gap-2">
                     <div className="flex items-center text-[var(--primitive-colors-gray-light-mode-700)] text-xs">

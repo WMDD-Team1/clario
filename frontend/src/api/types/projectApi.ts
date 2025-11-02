@@ -24,7 +24,8 @@ export interface MilestoneApiResponse {
     description: string;
     dueDate: string;
     amount: number;
-    status: "Pending" | "In-Progress" | "Completed";
+    isCompleted: boolean;
+    isArchived: boolean;
     generateInvoice: "on_completion" | "on_due_date";
     deliverables: DeliverableApiResponse[];
 }
@@ -34,11 +35,13 @@ export interface DeliverableApiResponse {
     name: string;
     description: string;
     fileUrls: string[];
+    status: "Pending" | "Completed";
     dueDate: string;
 }
 export interface OverviewItem {
     key: string;
     title: string;
+    status: "Pending" | "Completed";
     value: string;
 }
 export interface ProjectOverview {

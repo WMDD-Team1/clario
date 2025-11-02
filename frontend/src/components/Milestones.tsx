@@ -74,7 +74,7 @@ const Milestones = ({ milestones, projectId }: Props) => {
             />
 
             <div className='flex gap-10 flex-nowrap'>
-                {milestones.map(milestone => (
+                {milestones.map(milestone => ( !milestone.isArchived &&
                     <div key={milestone.id}>
                         <Milestone
                             milestone={milestone}
