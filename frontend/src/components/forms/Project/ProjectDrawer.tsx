@@ -1,5 +1,5 @@
 import { ProjectApiResponse } from "@api/index";
-import FormDrawer from "./FormDrawer";
+import FormDrawer from "../FormDrawer";
 import ProjectForm from "./ProjectForm";
 
 interface Props {
