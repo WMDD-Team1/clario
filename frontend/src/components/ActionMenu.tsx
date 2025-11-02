@@ -19,6 +19,8 @@ const ActionMenu: React.FC<ActionMenuProps> = ({ actions, direction }: ActionMen
     const buttonRef = useRef<HTMLButtonElement>(null);
     const [coords, setCoords] = useState({ top: 0, left: 0 });
 
+    if (actions.length === 0) return null;
+
     // Close when clicking outside
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
