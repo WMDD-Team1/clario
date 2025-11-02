@@ -1,5 +1,5 @@
 import Button from '@components/Button';
-import ProjectDrawer from '@components/forms/ProjectDrawer';
+import ProjectDrawer from '@components/forms/Project/ProjectDrawer';
 import InsightCard from '@components/InsightCard';
 import Projects from '@components/Projects';
 import Clients from '@components/Clients';
@@ -51,6 +51,7 @@ const MyWork = () => {
     return (
         <>
             <div className='header mb-8'>
+                {view.key === 'projects' ? <ProjectDrawer isOpen={isOpen} onClose={() => setIsOpen(false)}  mode="create"/> : null}
                 <section className=" md:flex justify-between items-center hidden transition">
                     <div className="header-left flex items-center gap-4">
                         <h2>My Work</h2>
@@ -68,7 +69,7 @@ const MyWork = () => {
                     >
                         Add {view.key === 'projects' ? "Project" : "Client"}
                     </Button>
-                    {view.key === 'projects' ? <ProjectDrawer isOpen={isOpen} onClose={() => setIsOpen(false)}  mode="create"/> : null}
+                    
                 </section>
                 <section className='md:hidden transition'>
                     <div className="flex items-center justify-between mb-4">
@@ -85,8 +86,6 @@ const MyWork = () => {
                         >
                             Add {view.key === 'projects' ? "Project" : "Client"}
                         </Button>
-                        {view.key === 'projects' ? <ProjectDrawer isOpen={isOpen} onClose={() => setIsOpen(false)} mode="create"/> : null}
-
                     </div>
                     <ToggleButton options={views} option={view} onClick={setView} />
                 </section>

@@ -7,6 +7,9 @@ interface FormFooterProps {
     disableSubmit?: boolean;
     submitLabel?: string;
     cancelLabel?: string;
+    isViewMode?: boolean;
+    onEdit?: () => void;
+    editLabel?: string;
 }
 
 export default function FormFooter({
@@ -17,16 +20,16 @@ export default function FormFooter({
     cancelLabel = "Close",
 }: FormFooterProps) {
     return (
-        <div className="flex justify-between mt-6 pt-4 gap-2">
-            <Button buttonColor="regularButton" onClick={onCancel} width="45%" textColor="white">
-                Close
+        <div className="flex justify-between gap-2 absolute bottom-0 right-0 left-0 p-[30px] bg-[var(--primitive-colors-brand-primary-75)] rounded-bl-[50px]">
+            <Button buttonColor="white" onClick={onCancel} width="45%" textColor="white">
+                <p className="text-[#98A2B3]">{cancelLabel}</p>
             </Button>
-            <Button buttonColor="lightButton"
-                    onClick={onSubmit} width="45%"
-                    textColor="white"
-                    disabled={disableSubmit}
-                    type="submit">
-                Next
+            <Button buttonColor="regularButton"
+                onClick={onSubmit} width="45%"
+                textColor="white"
+                disabled={disableSubmit}
+                type="submit">
+                {submitLabel}
             </Button>
         </div>
     );

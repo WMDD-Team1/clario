@@ -5,8 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import Spinner from "../Spinner";
-import FormFooter from "./FormFooter";
+import Spinner from "../../Spinner";
+import FormFooter from "../FormFooter";
 
 // Validation schema
 const projectSchema = z.object({
