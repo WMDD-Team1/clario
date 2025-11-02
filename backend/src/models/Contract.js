@@ -22,15 +22,26 @@ const ContractSchema = new mongoose.Schema(
 		contractName: {
 			type: String,
 		},
+		displayName: {
+			type: String,
+		},
 		contractUrl: String,
 		fileType: {
 			type: String,
-			enum: ["pdf", "docx", "doc"],
+			enum: ["pdf", "png", "jpeg", "jpg"],
 		},
-		size: Number, // 50MB max
+		size: { type: Number, max: 5 * 1024 * 1024 },
 
 		totalAmount: Number,
 		paymentTerms: String,
+		upfrontAmount: { type: Number, default: 0 },
+		milestones: [
+			{
+				name: String,
+				amount: Number,
+				dueDate: Date,
+			},
+		],
 		deliveryDate: Date,
 		aiAnalysis: {
 			riskyClauses: [RiskClauseSchema],

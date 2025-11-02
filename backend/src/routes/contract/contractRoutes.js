@@ -11,5 +11,6 @@ const upload = multer();
 router.use(checkJWT);
 router.use(attachUser);
 
-router.post("/contract-upload", upload.single("file"), ContractController.uploadContract);
-router.post("/contract-analyze", ContractController.analyzeContract);
+router.post("/upload", upload.single("file"), ContractController.uploadContract);
+router.post("/analyze/:projectId", ContractController.analyzeContract);
+router.post("/draft/:projectId", ContractController.generateContract);

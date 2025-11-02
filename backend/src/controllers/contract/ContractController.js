@@ -1,5 +1,9 @@
 import Contract from "../../models/Contract.js";
-import { analyzeContractService, uploadContractService } from "../../services/contract/ContractService.js";
+import {
+	analyzeContractService,
+	uploadContractService,
+	generateContractService,
+} from "../../services/contract/ContractService.js";
 
 export const uploadContract = async (req, res) => {
 	try {
@@ -26,7 +30,7 @@ export const uploadContract = async (req, res) => {
 export const analyzeContract = async (req, res) => {
 	try {
 		const { id: userId } = req.user;
-		const { projectId } = req.body;
+		const { projectId } = req.params;
 
 		if (!projectId) {
 			return res.status(400).json({ message: "ProjectId is required" });
@@ -45,6 +49,22 @@ export const analyzeContract = async (req, res) => {
 		});
 	} catch (err) {
 		console.error("Error analyzing contract:", err);
+		res.status(500).json({ message: err.message || "Internal Server Error" });
+	}
+};
+
+export const generateContract = async (req, res) => {
+	try {
+		const { projectId } = req.params;
+		const { id: userId } = req.user;
+
+		const contract = await generateContractService(userId, projectId);
+		res.status(201).json({
+			message: "Draft contract generated successfully",
+			contract,
+		});
+	} catch (err) {
+		console.error("Error generating draft contract:", err);
 		res.status(500).json({ message: err.message || "Internal Server Error" });
 	}
 };
