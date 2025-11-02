@@ -36,3 +36,17 @@ export interface DeliverableApiResponse {
     fileUrls: string[];
     dueDate: string;
 }
+export interface OverviewItem {
+    key: string;
+    title: string;
+    value: string;
+}
+export interface ProjectOverview {
+    totalProjects: number;
+    activeProjects: number;
+    inactiveProjects: number;
+    archivedProjects: number;
+    totalClients: number;
+    totalBudget: number;
+    activeBudget: number;
+}

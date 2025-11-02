@@ -9,7 +9,11 @@ import FiltersBar from "./FiltersBar";
 import Spinner from "./Spinner";
 import { useNavigate } from "react-router-dom";
 
-const Projects = () => {
+interface Props {
+    onCreate: () => void
+}
+
+const Projects = ({onCreate}: Props) => {
     const [currentFilter, setCurrentFilter] = useState(FILTERS[0]);
     const [search, setSearch] = useState<string>();
     const [debouncedSearch] = useDebounce(search, 400);
@@ -20,7 +24,7 @@ const Projects = () => {
     const navigate = useNavigate();
 
     const { isLoading, error, data } = useQuery({
-        queryKey: ['projects', {
+        queryKey: ['projects', 'list', {
             status: selectedStage.id,
             sortBy: selectedSort.id,
             page: currentPage,
@@ -77,7 +81,7 @@ const Projects = () => {
                     title="It's a little quiet here"
                     description="Add your first project and let's get things moving!"
                     buttonText="Add Project"
-                    onAction={() => console.log("Open project modal")}
+                    onAction={onCreate}
                 />
             ) : (
                 <Table
