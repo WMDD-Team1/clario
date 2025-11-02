@@ -20,7 +20,7 @@ export const PrivateRoute = ({ children }: { children: ReactNode }) => {
   return isAuthenticated ? (<>
     <Header />
     <Sidebar />
-    <div className='grow-1 ml-[170px] mr-[40px] mb-[40px]'>
+    <div className='grow-1 md:ml-[170px] mx-[40px] mb-[40px]'>
       {children}
     </div>
   </>) : <Navigate to="/" />;
