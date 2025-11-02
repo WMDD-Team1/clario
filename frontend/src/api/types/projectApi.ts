@@ -1,11 +1,11 @@
 export interface ProjectApiResponse {
     userId: string;
-    clientId: string | null;
+    clientId: string | null | { id: string, name: string };
     name: string;
     description: string;
     type: string;
     totalBudget: number;
-        status: 'Planning' | 'In-Progress' | 'Review' | 'Done';
+    status: 'Planning' | 'In-Progress' | 'Review' | 'Done';
     isActive: boolean;
     isArchived: boolean;
     startDate: string; // ISO date string
@@ -23,19 +23,16 @@ export interface MilestoneApiResponse {
     name: string;
     description: string;
     dueDate: string;
+    amount: number;
     status: "Pending" | "In-Progress" | "Completed";
     generateInvoice: "on_completion" | "on_due_date";
-    deliverables?: DeliverableApiResponse[];
-    createdAt: string;
-    updatedAt: string;
+    deliverables: DeliverableApiResponse[];
 }
 
 export interface DeliverableApiResponse {
     id: string;
     name: string;
     description: string;
-    fileUrl: string;
+    fileUrls: string[];
     dueDate: string;
-    createdAt: string;
-    updatedAt: string;
 }

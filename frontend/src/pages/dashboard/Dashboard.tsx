@@ -6,7 +6,6 @@ import Card from '@/components/Card';
 import BalanceChart from '@/components/BalanceChart';
 import { ExpensesTable } from '@/components/ExpensesTable';
 import MoneyFlowAreaChart from '@/components/MoneyFlowAreaChart';
-import { Sparkles } from 'lucide-react';
 import { WelcomeBanner } from '@/components/WelcomeBanner';
 import type { RootState } from '@/store';
 import { RemindersList } from './components/RemindersList';
@@ -23,23 +22,7 @@ export const Dashboard = () => {
     { name: 'Balance', value: 3250, color: '#4B5563' },
   ];
 
-  const flowData = [
-    { name: 'May', income: 1000, expense: 800 },
-    { name: 'Jun', income: 2000, expense: 1200 },
-    { name: 'Jul', income: 1500, expense: 1000 },
-    { name: 'Aug', income: 3000, expense: 2000 },
-    { name: 'Sep', income: 2700, expense: 2300 },
-    { name: 'Oct', income: 3100, expense: 2500 },
-  ];
-
-  const expenses = [
-    { label: 'Office Rent', date: '10/20/2025', amount: 'CAD 800' },
-    { label: 'Other', date: '10/17/2025', amount: 'CAD 400' },
-    { label: 'Internet', date: '10/21/2025', amount: 'CAD 140' },
-    { label: 'Usability Test', date: '10/25/2025', amount: 'CAD 130' },
-  ];
-
-  // Mobile view rendering
+  //Mobile View
   const renderDashboard = () => (
     <div className="flex flex-col gap-4">
       <div className="grid grid-cols-2 gap-3 sm:gap-4">
@@ -198,7 +181,7 @@ export const Dashboard = () => {
         {/* Conditional Content */}
         {activeTab === 'reminders' && renderReminders()}
         {activeTab === 'dashboard' && renderDashboard()}
-        {activeTab === 'insights' && renderInsights()}
+        {activeTab === 'insights' && <Insight />}
       </div>
     </>
   );

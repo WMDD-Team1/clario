@@ -7,6 +7,8 @@ import MoneyInactiveIcon from "./money-inactive.svg?react";
 import SettingsInactiveIcon from "./settings-inactive.svg?react";
 import WorkActiveIcon from "./work-active.svg?react";
 import WorkInactiveIcon from "./work-inactive.svg?react";
+import MenuScale from "./menu-scale.svg?react";
+import DotsButton from "./dots-button.svg?react";
 
 export {
   DashboardActiveIcon,
@@ -18,4 +20,6 @@ export {
   SettingsInactiveIcon,
   WorkActiveIcon,
   WorkInactiveIcon,
+  MenuScale,
+  DotsButton
 };

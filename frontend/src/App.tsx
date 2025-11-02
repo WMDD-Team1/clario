@@ -7,7 +7,7 @@ import MyWork from '@pages/MyWork';
 import Logout from '@pages/Logout';
 import FinancialDashboard from '@pages/FinancialDashboard';
 import Settings from '@pages/Settings';
-import Clients from '@pages/Clients';
+import ProjectDetails from '@pages/ProjectDetails';
 
 function App() {
   return (
@@ -49,15 +49,6 @@ function App() {
           </PrivateRoute>
         }
       />
-
-      <Route
-        path="/clients"
-        element={
-          <PrivateRoute>
-            <Clients />
-          </PrivateRoute>
-        }
-      />
       <Route
         path="/my-work"
         element={
@@ -66,6 +57,15 @@ function App() {
           </PrivateRoute>
         }
       />
+      <Route
+        path="/projects/:id"
+        element={
+          <PrivateRoute>
+            <ProjectDetails />
+          </PrivateRoute>
+        }
+      />
+      {/* <Route
       <Route
         path="/financial-dashboard"
         element={
@@ -81,15 +81,7 @@ function App() {
             <Settings />
           </PrivateRoute>
         }
-      />
-      <Route
-        path="/clients"
-        element={
-          <PrivateRoute>
-            <Clients />
-          </PrivateRoute>
-        }
-      />
+      /> */}
       {/* Dev-only shortcut */}
       <Route path="/dev-dashboard" element={<Dashboard />} />
       <Route path="/fin-dashboard" element={<FinancialDashboard />} />

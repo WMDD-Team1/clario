@@ -1,3 +1,4 @@
+import { formatDate } from "@utils/formatDate";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface RowData {
@@ -11,6 +12,7 @@ interface Props {
     page: number;
     pageSize: number;
     onPageChange: (page: number) => void;
+    onClickChildren: (childId: string) => void;
 }
 
 const Table = ({
@@ -20,13 +22,14 @@ const Table = ({
     page,
     pageSize,
     onPageChange,
+    onClickChildren,
 }: Props) => {
     const totalPages = Math.ceil(total / pageSize);
 
     return (
         <div className="w-full bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
             {/* Table */}
-            <div className="border border-gray-200 rounded-2xl bg-white shadow-sm overflow-hidden">
+            <div className="border-gray-200 rounded-tl-2xl rounded-tr-2xl bg-white overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full min-w-max text-left border-collapse">
                         <thead className="bg-[#f6f9ff] text-gray-700 text-sm font-medium">
@@ -40,10 +43,11 @@ const Table = ({
                         </thead>
                         <tbody>
                             {data.map((row, i) => (
-                                <tr key={i} className="border-t border-gray-100 hover:bg-[#f9fbff] transition">
+                                <tr key={i} onClick={(e) => onClickChildren(row.id)}
+                                    className="border-t border-gray-100 hover:bg-[#f9fbff] transition">
                                     {headers.map((header) => (
                                         <td key={header.key} className="px-6 py-4 whitespace-nowrap text-gray-600 text-sm">
-                                            {row[header.key]}
+                                            {!header.key.toLocaleLowerCase().includes("date") ? row[header.key] : formatDate(row[header.key], { stringMonth: true })}
                                         </td>
                                     ))}
                                 </tr>
@@ -92,7 +96,7 @@ const Table = ({
                             ? "text-gray-300 border-gray-200 cursor-not-allowed"
                             : "text-blue-600 border-gray-300 hover:bg-blue-50"
                             }`}
-                        onClick={() => { console.log('fd'); page < totalPages && onPageChange(page + 1) }}
+                        onClick={() => page < totalPages && onPageChange(page + 1)}
                         disabled={page === totalPages}
                     >
                         <ChevronRight size={18} />

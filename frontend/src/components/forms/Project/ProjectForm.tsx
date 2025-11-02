@@ -1,10 +1,12 @@
-import { createProject, fetchAllClients } from "@/api";
+import { createProject, fetchAllClients, ProjectApiResponse, updateProject } from "@/api";
+import Input from "@components/Input";
+import Loader from "@components/Loader";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import Spinner from "../Spinner";
-import FormFooter from "./FormFooter";
+import Spinner from "../../Spinner";
+import FormFooter from "../FormFooter";
 
 // Validation schema
 const projectSchema = z.object({
@@ -14,15 +16,22 @@ const projectSchema = z.object({
     startDate: z.string().nonempty("Start date required"),
     dueDate: z.string().nonempty("Due date required"),
     totalBudget: z.number().positive("Budget must be greater than 0"),
-});
+}).refine(
+    (data) => new Date(data.dueDate) >= new Date(data.startDate),
+    {
+        error: "Due Date must be after Start Sate",
+        path: ["dueDate"]
+    }
+)
 
 type ProjectFormData = z.infer<typeof projectSchema>;
 
 interface ProjectFormProps {
     onCancel: () => void;
+    project?: ProjectApiResponse | null;
 }
 
-export default function ProjectForm({ onCancel }: ProjectFormProps) {
+export default function ProjectForm({ onCancel, project }: ProjectFormProps) {
     const queryClient = useQueryClient();
 
     // Fetch clients
@@ -31,13 +40,32 @@ export default function ProjectForm({ onCancel }: ProjectFormProps) {
         queryFn: () => fetchAllClients(),
     });
 
+    const isEditMode = !!project;
+    const defaultValues = isEditMode ? {
+        name: project.name,
+        clientId: typeof project.clientId === "object" && project.clientId !== null ? project.clientId.id : (typeof project.clientId === "string" ? project.clientId : ""),
+        description: project.description ?? "",
+        startDate: project.startDate.split("T")[0],
+        dueDate: project.dueDate.split("T")[0],
+        totalBudget: project.totalBudget,
+    } : {
+        name: "",
+        description: "",
+        clientId: "",
+        startDate: "",
+        dueDate: "",
+        totalBudget: 0,
+    }
+
     const clients = data?.data ?? [];
 
     // Submit mutation
     const mutation = useMutation({
-        mutationFn: createProject,
+        mutationFn: (values: ProjectFormData) => {
+            return isEditMode ? updateProject(project.id, values) : createProject(values);
+        },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["projects"] });
+            queryClient.invalidateQueries({ queryKey: ["projects", "project"] });
             onCancel();
         },
     });
@@ -48,31 +76,33 @@ export default function ProjectForm({ onCancel }: ProjectFormProps) {
         formState: { errors, isSubmitting },
     } = useForm<ProjectFormData>({
         resolver: zodResolver(projectSchema),
-        defaultValues: {
-            name: "",
-            description: "",
-            clientId: "",
-            startDate: "",
-            dueDate: "",
-            totalBudget: 0,
-        },
+        defaultValues: defaultValues,
     });
 
     const onSubmit = (data: ProjectFormData) => {
-        mutation.mutate(data);
+        if (isEditMode && project?.id) {
+            mutation.mutate(data);
+        } else {
+            mutation.mutate(data);
+        }
     };
 
     if (clientsLoading) return <Spinner message="Loading clients..." />;
+    if (mutation.isPending) return (
+        <div className="absolute inset-0 bg-white/70 flex items-center justify-center z-10">
+            <Loader />
+        </div>
+    );
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
             {/* Project Name */}
             <div>
-                <label className="block text-sm text-gray-500">Project Name</label>
-                <input
-                    {...register("name")}
+                <Input
+                    color="bg-white"
+                    label="Project Name"
                     placeholder="Project Name..."
-                    className="w-full border-b border-gray-300 focus:border-blue-500 outline-none py-1"
+                    register={register("name")}
                 />
                 {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
             </div>

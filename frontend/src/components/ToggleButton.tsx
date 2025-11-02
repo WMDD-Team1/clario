@@ -9,14 +9,14 @@ interface Props {
 const ToggleButton = ({ options, option, onClick }: Props) => {
     const [firstOption, secondOption] = options;
     return (
-        <div className="toggle-view flex rounded-[20px] p-[10px] h-[60px] w-[400px] border-[2px] border-[#E4E7EC] justify-evenly">
+        <div className="toggle-view flex rounded-[20px] p-[10px] h-[60px] w-[400px] border-[2px] border-[#E4E7EC] justify-evenly bg-white">
             <button className={`grow px-4 py-1 text-sm font-medium transition rounded-[15px] ${option.key === firstOption.key
-                ? "bg-[#0665EC] text-white"
-                : "text-black"
+                ? "bg-[var(--primitive-colors-gray-light-mode-100)] text-[var(--brand-alpha)]"
+                : "text-[var(--primitive-colors-gray-light-mode-400)]"
                 }`} onClick={() => onClick(firstOption)}>{firstOption.label}</button>
             <button className={`grow px-4 py-1 text-sm font-medium transition rounded-[15px] ${option.key === secondOption.key
-                ? "bg-[#0665EC] text-white"
-                : "text-black"
+                ? "bg-[var(--primitive-colors-gray-light-mode-100)] text-[var(--brand-alpha)]"
+                : "text-[var(--primitive-colors-gray-light-mode-400)]"
                 }`} onClick={() => onClick(secondOption)}>{secondOption.label}</button>
         </div>
     )

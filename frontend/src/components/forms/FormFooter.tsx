@@ -1,3 +1,5 @@
+import Button from "@components/Button";
+
 // components/form/FormFooter.tsx
 interface FormFooterProps {
     onCancel: () => void;
@@ -5,6 +7,9 @@ interface FormFooterProps {
     disableSubmit?: boolean;
     submitLabel?: string;
     cancelLabel?: string;
+    isViewMode?: boolean;
+    onEdit?: () => void;
+    editLabel?: string;
 }
 
 export default function FormFooter({
@@ -15,25 +20,17 @@ export default function FormFooter({
     cancelLabel = "Close",
 }: FormFooterProps) {
     return (
-        <div className="flex justify-between mt-6 border-t pt-4">
-            <button
-                type="button"
-                onClick={onCancel}
-                className="bg-blue-100 text-blue-600 font-medium px-5 py-2 rounded-xl hover:bg-blue-200 transition"
-            >
-                {cancelLabel}
-            </button>
-            <button
-                type="submit"
-                onClick={onSubmit}
+        <div className="flex justify-between gap-2 absolute bottom-0 right-0 left-0 p-[30px] bg-[var(--primitive-colors-brand-primary-75)] rounded-bl-[50px]">
+            <Button buttonColor="white" onClick={onCancel} width="45%" textColor="white">
+                <p className="text-[#98A2B3]">{cancelLabel}</p>
+            </Button>
+            <Button buttonColor="regularButton"
+                onClick={onSubmit} width="45%"
+                textColor="white"
                 disabled={disableSubmit}
-                className={`font-medium px-5 py-2 rounded-xl transition ${disableSubmit
-                        ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                        : "bg-blue-600 text-white hover:bg-blue-700"
-                    }`}
-            >
+                type="submit">
                 {submitLabel}
-            </button>
+            </Button>
         </div>
     );
 }

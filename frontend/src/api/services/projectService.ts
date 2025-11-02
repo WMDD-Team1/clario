@@ -26,9 +26,24 @@ export const fetchAllProjects = async (params?: {
     return data;
 }
 
+export const fetchProjectById = async (id: string): Promise<ProjectApiResponse> => {
+    const res = await api.get<ProjectApiResponse>(`/projects/${id}`);
+    return res.data;
+}
+
 export const createProject = async (data: any): Promise<ProjectApiResponse> => {
     try {
         const res = await api.post<ProjectApiResponse>("/projects", data);
+        data = res.data;
+    } catch (err) {
+        console.log('Error creating project: ' + err);
+    }
+    return data;
+}
+
+export const updateProject = async (id: string, data: any): Promise<ProjectApiResponse> => {
+    try {
+        const res = await api.patch<ProjectApiResponse>(`/projects/${id}`, data);
         data = res.data;
     } catch (err) {
         console.log('Error creating project: ' + err);
