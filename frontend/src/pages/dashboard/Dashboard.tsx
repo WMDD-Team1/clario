@@ -11,6 +11,7 @@ import type { RootState } from '@/store';
 import { RemindersList } from './components/RemindersList';
 import Overview from './components/Overview';
 import Insight from './components/Insight';
+import { Sparkles } from 'lucide-react';
 
 export const Dashboard = () => {
   const { user } = useAuth0();
@@ -21,6 +22,16 @@ export const Dashboard = () => {
     { name: 'Expense', value: 2000, color: '#9CA3AF' },
     { name: 'Balance', value: 3250, color: '#4B5563' },
   ];
+  const flowData = [
+  { name: 'Jan', income: 4000, expense: 2400 },
+  { name: 'Feb', income: 3000, expense: 1398 },
+  { name: 'Mar', income: 2000, expense: 9800 },
+];
+
+const expenses = [
+  { id: 1, category: 'Rent', amount: 1200 },
+  { id: 2, category: 'Groceries', amount: 300 },
+];
 
   //Mobile View
   const renderDashboard = () => (
