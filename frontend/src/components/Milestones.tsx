@@ -76,12 +76,21 @@ const Milestones = ({ milestones, projectId }: Props) => {
             <div className='flex gap-10 flex-nowrap'>
                 {milestones.map(milestone => (
                     <div key={milestone.id}>
-                        <Milestone milestone={milestone} onClickAdd={() => handleAddDeliverable(milestone)} onEditMilestone={handleExistentMilestone} onEditDeliverable={handleExistentDeliverable} />
+                        <Milestone
+                            milestone={milestone}
+                            projectId={projectId}
+                            onClickAdd={() => handleAddDeliverable(milestone)}
+                            onEditMilestone={handleExistentMilestone}
+                            onEditDeliverable={handleExistentDeliverable} />
                     </div>
                 ))}
                 {/* Empty milestone to add more */}
                 <div>
-                    <Milestone onClickAdd={handleAddMilestone} onEditMilestone={handleExistentMilestone} onEditDeliverable={handleExistentDeliverable} />
+                    <Milestone
+                        onClickAdd={handleAddMilestone}
+                        projectId={projectId}
+                        onEditMilestone={handleExistentMilestone}
+                        onEditDeliverable={handleExistentDeliverable} />
                 </div>
             </div>
         </>

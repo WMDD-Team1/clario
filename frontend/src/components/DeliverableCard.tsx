@@ -1,16 +1,17 @@
 import { Paperclip } from 'lucide-react';
 import ActionMenu from './ActionMenu';
-import { DeliverableApiResponse, MilestoneApiResponse } from '@api/index';
+import { deleteDeliverable, DeliverableApiResponse, MilestoneApiResponse } from '@api/index';
 
 interface Props {
     deliverable: DeliverableApiResponse;
     milestone: MilestoneApiResponse;
     onEdit: (deliverable: DeliverableApiResponse, milestone: MilestoneApiResponse, mode: "edit" | "view") => void;
+    onDelete: (deliverableId: string) => void;
 }
 
-export default function DeliverableCard({ deliverable, milestone, onEdit }: Props) {
+export default function DeliverableCard({ deliverable, milestone, onEdit, onDelete }: Props) {
     const actions = [
-        { id: 'archive', label: 'Archive', action: () => console.log('Archive clicked') },
+        { id: 'delete', label: 'Delete', action: () => onDelete(deliverable.id) },
         { id: 'edit', label: 'Edit', action: () => onEdit(deliverable, milestone, "edit") },
         { id: 'view', label: 'View', action: () => onEdit(deliverable, milestone, "view") },
     ]

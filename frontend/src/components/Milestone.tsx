@@ -2,15 +2,20 @@ import { DeliverableApiResponse, MilestoneApiResponse } from '@api/index';
 import { Plus } from 'lucide-react';
 import ActionMenu from './ActionMenu';
 import DeliverableCard from './DeliverableCard';
+import { useState } from 'react';
+import { useDeleteDeliverable } from '@/hooks/index';
 
 interface Props {
     milestone?: MilestoneApiResponse
+    projectId: string;
     onClickAdd: () => void;
     onEditMilestone: (milestone: MilestoneApiResponse, mode: "edit" | "view") => void;
     onEditDeliverable: (deliverable: DeliverableApiResponse, milestone: MilestoneApiResponse, mode: "edit" | "view") => void;
 }
 
-const Milestone = ({ milestone, onClickAdd, onEditMilestone, onEditDeliverable }: Props) => {
+const Milestone = ({ milestone, projectId, onClickAdd, onEditMilestone, onEditDeliverable }: Props) => {
+    const { mutate: deleteDeliverableMutation } = useDeleteDeliverable(projectId, milestone?.id);
+    
     return (
         <div className="w-[400px] bg-[var(--general-alpha)] rounded-2xl shadow-sm border border-[var(--primitive-colors-gray-light-mode-200)] overflow-hidden">
             {/* Header */}
@@ -37,9 +42,9 @@ const Milestone = ({ milestone, onClickAdd, onEditMilestone, onEditDeliverable }
                         {milestone ? <Plus className='text-[var(--primitive-colors-gray-light-mode-500)]' /> : "Add Your Milestone"}
                     </button>
                 </div>
-                <div className="px-6 flex justify-center items-center w-full">
+                <div className="px-6 flex flex-col justify-center items-center w-full gap-5">
                     {milestone?.deliverables.map(deliverable => (
-                        <DeliverableCard deliverable={deliverable} onEdit={onEditDeliverable} milestone={milestone} />
+                        <DeliverableCard deliverable={deliverable} onEdit={onEditDeliverable} milestone={milestone} onDelete={(id) => deleteDeliverableMutation(id)} />
                     ))}
                 </div>
 

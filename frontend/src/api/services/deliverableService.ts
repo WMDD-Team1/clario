@@ -20,3 +20,13 @@ export const updateDeliverable = async (id: string, data: any, projectId: string
     }
     return data;
 }
+
+export const deleteDeliverable = async (id: string, projectId: string, milestoneId: string): Promise<boolean> => {
+    try {
+        const res = await api.delete<DeliverableApiResponse>(`/projects/${projectId}/milestones/${milestoneId}/deliverables/${id}`);
+        return true;
+    } catch (err) {
+        console.error('Error creating deliverable for milestone ' + milestoneId + ": " + err);
+        return false;
+    }
+}
