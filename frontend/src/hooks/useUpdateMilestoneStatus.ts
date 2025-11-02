@@ -35,7 +35,7 @@ export const useUpdateMilestoneStatus = (projectId: string, milestoneId?: string
 
         onSettled: () => {
             // Always refetch after success/failure to sync with server
-            queryClient.invalidateQueries({ queryKey: ["project"] });
+            queryClient.invalidateQueries({ queryKey: ["projects", projectId] });
         },
     });
 };

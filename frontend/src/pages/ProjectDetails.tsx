@@ -19,7 +19,7 @@ const ProjectDetails = () => {
     const [isFormOpen, setIsFormOpen] = useState(false)
     const navigate = useNavigate()
     const { data: project, isLoading, error } = useQuery({
-        queryKey: ["project", id],
+        queryKey: ["projects", id],
         queryFn: () => fetchProjectById(id!),
         enabled: !!id,
     });
