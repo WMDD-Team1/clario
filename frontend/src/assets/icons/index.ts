@@ -7,8 +7,14 @@ import MoneyInactiveIcon from "./money-inactive.svg?react";
 import SettingsInactiveIcon from "./settings-inactive.svg?react";
 import WorkActiveIcon from "./work-active.svg?react";
 import WorkInactiveIcon from "./work-inactive.svg?react";
+import Camera from "./camera.svg?react";
+import Forward from "./forward.svg?react";
+import CloudUpload from "./cloud-upload.svg?react";
 import MenuScale from "./menu-scale.svg?react";
 import DotsButton from "./dots-button.svg?react";
+import FileChange from "./file-change.svg?react";
+import Trash from "./trash.svg?react";
+import TransactionUploadSuccess from "./transaction-upload-success.svg?react";
 
 export {
   DashboardActiveIcon,
@@ -20,6 +26,13 @@ export {
   SettingsInactiveIcon,
   WorkActiveIcon,
   WorkInactiveIcon,
+  Camera,
+  Forward,
+  CloudUpload,
   MenuScale,
-  DotsButton
+  DotsButton,
+  FileChange,
+  Trash,
+  TransactionUploadSuccess
+
 };

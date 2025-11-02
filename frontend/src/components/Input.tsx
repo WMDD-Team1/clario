@@ -6,6 +6,8 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   color?: string;
   borderColor?: string;
   register?: UseFormRegisterReturn;
+  hidden?: boolean;
+  children?: React.ReactNode
 }
 
 const Input: React.FC<InputProps> = ({
@@ -14,10 +16,12 @@ const Input: React.FC<InputProps> = ({
   borderColor,
   id,
   register,
+  children,
+  hidden=false,
   ...props
 }) => {
   return (
-    <div className="relative">
+    <div className={`relative ${hidden && 'hidden'}`}>
       {label && (
         <label
           htmlFor={id}
@@ -35,6 +39,7 @@ const Input: React.FC<InputProps> = ({
           borderColor || "border-neutral-300"
         }`}
       />
+      {children}
     </div>
   );
 };
