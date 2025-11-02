@@ -1,18 +1,22 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
+import { Ref } from "react";
 
 interface FormDrawerProps {
     title: string;
     isOpen: boolean;
     onClose: () => void;
     children: React.ReactNode;
+    divRef: Ref<HTMLDivElement> | null;
 }
 
-const FormDrawer = ({ title, isOpen, onClose, children }: FormDrawerProps) => {
+const FormDrawer = ({ title, isOpen, onClose, children, divRef }: FormDrawerProps) => {
+    
     return (
         <AnimatePresence>
             {isOpen && (
                 <motion.div
+                    ref={divRef}
                     initial={{ x: "100%" }}
                     animate={{ x: 0 }}
                     exit={{ x: "100%" }}

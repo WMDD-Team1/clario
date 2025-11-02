@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MoreHorizontal, MoreVertical } from 'lucide-react';
+import { createPortal } from 'react-dom';
 
 interface Action {
     id: string;
@@ -15,11 +16,14 @@ interface ActionMenuProps {
 const ActionMenu: React.FC<ActionMenuProps> = ({ actions, direction }: ActionMenuProps) => {
     const [open, setOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
+    const buttonRef = useRef<HTMLButtonElement>(null);
+    const [coords, setCoords] = useState({ top: 0, left: 0 });
 
     // Close when clicking outside
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
-            if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+            if (!buttonRef.current?.contains(e.target as Node) &&
+                !menuRef.current?.contains(e.target as Node)) {
                 setOpen(false);
             }
         };
@@ -27,10 +31,22 @@ const ActionMenu: React.FC<ActionMenuProps> = ({ actions, direction }: ActionMen
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
+    // Calculate dropdown position when opened
+    useEffect(() => {
+        if (open && buttonRef.current) {
+            const rect = buttonRef.current.getBoundingClientRect();
+            setCoords({
+                top: rect.bottom,
+                left: rect.right - 160,
+            });
+        }
+    }, [open]);
+
     return (
-        <div className="relative inline-block" ref={menuRef}>
+        <div className="relative inline-block">
             <button
                 onClick={() => setOpen(!open)}
+                ref={buttonRef}
                 className="p-1 rounded-full hover:bg-[var(--primitive-colors-brand-primary-025)] transition"
             >
                 {direction === "horizontal" ?
@@ -42,8 +58,9 @@ const ActionMenu: React.FC<ActionMenuProps> = ({ actions, direction }: ActionMen
                         className="text-[var(--primitive-colors-gray-light-mode-500)]" />}
             </button>
 
-            {open && (
-                <div className="absolute right-0 mt-2 w-[160px] bg-[var(--general-alpha)] rounded-2xl shadow-md border border-[var(--primitive-colors-gray-light-mode-200)] overflow-hidden z-50">
+            {open && createPortal(
+                <div ref={menuRef} className="absolute right-0 mt-2 w-[160px] bg-[var(--general-alpha)] rounded-2xl shadow-md border border-[var(--primitive-colors-gray-light-mode-200)] overflow-hidden z-50"
+                    style={{ position: "fixed", top: coords.top, left: coords.left }}>
                     {actions.map(item => (
                         <button
                             key={item.id}
@@ -56,7 +73,8 @@ const ActionMenu: React.FC<ActionMenuProps> = ({ actions, direction }: ActionMen
                             {item.label}
                         </button>
                     ))}
-                </div>
+                </div>,
+                document.body
             )}
         </div>
     );

@@ -5,6 +5,7 @@ export * from './services/userService';
 export * from './services/projectService';
 export * from './services/clientService';
 export * from './services/milestoneService';
+export * from './services/deliverableService';
 
 // adapters
 export * from './adapters/userAdapter';

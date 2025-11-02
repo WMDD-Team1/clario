@@ -1,19 +1,20 @@
-import { MilestoneApiResponse } from "@api/index";
+import { DeliverableApiResponse } from "@api/index";
 import FormDrawer from "../FormDrawer";
-import MilestoneForm from "./MilestoneForm";
-import MilestoneDetails from "./MilestoneDetails";
+import DeliverableDetails from "./DeliverableDetails";
+import DeliverableForm from "./DeliverableForm";
 import { useEffect, useRef } from "react";
 
 interface Props {
     isOpen: boolean;
     onClose: () => void;
-    onEdit?: (milestone: MilestoneApiResponse) => void;
+    onEdit?: (milestone: DeliverableApiResponse) => void;
     mode: "create" | "edit" | "view";
-    milestone?: MilestoneApiResponse | null;
+    deliverable?: DeliverableApiResponse | null;
+    milestoneId?: string;
     projectId: string;
 }
 
-const MilestoneDrawer = ({ isOpen, onClose, onEdit, mode, milestone, projectId }: Props) => {
+const DeliverableDrawer = ({ isOpen, onClose, onEdit, mode, deliverable, milestoneId, projectId }: Props) => {
     const divRef = useRef<HTMLDivElement>(null);
 
     // Close when clicking outside
@@ -26,19 +27,19 @@ const MilestoneDrawer = ({ isOpen, onClose, onEdit, mode, milestone, projectId }
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
-    
+
     let title = "Add Milestone";
     if (mode === "view") title = "Milestone";
     if (mode === "edit") title = "Edit Milestone";
 
     return (
         <FormDrawer title={title} isOpen={isOpen} onClose={onClose} divRef={divRef}>
-            {mode === "create" && <MilestoneForm projectId={projectId} onCancel={onClose} />}
-            {mode === "edit" && <MilestoneForm projectId={projectId} onCancel={onClose} milestone={milestone} />}
-            {mode === "view" && (
-                <MilestoneDetails
-                    milestone={milestone!}
-                    onEdit={() => onEdit?.(milestone!)}
+            {milestoneId && mode === "create" && <DeliverableForm projectId={projectId} milestoneId={milestoneId} onCancel={onClose} />}
+            {milestoneId && mode === "edit" && <DeliverableForm projectId={projectId} milestoneId={milestoneId} onCancel={onClose} deliverable={deliverable} />}
+            {milestoneId && mode === "view" && (
+                <DeliverableDetails
+                    deliverable={deliverable!}
+                    onEdit={() => onEdit?.(deliverable!)}
                     onCancel={onClose}
                 />
             )}
@@ -46,4 +47,4 @@ const MilestoneDrawer = ({ isOpen, onClose, onEdit, mode, milestone, projectId }
     );
 };
 
-export default MilestoneDrawer;
+export default DeliverableDrawer;
