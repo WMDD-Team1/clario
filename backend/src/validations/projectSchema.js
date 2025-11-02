@@ -21,6 +21,7 @@ export const projectSchema = z.object({
 	description: z.string().optional().nullable(),
 	type: z.string().optional().nullable(),
 	totalBudget: z.number().optional().nullable(),
+	upfrontAmount: z.number().min(0).default(0),
 	status: z.enum(["Planning", "In-Progress", "Done"]).default("Planning"),
 	isActive: z.boolean().optional().default(false),
 	isArchived: z.boolean().optional().default(false),

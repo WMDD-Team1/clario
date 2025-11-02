@@ -5,7 +5,7 @@ import {
 	updateProjectById,
 	archiveProjectById,
 	getOverviewService,
-} from "../../services/projects/ProjectsService.js";
+} from "../../services/projects/ProjectService.js";
 import { projectSchema } from "../../validations/projectSchema.js";
 
 export const getAllProjects = async (req, res) => {

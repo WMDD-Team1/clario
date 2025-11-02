@@ -1,11 +1,36 @@
 import mongoose from "mongoose";
 
+const FileSchema = new mongoose.Schema(
+	{
+		fileUrl: { type: String },
+		fileType: { type: String, enum: ["pdf", "png", "jpeg", "jpg"] },
+		size: { type: Number, max: 5 * 1024 * 1024 },
+		uploadedAt: { type: Date, default: Date.now },
+	},
+	{
+		_id: true,
+		toJSON: {
+			virtuals: true,
+			transform: (_, ret) => {
+				ret.id = ret._id;
+				delete ret._id;
+				return ret;
+			},
+		},
+	}
+);
+
 const DeliverableSchema = new mongoose.Schema(
 	{
 		name: { type: String, required: true },
 		description: { type: String },
-		fileUrl: { type: String, default: null },
+		files: [FileSchema],
 		dueDate: { type: Date },
+		status: {
+			type: String,
+			enum: ["Pending", "Completed"],
+			default: "Pending",
+		},
 	},
 	{
 		_id: true,
@@ -25,16 +50,24 @@ const MilestoneSchema = new mongoose.Schema(
 		description: { type: String },
 		amount: { type: Number, required: true },
 		dueDate: { type: Date },
-		status: {
-			type: String,
-			enum: ["Pending", "In-Progress", "Completed"],
-			default: "Pending",
+		isCompleted: {
+			type: Boolean,
+			default: false,
+		},
+		completedAt: { type: Date, default: null },
+
+		isArchived: {
+			type: Boolean,
+			default: false,
 		},
 		generateInvoice: {
 			type: String,
 			enum: ["on_completion", "on_due_date"],
 			default: "on_completion",
 		},
+
+		invoiceId: { type: mongoose.Schema.Types.ObjectId, ref: "Invoice", default: null },
+		invoicedAt: { type: Date, default: null },
 		deliverables: [DeliverableSchema],
 	},
 	{
@@ -73,6 +106,7 @@ const ProjectSchema = new mongoose.Schema(
 		},
 
 		totalBudget: { type: Number },
+		upfrontAmount: { type: Number, default: 0 },
 
 		status: {
 			type: String,

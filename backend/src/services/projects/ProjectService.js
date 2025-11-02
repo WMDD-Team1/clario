@@ -10,7 +10,7 @@ export const findAllProjects = async (userId, query = {}) => {
 		sortBy = "createdAt",
 		sortOrder = "desc",
 		status,
-		viewType = "all",
+		viewType = "All",
 	} = query;
 	const skip = (page - 1) * limit;
 	const filter = { userId };
@@ -22,8 +22,9 @@ export const findAllProjects = async (userId, query = {}) => {
 		filter.status = status;
 	}
 
-	if (search.trim()) {
-		const regex = new RegExp(search, "i");
+	const searchQuery = search.trim();
+	if (searchQuery) {
+		const regex = new RegExp(searchQuery, "i");
 		const clientMatches = await Client.find({
 			name: regex,
 			userId,
@@ -35,7 +36,7 @@ export const findAllProjects = async (userId, query = {}) => {
 	}
 
 	const sortOptions = {};
-	const validSortFields = ["createdAt", "startDate", "dueDate", "totalBudget", "milestonesCount"];
+	const validSortFields = ["createdAt", "startDate", "dueDate", "totalBudget"];
 
 	if (validSortFields.includes(sortBy)) {
 		sortOptions[sortBy] = sortOrder === "asc" ? 1 : -1;
@@ -43,15 +44,22 @@ export const findAllProjects = async (userId, query = {}) => {
 		sortOptions.createdAt = -1;
 	}
 
-	const [projects, total] = await Promise.all([
-		Project.find(filter).populate("clientId", "name _id").skip(skip).limit(Number(limit)).sort(sortOptions),
+	const [total, projects] = await Promise.all([
 		Project.countDocuments(filter),
+		Project.find(filter).populate("clientId", "name _id").skip(skip).limit(Number(limit)).sort(sortOptions),
 	]);
-	const data = projects.map((p) => ({
+
+	let data = projects.map((p) => ({
 		...p.toJSON(),
-		clientName: p.clientId?.name || null,
 		milestonesCount: p.milestones?.length || 0,
 	}));
+
+	if (sortBy === "milestonesCount") {
+		data = data.sort((a, b) =>
+			sortOrder === "asc" ? a.milestonesCount - b.milestonesCount : b.milestonesCount - a.milestonesCount
+		);
+	}
+
 	return {
 		data,
 		meta: {
@@ -105,12 +113,12 @@ export const archiveProjectById = async (id, userId, isArchived) => {
 export const getOverviewService = async (userId) => {
 	const [projects, clients] = await Promise.all([Project.find({ userId }), Client.find({ userId })]);
 
+	const totalBudget = projects.reduce((sum, p) => sum + (p.totalBudget || 0), 0);
 	const activeProjects = projects.filter((p) => p.isActive && !p.isArchived);
+	const activeBudget = activeProjects.reduce((sum, p) => sum + (p.totalBudget || 0), 0);
+
 	const inactiveProjects = projects.filter((p) => !p.isActive && !p.isArchived);
 	const archivedProjects = projects.filter((p) => p.isArchived);
-
-	const totalBudget = projects.reduce((sum, p) => sum + (p.totalBudget || 0), 0);
-	const activeBudget = activeProjects.reduce((sum, p) => sum + (p.totalBudget || 0), 0);
 
 	return {
 		total: totalBudget,
