@@ -5,7 +5,7 @@ export interface TransactionFormat {
     title: string;
     date: string;
     categoryId: string;
-    baseAmount: number;
+    baseAmount: number | "";
     origin: string;
     paymentMethod: string;
     notes: string;

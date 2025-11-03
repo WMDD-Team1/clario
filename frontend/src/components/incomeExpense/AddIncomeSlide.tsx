@@ -117,13 +117,22 @@ export const AddIncomeSlide = ({
             label="Amount"
             id="incomeAmount"
             type="number"
-            min={0}
+            padding='pr-[3.5rem]'
+            // min={0}
             color="bg-white"
             value={transaction.baseAmount}
-            onChange={(e) =>
-              onTransactionChange({ ...transaction, baseAmount: Number(e.target.value) })
-            }
-          />
+            onChange={(e) => {
+              const val = e.target.value;
+              if (val === '' || Number(val) >= 0) {
+                onTransactionChange({
+                  ...transaction,
+                  baseAmount: val === '' ? '' : Number(val),
+                });
+              }
+            }}
+          >
+            <p className="absolute right-[1rem] top-4.5 text-blue-500">CAD</p>
+          </Input>
           <TextArea
             label="Notes"
             id="incomeNotes"

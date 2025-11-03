@@ -6,8 +6,7 @@ import InfoRow from '@components/InfoRow';
 import Loader from '@components/Loader';
 import Success from '@components/Success';
 import { FileChange, Trash, TransactionUploadSuccess } from '@assets/icons/index';
-import { TransactionFormat, Category, PostRecurrenceFormat} from '@api/types/transaction';
-
+import { TransactionFormat, Category, PostRecurrenceFormat } from '@api/types/transaction';
 
 interface ExpenseDetailSlideProps {
   slide: string;
@@ -132,13 +131,22 @@ export const AddExpenseSlide = ({
             label="Amount"
             id="expenseAmount"
             type="number"
-            min={0}
+            padding='pr-[3.5rem]'
+            // min={0}
             color="bg-white"
             value={transaction.baseAmount}
-            onChange={(e) =>
-              onTransactionChange({ ...transaction, baseAmount: Number(e.target.value) })
-            }
-          />
+            onChange={(e) => {
+              const val = e.target.value;
+              if (val === '' || Number(val) >= 0) {
+                onTransactionChange({
+                  ...transaction,
+                  baseAmount: val === '' ? "" : Number(val),
+                });
+              }
+            }}
+          >
+            <p className='absolute right-[1rem] top-4.5 text-blue-500'>CAD</p>
+          </Input>
 
           {/* Recurring Expense */}
           <div className="flex flex-col gap-[1rem]">
@@ -147,12 +155,12 @@ export const AddExpenseSlide = ({
               <div className="flex items-center gap-2">
                 Off
                 <div
-                  className="w-[45px] h-[20px] border-2 rounded-full flex items-center p-[2px] cursor-pointer"
+                  className="w-[45px] h-[20px] border-2 rounded-full flex items-center p-[2px] cursor-pointer border-blue-500"
                   onClick={onRepeatToggle}
                 >
                   <div
-                    className={`w-[10px] h-[10px] bg-black rounded-full transition-transform ${
-                      repeat ? 'translate-x-[25px]' : ''
+                    className={`w-[10px] h-[10px] bg-blue-500 rounded-full transition-transform ${
+                      repeat ? 'translate-x-[26px]' : ''
                     }`}
                   ></div>
                 </div>
