@@ -46,7 +46,7 @@ const MyWork = () => {
         label: "All Projects",
     });
     const [isOpen, setIsOpen] = useState(false);
-    const [slide, setSlide] = useState('100%');
+    const [slide, setSlide] = useState('110%');
 
     return (
         <>
@@ -106,7 +106,7 @@ const MyWork = () => {
             </div>
 
             {/* Projects or Clients */}
-            <div>{view.key === 'projects' ? <Projects /> : <Clients slide={slide} setSlide = {(value:string)=>setSlide(value)}/>}</div>
+            <div>{view.key === 'projects' ? <Projects /> : <Clients slide={slide} setSlide = {setSlide}/>}</div>
         </>
     )
 }
