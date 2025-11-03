@@ -49,7 +49,7 @@ const Overview = () => {
           key={idx}
           title={label}
           value={formatCurrency(value)}
-          className="flex flex-col justify-center items-center p-4 rounded-2xl shadow-sm border border-gray-100 bg-white transition-all duration-200"
+          className="flex flex-col justify-center items-center h-[96px] p-4 rounded-2xl shadow-sm border border-gray-100 bg-white transition-all duration-200"
         />
       ))}
     </div>

@@ -92,7 +92,7 @@ export const Dashboard = () => {
             <div className="flex flex-col flex-1 gap-4 min-w-0">
               <Overview />
 
-              <div className="flex flex-col lg:flex-row gap-4 w-full items-stretch">
+              <div className="flex flex-col lg:flex-row gap-4 w-full items-stretch ">
                 <div className="flex flex-col lg:w-[39%] xl:w-[39%] gap-4">
                   <Insight />
                 </div>
