@@ -15,7 +15,6 @@ export interface ProjectApiResponse {
     updatedAt: string;
     id: string;
     clientName: string | null;
-    milestonesCount: number;
 }
 
 export interface MilestoneApiResponse {
@@ -41,15 +40,12 @@ export interface DeliverableApiResponse {
 export interface OverviewItem {
     key: string;
     title: string;
-    status: "Pending" | "Completed";
     value: string;
 }
 export interface ProjectOverview {
-    totalProjects: number;
-    activeProjects: number;
-    inactiveProjects: number;
-    archivedProjects: number;
-    totalClients: number;
-    totalBudget: number;
-    activeBudget: number;
+    total: number;
+    active: number;
+    inactive: number;
+    archived: number;
+    clients: number;
 }

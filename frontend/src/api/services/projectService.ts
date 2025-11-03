@@ -64,13 +64,15 @@ export const fetchProjectsOverview = async (): Promise<OverviewItem[]> => {
     try {
         const { data } = await api.get<ProjectOverview>("/projects/overview");
 
+        console.log(data);
+
         return overview.map(item => {
             switch (item.key) {
-                case "totalBudget": return { ...item, value: `$${formatCurrency(data.totalBudget ?? 0)}` };
-                case "activeBudget": return { ...item, value: `$${formatCurrency(data.activeBudget ?? 0)}` };
-                case "inactiveProjects": return { ...item, value: String(data.inactiveProjects ?? 0) };
-                case "archivedProjects": return { ...item, value: String(data.archivedProjects ?? 0) };
-                case "totalClients": return { ...item, value: String(data.totalClients ?? 0) };
+                case "totalBudget": return { ...item, value: `$${formatCurrency(data.total ?? 0)}` };
+                case "activeBudget": return { ...item, value: `$${formatCurrency(data.active ?? 0)}` };
+                case "inactiveProjects": return { ...item, value: String(data.inactive ?? 0) };
+                case "archivedProjects": return { ...item, value: String(data.archived ?? 0) };
+                case "totalClients": return { ...item, value: String(data.clients ?? 0) };
                 default: return item;
             }
         });

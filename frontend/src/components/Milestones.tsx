@@ -73,7 +73,7 @@ const Milestones = ({ milestones, projectId }: Props) => {
                 onEdit={handleEditDeliverable}
             />
 
-            <div className='flex gap-10 flex-nowrap'>
+            <div className='flex gap-10 flex-nowrap mb-5'>
                 {milestones.map(milestone => ( !milestone.isArchived &&
                     <div key={milestone.id}>
                         <Milestone
