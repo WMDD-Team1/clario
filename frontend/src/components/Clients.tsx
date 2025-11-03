@@ -166,7 +166,7 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
     });
 
     const response = await axios.patch(
-      `${import.meta.env.VITE_API_BASE_URL}/clients/${clientId}/archive`,
+      `${import.meta.env.VITE_API_BASE_URL}/clients/${oneClient.id}/archive`,
       {
         isArchived: true,
       },
@@ -179,7 +179,7 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
     const data = await response.data;
     console.log(data);
     await fetchClients();
-    setSlideDetail('110%');
+    cancelOperation();
   };
 
   const unarchiveClient = async () => {
