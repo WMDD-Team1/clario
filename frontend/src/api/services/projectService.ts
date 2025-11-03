@@ -64,8 +64,6 @@ export const fetchProjectsOverview = async (): Promise<OverviewItem[]> => {
     try {
         const { data } = await api.get<ProjectOverview>("/projects/overview");
 
-        console.log(data);
-
         return overview.map(item => {
             switch (item.key) {
                 case "totalBudget": return { ...item, value: `$${formatCurrency(data.total ?? 0)}` };

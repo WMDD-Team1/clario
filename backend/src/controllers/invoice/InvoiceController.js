@@ -23,9 +23,9 @@ export const createInvoice = async (req, res) => {
 export const getInvoices = async (req, res) => {
 	try {
 		const { id: userId } = req.user;
-		const { projectId } = req.query;
+		const { projectId, page = 1, limit = 10 } = req.query;
 
-		const data = await getInvoicesService(userId, projectId);
+		const data = await getInvoicesService(userId, projectId, page, limit);
 		res.status(200).json(data);
 	} catch (err) {
 		console.error("Error fetching invoices:", err);
@@ -38,7 +38,6 @@ export const getInvoiceById = async (req, res) => {
 		const { id: userId } = req.user;
 		const { invoiceId } = req.params;
 
-		console.log("====");
 		const result = await getInvoiceByIdService(invoiceId, userId);
 
 		if (!result) return res.status(404).json({ message: "Invoice not found" });

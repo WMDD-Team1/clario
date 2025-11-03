@@ -128,8 +128,25 @@ export const createInvoiceService = async (user, projectId, milestoneId) => {
 	return newInvoice;
 };
 
-export const getInvoicesService = async (userId, projectId) => {
-	return await Invoice.find({ userId, projectId }).sort({ createdAt: -1 });
+export const getInvoicesService = async (userId, projectId, page = 1, limit = 10) => {
+	const query = { userId };
+	if (projectId) query.projectId = projectId;
+
+	const total = await Invoice.countDocuments(query);
+	const data = await Invoice.find(query)
+		.sort({ createdAt: -1 })
+		.skip((page - 1) * limit)
+		.limit(Number(limit));
+
+	return {
+		data,
+		meta: {
+			total,
+			page: Number(page),
+			limit: Number(limit),
+			totalPages: Math.ceil(total / limit),
+		},
+	};
 };
 
 export const getInvoiceByIdService = async (invoiceId, userId) => {

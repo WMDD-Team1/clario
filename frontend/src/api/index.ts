@@ -7,6 +7,7 @@ export * from './services/clientService';
 export * from './services/milestoneService';
 export * from './services/deliverableService';
 export * from './services/contractService';
+export * from './services/invoiceService';
 
 // adapters
 export * from './adapters/userAdapter';
@@ -17,3 +18,4 @@ export * from './types/projectApi';
 export * from './types/clientApi';
 export * from './types/listApi';
 export * from './types/contractApi';
+export * from './types/invoiceApi';
