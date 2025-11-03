@@ -3,6 +3,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import Error from '@components/Error';
 import Header from '@components/Header';
 import Loading from "@components/Loading";
+import Navbar from '@components/Navbar';
 import Sidebar from '@components/Sidebar';
 import { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
@@ -20,6 +21,7 @@ export const PrivateRoute = ({ children }: { children: ReactNode }) => {
   return isAuthenticated ? (<>
     <Header />
     <Sidebar />
+    <Navbar />
     <div className='grow-1 md:ml-[170px] mx-[40px] mb-[40px]'>
       {children}
     </div>

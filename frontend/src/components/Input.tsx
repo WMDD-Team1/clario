@@ -8,6 +8,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   register?: UseFormRegisterReturn;
   hidden?: boolean;
   children?: React.ReactNode
+  padding?:string
 }
 
 const Input: React.FC<InputProps> = ({
@@ -18,6 +19,7 @@ const Input: React.FC<InputProps> = ({
   register,
   children,
   hidden=false,
+  padding,
   ...props
 }) => {
   return (
@@ -35,7 +37,7 @@ const Input: React.FC<InputProps> = ({
         id={id}
         {...register}
         {...props}
-        className={`w-full p-[1rem] rounded-[1rem] border-2 ${color} ${
+        className={`w-full p-[1rem] rounded-[1rem] border-2 ${color} ${padding} ${
           borderColor || "border-neutral-300"
         }`}
       />

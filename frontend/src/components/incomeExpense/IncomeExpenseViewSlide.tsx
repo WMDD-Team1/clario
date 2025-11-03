@@ -1,5 +1,6 @@
 import Slide from "@components/Slide";
 import InfoRow from "@components/InfoRow";
+import Button from "@components/Button";
 import { TransactionFormat, categoriesResonse, RecurrenceFormat } from "@api/types/transaction";
 
 
@@ -9,13 +10,19 @@ interface IncomeExpenseViewSlideProps {
   cancelOperation: () => void;
   allCategories: categoriesResonse;
   activeRepeatableTransaction: RecurrenceFormat | null;
+  deleteTransaction: () => void;
+  editIncome: () => void;
+  editExpense: () => void;
 }
 export const IncomeExpenseViewSlide = ({
     oneTransaction,
     transactionDetail,
     cancelOperation,
     allCategories,
-    activeRepeatableTransaction
+    activeRepeatableTransaction,
+    deleteTransaction,
+    editIncome,
+    editExpense
 }:IncomeExpenseViewSlideProps)=>{
     return(
         <Slide
@@ -24,7 +31,7 @@ export const IncomeExpenseViewSlide = ({
         confirmText="Close"
         onConfirm={cancelOperation}
         extralText="Edit"
-        onExtra={() => {}}
+        onExtra={oneTransaction.type == 'income' ?editIncome: editExpense}
         onClose={cancelOperation}
       >
         <InfoRow label="Title" value={oneTransaction.title} />
@@ -61,16 +68,24 @@ export const IncomeExpenseViewSlide = ({
           />
           <InfoRow
             label="Tax(5%)"
-            value={`$ ${String(((oneTransaction.baseAmount * 5) / 100).toLocaleString())}`}
+            value={`$ ${String(((Number(oneTransaction.baseAmount) * 5) / 100).toLocaleString())}`}
           />
           <InfoRow
             label="Total Income"
-            value={`$ ${String(((oneTransaction.baseAmount * 105) / 100).toLocaleString())}`}
+            value={`$ ${String(((Number(oneTransaction.baseAmount) * 105) / 100).toLocaleString())}`}
           />
         </div>
 
         <InfoRow label="Notes" value={oneTransaction.notes} vertical={true} />
         <InfoRow label="Attachment" value={oneTransaction.attachmentURL} />
+        <Button
+          buttonColor='deleteButton'
+          width="100%"
+          textColor="white"
+          onClick={deleteTransaction}
+        >
+          Delete
+        </Button>
       </Slide>
     )
 }

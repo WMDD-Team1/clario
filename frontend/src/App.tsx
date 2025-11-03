@@ -42,7 +42,7 @@ function App() {
       />
 
       <Route
-        path="/income&expenses"
+        path="/transactions"
         element={
           <PrivateRoute>
             <IncomeExpenses />
