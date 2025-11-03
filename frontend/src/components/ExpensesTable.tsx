@@ -44,10 +44,10 @@ export const ExpensesTable: React.FC = () => {
         {expenses.slice(0, 4).map((expense, idx) => (
           <div key={idx} className="flex justify-between items-center text-[13px] border-b border-gray-500 pb-2">
             <div className="flex flex-col">
-              <span className="font-medium">{expense.title}</span>
-              <span className="text-gray-400 text-[12px]">{expense.date}</span>
+              <span className="font-medium text-[16px]">{expense.title}</span>
+              <span className="text-gray-400 text-[16px]">{expense.date}</span>
             </div>
-            <span className="font-semibold text-gray-800">
+            <span className="font-semibold text-[18px] text-gray-800">
               CAD {expense.amount.toLocaleString()}
             </span>
           </div>

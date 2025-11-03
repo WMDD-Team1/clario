@@ -27,7 +27,7 @@ const InsightCard: React.FC<StatCardProps> = ({ title, month, text }) => {
       </div>
 
       {/* Text Content */}
-      <p className="text-sm text-gray-700 leading-snug">{text}</p>
+      <p className="text-[1rem] text-gray-700 leading-snug">{text}</p>
     </div>
   );
 };
