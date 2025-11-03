@@ -30,7 +30,11 @@ const MoneyFlowAreaChart: React.FC = () => {
             expense: item.expense ?? 0,
           })) ?? [];
 
-        setData(formatted);
+        const isAllZero =
+          formatted.length > 0 &&
+          formatted.every((item) => item.income === 0 && item.expense === 0);
+
+        setData(isAllZero ? DUMMY_DATA : formatted);
       } catch (err) {
         console.error('Failed to fetch money flow:', err);
         setData(DUMMY_DATA);

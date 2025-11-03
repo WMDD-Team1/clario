@@ -8,24 +8,6 @@ const Overview = () => {
   const [overview, setOverview] = useState<OverviewResponse | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const mapOverviewToStats = (data: OverviewResponse) => [
-    { label: 'Income', value: data.income },
-    { label: 'Expense', value: data.expense },
-    { label: 'Taxes', value: data.taxes },
-    { label: 'Recurring Income', value: data.recurringIncome },
-    { label: 'Recurring Expense', value: data.recurringExpense },
-  ];
-
-  const stats = mapOverviewToStats(
-    overview ?? {
-      income: 0,
-      expense: 0,
-      taxes: 0,
-      recurringIncome: 0,
-      recurringExpense: 0,
-    },
-  );
-
   useEffect(() => {
     const loadOverview = async () => {
       try {
@@ -41,6 +23,27 @@ const Overview = () => {
 
     loadOverview();
   }, []);
+
+  const DUMMY_DATA = [
+    { label: 'Income', value: '$12,000' },
+    { label: 'Expense', value: '$8,000' },
+    { label: 'Completed', value: '10' },
+    { label: 'Recurring Income', value: '5' },
+    { label: 'Recurring Expense', value: '30' },
+  ];
+  const mapOverviewToStats = (data: OverviewResponse) => [
+    { label: 'Income', value: `$${data.income.toLocaleString()}` },
+    { label: 'Expense', value: `$${data.expense.toLocaleString()}` },
+    { label: 'Taxes', value: `$${data.taxes.toLocaleString()}` },
+    { label: 'Recurring Income', value: `$${data.recurringIncome.toLocaleString()}` },
+    { label: 'Recurring Expense', value: `$${data.recurringExpense.toLocaleString()}` },
+  ];
+  const isAllZero = (data: OverviewResponse | null) => {
+    if (!data) return true;
+    return Object.values(data).every((val) => val === 0);
+  };
+
+  const stats = overview && !isAllZero(overview) ? mapOverviewToStats(overview) : DUMMY_DATA;
 
   return (
     <>
