@@ -4,7 +4,7 @@ export const INVOICE_HEADERS = [
         value: "Name"
     },
     {
-        key: "invoiceNumber",
+        key: "id",
         value: "Invoice ID"
     },
     {
@@ -20,7 +20,7 @@ export const INVOICE_HEADERS = [
         value: "Amount"
     },
     {
-        key: "milestoneName",
+        key: "fileUrl",
         value: "Files"
     },
 ]

@@ -22,3 +22,13 @@ export const fetchInvoicesByProject = async (params: {
     }
     return data;
 }
+
+export const updateInvoice = async (id: string, status: string): Promise<boolean> => {
+    try {
+        await api.patch<InvoiceApiResponse>(`/invoices/${id}/status`, {status});
+        return true;
+    } catch (err) {
+        console.log('Error updating invoice: ' + err);
+        return false;
+    }
+}
