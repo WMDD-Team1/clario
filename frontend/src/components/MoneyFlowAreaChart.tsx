@@ -11,17 +11,8 @@ import { fetchMoneyFlow } from "@api/services/dashboardService";
 import { formatDate } from "@utils/formatDate";
 import { MoneyFlowItem } from "@api/types/dashboardApi";
 
-const DUMMY_DATA: MoneyFlowItem[] = [
-  { month: "May", income: 5000, expense: 3500 },
-  { month: "Jun", income: 4200, expense: 3000 },
-  { month: "Jul", income: 6800, expense: 4700 },
-  { month: "Aug", income: 6100, expense: 4200 },
-  { month: "Sep", income: 7300, expense: 5000 },
-  { month: "Oct", income: 7900, expense: 6100 },
-];
-
 const MoneyFlowAreaChart: React.FC = () => {
-  const [data, setData] = useState<MoneyFlowItem[]>(DUMMY_DATA);
+  const [data, setData] = useState<MoneyFlowItem[]>([]);
 
   useEffect(() => {
     const loadMoneyFlow = async () => {
@@ -38,11 +29,11 @@ const MoneyFlowAreaChart: React.FC = () => {
           }));
           setData(formatted);
         } else {
-          setData(DUMMY_DATA);
+          setData([]); // no dummy fallback
         }
       } catch (err) {
         console.error("Failed to fetch money flow:", err);
-        setData(DUMMY_DATA);
+        setData([]); // no dummy fallback
       }
     };
 
@@ -60,14 +51,14 @@ const MoneyFlowAreaChart: React.FC = () => {
           <Area
             type="monotone"
             dataKey="income"
-            stroke="#4F46E5"
+            stroke="#17B26A"
             fill="#C7D2FE"
             fillOpacity={0.4}
           />
           <Area
             type="monotone"
             dataKey="expense"
-            stroke="#EF4444"
+            stroke="#F04438"
             fill="#FCA5A5"
             fillOpacity={0.4}
           />

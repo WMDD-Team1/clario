@@ -3,6 +3,7 @@ import { ResponsiveContainer, PieChart, Pie, Cell, Sector } from 'recharts';
 import { fetchCurrentMonth } from '@api/services/dashboardService';
 import { CurrentMonthResponse } from '@api/types/dashboardApi';
 import { formatCurrency } from '@utils/formatCurrency';
+
 type ChartItem = {
   name: string;
   value: number;
@@ -25,11 +26,13 @@ type PieSectorData = {
   fill?: string;
 };
 
-const COLORS = ['#0665EC', '#9966FF'];
+const COLORS = ['#F04438', '#17B26A'];
 const DUMMY_DATA: ChartItem[] = [
   { name: 'Income', value: 12000, color: COLORS[0] },
   { name: 'Expense', value: 8000, color: COLORS[1] },
 ];
+
+// UPDATED FUNCTION BELOW
 const renderActiveShape = ({
   cx,
   cy,
@@ -42,6 +45,9 @@ const renderActiveShape = ({
   percent,
   value,
 }: PieSectorData) => {
+  // Use the chart item color for all texts
+  const itemColor = payload?.color || fill || '#888';
+
   return (
     <g>
       <Sector
@@ -53,18 +59,37 @@ const renderActiveShape = ({
         endAngle={endAngle}
         fill={fill}
       />
-      <text x={cx} y={(cy ?? 0) - 8} textAnchor="middle" className="text-sm" fill="#111">
+      <text
+        x={cx}
+        y={(cy ?? 0) - 8}
+        textAnchor="middle"
+        className="text-sm"
+        fill={itemColor}
+      >
         {payload?.name}
       </text>
-      <text x={cx} y={(cy ?? 0) + 10} textAnchor="middle" className="text-xs" fill="#666">
+      <text
+        x={cx}
+        y={(cy ?? 0) + 10}
+        textAnchor="middle"
+        className="text-xs"
+        fill={itemColor}
+      >
         {`CAD ${formatCurrency(value ?? 0, 0)}`}
       </text>
-      <text x={cx} y={(cy ?? 0) + 25} textAnchor="middle" className="text-xs" fill="#888">
+      <text
+        x={cx}
+        y={(cy ?? 0) + 25}
+        textAnchor="middle"
+        className="text-xs"
+        fill={itemColor}
+      >
         {`(${((percent ?? 0) * 100).toFixed(1)}%)`}
       </text>
     </g>
   );
 };
+// END UPDATED FUNCTION
 
 const BalanceChart: React.FC = () => {
   const [data, setData] = useState<ChartItem[]>([]);
@@ -106,23 +131,23 @@ const BalanceChart: React.FC = () => {
     <div className="flex flex-col justify-center items-center w-full max-w-[310px] h-auto aspect-square sm:h-[313px] p-5 hover:shadow-md rounded-2xl bg-white shadow-sm relative">
       <h3 className="font-semibold self-start text-[18px]">This Month Balance</h3>
       <div className="w-full h-[250px] flex justify-center items-center relative z-[60]">
-      <ResponsiveContainer width="100%" height={250}>
-        <PieChart>
-          <Pie
-            activeShape={renderActiveShape}
-            data={data}
-            dataKey="value"
-            innerRadius={60}
-            outerRadius={80}
-            paddingAngle={3}
-            onMouseEnter={onPieEnter}
-          >
-            {data.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={entry.color || '#4B5563'} />
-            ))}
-          </Pie>
-        </PieChart>
-      </ResponsiveContainer>
+        <ResponsiveContainer width="100%" height={250}>
+          <PieChart>
+            <Pie
+              activeShape={renderActiveShape}
+              data={data}
+              dataKey="value"
+              innerRadius={60}
+              outerRadius={80}
+              paddingAngle={3}
+              onMouseEnter={onPieEnter}
+            >
+              {data.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={entry.color || '#4B5563'} />
+              ))}
+            </Pie>
+          </PieChart>
+        </ResponsiveContainer>
       </div>
     </div>
   );

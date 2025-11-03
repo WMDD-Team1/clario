@@ -57,15 +57,15 @@ export const Dashboard = () => {
 
       {/* Charts and Tables */}
       <div className=" flex bg-transparent rounded-2xl item-center justify-center w-full overflow-hidden">
-        <BalanceChart data={balanceData} />
+        <BalanceChart />
       </div>
 
       <div className="flex bg-transparent rounded-2xl justify-center w-full overflow-hidden">
-        <ExpensesTable expenses={expenses} />
+        <ExpensesTable />
       </div>
 
       <div className="flex bg-transparent rounded-2xl justify-center w-full overflow-hidden">
-        <MoneyFlowAreaChart data={flowData} />
+        <MoneyFlowAreaChart />
       </div>
     </div>
   );
@@ -100,13 +100,13 @@ export const Dashboard = () => {
                 <div className="flex flex-col flex-1 gap-4 min-w-0">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
                     <div className="min-w-0">
-                        <BalanceChart data={balanceData} />
+                        <BalanceChart />
                     </div>
                     <div className="min-w-0">
-                        <ExpensesTable expenses={expenses} />
+                        <ExpensesTable />
                     </div>
                   </div>
-                    <MoneyFlowAreaChart data={flowData} />
+                    <MoneyFlowAreaChart />
                 </div>
               </div>
             </div>

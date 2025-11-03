@@ -29,7 +29,7 @@ const Reminder: React.FC<{ data: ReminderResponse }> = ({ data }) => {
         <span className="text-sm text-[#182230] font-medium">{clientName}</span>
       </div>
 
-      <p className="text-sm text-[#182230] mt-1">{milestoneName}</p>
+      <p className="text-[18px] font-small text-[#182230] mt-1">{milestoneName}</p>
 
       {/* Date */}
       <div className="flex justify-end mt-2">
