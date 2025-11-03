@@ -6,85 +6,103 @@ import { analyzeContractText } from "../../utils/analyze.js";
 import Client from "../../models/Client.js";
 import { generateContractPDF } from "../../utils/generateHTML.js";
 import fs from "fs";
-
 export const uploadContractService = async (file, userId, clientId, projectId) => {
 	if (!file) throw new Error("No file uploaded");
 
-	// upload on firebase storage
 	const { fileName, fileUrl, fileType, size } = await uploadToFirebase(file, "contracts/original");
 
 	let projectInput = {};
 	let parsedText = [];
 
-	// no proejct
+	//  no project
 	if (!projectId) {
-		// parsing
-		if (fileType === "pdf") {
-			try {
-				parsedText = await extractPdfText(fileUrl);
-			} catch (err) {
-				console.error("PDF parsing error:", err);
-				parsedText = [];
-			}
-		} else if (["png", "jpeg", "jpg"].includes(fileType)) {
-			try {
-				parsedText = await extractImageText(fileUrl);
-			} catch (err) {
-				console.error("Image OCR error:", err);
-				parsedText = [];
-			}
+		// PDF or image parsing
+		try {
+			if (fileType === "pdf") parsedText = await extractPdfText(fileUrl);
+			else if (["png", "jpeg", "jpg"].includes(fileType)) parsedText = await extractImageText(fileUrl);
+		} catch (err) {
+			console.error("Parsing error:", err);
+			parsedText = [];
 		}
 
-		// sending parsed text to openAI
+		// send parsed text to AI
 		const fullText = parsedText.map((p) => p.content).join(" ");
 		if (fullText.trim().length > 50) {
 			try {
 				projectInput = await extractContractFields(fullText);
+
+				//  match by clientName first
 				if (projectInput.clientName) {
-					const client = await Client.findOne({
+					const normalizeName = (name) => name.replace(/\b(inc|inc\.|ltd|co|company|corp|corporation)\b/gi, "").trim();
+					const normalizedName = normalizeName(projectInput.clientName);
+
+					let client = await Client.findOne({
 						userId,
-						name: { $regex: new RegExp(`^${projectInput.clientName}$`, "i") },
+						name: { $regex: new RegExp(normalizedName, "i") },
 					}).select("_id name");
+
+					//  if not found by name, try by clientId
+					if (!client && clientId) {
+						client = await Client.findOne({ _id: clientId, userId }).select("_id name");
+					}
 
 					if (client) {
 						projectInput.clientId = client._id.toString();
+						projectInput.clientName = client.name;
 						projectInput.clientExist = true;
 					} else {
 						projectInput.clientExist = false;
 					}
 				}
+
+				//  no clientName from AI but clientId provided
+				else if (clientId) {
+					const client = await Client.findOne({ _id: clientId, userId }).select("_id name");
+					if (client) {
+						projectInput.clientId = client._id.toString();
+						projectInput.clientName = client.name;
+						projectInput.clientExist = true;
+					} else {
+						projectInput.clientExist = false;
+					}
+				} else {
+					projectInput.clientExist = false;
+				}
 			} catch (err) {
 				console.error("AI field extraction error:", err);
 			}
 		}
-	}
-	// with project
-	if (projectId) {
-		let existingContract = await Contract.findOne({ userId, projectId });
 
-		if (existingContract) {
-			if (existingContract.contractUrl) {
-				try {
-					await deleteFromFirebase(existingContract.contractUrl);
-				} catch (err) {
-					console.warn("Failed to delete old contract file:", err.message);
-				}
+		return { projectInput };
+	}
+
+	// with project (replace or new upload)
+	let existingContract = await Contract.findOne({ userId, projectId });
+
+	if (existingContract) {
+		if (existingContract.contractUrl) {
+			try {
+				await deleteFromFirebase(existingContract.contractUrl);
+			} catch (err) {
+				console.warn("Failed to delete old contract file:", err.message);
 			}
-
-			existingContract.contractUrl = fileUrl;
-			existingContract.fileType = fileType;
-			existingContract.size = size;
-			existingContract.aiAnalysis = undefined;
-			existingContract.contractName = fileName;
-			existingContract.updatedAt = new Date();
-
-			await existingContract.save();
-			await Project.findByIdAndUpdate(projectId, { isActive: true });
-			return { message: "Contract replaced successfully" };
 		}
+
+		Object.assign(existingContract, {
+			contractUrl: fileUrl,
+			fileType,
+			size,
+			contractName: fileName,
+			aiAnalysis: undefined,
+			parsedText,
+			updatedAt: new Date(),
+		});
+
+		await existingContract.save();
+		await Project.findByIdAndUpdate(projectId, { isActive: true });
+		return existingContract.toJSON();
 	}
 
-	// if needed later
 	const contract = await Contract.create({
 		userId,
 		clientId,
@@ -96,11 +114,9 @@ export const uploadContractService = async (file, userId, clientId, projectId) =
 		parsedText,
 	});
 
-	if (projectId) {
-		await Project.findByIdAndUpdate(projectId, { isActive: true });
-	}
+	await Project.findByIdAndUpdate(projectId, { isActive: true });
 
-	return { projectInput };
+	return contract.toJSON();
 };
 
 export const analyzeContractService = async (contract) => {
@@ -175,20 +191,36 @@ export const generateContractService = async (userId, projectId) => {
 
 	const uploaded = await uploadToFirebase(pdfFile, "contracts/drafts");
 
-	const newContract = await Contract.create({
-		userId,
-		projectId,
-		clientId: project.clientId?._id,
-		contractName: fileName,
-		contractUrl: uploaded.fileUrl,
-		fileType: pdfFile.mimetype.split("/")[1],
-		size: pdfFile.size,
-		displayName,
-		upfrontAmount,
-		milestones,
-	});
-
+	let contract = await Contract.findOne({ projectId, userId });
+	if (contract) {
+		Object.assign(contract, {
+			contractName: fileName,
+			contractUrl: uploaded.fileUrl,
+			fileType: pdfFile.mimetype.split("/")[1],
+			size: pdfFile.size,
+			displayName,
+			upfrontAmount,
+			milestones,
+			updatedAt: new Date(),
+		});
+		await contract.save();
+	} else {
+		contract = await Contract.create({
+			userId,
+			projectId,
+			clientId: project.clientId?._id,
+			contractName: fileName,
+			contractUrl: uploaded.fileUrl,
+			fileType: pdfFile.mimetype.split("/")[1],
+			size: pdfFile.size,
+			displayName,
+			upfrontAmount,
+			milestones,
+			createdAt: new Date(),
+		});
+	}
+	await Project.findByIdAndUpdate(projectId, { isActive: true });
 	fs.unlinkSync(pdfPath);
 
-	return newContract;
+	return contract;
 };
