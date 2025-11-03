@@ -42,8 +42,7 @@ const ProjectDetails = () => {
             key: "invoices",
             label: "Invoices",
         }
-    ]
-    console.log(project)
+    ];
 
     return (
         <>
@@ -60,7 +59,7 @@ const ProjectDetails = () => {
                         <ToggleButton options={views} option={view} onClick={setView} />
                     </div>
                     <div className='mt-[20px]'>
-                        {view.key == 'milestones' ? <Milestones milestones={project.milestones ?? []} projectId={project.id} /> : <Invoices />}
+                        {view.key == 'milestones' ? <Milestones milestones={project.milestones ?? []} projectId={project.id} /> : <Invoices projectId={project.id} />}
                     </div>
                 </div>
             </div>

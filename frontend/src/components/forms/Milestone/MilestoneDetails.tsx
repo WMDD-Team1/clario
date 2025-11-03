@@ -55,6 +55,7 @@ export default function Details({ milestone, onEdit, onCancel }: Props) {
             <FormFooter
                 onCancel={onCancel}
                 onSubmit={onEdit}
+                disableSubmit={milestone.isCompleted}
                 submitLabel="Edit"
             />
         </>

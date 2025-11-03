@@ -12,9 +12,10 @@ interface Props {
     deliverable?: DeliverableApiResponse | null;
     milestoneId?: string;
     projectId: string;
+    disableEdit?: boolean;
 }
 
-const DeliverableDrawer = ({ isOpen, onClose, onEdit, mode, deliverable, milestoneId, projectId }: Props) => {
+const DeliverableDrawer = ({ isOpen, onClose, onEdit, mode, deliverable, milestoneId, projectId, disableEdit }: Props) => {
     const divRef = useRef<HTMLDivElement>(null);
 
     // Close when clicking outside
@@ -28,9 +29,9 @@ const DeliverableDrawer = ({ isOpen, onClose, onEdit, mode, deliverable, milesto
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    let title = "Add Milestone";
-    if (mode === "view") title = "Milestone";
-    if (mode === "edit") title = "Edit Milestone";
+    let title = "Add Deliverable";
+    if (mode === "view") title = "Deliverable";
+    if (mode === "edit") title = "Edit Deliverable";
 
     return (
         <FormDrawer title={title} isOpen={isOpen} onClose={onClose} divRef={divRef}>
@@ -41,6 +42,7 @@ const DeliverableDrawer = ({ isOpen, onClose, onEdit, mode, deliverable, milesto
                     deliverable={deliverable!}
                     onEdit={() => onEdit?.(deliverable!)}
                     onCancel={onClose}
+                    disableEdit={disableEdit}
                 />
             )}
         </FormDrawer>

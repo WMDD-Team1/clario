@@ -9,30 +9,6 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Loader from '@components/Loader';
 
-// Static data to be replaced when backend is ready
-const myWorkInsights = [
-    {
-        title: "Total",
-        value: "$12.000"
-    },
-    {
-        title: "Active",
-        value: "$8.000"
-    },
-    {
-        title: "Inactive",
-        value: "10"
-    },
-    {
-        title: "Archive",
-        value: "5"
-    },
-    {
-        title: "Clients",
-        value: "30"
-    }
-];
-
 const MY_WORK_VIEWS = [
     {
         key: "projects",

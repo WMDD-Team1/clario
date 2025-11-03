@@ -9,9 +9,10 @@ interface Props {
     deliverable: DeliverableApiResponse;
     onEdit: () => void;
     onCancel: () => void;
+    disableEdit?: boolean;
 }
 
-export default function DeliverableDetails({ deliverable, onEdit, onCancel }: Props) {
+export default function DeliverableDetails({ deliverable, onEdit, onCancel, disableEdit = false }: Props) {
     const deliverableDetails = useMemo(
         () => [
             {
@@ -45,6 +46,7 @@ export default function DeliverableDetails({ deliverable, onEdit, onCancel }: Pr
                 onCancel={onCancel}
                 onSubmit={onEdit}
                 submitLabel="Edit"
+                disableSubmit={disableEdit}
             />
         </>
     );

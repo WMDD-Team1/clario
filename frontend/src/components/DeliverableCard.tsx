@@ -11,10 +11,13 @@ interface Props {
 
 export default function DeliverableCard({ deliverable, milestone, onEdit, onDelete }: Props) {
     const actions = [
-        { id: 'delete', label: 'Delete', action: () => onDelete(deliverable.id) },
-        { id: 'edit', label: 'Edit', action: () => onEdit(deliverable, milestone, "edit") },
         { id: 'view', label: 'View', action: () => onEdit(deliverable, milestone, "view") },
     ]
+
+    if (!milestone.isCompleted || deliverable.status !== 'Completed') {
+        actions.push({ id: 'edit', label: 'Edit', action: () => onEdit(deliverable, milestone, "edit") })
+        actions.push({ id: 'delete', label: 'Delete', action: () => onDelete(deliverable.id) })
+    }
     return (
         <div
             className="bg-[var(--primitive-colors-brand-primary-50)] rounded-xl p-4 transition w-full"
