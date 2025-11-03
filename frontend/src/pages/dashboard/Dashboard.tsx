@@ -22,20 +22,22 @@ export const Dashboard = () => {
     { name: 'Expense', value: 2000, color: '#9CA3AF' },
     { name: 'Balance', value: 3250, color: '#4B5563' },
   ];
+
   const flowData = [
-  { name: 'Jan', income: 4000, expense: 2400 },
-  { name: 'Feb', income: 3000, expense: 1398 },
-  { name: 'Mar', income: 2000, expense: 9800 },
-];
+    { name: 'Jan', income: 4000, expense: 2400 },
+    { name: 'Feb', income: 3000, expense: 1398 },
+    { name: 'Mar', income: 2000, expense: 9800 },
+  ];
 
-const expenses = [
-  { id: 1, category: 'Rent', amount: 1200 },
-  { id: 2, category: 'Groceries', amount: 300 },
-];
+  const expenses = [
+    { id: 1, category: 'Rent', amount: 1200 },
+    { id: 2, category: 'Groceries', amount: 300 },
+  ];
 
-  //Mobile View
+  /** ---------------- MOBILE DASHBOARD ---------------- **/
   const renderDashboard = () => (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-6">
+      {/* Stats Section */}
       <div className="grid grid-cols-2 gap-3 sm:gap-4">
         {[
           { label: 'Income', value: '$12,000' },
@@ -46,7 +48,7 @@ const expenses = [
         ].map((stat, index) => (
           <div
             key={index}
-            className="flex-1 min-w-[150px] flex flex-col justify-center items-center py-3 rounded-2xl shadow-sm border border-gray-100 bg-white"
+            className="flex flex-col justify-center items-center py-3 bg-white/50 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-100"
           >
             <p className="font-semibold text-gray-600 text-sm">{stat.label}</p>
             <p className="text-lg font-bold text-gray-800">{stat.value}</p>
@@ -54,103 +56,57 @@ const expenses = [
         ))}
       </div>
 
-      <Card style="card1">
+      {/* Charts and Tables */}
+      <div className="bg-transparent rounded-2xl overflow-hidden">
         <BalanceChart data={balanceData} />
-      </Card>
+      </div>
 
-      <Card style="card1">
-        <MoneyFlowAreaChart data={flowData} />
-      </Card>
-
-      <Card style="card1">
+      <div className="bg-transparent rounded-2xl overflow-hidden">
         <ExpensesTable expenses={expenses} />
-      </Card>
+      </div>
+
+      <div className="bg-transparent rounded-2xl overflow-hidden">
+        <MoneyFlowAreaChart data={flowData} />
+      </div>
     </div>
   );
 
   const renderReminders = () => <RemindersList />;
+  const renderInsights = () => <Insight />;
 
-  const renderInsights = () => (
-    <div className="flex flex-col gap-3">
-      {[
-        {
-          title: 'Earning Trend',
-          period: 'This Month',
-          text: "Your income grew 18% compared to last month mostly from Project A. You're trending toward a more stable cashflow.",
-        },
-        {
-          title: 'Client Dependency',
-          period: 'This Month',
-          text: '75% of your total income came from a single client this month — consider diversifying your portfolio.',
-        },
-        {
-          title: 'Income Projection',
-          period: 'Next Month',
-          text: 'You have $2,800 in confirmed recurring income for the next 30 days.',
-        },
-        {
-          title: 'Payment Timeliness',
-          period: 'Next Month',
-          text: 'Client B usually pays 8 days late — consider updating your contract terms.',
-        },
-      ].map((item, idx) => (
-        <Card key={idx} style="card1">
-          <div className="py-3 px-4 rounded-xl bg-white width-full">
-            <div className="flex justify-between items-center mb-1">
-              <div className="flex items-center gap-2 bg-white text-white text-xs font-medium px-2 py-1 rounded-full shadow-sm">
-                <Sparkles className="w-3 h-3" />
-                {item.title}
-              </div>
-              <span className="text-xs font-semibold">{item.period}</span>
-            </div>
-            <p className="text-xs text-gray-600 leading-snug">{item.text}</p>
-          </div>
-        </Card>
-      ))}
-    </div>
-  );
-
-  // Desktop layout reorganized to match final design
+  /** ---------------- DESKTOP DASHBOARD ---------------- **/
   return (
     <>
-
       {/* DESKTOP VIEW */}
       <div className="hidden sm:block">
         <div className="flex flex-col w-full gap-4 overflow-hidden">
-          {/* Welcome Section */}
           <WelcomeBanner userName={user?.name || 'User'} />
 
-          {/* MAIN GRID — Overview + Insights + Charts (Left), Reminders (Right) */}
           <div className="flex flex-col xl:flex-row gap-6 w-full items-start">
-            {/* LEFT SECTION (Main content area) */}
+            {/* LEFT SECTION */}
             <div className="flex flex-col flex-1 gap-6 min-w-0">
-              {/* Overview Row – stays inside left section only */}
               <Overview />
 
-            {/* Insights + Charts Row */}
-            <div className="flex flex-col lg:flex-row gap-4 w-full items-stretch">
-              {/* LEFT COLUMN – Insights */}
-              <div className="flex flex-col lg:w-[39%] xl:w-[39%] gap-4">
-                <Insight />
-              </div>
-
-              {/* CENTER COLUMN – Charts + Expenses + Money Flow */}
-              <div className="flex flex-col flex-1 gap-6 min-w-0">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-                  <div className="min-w-0">
-                    <BalanceChart data={balanceData} />
-                  </div>
-                  <div className="min-w-0">
-                    <ExpensesTable expenses={expenses} />
-                  </div>
+              <div className="flex flex-col lg:flex-row gap-4 w-full items-stretch">
+                <div className="flex flex-col lg:w-[39%] xl:w-[39%] gap-4">
+                  <Insight />
                 </div>
 
-                <MoneyFlowAreaChart data={flowData} />
+                <div className="flex flex-col flex-1 gap-6 min-w-0">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+                    <div className="min-w-0">
+                        <BalanceChart data={balanceData} />
+                    </div>
+                    <div className="min-w-0">
+                        <ExpensesTable expenses={expenses} />
+                    </div>
+                  </div>
+                    <MoneyFlowAreaChart data={flowData} />
+                </div>
               </div>
             </div>
-            </div>
 
-            {/* RIGHT COLUMN – Reminders */}
+            {/* RIGHT SECTION */}
             <div className="flex flex-col xl:w-[25%] gap-4">
               <RemindersList />
             </div>
@@ -158,12 +114,8 @@ const expenses = [
         </div>
       </div>
 
-
-
-
       {/* MOBILE VIEW */}
       <div className="block sm:hidden px-4 pb-10">
-        {/* Placeholder header spacing */}
         <div className="h-10"></div>
 
         <h2 className="text-xl font-semibold mt-4 mb-2">
@@ -172,15 +124,15 @@ const expenses = [
 
         {/* Toggle Buttons */}
         <div className="flex justify-center w-full mt-4 mb-6">
-          <div className="flex bg-gray-800 text-white rounded-full p-1 w-full max-w-md justify-between">
+          <div className="flex bg-white text-[#02357C] rounded-xl p-1 w-full max-w-md justify-between">
             {['insights', 'dashboard', 'reminders'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab as any)}
-                className={`flex-1 py-2 rounded-full text-sm font-medium transition-all ${
+                className={`flex-1 py-2 rounded-xl text[#02357C] text-sm font-medium transition-all ${
                   activeTab === tab
-                    ? 'bg-white text-gray-900 shadow-md'
-                    : 'text-gray-300 hover:text-white'
+                    ? 'bg-[#0665EC] text-white shadow-md'
+                    : 'text-[#02357C] hover:text-white'
                 }`}
               >
                 {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -192,7 +144,7 @@ const expenses = [
         {/* Conditional Content */}
         {activeTab === 'reminders' && renderReminders()}
         {activeTab === 'dashboard' && renderDashboard()}
-        {activeTab === 'insights' && <Insight />}
+        {activeTab === 'insights' && renderInsights()}
       </div>
     </>
   );
