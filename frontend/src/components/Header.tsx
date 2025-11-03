@@ -10,7 +10,7 @@ const Header = () => {
     const { data } = useAppSelector((state) => state.user);
 
     return (
-        <div className='flex m-0 p-[40px] justify-between items-center sticky top-0 bg-[#F5F9FF] mb-5'>
+        <div className='flex m-0 p-[40px] justify-between items-center sticky top-0 bg-[#F5F9FF] mb-5 z-[1000]'>
             <div className={`logo transition-all duration-3000 ${isSearchOpen ? "hidden md:block" : "block"
                 }`} onClick={() => navigate("/")}>
                 <img src="/clario.svg" alt="Clario logo" />

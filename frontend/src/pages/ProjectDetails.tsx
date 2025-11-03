@@ -4,6 +4,7 @@ import Invoices from '@components/Invoices';
 import Loader from '@components/Loader';
 import Milestones from '@components/Milestones';
 import ProjectBanner from '@components/ProjectBanner';
+import StatusPill from '@components/StatusPill';
 import ToggleButton from '@components/ToggleButton';
 import { useQuery } from '@tanstack/react-query';
 import { ChevronLeft } from 'lucide-react';
@@ -19,7 +20,7 @@ const ProjectDetails = () => {
     const [isFormOpen, setIsFormOpen] = useState(false)
     const navigate = useNavigate()
     const { data: project, isLoading, error } = useQuery({
-        queryKey: ["project", id],
+        queryKey: ["projects", id],
         queryFn: () => fetchProjectById(id!),
         enabled: !!id,
     });
@@ -41,14 +42,14 @@ const ProjectDetails = () => {
             key: "invoices",
             label: "Invoices",
         }
-    ]
-    console.log(project)
+    ];
 
     return (
         <>
             <div className='flex justify-start items-center gap-2 mb-7'>
                 <ChevronLeft size={30} onClick={(e) => navigate(-1)} className='cursor-pointer' />
                 <h2>{project.name}</h2>
+                <StatusPill status={project.isArchived ? "Archived" : project.isActive ? "Active" : "Inactive"}/>
             </div>
             <div className='flex gap-5'>
                 <ProjectBanner project={project} onEdit={() => setIsFormOpen(true)} />
@@ -58,7 +59,7 @@ const ProjectDetails = () => {
                         <ToggleButton options={views} option={view} onClick={setView} />
                     </div>
                     <div className='mt-[20px]'>
-                        {view.key == 'milestones' ? <Milestones milestones={project.milestones ?? []} projectId={project.id} /> : <Invoices />}
+                        {view.key == 'milestones' ? <Milestones milestones={project.milestones ?? []} projectId={project.id} /> : <Invoices projectId={project.id} />}
                     </div>
                 </div>
             </div>

@@ -43,7 +43,7 @@ export default function DeliverableForm({ onCancel, deliverable, milestoneId, pr
             return isEditMode ? updateDeliverable(deliverable.id, values, projectId, milestoneId) : createDeliverable(values, projectId, milestoneId);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["project"] });
+            queryClient.invalidateQueries({ queryKey: ["projects", projectId] });
             onCancel();
         },
     });

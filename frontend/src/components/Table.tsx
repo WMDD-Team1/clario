@@ -12,7 +12,7 @@ interface Props {
     page: number;
     pageSize: number;
     onPageChange: (page: number) => void;
-    onClickChildren: (childId: string) => void;
+    onClickChildren?: (childId: string) => void;
 }
 
 const Table = ({
@@ -43,7 +43,7 @@ const Table = ({
                         </thead>
                         <tbody>
                             {data.map((row, i) => (
-                                <tr key={i} onClick={(e) => onClickChildren(row.id)}
+                                <tr key={i} onClick={(e) => onClickChildren && onClickChildren(row.id)}
                                     className="border-t border-gray-100 hover:bg-[#f9fbff] transition">
                                     {headers.map((header) => (
                                         <td key={header.key} className="px-6 py-4 whitespace-nowrap text-gray-600 text-sm">

@@ -54,7 +54,7 @@ export default function ProjectForm({ onCancel, milestone, projectId }: Props) {
             return isEditMode ? updateMilestone(milestone.id, values, projectId) : createMilestone(values, projectId);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["project"] });
+            queryClient.invalidateQueries({ queryKey: ["projects", projectId] });
             onCancel();
         },
     });

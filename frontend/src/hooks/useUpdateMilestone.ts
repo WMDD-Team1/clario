@@ -1,22 +1,25 @@
 import { useMutation, UseMutationResult, useQueryClient } from '@tanstack/react-query';
 import { MilestoneApiResponse, updateMilestone } from '@api/index';
+import { useLoader } from '@components/LoaderProvider';
 
-export const useUpdateMilestoneStatus = (projectId: string, milestoneId?: string): UseMutationResult<
-    boolean,                       // mutationFn return type
-    Error,                                      // error type
-    "Pending" | "In-Progress" | "Completed",    // variable type (deliverableId)
+export const useUpdateMilestone = (projectId: string, milestoneId?: string): UseMutationResult<
+    boolean,    // mutationFn return type
+    Error,      // error type
+    Partial<MilestoneApiResponse>,    // new data
     { previousData: unknown } // context type
 > => {
     const queryClient = useQueryClient();
+    const { setIsLoading } = useLoader();
 
     return useMutation({
-        mutationFn: async (newStatus) => {
+        mutationFn: async (data) => {
             if (!milestoneId) return Promise.resolve(false);
-            const response = await updateMilestone(milestoneId, {status: newStatus}, projectId);
+            setIsLoading(true);
+            await updateMilestone(milestoneId, { ...data }, projectId);
             return Promise.resolve(true);
         },
 
-        onMutate: async (newStatus) => {
+        onMutate: async () => {
             // Cancel ongoing fetches for this project
             await queryClient.cancelQueries({ queryKey: ['project', projectId, milestoneId] });
 
@@ -29,13 +32,14 @@ export const useUpdateMilestoneStatus = (projectId: string, milestoneId?: string
         onError: (err, _, context) => {
             // Roll back on failure
             if (context?.previousData) {
-                queryClient.setQueryData(['project', projectId, milestoneId], context.previousData);
+                queryClient.setQueryData(['projects', projectId], context.previousData);
             }
         },
 
         onSettled: () => {
             // Always refetch after success/failure to sync with server
-            queryClient.invalidateQueries({ queryKey: ["project"] });
+            queryClient.invalidateQueries({ queryKey: ["projects", projectId] });
+            setIsLoading(false);
         },
     });
 };

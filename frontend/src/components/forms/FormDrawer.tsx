@@ -21,7 +21,7 @@ const FormDrawer = ({ title, isOpen, onClose, children, divRef }: FormDrawerProp
                     animate={{ x: 0 }}
                     exit={{ x: "100%" }}
                     transition={{ type: "spring", stiffness: 100, damping: 25 }}
-                    className="fixed right-0 top-0 h-full w-full md:max-w-md bg-white shadow-xl z-50 flex flex-col rounded-l-[50px]"
+                    className="fixed right-0 top-0 h-full w-full md:max-w-md bg-white shadow-xl z-1010 flex flex-col rounded-l-[50px]"
                 >
                     {/* Header */}
                     <div className="relative p-5 bg-[var(--primitive-colors-brand-primary-75)] h-[120px] flex items-center justify-center rounded-tl-[50px]">

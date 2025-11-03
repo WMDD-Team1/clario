@@ -1,4 +1,4 @@
-import { useDeleteDeliverable, useUpdateMilestoneStatus } from '@/hooks/index';
+import { useDeleteDeliverable, useUpdateMilestone } from '@/hooks/index';
 import { DeliverableApiResponse, MilestoneApiResponse } from '@api/index';
 import { Plus } from 'lucide-react';
 import ActionMenu from './ActionMenu';
@@ -14,18 +14,18 @@ interface Props {
 
 const Milestone = ({ milestone, projectId, onClickAdd, onEditMilestone, onEditDeliverable }: Props) => {
     const { mutate: deleteDeliverableMutation } = useDeleteDeliverable(projectId, milestone?.id);
-    const { mutate: updateMilestoneStatusMutation} = useUpdateMilestoneStatus(projectId, milestone?.id)
+    const { mutate: updateMilestoneMutation } = useUpdateMilestone(projectId, milestone?.id)
 
     const actions = milestone ? [
         { id: 'view', label: 'View', action: () => onEditMilestone(milestone!, "view") },
-        { id: 'archive', label: 'Archive', action: () => console.log('Archive clicked') },
+        { id: 'archive', label: 'Archive', action: () => updateMilestoneMutation({ isArchived: true }) },
     ] : []
 
-    if (milestone && milestone?.status !== 'Completed') {
-        actions.push({ id: 'setCompleted', label: 'Mark Complete', action: () => updateMilestoneStatusMutation("Completed") })
+    if (milestone && !milestone?.isCompleted) {
+        actions.push({ id: 'setCompleted', label: 'Mark Complete', action: () => updateMilestoneMutation({ isCompleted: true }) })
         actions.push({ id: 'edit', label: 'Edit', action: () => onEditMilestone(milestone!, "edit") })
-    } else if (milestone?.status === 'Completed') {
-        actions.push({ id: 'reopen', label: 'Reopen', action: () => updateMilestoneStatusMutation("Pending") })
+    } else if (milestone?.isCompleted) {
+        actions.push({ id: 'reopen', label: 'Reopen', action: () => updateMilestoneMutation({ isCompleted: false }) })
     }
 
     return (

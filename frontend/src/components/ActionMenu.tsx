@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
 import { MoreHorizontal, MoreVertical } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 interface Action {

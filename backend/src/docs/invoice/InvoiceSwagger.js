@@ -7,37 +7,58 @@
 
 /**
  * @swagger
- * /api/invoices/{projectId}:
+ * /api/invoices:
  *   get:
- *     summary: Get all invoices for a specific project
- *     description: Retrieves all invoices belonging to the given project.
+ *     summary: Get all invoices
+ *     description: Returns a paginated list of invoices for the authenticated user.
  *     tags: [Invoices]
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - in: path
+ *       - in: query
  *         name: projectId
- *         required: true
  *         schema:
  *           type: string
- *         description: ID of the project
+ *         description:  Filter invoices by project ID
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number for pagination
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Number of results per page
  *     responses:
  *       200:
- *         description: Successfully retrieved invoices
+ *         description: Paginated list of invoices
  *         content:
  *           application/json:
- *             example:
- *               - id: "671a1234bcdef9876543210"
- *                 invoiceNumber: 102
- *                 milestoneName: "UI Design"
- *                 amount: 1200
- *                 totalAmount: 1260
- *                 status: "Pending"
- *                 fileUrl: "https://storage.googleapis.com/invoices/invoice_102.pdf"
- *       404:
- *         description: Project not found
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Invoice'
+ *                 meta:
+ *                   type: object
+ *                   properties:
+ *                     total:
+ *                       type: integer
+ *                     page:
+ *                       type: integer
+ *                     limit:
+ *                       type: integer
+ *                     totalPages:
+ *                       type: integer
+ *       401:
+ *         description: Unauthorized
  *       500:
- *         description: Internal server error
+ *         description: Internal Server Error
  */
 
 /**

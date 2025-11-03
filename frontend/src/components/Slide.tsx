@@ -35,14 +35,14 @@ const Slide: React.FC<SlideProps> = ({
   return (
     <>
       <div
-        className={`fixed inset-0 bg-black/40 transition-opacity duration-300 z-40 ${
+        className={`fixed inset-0 bg-black/40 transition-opacity duration-300 z-1010 ${
           slide === '0px' ? 'opacity-100 visible' : 'opacity-0 invisible'
         }`}
         onClick={onClose}
       />
 
       <div
-        className="fixed top-0 right-0 h-full shadow-lg bg-white transition-transform duration-300 sm:rounded-tl-[20px] sm:rounded-bl-[20px] z-50 flex flex-col gap-[1rem] sm:w-[450px]  w-full"
+        className="fixed top-0 right-0 h-full shadow-lg bg-white transition-transform duration-300 sm:rounded-tl-[20px] sm:rounded-bl-[20px] z-1020 flex flex-col gap-[1rem] sm:w-[450px]  w-full"
         style={{ transform: `translateX(${slide})` }}
       >
         <div
