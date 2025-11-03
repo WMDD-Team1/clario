@@ -39,7 +39,7 @@ export const useDeleteDeliverable = (projectId: string, milestoneId?: string): U
 
         onSettled: () => {
             // Always refetch after success/failure to sync with server
-            queryClient.invalidateQueries({ queryKey: ["project"] });
+            queryClient.invalidateQueries({ queryKey: ["projects", projectId] });
         },
     });
 };

@@ -1,0 +1,202 @@
+import Slide from '@components/Slide';
+import Input from '@components/Input';
+import Select from '@components/Select';
+import TextArea from '@components/TextArea';
+import InfoRow from '@components/InfoRow';
+import Loader from '@components/Loader';
+import Success from '@components/Success';
+import { FileChange, Trash, TransactionUploadSuccess } from '@assets/icons/index';
+import { TransactionFormat, Category, PostRecurrenceFormat} from '@api/types/transaction';
+
+
+interface ExpenseDetailSlideProps {
+  slide: string;
+  loader: boolean;
+  success: boolean;
+  transaction: TransactionFormat;
+  expenseType: string;
+  repeat: boolean;
+  repeatOption: string;
+  recurrence: PostRecurrenceFormat;
+  file: File | null;
+  fileName: string;
+  expenseCategories: Category[];
+  onTransactionChange: (transaction: TransactionFormat) => void;
+  onExpenseTypeChange: (value: string) => void;
+  onRepeatToggle: () => void;
+  onRepeatOptionChange: (value: string) => void;
+  onRecurrenceChange: (recurrence: PostRecurrenceFormat) => void;
+  onCancel: () => void;
+  onAdd: () => void;
+  onView: () => void;
+  onClose: () => void;
+  onFileRemove: () => void;
+}
+
+export const AddExpenseSlide = ({
+  slide,
+  loader,
+  success,
+  transaction,
+  expenseType,
+  repeat,
+  repeatOption,
+  recurrence,
+  file,
+  fileName,
+  expenseCategories,
+  onTransactionChange,
+  onExpenseTypeChange,
+  onRepeatToggle,
+  onRepeatOptionChange,
+  onRecurrenceChange,
+  onCancel,
+  onAdd,
+  onView,
+  onClose,
+  onFileRemove,
+}: ExpenseDetailSlideProps) => {
+  const handleBrowseClick = () => {
+    document.getElementById('fileInput')?.click();
+  };
+
+  return (
+    <Slide
+      title="Add Expense"
+      slide={slide}
+      confirmText="cancel"
+      onConfirm={onCancel}
+      extralText={success ? 'view' : 'Add'}
+      onExtra={success ? onView : onAdd}
+      onClose={onClose}
+    >
+      {loader ? (
+        <div className="flex flex-col h-full justify-center">
+          <Loader />
+        </div>
+      ) : success ? (
+        <Success
+          title="Successful!"
+          p1="Your Expense has been recorded"
+          p2={`It's saved in Expense List`}
+        >
+          <TransactionUploadSuccess className="w-25 h-25" />
+        </Success>
+      ) : (
+        <form className="flex flex-col gap-4">
+          <Input
+            label="Expense Title"
+            id="expenseTitle"
+            color="bg-white"
+            value={transaction.title}
+            onChange={(e) => onTransactionChange({ ...transaction, title: e.target.value })}
+          />
+          <Input
+            label="Date"
+            id="expenseDate"
+            type="date"
+            color="bg-white"
+            value={transaction.date}
+            onChange={(e) => onTransactionChange({ ...transaction, date: e.target.value })}
+          />
+          <Select
+            label="Type of Expense"
+            id="expenseType"
+            options={[
+              'Software & Tools',
+              'Equipment / Hardware',
+              'Internet & Utilities',
+              'Marketing & Advertising',
+              'Subscription Fees',
+              'Travel & Transportation',
+              'Other Expenses',
+            ]}
+            value={expenseType}
+            onChange={(value) => {
+              onExpenseTypeChange(value);
+              const categoryId =
+                expenseCategories.find((category) => category.name === value)?.id || '';
+              onTransactionChange({ ...transaction, categoryId });
+            }}
+            color="bg-white"
+            width="100%"
+          />
+          <Input
+            label="Invoice No."
+            id="expenseInvoice"
+            color="bg-white"
+            value={transaction.origin}
+            onChange={(e) => onTransactionChange({ ...transaction, origin: e.target.value })}
+          />
+          <Input
+            label="Amount"
+            id="expenseAmount"
+            type="number"
+            min={0}
+            color="bg-white"
+            value={transaction.baseAmount}
+            onChange={(e) =>
+              onTransactionChange({ ...transaction, baseAmount: Number(e.target.value) })
+            }
+          />
+
+          {/* Recurring Expense */}
+          <div className="flex flex-col gap-[1rem]">
+            <div className="flex justify-between items-center">
+              <p>Make this recurring expense</p>
+              <div className="flex items-center gap-2">
+                Off
+                <div
+                  className="w-[45px] h-[20px] border-2 rounded-full flex items-center p-[2px] cursor-pointer"
+                  onClick={onRepeatToggle}
+                >
+                  <div
+                    className={`w-[10px] h-[10px] bg-black rounded-full transition-transform ${
+                      repeat ? 'translate-x-[25px]' : ''
+                    }`}
+                  ></div>
+                </div>
+                On
+              </div>
+            </div>
+
+            {repeat && (
+              <Select
+                label="Recurrence Type"
+                id="repeatExpenses"
+                options={['Weekly', 'Monthly']}
+                value={repeatOption}
+                onChange={(value) => {
+                  onRepeatOptionChange(value);
+                  onRecurrenceChange({ ...recurrence, frequency: value.toLowerCase() });
+                }}
+                color="bg-white"
+                width="100%"
+              />
+            )}
+          </div>
+
+          <TextArea
+            label="Notes"
+            id="expenseNotes"
+            color="bg-white"
+            rows={3}
+            value={transaction.notes}
+            onChange={(e) => onTransactionChange({ ...transaction, notes: e.target.value })}
+          />
+
+          {file && (
+            <div>
+              <InfoRow label="Attachment" value={fileName} />
+              <div className="flex gap-[.5rem] items-center justify-end mt-[.1rem]">
+                <FileChange className="cursor-pointer" onClick={handleBrowseClick} />
+                |
+                <Trash className="cursor-pointer" onClick={onFileRemove} />
+              </div>
+            </div>
+          )}
+        </form>
+      )}
+    </Slide>
+  );
+};

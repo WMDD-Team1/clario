@@ -1,5 +1,6 @@
-import { ListApi, ProjectApiResponse } from "@/api";
+import { ListApi, OverviewItem, ProjectApiResponse, ProjectOverview } from "@/api";
 import api from "../api";
+import { formatCurrency } from "@utils/formatCurrency";
 
 export const fetchAllProjects = async (params?: {
     status?: string,
@@ -50,3 +51,33 @@ export const updateProject = async (id: string, data: any): Promise<ProjectApiRe
     }
     return data;
 }
+
+export const fetchProjectsOverview = async (): Promise<OverviewItem[]> => {
+    const overview: OverviewItem[] = [
+        { key: "totalBudget", title: "Total", value: "$0" },
+        { key: "activeBudget", title: "Active", value: "$0" },
+        { key: "inactiveProjects", title: "Inactive", value: "0" },
+        { key: "archivedProjects", title: "Archived", value: "0" },
+        { key: "totalClients", title: "Clients", value: "0" },
+    ];
+
+    try {
+        const { data } = await api.get<ProjectOverview>("/projects/overview");
+
+        console.log(data);
+
+        return overview.map(item => {
+            switch (item.key) {
+                case "totalBudget": return { ...item, value: `$${formatCurrency(data.total ?? 0)}` };
+                case "activeBudget": return { ...item, value: `$${formatCurrency(data.active ?? 0)}` };
+                case "inactiveProjects": return { ...item, value: String(data.inactive ?? 0) };
+                case "archivedProjects": return { ...item, value: String(data.archived ?? 0) };
+                case "totalClients": return { ...item, value: String(data.clients ?? 0) };
+                default: return item;
+            }
+        });
+    } catch (err) {
+        console.error("Failed to fetch project overview", err);
+        return overview;
+    }
+};

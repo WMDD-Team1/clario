@@ -12,6 +12,7 @@ import { router as milestoneRoutes } from "./routes/projects/milestoneRoutes.js"
 import { router as projectRoutes } from "./routes/projects/projectsRoutes.js";
 import { router as settingRoutes } from "./routes/settings/settingRoutes.js";
 import { setupSwagger } from "./swagger.js";
+import "./utils/triggerInvoice.js";
 
 export const app = express();
 
@@ -30,7 +31,7 @@ app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/projects", milestoneRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/contracts", contractRoutes);
-app.use("/api/invoice", invoiceRoutes);
+app.use("/api/invoices", invoiceRoutes);
 app.use("/api/clients", clientRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/ai", openaiRoutes);

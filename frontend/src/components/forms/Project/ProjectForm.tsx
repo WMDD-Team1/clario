@@ -65,7 +65,8 @@ export default function ProjectForm({ onCancel, project }: ProjectFormProps) {
             return isEditMode ? updateProject(project.id, values) : createProject(values);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["projects", "project"] });
+            if (project) queryClient.invalidateQueries({ queryKey: ["projects", project.id] });
+            if (!project) queryClient.invalidateQueries({ queryKey: ["projects"] });
             onCancel();
         },
     });

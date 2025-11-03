@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Invoice Notification</title>
+	</head>
+	<body style="font-family: Arial, sans-serif; color: #0f172a; line-height: 1.6">
+		<p>Hi {{client_name}},</p>
+		<p>
+			Please find attached the invoice for
+			<strong>{{project_name}}</strong>
+			.
+		</p>
+		<p>
+			Kindly review the details and process the payment by
+			<strong>{{due_date}}</strong>
+			.
+		</p>
+		<p>If you have any questions or need clarifications, feel free to reply to this email.</p>
+		<p>Thank you for your business!</p>
+		<br />
+		<p>
+			Best regards,
+			<br />
+			{{your_name}}
+		</p>
+	</body>
+</html>

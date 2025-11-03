@@ -8,7 +8,8 @@ export const router = express.Router();
 router.use(checkJWT);
 router.use(attachUser);
 
-router.post("/", InvoiceController.createInvoice);
+router.post("/:invoiceId/send", InvoiceController.sendInvoice);
+router.patch("/:invoiceId/status", InvoiceController.updateInvoiceStatus);
+router.post("/:projectId/:milestoneId", InvoiceController.createInvoice);
 router.get("/", InvoiceController.getInvoices);
 router.get("/:invoiceId", InvoiceController.getInvoiceById);
-router.patch("/:invoiceId/status", InvoiceController.updateInvoiceStatus);

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Independent Contractor Agreement</title>
+		<style>
+			body {
+				font-family: "Red Hat Display", sans-serif;
+				line-height: 1.6;
+				color: #0c111d;
+				max-width: 800px;
+				margin: 40px auto;
+				padding: 40px;
+				border: 1px solid #e5e7eb;
+				border-radius: 12px;
+			}
+			h1,
+			h2,
+			h3 {
+				color: #0f4761;
+			}
+			ul {
+				margin-left: 20px;
+			}
+			b {
+				color: #0f4761;
+			}
+		</style>
+	</head>
+	<body>
+		<h1 style="text-align: center">Independent {{userType}} Agreement</h1>
+
+		<p>
+			This Independent Contractor Agreement (“Agreement”) is entered into as of
+			<b>{{today}}</b>
+			, by and between:
+		</p>
+
+		<p>
+			<b>Client:</b>
+			{{clientName}}
+			<br />
+			Address: {{clientAddress}}
+			<br />
+			Contact: {{clientEmail}} / {{clientPhone}}
+		</p>
+
+		<p>
+			<b>Contractor:</b>
+			{{userName}}
+			<br />
+			Address: {{userAddress}}
+			<br />
+			Contact: {{userEmail}}
+		</p>
+
+		<h3>1. Scope of Services</h3>
+		<p>The Contractor agrees to perform the following services for the Client:</p>
+		<ul>
+			<li>{{projectName}}</li>
+			<li>{{milestoneName}}</li>
+			<ul>
+				<li>{{deliverableName}}</li>
+			</ul>
+		</ul>
+		<p>Any changes to the scope must be agreed upon in writing by both parties.</p>
+
+		<h3>2. Term of Agreement</h3>
+		<p>
+			This Agreement begins on
+			<b>{{startDate}}</b>
+			and continues until
+			<b>{{endDate}}</b>
+			, unless terminated earlier in accordance with Section 9.
+		</p>
+
+		<h3>3. Payment Terms</h3>
+		<ul>
+			<li>
+				Total project fee:
+				<b>${{totalAmount}}</b>
+				payable as follows:
+				<ul>
+					<li>{{upfront}}% deposit upon signing.</li>
+					<li>100% upon delivery of first milestone.</li>
+					<li>Remaining balance upon project completion.</li>
+				</ul>
+			</li>
+			<li>
+				Payment due within
+				<b>7 days</b>
+				of invoicing.
+			</li>
+			<li>
+				Late payments accrue
+				<b>2% monthly interest</b>
+				on outstanding balances.
+			</li>
+		</ul>
+
+		<p>
+			<b>Note:</b>
+			Under BC law, independent contractors are responsible for their own tax remittance (CRA). The Client will not
+			withhold taxes, CPP, or EI.
+		</p>
+
+		<h3>4. Expenses</h3>
+		<p>
+			The Contractor is responsible for all personal business expenses, unless otherwise agreed in writing.
+			<br />
+			Reimbursable expenses must be pre-approved by the Client.
+		</p>
+
+		<h3>5. Independent Contractor Status</h3>
+		<ul>
+			<li>
+				The Contractor is an independent business entity and
+				<b>not an employee</b>
+				of the Client.
+			</li>
+			<li>
+				The Contractor is responsible for all applicable
+				<b>taxes, insurance, permits, and licenses</b>
+				.
+			</li>
+			<li>Nothing in this Agreement creates an employment, joint venture, or partnership relationship.</li>
+		</ul>
+
+		<h3>6. Confidentiality</h3>
+		<p>
+			Both parties agree to maintain confidentiality regarding proprietary or sensitive information shared during the
+			term of this Agreement and thereafter.
+		</p>
+
+		<h3>7. Intellectual Property (IP)</h3>
+		<ul>
+			<li>
+				Unless otherwise agreed, all
+				<b>work created by the Contractor</b>
+				under this Agreement remains the Contractor’s property until full payment is received.
+			</li>
+			<li>Upon full payment, ownership of final deliverables transfers to the Client.</li>
+			<li>The Contractor retains the right to include work in their portfolio, unless otherwise specified.</li>
+		</ul>
+
+		<h3>8. Liability & Indemnity</h3>
+		<p>
+			The Contractor is responsible for performing work to a professional standard.
+			<br />
+			The Client agrees not to hold the Contractor liable for indirect or consequential losses.
+		</p>
+
+		<h3>9. Termination</h3>
+		<p>
+			Either party may terminate this Agreement with
+			<b>7–14 days’ written notice</b>
+			.
+			<br />
+			Upon termination, the Client must pay for all completed work and approved expenses up to the termination date.
+		</p>
+
+		<h3>10. Governing Law</h3>
+		<p>
+			This Agreement is governed by the
+			<b>laws of the Province of {{userProvince}}</b>
+			and the applicable
+			<b>federal laws of Canada</b>
+			.
+			<br />
+			Both parties agree that any disputes shall be resolved in the
+			<b>courts of {{userProvince}}</b>
+			.
+		</p>
+
+		<h3>11. Entire Agreement</h3>
+		<p>
+			This document constitutes the entire agreement between the parties and supersedes all prior communications,
+			understandings, or agreements.
+		</p>
+
+		<h3>Signatures</h3>
+
+		<p>
+			<b>Client Signature:</b>
+			___________________________
+			<br />
+			Name: {{clientName}}
+			<br />
+			Date: {{today}}
+		</p>
+
+		<p>
+			<b>Contractor Signature:</b>
+			___________________________
+			<br />
+			Name: {{userName}}
+			<br />
+			Date: {{today}}
+		</p>
+	</body>
+</html>

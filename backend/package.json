@@ -28,6 +28,7 @@
 		"openai": "^6.5.0",
 		"pdf.js-extract": "^0.2.1",
 		"puppeteer": "^24.25.0",
+		"resend": "^6.4.0",
 		"swagger-jsdoc": "^6.2.8",
 		"swagger-ui-express": "^5.0.1",
 		"tesseract.js": "^6.0.1",

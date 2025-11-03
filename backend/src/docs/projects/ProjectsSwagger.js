@@ -9,6 +9,7 @@
  * /api/projects:
  *   get:
  *     summary: Get all projects with search, filter, and sort
+ *     description: Retrieve all projects for the authenticated user, with support for filtering, searching, and sorting.
  *     tags: [Projects]
  *     security:
  *       - bearerAuth: []
@@ -17,51 +18,123 @@
  *         name: viewType
  *         schema:
  *           type: string
- *           enum: [all, active, archived]
+ *           enum: [All, Active, Archived]
  *         description: Filter projects by current tab (All, Active, Archived)
- *         example: "active"
+ *         example: All
+ *
  *       - in: query
  *         name: search
  *         schema:
  *           type: string
  *         description: Search by project or client name
- *         example: "Website"
+ *         example: ""
+ *
  *       - in: query
  *         name: status
  *         schema:
  *           type: string
- *           enum: [Planning, In-Progress, Review, Done, All]
- *         description: Filter projects by status
+ *           enum: [All, Planning, In-Progress, Review, Done]
+ *           description: Filter projects by current status
+ *           example: All
+ *
  *       - in: query
  *         name: sortBy
  *         schema:
  *           type: string
- *           enum: [createdAt, startDate, dueDate, totalBudget, milestonesCount, name]
- *         description: Field to sort by
+ *           enum: [createdAt, startDate, dueDate, totalBudget, milestonesCount]
+ *         description: Field to sort by (Date Started, Due Date, Amount, Milestones)
+ *         example: dueDate
+ *
  *       - in: query
  *         name: sortOrder
  *         schema:
  *           type: string
  *           enum: [asc, desc]
- *         description: Sort order
- *         example: "desc"
+ *         description: Sort order (ascending or descending)
+ *         example: desc
+ *
  *       - in: query
  *         name: page
  *         schema:
  *           type: integer
  *         description: Page number
  *         example: 1
+ *
  *       - in: query
  *         name: limit
  *         schema:
  *           type: integer
  *         description: Number of items per page
  *         example: 10
+ *
  *     responses:
  *       200:
  *         description: Successfully retrieved projects
  *       500:
  *         description: Internal Server Error
+ */
+
+/**
+ * @swagger
+ * /api/projects:
+ *   post:
+ *     summary: Create a new project
+ *     description: Creates a new project for the authenticated user. Each project must be linked to an existing client.
+ *     tags: [Projects]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - clientId
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: "Website Redesign"
+ *               description:
+ *                 type: string
+ *                 example: "Redesigning the client's e-commerce platform with improved UX."
+ *               clientId:
+ *                 type: string
+ *                 example: "671a5b2345abcde98765f123"
+ *               type:
+ *                 type: string
+ *                 example: "Web Development"
+ *               totalBudget:
+ *                 type: number
+ *                 example: 8000
+ *               upfrontAmount:
+ *                 type: number
+ *                 example: 1500
+ *                 description: Initial upfront payment amount (if any)
+ *               startDate:
+ *                 type: string
+ *                 format: date
+ *                 example: "2025-11-01"
+ *               dueDate:
+ *                 type: string
+ *                 format: date
+ *                 example: "2026-01-31"
+ *               status:
+ *                 type: string
+ *                 enum: [Planning, In-Progress, Review, Done]
+ *                 example: "Planning"
+ *     responses:
+ *       201:
+ *         description: Project created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Project'
+ *       400:
+ *         description: Invalid request body
+ *       401:
+ *         description: Unauthorized
  */
 
 /**
@@ -88,65 +161,6 @@
  *               $ref: '#/components/schemas/Project'
  *       404:
  *         description: Project not found
- *       401:
- *         description: Unauthorized
- */
-
-/**
- * @swagger
- * /api/projects:
- *   post:
- *     summary: Create a new project
- *     description: Creates a new project for the authenticated user.
- *     tags: [Projects]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - name
- *               - clientId
- *             properties:
- *               name:
- *                 type: string
- *                 example: "Website Redesign"
- *               description:
- *                 type: string
- *                 example: "Redesign the client’s company website for better UX and performance."
- *               clientId:
- *                 type: string
- *                 example: "671a5b2345abcde98765f123"
- *               type:
- *                 type: string
- *                 example: "UI/UX Design"
- *               totalBudget:
- *                 type: number
- *                 example: 5000
- *               startDate:
- *                 type: string
- *                 format: date
- *                 example: "2025-10-01"
- *               dueDate:
- *                 type: string
- *                 format: date
- *                 example: "2025-12-31"
- *               status:
- *                 type: string
- *                 enum: [Planning, In-Progress, Review, Done]
- *                 example: "Planning"
- *     responses:
- *       201:
- *         description: Project created successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Project'
- *       400:
- *         description: Invalid data
  *       401:
  *         description: Unauthorized
  */

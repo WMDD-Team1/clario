@@ -1,4 +1,10 @@
 import mongoose from "mongoose";
+const DeliverableSchema = new mongoose.Schema(
+	{
+		name: { type: String, required: true },
+	},
+	{ _id: false }
+);
 
 const InvoiceSchema = new mongoose.Schema(
 	{
@@ -15,12 +21,12 @@ const InvoiceSchema = new mongoose.Schema(
 		milestoneId: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "Project.milestones",
-			requried: true,
+			required: true,
 		},
 		clientId: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "Client",
-			requried: true,
+			required: true,
 		},
 
 		userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
@@ -29,11 +35,7 @@ const InvoiceSchema = new mongoose.Schema(
 		milestoneName: String,
 		dueDate: Date,
 		amount: Number,
-		deliverables: [
-			{
-				name: String,
-			},
-		],
+		deliverables: [DeliverableSchema],
 
 		amount: Number,
 		taxRate: Number,
@@ -50,6 +52,7 @@ const InvoiceSchema = new mongoose.Schema(
 			enum: ["Pending", "Paid", "Overdue"],
 			default: "Pending",
 		},
+		sentAt: { type: Date, default: null },
 	},
 	{
 		timestamps: true,

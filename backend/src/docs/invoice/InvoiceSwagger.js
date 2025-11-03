@@ -2,7 +2,42 @@
  * @swagger
  * tags:
  *   name: Invoices
- *   description: API endpoints for managing invoices
+ *   description: Manage project invoices automatically generated from milestones or manually created by user.
+ */
+
+/**
+ * @swagger
+ * /api/invoices/{projectId}:
+ *   get:
+ *     summary: Get all invoices for a specific project
+ *     description: Retrieves all invoices belonging to the given project.
+ *     tags: [Invoices]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: projectId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the project
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved invoices
+ *         content:
+ *           application/json:
+ *             example:
+ *               - id: "671a1234bcdef9876543210"
+ *                 invoiceNumber: 102
+ *                 milestoneName: "UI Design"
+ *                 amount: 1200
+ *                 totalAmount: 1260
+ *                 status: "Pending"
+ *                 fileUrl: "https://storage.googleapis.com/invoices/invoice_102.pdf"
+ *       404:
+ *         description: Project not found
+ *       500:
+ *         description: Internal server error
  */
 
 /**
@@ -50,29 +85,7 @@
 
 /**
  * @swagger
- * /api/invoices:
- *   get:
- *     summary: Get all invoices
- *     description: Retrieve a list of invoices belonging to the authenticated user.
- *     tags: [Invoices]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: Successfully retrieved invoices
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Invoice'
- *       401:
- *         description: Unauthorized
- */
-
-/**
- * @swagger
- * /api/invoices/{id}:
+ * /api/invoices/{invoiceId}:
  *   get:
  *     summary: Get an invoice by ID
  *     tags: [Invoices]
@@ -80,7 +93,7 @@
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: invoiceId
  *         required: true
  *         schema:
  *           type: string
@@ -99,31 +112,78 @@
 
 /**
  * @swagger
- * /api/invoices/{id}/download:
- *   get:
- *     summary: Download invoice PDF
- *     description: Returns the Firebase file URL for the invoice PDF.
+ * /api/invoices/{invoiceId}/status:
+ *   patch:
+ *     summary: Update invoice payment status
+ *     description: Updates invoice status to Paid or Pending. If set to Paid, triggers income transaction creation.
  *     tags: [Invoices]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: invoiceId
  *         required: true
  *         schema:
  *           type: string
  *         description: Invoice ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - status
+ *             properties:
+ *               status:
+ *                 type: string
+ *                 enum: [Pending, Paid]
+ *                 example: Paid
  *     responses:
  *       200:
- *         description: Successfully returned file URL
+ *         description: Invoice status updated successfully and income triggered if applicable
  *         content:
  *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 fileUrl:
- *                   type: string
- *                   example: "https://storage.googleapis.com/.../invoice_12.pdf"
+ *             example:
+ *               message: "Invoice status updated"
+ *               result:
+ *                 id: "671a1234bcdef9876543210"
+ *                 invoiceNumber: 102
+ *                 status: "Paid"
+ *                 totalAmount: 1260
  *       404:
  *         description: Invoice not found
+ *       401:
+ *         description: Unauthorized
+ */
+
+/**
+ * @swagger
+ * /api/invoices/{invoiceId}/send:
+ *   post:
+ *     summary: Send invoice via email
+ *     description: Sends the generated invoice PDF to the client’s email using Resend.
+ *     tags: [Invoices]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: invoiceId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the invoice to send
+ *     responses:
+ *       200:
+ *         description: Invoice email sent successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               message: "Invoice #12 sent to bitna@client.com"
+ *               sentAt: "2025-11-02T18:32:00.000Z"
+ *       404:
+ *         description: Invoice not found
+ *       500:
+ *         description: Failed to send invoice email
  */

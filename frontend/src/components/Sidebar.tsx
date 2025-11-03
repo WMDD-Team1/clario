@@ -56,7 +56,7 @@ const Sidebar = () => {
     ];
 
     return (
-        <div className='flex flex-col justify-between w-[90px] h-[calc(100vh-200px)] fixed left-[40px]'>
+        <div className='hidden md:flex flex-col justify-between w-[90px] h-[calc(100vh-200px)] fixed left-[40px]'>
             <Menu items={topMenu} />
 
             <Menu items={bottomMenu} />

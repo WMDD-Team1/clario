@@ -12,11 +12,13 @@ router.use(checkJWT);
 router.use(attachUser);
 
 // Milestones
+router.get("/:projectId/milestones/:milestoneId", MilestoneController.getMilestoneById);
 router.post("/:projectId/milestones", MilestoneController.createMilestone);
 router.patch("/:projectId/milestones/:milestoneId", MilestoneController.updateMilestone);
-router.delete("/:projectId/milestones/:milestoneId", MilestoneController.deleteMilestone);
+router.patch("/:projectId/milestones/:milestoneId/archive", MilestoneController.archiveMilestone);
 
 // Deliverables
+router.get("/:projectId/milestones/:milestoneId/deliverables/:deliverableId", DeliverableController.getDeliverableById);
 router.post(
 	"/:projectId/milestones/:milestoneId/deliverables",
 	upload.single("file"),
