@@ -38,11 +38,11 @@ export const ExpensesTable: React.FC = () => {
         rounded-[20px] bg-white shadow-sm hover:shadow-md p-4
       "
     >
-      <h3 className="font-semibold text-base text-gray-700 mb-3">Top Expenses</h3>
+      <h3 className="font-semibold text-[18px] text-gray-700 mb-3">Top Expenses</h3>
 
       <div className="w-full flex flex-col justify-between gap-2 text-sm text-gray-700">
         {expenses.slice(0, 4).map((expense, idx) => (
-          <div key={idx} className="flex justify-between items-center text-[13px] border-b border-gray-200 pb-2">
+          <div key={idx} className="flex justify-between items-center text-[13px] border-b border-gray-500 pb-2">
             <div className="flex flex-col">
               <span className="font-medium">{expense.title}</span>
               <span className="text-gray-400 text-[12px]">{expense.date}</span>

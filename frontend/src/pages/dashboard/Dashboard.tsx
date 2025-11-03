@@ -11,7 +11,6 @@ import type { RootState } from '@/store';
 import { RemindersList } from './components/RemindersList';
 import Overview from './components/Overview';
 import Insight from './components/Insight';
-import { Sparkles } from 'lucide-react';
 
 export const Dashboard = () => {
   const { user } = useAuth0();
@@ -36,9 +35,9 @@ export const Dashboard = () => {
 
   /** ---------------- MOBILE DASHBOARD ---------------- **/
   const renderDashboard = () => (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col w-full gap-4">
       {/* Stats Section */}
-      <div className="grid grid-cols-2 gap-3 sm:gap-4">
+      <div className="grid grid-cols-2 gap-4 sm:gap-4">
         {[
           { label: 'Income', value: '$12,000' },
           { label: 'Expense', value: '$8,000' },
@@ -48,7 +47,7 @@ export const Dashboard = () => {
         ].map((stat, index) => (
           <div
             key={index}
-            className="flex flex-col justify-center items-center py-3 bg-white/50 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-100"
+            className="flex flex-col justify-center items-center py-3 bg-white backdrop-blur-sm rounded-2xl hover:shadow-lg border border-gray-100"
           >
             <p className="font-semibold text-gray-600 text-sm">{stat.label}</p>
             <p className="text-lg font-bold text-gray-800">{stat.value}</p>
@@ -57,22 +56,28 @@ export const Dashboard = () => {
       </div>
 
       {/* Charts and Tables */}
-      <div className="bg-transparent rounded-2xl overflow-hidden">
+      <div className=" flex bg-transparent rounded-2xl item-center justify-center w-full overflow-hidden">
         <BalanceChart data={balanceData} />
       </div>
 
-      <div className="bg-transparent rounded-2xl overflow-hidden">
+      <div className="flex bg-transparent rounded-2xl justify-center w-full overflow-hidden">
         <ExpensesTable expenses={expenses} />
       </div>
 
-      <div className="bg-transparent rounded-2xl overflow-hidden">
+      <div className="flex bg-transparent rounded-2xl justify-center w-full overflow-hidden">
         <MoneyFlowAreaChart data={flowData} />
       </div>
     </div>
   );
 
-  const renderReminders = () => <RemindersList />;
-  const renderInsights = () => <Insight />;
+  const renderReminders = () => 
+    <div className="flex flex-col gap-4 w-full max-w-md mx-auto px-4">
+      <RemindersList />
+    </div>
+  const renderInsights = () => 
+  <div className="flex flex-col gap-4 w-full max-w-md mx-auto px-4">
+    <Insight />
+  </div>
 
   /** ---------------- DESKTOP DASHBOARD ---------------- **/
   return (
@@ -82,9 +87,9 @@ export const Dashboard = () => {
         <div className="flex flex-col w-full gap-4 overflow-hidden">
           <WelcomeBanner userName={user?.name || 'User'} />
 
-          <div className="flex flex-col xl:flex-row gap-6 w-full items-start">
+          <div className="flex flex-col xl:flex-row gap-4 w-full items-start">
             {/* LEFT SECTION */}
-            <div className="flex flex-col flex-1 gap-6 min-w-0">
+            <div className="flex flex-col flex-1 gap-4 min-w-0">
               <Overview />
 
               <div className="flex flex-col lg:flex-row gap-4 w-full items-stretch">
@@ -92,7 +97,7 @@ export const Dashboard = () => {
                   <Insight />
                 </div>
 
-                <div className="flex flex-col flex-1 gap-6 min-w-0">
+                <div className="flex flex-col flex-1 gap-4 min-w-0">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
                     <div className="min-w-0">
                         <BalanceChart data={balanceData} />
@@ -118,9 +123,9 @@ export const Dashboard = () => {
       <div className="block sm:hidden px-4 pb-10">
         <div className="h-10"></div>
 
-        <h2 className="text-xl font-semibold mt-4 mb-2">
+        <p className="text-xl font-semibold mt-4 mb-2">
           Hi {user?.name || 'User'}, Welcome Back
-        </h2>
+        </p>
 
         {/* Toggle Buttons */}
         <div className="flex justify-center w-full mt-4 mb-6">
