@@ -1,6 +1,7 @@
 import { generateContractDraft, ProjectApiResponse } from "@api/index";
 import { useLoader } from "@components/LoaderProvider";
 import { Tooltip } from "@mui/material";
+import { useQueryClient } from "@tanstack/react-query";
 import { Info } from "lucide-react";
 
 interface Props {
@@ -9,11 +10,13 @@ interface Props {
 
 const InactiveContractCard = ({ project }: Props) => {
     const { setIsLoading } = useLoader();
+    const queryClient = useQueryClient();
 
     const handleDownload = async (projectId: string) => {
         try {
             setIsLoading(true);
             const fileURL = await generateContractDraft(projectId);
+            queryClient.invalidateQueries({ queryKey: ["projects", projectId] })
             if (fileURL.length === 0) {
                 console.error("No file returned");
                 return;
