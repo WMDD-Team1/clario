@@ -10,7 +10,14 @@ import { IncomeUploadSlide } from '@components/incomeExpense/IncomeUploadSlide';
 import { ExpenseUploadSlide } from '@components/incomeExpense/ExpenseUploadSlide';
 import { AddIncomeSlide } from '@components/incomeExpense/AddIncomeSlide';
 import { AddExpenseSlide } from '@components/incomeExpense/AddExpenseSlide';
-import { PostRecurrenceFormat, Meta, categoriesResonse, TransactionFormat, RecurrenceFormat } from '@api/types/transaction';
+import {
+  PostRecurrenceFormat,
+  Meta,
+  categoriesResonse,
+  TransactionFormat,
+  RecurrenceFormat,
+} from '@api/types/transaction';
+import EmptyState from '@components/EmptyState';
 
 export const IncomeExpenses = () => {
   const [incomeSlide, setIncomeSlide] = useState('110%');
@@ -24,7 +31,6 @@ export const IncomeExpenses = () => {
   const [transactionDetail, setTransactionDetail] = useState('110%');
   const [loader, setLoader] = useState(false);
   const [success, setSuccess] = useState(false);
-
 
   let initialRecurrence = {
     templateTransactionId: '',
@@ -46,7 +52,6 @@ export const IncomeExpenses = () => {
       totalPages: 0,
     },
   });
-
 
   const [allCategories, setAllCategories] = useState<categoriesResonse>({
     income: [],
@@ -125,7 +130,7 @@ export const IncomeExpenses = () => {
     title: '',
     date: '',
     categoryId: '',
-    baseAmount: 0,
+    baseAmount: '',
     origin: '',
     paymentMethod: '',
     notes: '',
@@ -369,6 +374,31 @@ export const IncomeExpenses = () => {
     }
   };
 
+  //---delete transaction-------------------
+  const deleteTransaction = async () => {
+    const token = await getAccessTokenSilently({
+      authorizationParams: {
+        audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
+      },
+    });
+
+    const response = await axios.patch(
+      `${import.meta.env.VITE_API_BASE_URL}/transactions/${oneTransaction.id}/archive`,
+      {
+        isArchived: true,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    const data = await response.data;
+    console.log(data);
+    await getTransactionData();
+    setTransactionDetail('110%');
+  };
+
   const [incomePage, setIncomePage] = useState(1);
   const [expensePage, setExpensePage] = useState(1);
 
@@ -381,7 +411,7 @@ export const IncomeExpenses = () => {
 
   const headers = [
     { key: 'date', value: 'Date' },
-    { key: 'amount', value: 'Amount ($)' },
+    { key: 'amount', value: 'Amount (CAD)' },
     { key: 'category', value: 'Category' },
     { key: 'details', value: 'Details' },
   ];
@@ -390,13 +420,14 @@ export const IncomeExpenses = () => {
   // fake data
 
   //Add filter logic-------
-  const incomeData = allTransactions?.data?.filter((transaction) => transaction.type == 'income');
+  const incomeData = allTransactions?.data?.filter((transaction) => transaction.type == 'income' && !transaction.isArchived);
   const incomeFilteredData = incomeData
     .map((transaction) => {
       const dateObj = new Date(transaction.date);
       const formattedDate = dateObj.toLocaleDateString('en-US', {
         month: 'short',
         day: '2-digit',
+        year: 'numeric',
       });
 
       return {
@@ -412,7 +443,7 @@ export const IncomeExpenses = () => {
     .slice((incomePage - 1) * 10, (incomePage - 1) * 10 + 10);
 
   //Add filter logic-----------------
-  const expenseData = allTransactions?.data?.filter((transaction) => transaction.type == 'expense');
+  const expenseData = allTransactions?.data?.filter((transaction) => transaction.type == 'expense' && !transaction.isArchived);
 
   const expenseFilteredData = expenseData
     .map((transaction) => {
@@ -420,6 +451,7 @@ export const IncomeExpenses = () => {
       const formattedDate = dateObj.toLocaleDateString('en-US', {
         month: 'short',
         day: '2-digit',
+        year: 'numeric',
       });
 
       return {
@@ -519,16 +551,27 @@ export const IncomeExpenses = () => {
           </div>
 
           <div>
-            <Table
-              // --------------------------------------
-              onClickChildren={handleTransactionDetail}
-              headers={headers}
-              data={incomeFilteredData}
-              total={incomeData.length}
-              page={incomePage}
-              pageSize={10}
-              onPageChange={handleIncomePageChange}
-            />
+            {incomeFilteredData.length === 0 ? (
+              <EmptyState
+                description="You haven't added any income yet. Add your first one to start tracking your finances"
+                buttonText="Add Income"
+                onAction={() => {
+                  addIncome();
+                  resetForm();
+                }}
+              />
+            ) : (
+              <Table
+                // --------------------------------------
+                onClickChildren={handleTransactionDetail}
+                headers={headers}
+                data={incomeFilteredData}
+                total={incomeData.length}
+                page={incomePage}
+                pageSize={10}
+                onPageChange={handleIncomePageChange}
+              />
+            )}
           </div>
         </div>
 
@@ -547,16 +590,27 @@ export const IncomeExpenses = () => {
             </Button>
           </div>
           <div>
-            <Table
-              // ----------------------------------------
-              onClickChildren={handleTransactionDetail}
-              headers={headers}
-              data={expenseFilteredData}
-              total={expenseData.length}
-              page={expensePage}
-              pageSize={10}
-              onPageChange={handleExpensePageChange}
-            />
+            {expenseFilteredData.length === 0 ? (
+              <EmptyState
+                description="You haven't added any expense yet. Add your first one to start tracking your finances"
+                buttonText="Add Expense"
+                onAction={() => {
+                  addExpenses();
+                  resetForm();
+                }}
+              />
+            ) : (
+              <Table
+                // ----------------------------------------
+                onClickChildren={handleTransactionDetail}
+                headers={headers}
+                data={expenseFilteredData}
+                total={expenseData.length}
+                page={expensePage}
+                pageSize={10}
+                onPageChange={handleExpensePageChange}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -635,7 +689,7 @@ export const IncomeExpenses = () => {
         onTransactionChange={setOneTransaction}
         onExpenseTypeChange={(value) => setExpenseType(value)}
         onRepeatToggle={() => setRepeat(!repeat)}
-        onRepeatOptionChange={value=>setRepeatOption(value)}
+        onRepeatOptionChange={(value) => setRepeatOption(value)}
         onRecurrenceChange={setRecurrence}
         onCancel={cancelOperation}
         onAdd={() => {
@@ -652,11 +706,14 @@ export const IncomeExpenses = () => {
       />
 
       <IncomeExpenseViewSlide
+      editIncome={()=>{setIndetailSlide('0px');setTransactionDetail('110%')}}
+      editExpense={()=>{setExdetailSlide('0px');setTransactionDetail('110%')}}
         oneTransaction={oneTransaction}
         transactionDetail={transactionDetail}
         cancelOperation={cancelOperation}
         allCategories={allCategories}
         activeRepeatableTransaction={activeRepeatableTransaction || null}
+        deleteTransaction={deleteTransaction}
       />
     </div>
   );

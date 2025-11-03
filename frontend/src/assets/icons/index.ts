@@ -15,6 +15,9 @@ import DotsButton from "./dots-button.svg?react";
 import FileChange from "./file-change.svg?react";
 import Trash from "./trash.svg?react";
 import TransactionUploadSuccess from "./transaction-upload-success.svg?react";
+import ChevronDown from "./chevron-down.svg?react";
+import ClientUploadSuccess from "./client-upload-success.svg?react";
+import ClientUpdateSuccess from "./client-update-success.svg?react";
 
 export {
   DashboardActiveIcon,
@@ -33,6 +36,8 @@ export {
   DotsButton,
   FileChange,
   Trash,
-  TransactionUploadSuccess
-
+  TransactionUploadSuccess,
+  ChevronDown,
+  ClientUploadSuccess,
+  ClientUpdateSuccess
 };
