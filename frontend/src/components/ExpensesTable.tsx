@@ -13,15 +13,13 @@ export const ExpensesTable: React.FC = () => {
     { title: 'Internet', date: '2025-10-21', amount: 140, category: 'Utilities' },
     { title: 'Usability Test', date: '2025-10-25', amount: 130, category: 'Research' },
   ];
+
   useEffect(() => {
     const loadExpenses = async () => {
       try {
         const res = await fetchTopExpenses();
-        if (res?.data?.length) {
-          setExpenses(res.data);
-        } else {
-          setExpenses(DUMMY_DATA);
-        }
+        if (res?.data?.length) setExpenses(res.data);
+        else setExpenses(DUMMY_DATA);
       } catch (err) {
         console.error('Failed to fetch top expenses:', err);
         setExpenses(DUMMY_DATA);
@@ -33,11 +31,26 @@ export const ExpensesTable: React.FC = () => {
   }, []);
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-4">
-      <h3 className="font-semibold text-lg mb-2">Top Expenses</h3>
-      <div className="space-y-2  divide-y ">
-        {expenses.map((expense, idx) => (
-          <InfoCard key={idx} expense={expense} />
+    <div
+      className="
+        flex flex-col justify-start items-start 
+        w-full max-w-[310px] h-auto aspect-square sm:h-[313px] shrink-0 
+        rounded-[20px] bg-white shadow-sm hover:shadow-md p-4
+      "
+    >
+      <h3 className="font-semibold text-[18px] text-gray-700 mb-3">Top Expenses</h3>
+
+      <div className="w-full flex flex-col justify-between gap-2 text-sm text-gray-700">
+        {expenses.slice(0, 4).map((expense, idx) => (
+          <div key={idx} className="flex justify-between items-center text-[13px] border-b border-gray-500 pb-2">
+            <div className="flex flex-col">
+              <span className="font-medium text-[16px]">{expense.title}</span>
+              <span className="text-gray-400 text-[16px]">{expense.date}</span>
+            </div>
+            <span className="font-semibold text-[18px] text-gray-800">
+              CAD {expense.amount.toLocaleString()}
+            </span>
+          </div>
         ))}
       </div>
     </div>

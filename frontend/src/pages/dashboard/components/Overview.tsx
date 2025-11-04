@@ -46,19 +46,16 @@ const Overview = () => {
   const stats = overview && !isAllZero(overview) ? mapOverviewToStats(overview) : DUMMY_DATA;
 
   return (
-    <>
-      <div className="w-full flex flex-wrap justify-between gap-4 pb-2 overflow-hidden">
-        {stats.map(({ label, value }, idx) => (
-          <InsightCard
-            key={idx}
-            title={label}
-            value={value}
-            className="flex-1 min-w-[180px] max-w-[220px] flex flex-col justify-center items-center 
-                      py-4 rounded-2xl shadow-sm border border-gray-100 bg-white transition-all duration-200"
-          />
-        ))}
-      </div>
-    </>
+    <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 pb-4">
+      {stats.map(({ label, value }, idx) => (
+        <InsightCard
+          key={idx}
+          title={label}
+          value={formatCurrency(value)}
+          className="flex flex-col justify-center items-center h-[96px] p-4 rounded-2xl shadow-sm border border-gray-100 bg-white transition-all duration-200"
+        />
+      ))}
+    </div>
   );
 };
 

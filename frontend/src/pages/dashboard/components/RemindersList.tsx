@@ -56,7 +56,7 @@ export const RemindersList: React.FC = () => {
   }, []);
   return (
     <div className="space-y-4">
-      <h3 className="font-semibold text-lg text-gray-700">Reminders</h3>
+      <h3 className="font-semibold text-[24px] text-gray-700">Reminders</h3>
       {reminders?.map((reminder, idx) => (
         <Reminder data={reminder} key={idx} />
       ))}

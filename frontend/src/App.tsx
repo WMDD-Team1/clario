@@ -66,6 +66,7 @@ function App() {
         }
       />
       {/* <Route
+      <Route
         path="/financial-dashboard"
         element={
           <PrivateRoute>
