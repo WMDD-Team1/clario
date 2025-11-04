@@ -71,3 +71,40 @@ export const getUserSettings = async (userId) => {
 		settings: user.settings,
 	};
 };
+
+// income categories
+export const getIncomeCategoriesService = async (userId) => {
+	const user = await User.findById(userId).select("settings.finance.incomeCategories");
+	if (!user) throw new Error("User not found");
+	return user.settings.finance.incomeCategories || [];
+};
+export const updateIncomeCategoriesService = async (userId, categories) => {
+	if (!Array.isArray(categories)) throw new Error("Categories must be an array");
+
+	const user = await User.findById(userId);
+	if (!user) throw new Error("User not found");
+
+	user.settings.finance.incomeCategories = categories;
+	await user.save();
+
+	return user.settings.finance.incomeCategories;
+};
+
+// expense categories
+export const getExpenseCategoriesService = async (userId) => {
+	const user = await User.findById(userId).select("settings.finance.expenseCategories");
+	if (!user) throw new Error("User not found");
+	return user.settings.finance.expenseCategories || [];
+};
+
+export const updateExpenseCategoriesService = async (userId, categories) => {
+	if (!Array.isArray(categories)) throw new Error("Categories must be an array");
+
+	const user = await User.findById(userId);
+	if (!user) throw new Error("User not found");
+
+	user.settings.finance.expenseCategories = categories;
+	await user.save();
+
+	return user.settings.finance.expenseCategories;
+};

@@ -152,3 +152,135 @@
  *       401:
  *         description: Unauthorized
  */
+
+/**
+ * @swagger
+ * /api/settings/categories/incomes:
+ *   get:
+ *     summary: Get user's income categories
+ *     description: Fetches the list of income categories saved in the user's finance settings.
+ *     tags: [Settings]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved income categories
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 categories:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                   example: ["Project Income", "Consulting", "Recurring Income"]
+ *       401:
+ *         description: Unauthorized
+ *
+ *   patch:
+ *     summary: Update user's income categories
+ *     description: Replaces the current list of income categories with a new one.
+ *     tags: [Settings]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               categories:
+ *                 type: array
+ *                 description: Updated list of income category labels
+ *                 items:
+ *                   type: string
+ *                 example: ["Project Income", "Consulting", "Royalties"]
+ *     responses:
+ *       200:
+ *         description: Income categories updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Income categories updated"
+ *                 categories:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                   example: ["Project Income", "Consulting", "Royalties"]
+ *       400:
+ *         description: Invalid request data
+ *       401:
+ *         description: Unauthorized
+ */
+
+/**
+ * @swagger
+ * /api/settings/categories/expenses:
+ *   get:
+ *     summary: Get user's expense categories
+ *     description: Fetches the list of expense categories saved in the user's finance settings.
+ *     tags: [Settings]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved expense categories
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 categories:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                   example: ["Software & Tools", "Subscriptions", "Taxes"]
+ *       401:
+ *         description: Unauthorized
+ *
+ *   patch:
+ *     summary: Update user's expense categories
+ *     description: Replaces the current list of expense categories with a new one.
+ *     tags: [Settings]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               categories:
+ *                 type: array
+ *                 description: Updated list of expense category labels
+ *                 items:
+ *                   type: string
+ *                 example: ["Software & Tools", "Subscriptions", "Marketing"]
+ *     responses:
+ *       200:
+ *         description: Expense categories updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Expense categories updated"
+ *                 categories:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                   example: ["Software & Tools", "Subscriptions", "Marketing"]
+ *       400:
+ *         description: Invalid request data
+ *       401:
+ *         description: Unauthorized
+ */

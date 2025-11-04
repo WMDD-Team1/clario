@@ -72,7 +72,14 @@ const UserSchema = new mongoose.Schema(
 					enum: ["British Columbia", "Quebec"],
 					default: "British Columbia",
 				},
-				categories: { type: [CategorySchema], default: [] },
+				incomeCategories: {
+					type: [String],
+					default: ["Project Income", "Recurring Income", "Professional Services"],
+				},
+				expenseCategories: {
+					type: [String],
+					default: ["Software & Tools", "Equipment & Hardware", "Subscriptions", "Professional Services"],
+				},
 			},
 		},
 	},
