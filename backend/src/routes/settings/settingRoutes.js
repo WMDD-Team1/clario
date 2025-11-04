@@ -18,3 +18,5 @@ router.patch("/categories/incomes", SettingController.updateIncomeCategories);
 
 router.get("/categories/expenses", SettingController.getExpenseCategories);
 router.patch("/categories/expenses", SettingController.updateExpenseCategories);
+
+router.get("/export/transactions", SettingController.exportCSV);
