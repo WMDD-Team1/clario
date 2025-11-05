@@ -11,10 +11,7 @@ export const transactionSchema = z.object({
             message: "Invalid projectId",
         }).optional(),
     date: z.coerce.date({ required_error: "Date is required" }),
-    categoryId: z.string()
-        .refine((val) => mongoose.Types.ObjectId.isValid(val), {
-            message: "Invalid categoryId",
-        }).optional(),
+    category: z.string().optional(),
     origin: z.string().min(1, "Origin cannot be empty"),
     baseAmount: z.number({
         required_error: "Amount is required",

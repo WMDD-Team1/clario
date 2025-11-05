@@ -33,7 +33,7 @@ const Sidebar = () => {
       tooltip: '',
     },
     {
-      route: '/dashboard2',
+      route: '/settings',
       activeIcon: <SettingsInactiveIcon />,
       inactiveIcon: <SettingsInactiveIcon />,
       tooltip: 'Settings',

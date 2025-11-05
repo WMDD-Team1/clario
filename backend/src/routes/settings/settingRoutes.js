@@ -1,6 +1,5 @@
 import express from "express";
 import * as SettingController from "../../controllers/settings/SettingController.js";
-import * as CategoryController from "../../controllers/settings/CategoryController.js";
 import { checkJWT } from "../../middlewares/checkJWT.js";
 import { attachUser } from "../../middlewares/attachUser.js";
 
@@ -14,7 +13,10 @@ router.patch("/preferences", SettingController.updatePreferences);
 router.patch("/finance", SettingController.updateFinanceSettings);
 router.get("/", SettingController.getSettings);
 
-router.get("/categories", CategoryController.getUserCategories);
-router.post("/categories", CategoryController.createUserCategory);
-router.patch("/categories/:id", CategoryController.updateUserCategory);
-router.delete("/categories/:id", CategoryController.deleteUserCategory);
+router.get("/categories/incomes", SettingController.getIncomeCategories);
+router.patch("/categories/incomes", SettingController.updateIncomeCategories);
+
+router.get("/categories/expenses", SettingController.getExpenseCategories);
+router.patch("/categories/expenses", SettingController.updateExpenseCategories);
+
+router.get("/export/transactions", SettingController.exportCSV);

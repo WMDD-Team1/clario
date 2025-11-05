@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useAppSelector } from '@/store/hooks';
 import Card from '@/components/Card';
-import BalanceChart from '@components/BalanceChart';
+import BalanceChart from '@/components/BalanceChart';
 import { ExpensesTable } from '@/components/ExpensesTable';
 import MoneyFlowAreaChart from '@/components/MoneyFlowAreaChart';
 import { WelcomeBanner } from '@/components/WelcomeBanner';
@@ -17,9 +17,27 @@ export const Dashboard = () => {
   const { data: appUser } = useAppSelector((state: RootState) => state.user);
   const [activeTab, setActiveTab] = useState<'reminders' | 'dashboard' | 'insights'>('dashboard');
 
+  const balanceData = [
+    { name: 'Expense', value: 2000, color: '#9CA3AF' },
+    { name: 'Balance', value: 3250, color: '#4B5563' },
+  ];
+
+  const flowData = [
+    { name: 'Jan', income: 4000, expense: 2400 },
+    { name: 'Feb', income: 3000, expense: 1398 },
+    { name: 'Mar', income: 2000, expense: 9800 },
+  ];
+
+  const expenses = [
+    { id: 1, category: 'Rent', amount: 1200 },
+    { id: 2, category: 'Groceries', amount: 300 },
+  ];
+
+  /** ---------------- MOBILE DASHBOARD ---------------- **/
   const renderDashboard = () => (
-    <div className="flex flex-col gap-6">
-      <div className="grid grid-cols-2 gap-3 sm:gap-4">
+    <div className="flex flex-col w-full gap-4">
+      {/* Stats Section */}
+      <div className="grid grid-cols-2 gap-4 sm:gap-4">
         {[
           { label: 'Income', value: '$12,000' },
           { label: 'Expense', value: '$8,000' },
@@ -29,7 +47,7 @@ export const Dashboard = () => {
         ].map((stat, index) => (
           <div
             key={index}
-            className="flex-1 min-w-[150px] flex flex-col justify-center items-center py-3 rounded-2xl shadow-sm border border-gray-100 bg-white"
+            className="flex flex-col justify-center items-center py-3 bg-white backdrop-blur-sm rounded-2xl hover:shadow-lg border border-gray-100"
           >
             <p className="font-semibold text-gray-600 text-sm">{stat.label}</p>
             <p className="text-lg font-bold text-gray-800">{stat.value}</p>
@@ -37,81 +55,89 @@ export const Dashboard = () => {
         ))}
       </div>
 
-      <Card style="card1">
+      {/* Charts and Tables */}
+      <div className=" flex bg-transparent rounded-2xl item-center justify-center w-full overflow-hidden">
         <BalanceChart />
-      </Card>
+      </div>
 
-      <Card style="card1">
-        <MoneyFlowAreaChart />
-      </Card>
-
-      <Card style="card1">
+      <div className="flex bg-transparent rounded-2xl justify-center w-full overflow-hidden">
         <ExpensesTable />
-      </Card>
+      </div>
+
+      <div className="flex bg-transparent rounded-2xl justify-center w-full overflow-hidden">
+        <MoneyFlowAreaChart />
+      </div>
     </div>
   );
 
+  const renderReminders = () => 
+    <div className="flex flex-col gap-4 w-full max-w-md mx-auto px-4">
+      <RemindersList />
+    </div>
+  const renderInsights = () => 
+  <div className="flex flex-col gap-4 w-full max-w-md mx-auto px-4">
+    <Insight />
+  </div>
+
+  /** ---------------- DESKTOP DASHBOARD ---------------- **/
   return (
     <>
-      {/* === DESKTOP VIEW (unchanged) === */}
+      {/* DESKTOP VIEW */}
       <div className="hidden sm:block">
-        <div className="flex flex-col gap-6 w-full overflow-hidden">
-          {/* Welcome */}
+        <div className="flex flex-col w-full gap-4 overflow-hidden">
           <WelcomeBanner userName={user?.name || 'User'} />
 
-          {/* === Main Body (Left + Center + Right) === */}
-          <div className="flex flex-col xl:flex-row gap-6">
-            {/* ==== Left + Center Section ==== */}
-            <div className="flex flex-col flex-1 min-w-0 gap-6">
-              {/* --- Top Stats Row --- */}
+          <div className="flex flex-col xl:flex-row gap-4 w-full items-start">
+            {/* LEFT SECTION */}
+            <div className="flex flex-col flex-1 gap-4 min-w-0">
               <Overview />
-              {/* --- Insights + Charts Row --- */}
-              <div className="flex flex-col lg:flex-row gap-6 w-full">
-                {/* Insights (Left) */}
-                <Insight />
-                {/* Charts (Center) */}
-                <div className="flex flex-col flex-[1.2] gap-6">
-                  <div className="flex flex-col md:flex-row gap-4">
-                    <div className="flex-1">
-                      <BalanceChart />
+
+              <div className="flex flex-col lg:flex-row gap-4 w-full items-stretch ">
+                <div className="flex flex-col lg:w-[39%] xl:w-[39%] gap-4">
+                  <Insight />
+                </div>
+
+                <div className="flex flex-col flex-1 gap-4 min-w-0">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+                    <div className="min-w-0">
+                        <BalanceChart />
                     </div>
-                    <div className="flex-1">
-                      <ExpensesTable />
+                    <div className="min-w-0">
+                        <ExpensesTable />
                     </div>
                   </div>
-                  <div>
                     <MoneyFlowAreaChart />
-                  </div>
                 </div>
               </div>
             </div>
 
-            {/* ==== Right Column - Reminders ==== */}
-            <div className="flex flex-col w-full xl:w-[26%] gap-4">
+            {/* RIGHT SECTION */}
+            <div className="flex flex-col xl:w-[25%] gap-4">
               <RemindersList />
             </div>
           </div>
         </div>
       </div>
 
-      {/* === MOBILE VIEW (≤580px) === */}
+      {/* MOBILE VIEW */}
       <div className="block sm:hidden px-4 pb-10">
-        {/* Placeholder for hidden header */}
         <div className="h-10"></div>
 
-        <h2>Hi {user?.name || 'User'}, Welcome Back</h2>
+        <p className="text-xl font-semibold mt-4 mb-2">
+          Hi {user?.name || 'User'}, Welcome Back
+        </p>
 
-        {/* Toggle */}
+        {/* Toggle Buttons */}
         <div className="flex justify-center w-full mt-4 mb-6">
-          <div className="flex bg-gray-800 text-white rounded-full p-1 w-full max-w-md justify-between">
+          <div className="flex bg-white text-[#02357C] rounded-xl p-1 w-full max-w-md justify-between">
             {['insights', 'dashboard', 'reminders'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab as any)}
-                className={`flex-1 py-2 rounded-full text-sm font-medium transition-all ${
+                className={`flex-1 py-2 rounded-xl text[#02357C] text-sm font-medium transition-all ${
                   activeTab === tab
-                    ? 'bg-white text-gray-900 shadow-md'
-                    : 'text-gray-300 hover:text-white'
+                    ? 'bg-[#0665EC] text-white shadow-md'
+                    : 'text-[#02357C] hover:text-white'
                 }`}
               >
                 {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -120,10 +146,10 @@ export const Dashboard = () => {
           </div>
         </div>
 
-        {/* Content */}
-        {activeTab === 'reminders' && <RemindersList />}
+        {/* Conditional Content */}
+        {activeTab === 'reminders' && renderReminders()}
         {activeTab === 'dashboard' && renderDashboard()}
-        {activeTab === 'insights' && <Insight />}
+        {activeTab === 'insights' && renderInsights()}
       </div>
     </>
   );
