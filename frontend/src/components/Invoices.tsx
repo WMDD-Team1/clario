@@ -1,4 +1,4 @@
-import { fetchInvoicesByProject, InvoiceApiResponse, updateInvoice } from "@api/index";
+import { fetchInvoicesByProject, InvoiceApiResponse, sendInvoice, updateInvoice } from "@api/index";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Loader from "./Loader";
 import { ReactNode, useState } from "react";
@@ -7,6 +7,7 @@ import { INVOICE_HEADERS } from "@/constants/invoiceConstants";
 import { ChevronDown } from "lucide-react";
 import { useLoader } from "./LoaderProvider";
 import InvoiceDrawer from "./forms/Invoice/InvoiceDrawer";
+import { Alert, Snackbar } from "@mui/material";
 
 interface Props {
     projectId: string;
@@ -14,6 +15,8 @@ interface Props {
 
 const Invoices = ({ projectId }: Props) => {
     const { setIsLoading } = useLoader();
+    const [showInvoiceToast, setShowInvoiceToast] = useState(false);
+    const [toastSetup, setToastSetup] = useState<{ success: boolean, message: string }>();
     const [isInvoiceDrawerOpen, setIsInvoiceDrawerOpen] = useState(false);
     const [selectedInvoice, setSelectedInvoice] = useState<InvoiceApiResponse | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
@@ -72,8 +75,23 @@ const Invoices = ({ projectId }: Props) => {
         setIsInvoiceDrawerOpen(true);
     }
 
-    const handleSendInvoice = (invoiceId: string) => {
-        console.log(invoiceId);
+    const handleSendInvoice = async (invoiceId: string) => {
+        setIsLoading(true);
+        const sent = await sendInvoice(invoiceId);
+        setIsLoading(false);
+        if (sent) {
+            setToastSetup({
+                success: true,
+                message: "Invoice sent",
+            })
+        } else {
+            setToastSetup({
+                success: false,
+                message: "Invoice not sent",
+            })
+        }
+        setShowInvoiceToast(true);
+        setIsInvoiceDrawerOpen(false);
     }
 
     return (
@@ -96,6 +114,11 @@ const Invoices = ({ projectId }: Props) => {
                     onClickChildren={handleOpenInvoice}
                     onPageChange={setCurrentPage} />
             )}
+            <Snackbar open={showInvoiceToast} autoHideDuration={3000} onClose={() => setShowInvoiceToast(false)}>
+                <Alert severity={toastSetup?.success ? "success" : "error"} sx={{ backgroundColor: `var(${toastSetup?.success ? '--primitive-colors-success-500' : '--primitive-colors-error-500'})`, color: "white" }}>
+                    {toastSetup?.message}
+                </Alert>
+            </Snackbar>
         </>
     )
 }

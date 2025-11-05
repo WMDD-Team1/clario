@@ -26,8 +26,6 @@ const InvoiceDrawer = ({ isOpen, onClose, onSend, invoice }: Props) => {
 
     let title = "Invoice";
 
-    console.log(invoice)
-
     return (
         <>
             {invoice && <FormDrawer title={title} isOpen={isOpen} onClose={onClose} divRef={divRef}>
