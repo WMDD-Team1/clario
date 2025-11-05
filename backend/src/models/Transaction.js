@@ -22,9 +22,8 @@ const TransactionSchema = new mongoose.Schema(
 			type: Date,
 			required: true,
 		},
-		categoryId: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: "Category",
+		category: {
+			type: String,
 			required: false,
 		},
 		origin: {
