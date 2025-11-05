@@ -5,15 +5,16 @@ import { createPortal } from 'react-dom';
 interface Action {
     id: string;
     label: string;
-    action: () => void;
+    action: (record?: any) => void;
 }
 
 interface ActionMenuProps {
     actions: Action[];
+    record?: any
     direction: "horizontal" | "vertical";
 }
 
-const ActionMenu: React.FC<ActionMenuProps> = ({ actions, direction }: ActionMenuProps) => {
+const ActionMenu: React.FC<ActionMenuProps> = ({ actions, record, direction }: ActionMenuProps) => {
     const [open, setOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
@@ -67,7 +68,7 @@ const ActionMenu: React.FC<ActionMenuProps> = ({ actions, direction }: ActionMen
                         <button
                             key={item.id}
                             onClick={() => {
-                                item.action();
+                                item.action(record);
                                 setOpen(false);
                             }}
                             className={`block w-full text-left px-4 py-2 text-sm text-[var(--primitive-colors-gray-light-mode-600)] hover:bg-[var(--sublight)] hover:text-[var(--tertiary-text)] transition`}

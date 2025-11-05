@@ -1,6 +1,7 @@
 import { formatCurrency } from "@utils/formatCurrency";
 import { formatDate } from "@utils/formatDate";
 import { ChevronLeft, ChevronRight, Download } from "lucide-react";
+import ActionMenu from "./ActionMenu";
 
 interface RowData {
     [key: string]: any;
@@ -12,6 +13,12 @@ interface Header {
     render?: (row: RowData) => React.ReactNode;
 }
 
+interface Action {
+    id: string;
+    label: string;
+    action: (record: any) => void;
+}
+
 interface Props {
     headers: Header[];
     data: RowData[];
@@ -20,11 +27,13 @@ interface Props {
     pageSize: number;
     onPageChange: (page: number) => void;
     onClickChildren?: (childId: string) => void;
+    actions?: Action[]
 }
 
 const Table = ({
     headers,
     data,
+    actions = [],
     total,
     page,
     pageSize,
@@ -34,8 +43,9 @@ const Table = ({
     const totalPages = Math.ceil(total / pageSize);
 
     // ----- Render helpers -----
-    const renderCellValue = (key: string, value: any) => {
+    const renderCellValue = (key: string, row: any) => {
         const lowerKey = key.toLowerCase();
+        const value = row[key];
 
         if (lowerKey.includes("date")) {
             return value ? formatDate(value, { stringMonth: true }) : "-";
@@ -43,6 +53,20 @@ const Table = ({
 
         if (lowerKey.includes("amount") || lowerKey.includes("price")) {
             return value ? `$ ${formatCurrency(value)}` : "-";
+        }
+
+        if (lowerKey.includes(".")) {
+            const keys = key.split(".");
+            let nestedValue = row;
+            for (const k of keys) {
+                if (nestedValue && k in nestedValue) {
+                    nestedValue = nestedValue[k];
+                } else {
+                    nestedValue = null;
+                    break;
+                }
+            }
+            return nestedValue ?? "-";
         }
 
         if (lowerKey.includes("url")) {
@@ -88,6 +112,7 @@ const Table = ({
                                     {header.value}
                                 </th>
                             ))}
+                            {actions ? <th></th> : null}
                         </tr>
                     </thead>
 
@@ -105,14 +130,14 @@ const Table = ({
                             data.map((row, i) => (
                                 <tr
                                     key={row.id || i}
-                                    onClick={() =>
-                                        onClickChildren && row.id && onClickChildren(row.id)
-                                    }
                                     className={`border-t border-gray-100 ${onClickChildren && 'hover:bg-[#f9fbff] transition cursor-pointer'}`}
                                 >
                                     {headers.map((header) => (
                                         <td
                                             key={header.key}
+                                            onClick={() =>
+                                                onClickChildren && row.id && onClickChildren(row.id)
+                                            }
                                             className={`px-6 py-4 whitespace-nowrap text-sm text-gray-600 ${header.key.toLowerCase().includes("amount") ||
                                                 header.key.toLowerCase().includes("price")
                                                 ? "text-right"
@@ -121,9 +146,17 @@ const Table = ({
                                         >
                                             {header.render
                                                 ? header.render(row)
-                                                : renderCellValue(header.key, row[header.key])}
+                                                : renderCellValue(header.key, row)}
                                         </td>
                                     ))}
+                                    {actions ?
+                                        <td>
+                                            <ActionMenu
+                                                direction="vertical"
+                                                actions={actions}
+                                                record={row}
+                                            />
+                                        </td> : null}
                                 </tr>
                             ))
                         )}
