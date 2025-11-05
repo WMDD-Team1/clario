@@ -12,7 +12,15 @@ interface Props {
 const MenuItem = ({ route, children, onClick, tooltip }: Props) => {
 
     return (
-        <Tooltip title={tooltip} arrow placement="right">
+        <Tooltip title={tooltip} arrow placement="right" slotProps={{
+            tooltip: {
+                sx: {
+                    backgroundColor: "var(--primitive-colors-brand-primary-925)",
+                    fontSize: "14px",
+                    color: "white"
+                }
+            }
+        }}>
             <li className="relative group cursor-pointer rounded-lg transition"
                 key={route}
                 onClick={() => onClick(route)}>
