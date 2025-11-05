@@ -12,11 +12,12 @@ import { DotsButton } from '@assets/icons';
 import EmptyState from './EmptyState';
 import Loader from '@components/Loader';
 import Success from '@components/Success';
-import { ClientUploadSuccess, ClientUpdateSuccess } from '@assets/icons';
+import { ClientUploadSuccess, ClientUpdateSuccess, ViewProject } from '@assets/icons';
+import { Link } from 'react-router-dom';
 
 const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string) => void }) => {
   interface Project {
-    _id: string;
+    id: string;
     name: string;
   }
 
@@ -225,7 +226,7 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
     };
 
     const response = await axios.patch(
-      `${import.meta.env.VITE_API_BASE_URL}/clients/${clientId}`,
+      `${import.meta.env.VITE_API_BASE_URL}/clients/${oneClient.id}`,
       payload,
       {
         headers: {
@@ -399,14 +400,17 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
         {openDotsId === client.id && (
           <>
             <div
-            className="fixed inset-0 z-10"
-            onClick={(e) => {
-              setOpenDotsId(null);
-              e.stopPropagation();
-              }}></div>
-            <div className={`absolute right-0 w-48 bg-white shadow-lg z-20 p-[1rem] rounded-[1rem] hidden md:block cursor-pointer ${
-              index >= pagedClients.length - 2 ? 'bottom-full mb-2' : 'mt-2'
-            }`}>
+              className="fixed inset-0 z-10"
+              onClick={(e) => {
+                setOpenDotsId(null);
+                e.stopPropagation();
+              }}
+            ></div>
+            <div
+              className={`absolute right-0 w-48 bg-white shadow-lg z-20 p-[1rem] rounded-[1rem] hidden md:block cursor-pointer ${
+                index >= pagedClients.length - 2 ? 'bottom-full mb-2' : 'mt-2'
+              }`}
+            >
               <div
                 className="cursor-pointer px-4 py-2 hover:bg-blue-100 rounded-[.5rem]"
                 onClick={(e) => {
@@ -599,10 +603,15 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
         title="Client Details"
         slide={slideDetail}
         onClose={cancelOperation}
-        confirmText="Cancel"
-        onConfirm={cancelOperation}
+        confirmText={!oneClient.isArchived ? 'Archive' : 'Unarchive'}
+        onConfirm={() => {
+            !oneClient.isArchived ? deleteClient() : unarchiveClient();
+          }}
         extralText="Edit"
-        onExtra={() => {setSlideEdit('0px');setSuccess(false);}}
+        onExtra={() => {
+          setSlideEdit('0px');
+          setSuccess(false);
+        }}
       >
         <InfoRow label="Client Name" value={oneClient.name} />
         <InfoRow label="Phone" value={oneClient.phone} />
@@ -613,14 +622,25 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
         <InfoRow label="City" value={oneClient.address?.city} />
         <InfoRow label="Country" value={oneClient.address?.country} />
 
-        <div className="flex flex-col items-start p-[1rem] border-gray-200 bg-blue-50 rounded-[1rem] my-[1rem]">
-          <p>Projects</p>
-          {oneClient.projects?.map((project) => (
-            <p key={project._id}>{project.name}</p>
-          ))}
+        <div className="flex flex-col items-start p-[1rem] border-gray-200 bg-blue-50 rounded-[1rem] my-[1rem] gap-[1rem]">
+          <p className="font-bold">Projects</p>
+          {(oneClient.projects?.length == 0 || !oneClient.projects) ? (
+            <p className='text-gray-400'>No projects added.</p>
+          ) : (
+            <>
+              {oneClient.projects?.slice(0, 3).map((project) => (
+                <div className="flex flex-row flex-nowrap justify-between w-full">
+                  <p key={project.id}>{project.name}</p>
+                  <Link to={`/projects/${project.id}`}>
+                    <ViewProject />
+                  </Link>
+                </div>
+              ))}
+            </>
+          )}
         </div>
 
-        <Button
+        {/* <Button
           buttonColor={!oneClient.isArchived ? 'deleteButton' : 'regularButton'}
           width="100%"
           textColor="white"
@@ -629,12 +649,12 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
           }}
         >
           {!oneClient.isArchived ? 'Archive' : 'Unarchive'}
-        </Button>
+        </Button> */}
       </Slide>
 
       <Slide
         title="Edit Client"
-        extralText={success?'view':'Save'}
+        extralText={success ? 'view' : 'Save'}
         slide={slideEdit}
         confirmText="cancel"
         onConfirm={cancelOperation}
@@ -642,10 +662,10 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
         onExtra={
           success
             ? () => {
-              setSlideEdit('110%');
+                setSlideEdit('110%');
                 setSlideDetail('0px');
               }
-            : updateClient
+            : ()=>updateClient()
         }
       >
         {loader ? (
@@ -654,7 +674,7 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
           </div>
         ) : success ? (
           <Success
-            title="Client Client saved successfully."
+            title="Client saved successfully."
             p1="The details have been added to your records."
           >
             <ClientUpdateSuccess className="w-25 h-25" />
@@ -687,7 +707,7 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
               onChange={(e) => setOneClient({ ...oneClient, notes: e.target.value })}
             />
 
-            <p>Client's Address</p>
+            <p className='font-bold text-center'>Client's Address</p>
             <Input
               color="bg-white"
               label="Street Address"

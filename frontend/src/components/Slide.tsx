@@ -42,24 +42,24 @@ const Slide: React.FC<SlideProps> = ({
       />
 
       <div
-        className="fixed top-0 right-0 h-full shadow-lg bg-white transition-transform duration-300 sm:rounded-tl-[20px] sm:rounded-bl-[20px] z-1020 flex flex-col gap-[1rem] sm:w-[450px]  w-full"
+        className="fixed top-0 right-0 h-full shadow-lg bg-white transition-transform duration-300 ease-in-out sm:rounded-tl-[50px] sm:rounded-bl-[50px] z-1020 flex flex-col sm:w-[450px]  w-full"
         style={{ transform: `translateX(${slide})` }}
       >
         <div
-        className="absolute top-14 sm:left-[-1rem] left-[2rem] bg-blue-300 w-12 h-12 rounded-[1rem] cursor-pointer flex items-center justify-center shadow-md z-60"
+        className="absolute top-19 sm:left-[-1rem] left-[2rem] bg-blue-300 w-12 h-12 rounded-[1rem] cursor-pointer flex items-center justify-center shadow-md z-60"
         onClick={onClose}
         >
           <Forward className="w-8 h-8"/>
         </div>
-        <h2
-          className={`text-[${fontSizeOptions.h2}] text-center bg-blue-50 p-[1rem] sticky top-0 z-10 sm:rounded-tl-[20px]`}
+        <h3
+          className={`text-3xl font-semibold text-center bg-blue-50 p-[2rem] sticky top-0 z-10 sm:rounded-tl-[50px]`}
         >
           {title}
-        </h2>
-        <div className="flex flex-col gap-[1.5rem] p-[2rem] h-full overflow-y-auto">{children}</div>
+        </h3>
+        <div className="flex flex-col gap-[1.5rem] p-[2rem] h-full overflow-y-auto pt-[2.5rem]">{children}</div>
 
         {showFooter && (
-          <div className="flex flex-row justify-center gap-[1rem] sticky bottom-0 w-full p-[2rem] bg-blue-50 sm:rounded-bl-[20px]">
+          <div className="flex flex-row justify-center gap-[1rem] sticky bottom-0 w-full p-[2rem] bg-blue-50 sm:rounded-bl-[50px]">
             {showConfirm && onConfirm && (
               <Button
                 buttonColor="whiteButton"
