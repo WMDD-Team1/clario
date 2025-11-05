@@ -1,7 +1,7 @@
 import { MilestoneApiResponse } from "@/api";
 import api from "../api";
 
-export const createMilestone = async (data: any, projectId: string): Promise<MilestoneApiResponse> => {
+export const createMilestone = async (data: any, projectId: string): Promise<{milestone: MilestoneApiResponse}> => {
     try {
         const res = await api.post<MilestoneApiResponse>(`/projects/${projectId}/milestones`, data);
         data = res.data;

@@ -1,3 +1,5 @@
+import { DeliverableApiResponse } from "./projectApi";
+
 export interface InvoiceApiResponse {
     id: string;
     invoiceNumber: number;
@@ -15,4 +17,5 @@ export interface InvoiceApiResponse {
     createdAt: string;
     updatedAt: string;
     sendAt: string;
+    deliverables?: DeliverableApiResponse[];
 }

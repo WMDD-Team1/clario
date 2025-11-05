@@ -1,4 +1,4 @@
-import { fetchInvoicesByProject, updateInvoice } from "@api/index";
+import { fetchInvoicesByProject, InvoiceApiResponse, updateInvoice } from "@api/index";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Loader from "./Loader";
 import { ReactNode, useState } from "react";
@@ -6,6 +6,7 @@ import Table from "./Table";
 import { INVOICE_HEADERS } from "@/constants/invoiceConstants";
 import { ChevronDown } from "lucide-react";
 import { useLoader } from "./LoaderProvider";
+import InvoiceDrawer from "./forms/Invoice/InvoiceDrawer";
 
 interface Props {
     projectId: string;
@@ -13,6 +14,8 @@ interface Props {
 
 const Invoices = ({ projectId }: Props) => {
     const { setIsLoading } = useLoader();
+    const [isInvoiceDrawerOpen, setIsInvoiceDrawerOpen] = useState(false);
+    const [selectedInvoice, setSelectedInvoice] = useState<InvoiceApiResponse | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
     const queryClient = useQueryClient();
     const { data, isLoading, error } = useQuery({
@@ -64,8 +67,23 @@ const Invoices = ({ projectId }: Props) => {
 
     if (error) return 'An error has occurred: ' + error.message
 
+    const handleOpenInvoice = (invoiceId: string) => {
+        setSelectedInvoice(invoices.find(invoice => invoice.id === invoiceId) ?? null)
+        setIsInvoiceDrawerOpen(true);
+    }
+
+    const handleSendInvoice = (invoiceId: string) => {
+        console.log(invoiceId);
+    }
+
     return (
         <>
+            <InvoiceDrawer
+                isOpen={isInvoiceDrawerOpen}
+                onClose={() => setIsInvoiceDrawerOpen(false)}
+                invoice={selectedInvoice}
+                onSend={handleSendInvoice}
+            />
             {!invoices.length ? (
                 <p>No invoices to show</p>
             ) : (
@@ -75,6 +93,7 @@ const Invoices = ({ projectId }: Props) => {
                     total={meta.total}
                     page={meta.page}
                     pageSize={meta.limit}
+                    onClickChildren={handleOpenInvoice}
                     onPageChange={setCurrentPage} />
             )}
         </>
