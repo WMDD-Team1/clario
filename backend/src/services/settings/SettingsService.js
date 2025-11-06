@@ -1,6 +1,8 @@
 import axios from "axios";
 import User from "../../models/User.js";
 import { getManagementToken } from "../../utils/auth0.js";
+import Transaction from "../../models/Transaction.js";
+import { Parser } from "json2csv";
 
 export const updateAuth0Profile = async (auth0Id, updates) => {
 	const token = await getManagementToken();
@@ -70,4 +72,64 @@ export const getUserSettings = async (userId) => {
 		},
 		settings: user.settings,
 	};
+};
+
+// income categories
+export const getIncomeCategoriesService = async (userId) => {
+	const user = await User.findById(userId).select("settings.finance.incomeCategories");
+	if (!user) throw new Error("User not found");
+	return user.settings.finance.incomeCategories || [];
+};
+export const updateIncomeCategoriesService = async (userId, categories) => {
+	if (!Array.isArray(categories)) throw new Error("Categories must be an array");
+
+	const user = await User.findById(userId);
+	if (!user) throw new Error("User not found");
+
+	user.settings.finance.incomeCategories = categories;
+	await user.save();
+
+	return user.settings.finance.incomeCategories;
+};
+
+// expense categories
+export const getExpenseCategoriesService = async (userId) => {
+	const user = await User.findById(userId).select("settings.finance.expenseCategories");
+	if (!user) throw new Error("User not found");
+	return user.settings.finance.expenseCategories || [];
+};
+
+export const updateExpenseCategoriesService = async (userId, categories) => {
+	if (!Array.isArray(categories)) throw new Error("Categories must be an array");
+
+	const user = await User.findById(userId);
+	if (!user) throw new Error("User not found");
+
+	user.settings.finance.expenseCategories = categories;
+	await user.save();
+
+	return user.settings.finance.expenseCategories;
+};
+
+export const exportTransactionsCSV = async (userId) => {
+	const records = await Transaction.find({ userId }).lean();
+	if (!records.length) throw new Error("No data to export");
+
+	const fields = [
+		{ label: "Title", value: "title" },
+		{ label: "Type", value: "type" },
+		{ label: "Category", value: (r) => r.categoryId || "N/A" },
+		{ label: "Amount (Total)", value: "totalAmount" },
+		{ label: "Tax Amount", value: "taxAmount" },
+		{ label: "Base Amount", value: "baseAmount" },
+		{ label: "Date", value: (r) => new Date(r.date).toLocaleDateString("en-CA") },
+		{ label: "Payment Method", value: "paymentMethod" },
+		{ label: "Notes", value: "notes" },
+		{ label: "Frequency", value: "frequency" },
+	];
+
+	const parser = new Parser({ fields });
+	const csv = parser.parse(records);
+
+	return csv;
 };

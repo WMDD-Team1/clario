@@ -1,8 +1,14 @@
+import User from "../../models/User.js";
 import {
 	updateUserProfile,
 	updateUserPreferences,
 	updateUserFinanceSettings,
 	getUserSettings,
+	getIncomeCategoriesService,
+	updateIncomeCategoriesService,
+	getExpenseCategoriesService,
+	updateExpenseCategoriesService,
+	exportTransactionsCSV,
 } from "../../services/settings/SettingsService.js";
 
 export const updateProfile = async (req, res) => {
@@ -62,5 +68,63 @@ export const getSettings = async (req, res) => {
 	} catch (err) {
 		console.error("Error fetching user settings:", err);
 		res.status(500).json({ message: "Internal Server Error" });
+	}
+};
+
+export const getIncomeCategories = async (req, res) => {
+	try {
+		const { id: userId } = req.user;
+		const data = await getIncomeCategoriesService(userId);
+		res.status(200).json({ categories: data });
+	} catch (err) {
+		console.error("Error fetching income categories:", err);
+		res.status(500).json({ message: err.message || "Internal Server Error" });
+	}
+};
+export const updateIncomeCategories = async (req, res) => {
+	try {
+		const { id: userId } = req.user;
+		const { categories } = req.body;
+		const data = await updateIncomeCategoriesService(userId, categories);
+		res.status(200).json({ message: "Income categories updated", categories: data });
+	} catch (err) {
+		console.error("Error updating income categories:", err);
+		res.status(500).json({ message: err.message || "Internal Server Error" });
+	}
+};
+export const getExpenseCategories = async (req, res) => {
+	try {
+		const { id: userId } = req.user;
+		const data = await getExpenseCategoriesService(userId);
+		res.status(200).json({ categories: data });
+	} catch (err) {
+		console.error("Error fetching expense categories:", err);
+		res.status(500).json({ message: err.message || "Internal Server Error" });
+	}
+};
+export const updateExpenseCategories = async (req, res) => {
+	try {
+		const { id: userId } = req.user;
+		const { categories } = req.body;
+		const data = await updateExpenseCategoriesService(userId, categories);
+		res.status(200).json({ message: "Expense categories updated", categories: data });
+	} catch (err) {
+		console.error("Error updating expense categories:", err);
+		res.status(500).json({ message: err.message || "Internal Server Error" });
+	}
+};
+
+export const exportCSV = async (req, res) => {
+	try {
+		const { id: userId } = req.user;
+		const csvBuffer = await exportTransactionsCSV(userId);
+
+		res.setHeader("Content-Type", "text/csv");
+		res.setHeader("Content-Disposition", "attachment; filename=transactions.csv");
+
+		res.status(200).send(csvBuffer);
+	} catch (err) {
+		console.error("Error exporting transactions:", err);
+		res.status(500).json({ message: "Failed to export transactions" });
 	}
 };

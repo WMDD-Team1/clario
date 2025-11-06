@@ -152,3 +152,165 @@
  *       401:
  *         description: Unauthorized
  */
+
+/**
+ * @swagger
+ * /api/settings/categories/incomes:
+ *   get:
+ *     summary: Get user's income categories
+ *     description: Fetches the list of income categories saved in the user's finance settings.
+ *     tags: [Settings]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved income categories
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 categories:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                   example: ["Project Income", "Consulting", "Recurring Income"]
+ *       401:
+ *         description: Unauthorized
+ *
+ *   patch:
+ *     summary: Update user's income categories
+ *     description: Replaces the current list of income categories with a new one.
+ *     tags: [Settings]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               categories:
+ *                 type: array
+ *                 description: Updated list of income category labels
+ *                 items:
+ *                   type: string
+ *                 example: ["Project Income", "Consulting", "Royalties"]
+ *     responses:
+ *       200:
+ *         description: Income categories updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Income categories updated"
+ *                 categories:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                   example: ["Project Income", "Consulting", "Royalties"]
+ *       400:
+ *         description: Invalid request data
+ *       401:
+ *         description: Unauthorized
+ */
+
+/**
+ * @swagger
+ * /api/settings/categories/expenses:
+ *   get:
+ *     summary: Get user's expense categories
+ *     description: Fetches the list of expense categories saved in the user's finance settings.
+ *     tags: [Settings]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved expense categories
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 categories:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                   example: ["Software & Tools", "Subscriptions", "Taxes"]
+ *       401:
+ *         description: Unauthorized
+ *
+ *   patch:
+ *     summary: Update user's expense categories
+ *     description: Replaces the current list of expense categories with a new one.
+ *     tags: [Settings]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               categories:
+ *                 type: array
+ *                 description: Updated list of expense category labels
+ *                 items:
+ *                   type: string
+ *                 example: ["Software & Tools", "Subscriptions", "Marketing"]
+ *     responses:
+ *       200:
+ *         description: Expense categories updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Expense categories updated"
+ *                 categories:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                   example: ["Software & Tools", "Subscriptions", "Marketing"]
+ *       400:
+ *         description: Invalid request data
+ *       401:
+ *         description: Unauthorized
+ */
+
+/**
+ * @swagger
+ * /api/settings/export/transactions:
+ *   get:
+ *     summary: Export all user transactions (income & expense) as CSV
+ *     description: |
+ *       Downloads a CSV file containing all income and expense transactions for the authenticated user.
+ *       Each row includes title, type, amounts, category, payment method, and date.
+ *     tags: [Settings]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Successfully exported CSV file
+ *         content:
+ *           text/csv:
+ *             schema:
+ *               type: string
+ *               example: |
+ *                 Title,Type,Category,Amount (Total),Tax Amount,Base Amount,Date,Payment Method,Notes,Frequency
+ *                 Website Design,income,Project Income,2800,300,2500,2025-11-02,Stripe,Design phase payment,monthly
+ *                 Figma Pro,expense,Software & Tools,45,0,45,2025-11-01,Credit Card,Subscription renewal,monthly
+ *       401:
+ *         description: Unauthorized — Missing or invalid bearer token
+ *       404:
+ *         description: No transactions found for the user
+ *       500:
+ *         description: Internal server error
+ */

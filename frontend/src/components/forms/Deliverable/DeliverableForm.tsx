@@ -6,6 +6,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import FormFooter from "../FormFooter";
+import FileUpload from "@components/FileUpload";
+import { useState } from "react";
 
 // Validation schema
 const deliverableSchema = z.object({
@@ -25,6 +27,7 @@ interface Props {
 
 export default function DeliverableForm({ onCancel, deliverable, milestoneId, projectId }: Props) {
     const queryClient = useQueryClient();
+    const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
     const isEditMode = !!deliverable;
     const defaultValues = isEditMode ? {
@@ -40,7 +43,17 @@ export default function DeliverableForm({ onCancel, deliverable, milestoneId, pr
     // Submit mutation
     const mutation = useMutation({
         mutationFn: (values: DeliverableFormData) => {
-            return isEditMode ? updateDeliverable(deliverable.id, values, projectId, milestoneId) : createDeliverable(values, projectId, milestoneId);
+            const formData = new FormData();
+            formData.append("name", values.name);
+            formData.append("description", values.description);
+            formData.append("dueDate", values.dueDate);
+
+            // append all files
+            selectedFiles.forEach((file) => formData.append("file", file));
+
+            return isEditMode
+                ? updateDeliverable(deliverable!.id, formData, projectId, milestoneId)
+                : createDeliverable(formData, projectId, milestoneId);
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["projects", projectId] });
@@ -72,7 +85,7 @@ export default function DeliverableForm({ onCancel, deliverable, milestoneId, pr
     );
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4  pb-40 ">
             {/* Project Name */}
             <div>
                 <Input
@@ -94,6 +107,14 @@ export default function DeliverableForm({ onCancel, deliverable, milestoneId, pr
                     className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-400 focus:outline-none resize-none"
                 />
             </div>
+
+            {/* File Upload */}
+            <FileUpload
+                onFilesSelected={(fileList) => {
+                    const files = Array.from(fileList);
+                    setSelectedFiles(files);
+                }}
+            />
 
             {/* Dates */}
             <div>

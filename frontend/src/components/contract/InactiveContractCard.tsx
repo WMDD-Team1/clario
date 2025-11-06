@@ -54,7 +54,15 @@ const InactiveContractCard = ({ project }: Props) => {
                     flex items-center justify-center gap-2 ${!project.milestones?.length ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
                     Generate Draft
                     {!project.milestones?.length ?
-                        <Tooltip title="Add yous milestones no generate a draft" arrow placement="top">
+                        <Tooltip title="Add yous milestones no generate a draft" arrow placement="top" slotProps={{
+                            tooltip: {
+                                sx: {
+                                    backgroundColor: "var(--primitive-colors-brand-primary-925)",
+                                    fontSize: "14px",
+                                    color: "white"
+                                }
+                            }
+                        }}>
                             <Info
                                 size={20}
                             />

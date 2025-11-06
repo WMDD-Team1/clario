@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ExpenseItem } from '@api/types/dashboardApi';
 import { fetchTopExpenses } from '@api/services/dashboardService';
 import InfoCard from './InfoCard';
+import { formatDate } from '@utils/formatDate';
 
 export const ExpensesTable: React.FC = () => {
   const [expenses, setExpenses] = useState<ExpenseItem[]>([]);
@@ -42,10 +43,13 @@ export const ExpensesTable: React.FC = () => {
 
       <div className="w-full flex flex-col justify-between gap-2 text-sm text-gray-700">
         {expenses.slice(0, 4).map((expense, idx) => (
-          <div key={idx} className="flex justify-between items-center text-[13px] border-b border-gray-500 pb-2">
+          <div
+            key={idx}
+            className="flex justify-between items-center text-[13px] border-b border-gray-500 pb-2"
+          >
             <div className="flex flex-col">
               <span className="font-medium text-[16px]">{expense.title}</span>
-              <span className="text-gray-400 text-[16px]">{expense.date}</span>
+              <span className="text-gray-400 text-[16px]">{formatDate(expense.date)}</span>
             </div>
             <span className="font-semibold text-[18px] text-gray-800">
               CAD {expense.amount.toLocaleString()}

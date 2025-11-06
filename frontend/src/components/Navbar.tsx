@@ -67,7 +67,7 @@ const Navbar = () => {
               <div
                 className={`
                     flex items-center justify-center
-                    w-12 h-12 rounded-2xl
+                     rounded-2xl
                     ${isActive ? 'bg-blue-50' : ''}
                   `}
               >
