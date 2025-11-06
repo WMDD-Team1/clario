@@ -64,3 +64,41 @@ export const extractContractFields = async (text) => {
 		return {};
 	}
 };
+
+export const extractTransactionFields = async (text) => {
+	const prompt = `
+	You are a income and expense data extractor.
+	Read the following text and return ONLY JSON for a new transaction input in this format:
+	{
+		"title": "...",
+		"date": "YYYY-MM-DD",
+		"origin": "...",
+		"baseAmount": "...",
+		"notes": "...",
+	}
+
+	If a field is missing, set it to null.
+	DO NOT include any explanation, commentary, or text outside the JSON.
+	Respond with valid JSON only.
+	Transactions text:
+	${text.slice(0, 7000)}
+	`;;
+
+	const res = await openai.chat.completions.create({
+		model: "gpt-4o-mini",
+		messages: [{ role: "user", content: prompt }],
+		temperature: 0.2,
+	});
+
+	try {
+		const content = res.choices[0].message.content;
+		const jsonStart = content.indexOf("{");
+		const jsonEnd = content.lastIndexOf("}");
+		const cleanJson = content.slice(jsonStart, jsonEnd + 1);
+		return JSON.parse(cleanJson);
+	} catch (err) {
+		console.error("JSON parse error from OpenAI:", err);
+		console.log("Raw AI output:", res.choices[0].message.content);
+		return {};
+	}
+};

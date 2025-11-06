@@ -123,6 +123,47 @@
 
 /**
  * @swagger
+ * /api/transactions/scan:
+ *   post:
+ *     summary: Scan and upload a transaction
+ *     description: Receives a file upload it to firebase and scan it to find transaction fields
+ *     tags: [Transactions]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - file
+ *             properties:
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *                 description: Contract file to upload (PDF, JPG, PNG)
+ *     responses:
+ *       201:
+ *         description: Transaction uploaded successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: "Transaction uploaded and parsed successfully."
+ *               transaction:
+ *                 title: "Website Redesign"
+ *                 date: "2025-12-31"
+ *                 origin: "INV-001"
+ *                 baseAmount: 100
+ *                 notes: "Invoice example"
+ *               fileUrl: "https://img.com"
+ * 
+ *       500:
+ *         description: Internal Server Error
+ */
+
+/**
+ * @swagger
  * /api/transactions/{id}:
  *  patch:
  *    summary: Update an existing transaction

@@ -112,3 +112,26 @@ export const archive = async (req, res) => {
         });
     }
 }
+
+export const scanAndUpload = async (req, res) => {
+    try {
+        const { id: userId } = req.user;
+        const file = req.file;
+
+        const { transactionInput, fileUrl } = await TransactionService.scanAndUpload(file, userId);
+
+        return res.status(201).json({
+            message: "Transaction uploaded and parsed successfully.",
+            transaction: {...transactionInput},
+            fileUrl: fileUrl
+        });
+    } catch (err) {
+        if (err.message === "No file uploaded") {
+            return res.status(422).send({
+                message: "No file uploaded"
+            })
+        }
+        console.error("Error uploading transaction:", err);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+};
