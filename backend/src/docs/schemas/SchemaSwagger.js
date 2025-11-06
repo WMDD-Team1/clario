@@ -263,9 +263,9 @@
  *           type: string
  *           format: date
  *           example: 2025-10-05
- *         categoryId:
+ *         category:
  *           type: string
- *           description: Linked category ID
+ *           description: Linked category
  *           example: "670a12b4d9e4fa1234abcd99"
  *         amount:
  *           type: number
@@ -305,7 +305,7 @@
  *       required:
  *         - type
  *         - date
- *         - categoryId
+ *         - category
  *         - amount
  *         - origin
  *       properties:
@@ -323,7 +323,7 @@
  *           type: string
  *           format: date
  *           example: 2025-10-05
- *         categoryId:
+ *         category:
  *           type: string
  *           example: "670a12b4d9e4fa1234abcd99"
  *         amount:

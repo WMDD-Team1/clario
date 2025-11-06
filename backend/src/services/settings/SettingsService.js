@@ -118,7 +118,7 @@ export const exportTransactionsCSV = async (userId) => {
 	const fields = [
 		{ label: "Title", value: "title" },
 		{ label: "Type", value: "type" },
-		{ label: "Category", value: (r) => r.categoryId || "N/A" },
+		{ label: "Category", value: (r) => r.category || "N/A" },
 		{ label: "Amount (Total)", value: "totalAmount" },
 		{ label: "Tax Amount", value: "taxAmount" },
 		{ label: "Base Amount", value: "baseAmount" },
