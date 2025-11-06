@@ -1,26 +1,28 @@
 import React, { useState } from "react";
-import DashboardShell from "@/components/DashboardShell";
 import Button from "@/components/Button";
 import ToggleButton from "@/components/ToggleButton";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Settings: React.FC = () => {
+  const { isAuthenticated, isLoading } = useAuth0();
+
   const [activeSection, setActiveSection] = useState({
     key: "general",
     label: "General",
   });
 
-  // Placeholder data
-  const [profile, setProfile] = useState({
+  const [profile] = useState({
     name: "Yosimar Yotún",
     email: "bebexito@emoxito.com",
+    address: "5 - 312 3rd Ave, Vancouver British Columbia, v6z-1y9",
   });
 
-  const [preferences, setPreferences] = useState({
+  const [preferences] = useState({
     language: "English",
     mode: "Bright Mode",
   });
 
-  const [finance, setFinance] = useState({
+  const [finance] = useState({
     expenseCategories: [
       "Software & Tools",
       "Equipment & Hardware",
@@ -31,78 +33,104 @@ const Settings: React.FC = () => {
     taxRegime: "British Columbia",
   });
 
-  const handleEdit = (section: string) => {};
-  const handleExportData = () => {};
+  const handleEdit = (section: string) => {
+    console.log("Edit:", section);
+  };
 
-  // === Reusable Renderers for Mobile ===
+  const handleExportData = () => {
+    console.log("Export data clicked");
+  };
+
   const renderGeneral = () => (
     <div className="flex flex-col gap-8 mt-4">
-      {/* Profile Section */}
-      <section className="bg-white rounded-xl shadow-sm p-4">
-        <h3 className="font-semibold text-gray-800 mb-3">Profile</h3>
-        <div className="flex flex-col gap-3">
-          <div className="flex justify-between items-center">
-            <span className="text-gray-700 text-sm">Name</span>
-            <span className="text-gray-500 text-sm">{profile.name}</span>
+      {/* Profile */}
+      <section>
+        <h3 className="font-semibold text-gray-900 text-lg mb-3">Profile</h3>
+        <div className="divide-y divide-gray-300 border-b border-gray-300">
+          <div className="flex justify-between items-center py-4">
+            <span className="text-sm text-gray-600 w-1/3">Name</span>
+            <span className="text-gray-800 flex-1">{profile.name}</span>
             <Button
-              textColor="white"
+              className="bg-blue-600 text-white rounded-xl px-5 py-1"
               buttonColor="regularButton"
-              onClick={() => handleEdit("profile-name")}
+              textColor="white"
+              onClick={() => handleEdit("name")}
             >
               Edit
             </Button>
           </div>
 
-          <div className="flex justify-between items-center">
-            <span className="text-gray-700 text-sm">Email</span>
-            <span className="text-gray-500 text-sm">{profile.email}</span>
+          <div className="flex justify-between items-center py-4">
+            <span className="text-sm text-gray-600 w-1/3">Email</span>
+            <span className="text-gray-800 flex-1">{profile.email}</span>
             <Button
-              textColor="white"
+              className="bg-blue-600 text-white rounded-xl px-5 py-1"
               buttonColor="regularButton"
-              onClick={() => handleEdit("profile-email")}
+              textColor="white"
+              onClick={() => handleEdit("email")}
             >
               Edit
             </Button>
           </div>
 
-          <div className="flex justify-between items-center">
-            <span className="text-gray-700 text-sm">Password</span>
-            <span className="text-gray-500 text-sm">••••••••••••••</span>
+          <div className="flex justify-between items-center py-4">
+            <span className="text-sm text-gray-600 w-1/3">Address</span>
+            <span className="text-gray-800 flex-1">{profile.address}</span>
             <Button
-              textColor="white"
+              className="bg-blue-600 text-white rounded-xl px-5 py-1"
               buttonColor="regularButton"
+              textColor="white"
+              onClick={() => handleEdit("address")}
+            >
+              Edit
+            </Button>
+          </div>
+
+          <div className="flex justify-between items-center py-4">
+            <span className="text-sm text-gray-600 w-1/3">Password</span>
+            <span className="text-gray-800 flex-1">
+              ************************
+            </span>
+            <Button
+              className="bg-blue-600 text-white rounded-xl px-5 py-1"
+              buttonColor="regularButton"
+              textColor="white"
               onClick={() => handleEdit("password")}
             >
-              Change
+              Change password
             </Button>
           </div>
         </div>
       </section>
 
-      {/* Preferences Section */}
-      <section className="bg-white rounded-xl shadow-sm p-4">
-        <h3 className="font-semibold text-gray-800 mb-3">Preferences</h3>
-        <div className="flex flex-col gap-3">
-          <div className="flex justify-between items-center">
-            <span className="text-gray-700 text-sm">Language</span>
-            <span className="text-gray-500 text-sm">
+      {/* Preferences */}
+      <section>
+        <h3 className="font-semibold text-gray-900 text-lg mb-3">
+          Preferences
+        </h3>
+        <div className="divide-y divide-gray-300 border-b border-gray-300">
+          <div className="flex justify-between items-center py-4">
+            <span className="text-sm text-gray-600 w-1/3">Language</span>
+            <span className="text-gray-800 flex-1">
               {preferences.language}
             </span>
             <Button
-              textColor="white"
+              className="bg-blue-600 text-white rounded-xl px-5 py-1"
               buttonColor="regularButton"
+              textColor="white"
               onClick={() => handleEdit("language")}
             >
               Change
             </Button>
           </div>
 
-          <div className="flex justify-between items-center">
-            <span className="text-gray-700 text-sm">Mode</span>
-            <span className="text-gray-500 text-sm">{preferences.mode}</span>
+          <div className="flex justify-between items-center py-4">
+            <span className="text-sm text-gray-600 w-1/3">Mode</span>
+            <span className="text-gray-800 flex-1">{preferences.mode}</span>
             <Button
-              textColor="white"
+              className="bg-blue-600 text-white rounded-xl px-5 py-1"
               buttonColor="regularButton"
+              textColor="white"
               onClick={() => handleEdit("mode")}
             >
               Change
@@ -112,158 +140,138 @@ const Settings: React.FC = () => {
       </section>
     </div>
   );
+  
+  // === Finance Section ===
+const renderFinance = () => (
+  <div className="flex flex-col gap-6 mt-4">
+    {/* Expense Categories */}
+    <section>
+      <div className="flex items-center mb-3">
+        <h3 className="font-semibold text-gray-900 text-base flex-shrink-0">
+          Expense Categories
+        </h3>
 
-  const renderFinance = () => (
-    <div className="flex flex-col gap-6 mt-4">
-      {/* Expenses */}
-      <section className="bg-white rounded-xl shadow-sm p-4">
-        <div className="flex justify-between items-center mb-3">
-          <h3 className="font-semibold text-gray-800 text-base">
-            Expenses Categories
-          </h3>
-          <Button
-            textColor="white"
-            buttonColor="regularButton"
-            onClick={() => handleEdit("expenseCategories")}
-          >
-            Add/Edit
-          </Button>
-        </div>
-        <div className="flex flex-wrap gap-2">
+        {/* Categories scrollable */}
+        <div className="flex gap-2 overflow-x-auto mx-4 flex-1">
           {finance.expenseCategories.map((cat) => (
             <span
               key={cat}
-              className="px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-700"
+              className="px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-700 flex-shrink-0 whitespace-nowrap"
             >
               {cat}
             </span>
           ))}
         </div>
-      </section>
 
-      {/* Income */}
-      <section className="bg-white rounded-xl shadow-sm p-4">
-        <div className="flex justify-between items-center mb-3">
-          <h3 className="font-semibold text-gray-800 text-base">
-            Income Categories
-          </h3>
-          <Button
-            textColor="white"
-            buttonColor="regularButton"
-            onClick={() => handleEdit("incomeCategories")}
-          >
-            Add/Edit
-          </Button>
-        </div>
-        <div className="flex flex-wrap gap-2">
+        <Button
+          className="bg-blue-600 text-white rounded-xl px-5 py-1 flex-shrink-0"
+          buttonColor="regularButton"
+          textColor="white"
+          onClick={() => handleEdit("expenseCategories")}
+        >
+          Add/Edit
+        </Button>
+      </div>
+    </section>
+
+    {/* Income Categories */}
+    <section>
+      <div className="flex items-center mb-3">
+        <h3 className="font-semibold text-gray-900 text-base flex-shrink-0">
+          Income Categories
+        </h3>
+
+        {/* Categories scrollable */}
+        <div className="flex gap-2 overflow-x-auto mx-4 flex-1">
           {finance.incomeCategories.map((cat) => (
             <span
               key={cat}
-              className="px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-700"
+              className="px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-700 flex-shrink-0 whitespace-nowrap"
             >
               {cat}
             </span>
           ))}
         </div>
-      </section>
 
-      {/* Tax Regime */}
-      <section className="bg-white rounded-xl shadow-sm p-4">
-        <div className="flex justify-between items-center mb-3">
-          <h3 className="font-semibold text-gray-800 text-base">Tax Regime</h3>
-          <Button
-            textColor="white"
-            buttonColor="regularButton"
-            onClick={() => handleEdit("taxRegime")}
-          >
-            Edit
-          </Button>
-        </div>
+        <Button
+          className="bg-blue-600 text-white rounded-xl px-5 py-1 flex-shrink-0"
+          buttonColor="regularButton"
+          textColor="white"
+          onClick={() => handleEdit("incomeCategories")}
+        >
+          Add/Edit
+        </Button>
+      </div>
+    </section>
+
+    {/* Tax Regime */}
+    <section>
+      <div className="flex justify-between items-center mb-3">
+        <h3 className="font-semibold text-gray-900 text-base flex-shrink-0">
+          Tax Regime
+        </h3>
         <p className="text-gray-600 text-sm">{finance.taxRegime}</p>
-      </section>
+        <Button
+          className="bg-blue-600 text-white rounded-xl px-5 py-1 flex-shrink-0"
+          buttonColor="regularButton"
+          textColor="white"
+          onClick={() => handleEdit("taxRegime")}
+        >
+          Edit
+        </Button>
+      </div>
+      
+    </section>
 
-      {/* Export */}
-      <section className="bg-white rounded-xl shadow-sm p-4">
-        <div className="flex justify-between items-center mb-2">
-          <h3 className="font-semibold text-gray-800 text-base">Export Data</h3>
-          <Button
-            textColor="white"
-            buttonColor="regularButton"
-            onClick={handleExportData}
-          >
-            Export
-          </Button>
-        </div>
-        <p className="text-xs text-gray-500">
-          Export your financial records and reports for bookkeeping or analysis.
-        </p>
-      </section>
-    </div>
-  );
+    {/* Export Data */}
+    <section>
+      <div className="flex justify-between items-center mb-2">
+        <h3 className="font-semibold text-gray-900 text-base flex-shrink-0">
+          Export Data
+        </h3>
+        <Button
+          className="bg-blue-600 text-white rounded-xl px-5 py-1 flex-shrink-0"
+          buttonColor="regularButton"
+          textColor="white"
+          onClick={handleExportData}
+        >
+          Export
+        </Button>
+      </div>
+      
+    </section>
+  </div>
+);
+
+
+  
+  if (isLoading) return <div className="p-10 text-gray-600">Loading...</div>;
+  if (!isAuthenticated)
+    return <div className="p-10 text-gray-600">Please log in to view settings.</div>;
+
 
   return (
-    <>
-      {/* === DESKTOP VIEW (Unchanged Original) === */}
-      <div className="hidden sm:block">
-        <DashboardShell>
-          <div className="flex flex-col gap-8 p-6 md:p-10 max-w mx-auto">
-            <h1 className="text-2xl md:text-3xl font-semibold text-gray-800">
-              Settings
-            </h1>
+    <div className="flex flex-col gap-8 w-full px-10 md:px-14 pr-16">
+      <h1 className="text-2xl md:text-3xl font-semibold text-gray-800">
+        Settings
+      </h1>
 
-            <ToggleButton
-              options={[
-                { key: "general", label: "General" },
-                { key: "finance", label: "Finance" },
-              ]}
-              option={activeSection}
-              onClick={setActiveSection}
-            />
+      <div className="max-w-[1200px]">
+        <ToggleButton
+          options={[
+            { key: "general", label: "General" },
+            { key: "finance", label: "Finance" },
+          ]}
+          option={activeSection}
+          onClick={setActiveSection}
+        />
 
-            {activeSection.key === "general" && renderGeneral()}
-            {activeSection.key === "finance" && renderFinance()}
-          </div>
-        </DashboardShell>
-      </div>
-
-      {/* === MOBILE VIEW (≤580px) === */}
-      <div className="block sm:hidden px-4 pb-20">
-        {/* Placeholder for mobile header */}
-        <div className="h-10"></div>
-
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-          Settings
-        </h2>
-
-        {/* Toggle */}
-        <div className="flex justify-center mb-4">
-          <div className="flex bg-gray-200 rounded-full p-1 w-full max-w-xs">
-            {["general", "finance"].map((tab) => (
-              <button
-                key={tab}
-                onClick={() =>
-                  setActiveSection({
-                    key: tab,
-                    label: tab === "general" ? "General" : "Finance",
-                  })
-                }
-                className={`flex-1 py-2 rounded-full text-sm font-medium transition-all ${
-                  activeSection.key === tab
-                    ? "bg-blue-600 text-white shadow-sm"
-                    : "text-gray-600"
-                }`}
-              >
-                {tab.charAt(0).toUpperCase() + tab.slice(1)}
-              </button>
-            ))}
-          </div>
+        <div className="mt-2">
+          {activeSection.key === "general" && renderGeneral()}
+          {activeSection.key === "finance" && renderFinance()}
         </div>
-
-        {/* Section Content */}
-        {activeSection.key === "general" && renderGeneral()}
-        {activeSection.key === "finance" && renderFinance()}
       </div>
-    </>
+    </div>
   );
 };
 
