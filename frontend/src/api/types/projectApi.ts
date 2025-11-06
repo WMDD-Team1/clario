@@ -33,7 +33,7 @@ export interface DeliverableApiResponse {
     id: string;
     name: string;
     description: string;
-    fileUrls: string[];
+    files: File[];
     status: "Pending" | "Completed";
     dueDate: string;
 }
@@ -48,4 +48,10 @@ export interface ProjectOverview {
     inactive: number;
     archived: number;
     clients: number;
+}
+
+export interface File {
+    fileUrl: string;
+    fileType: string;
+    size: number;
 }
