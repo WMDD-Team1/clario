@@ -6,7 +6,7 @@ import InfoRow from '@components/InfoRow';
 import Loader from '@components/Loader';
 import Success from '@components/Success';
 import { FileChange, Trash, TransactionUploadSuccess } from '@assets/icons/index';
-import { TransactionFormat, Category } from '@api/types/transaction';
+import { TransactionFormat, TransactionCategory } from '@api/types/transaction';
 
 interface IncomeDetailSlideProps {
   slide: string;
@@ -16,7 +16,7 @@ interface IncomeDetailSlideProps {
   incomeType: string;
   file: File | null;
   fileName: string;
-  incomeCategories: Category[];
+  incomeCategories: TransactionCategory;
   onTransactionChange: (transaction: TransactionFormat) => void;
   onIncomeTypeChange: (value: string) => void;
   onCancel: () => void;
@@ -51,7 +51,7 @@ export const AddIncomeSlide = ({
     <Slide
       title="Add Income"
       slide={slide}
-      confirmText="cancel"
+      confirmText="Cancel"
       onConfirm={onCancel}
       extralText={success ? 'view' : 'Add'}
       onExtra={success ? onView : onAdd}
@@ -89,19 +89,11 @@ export const AddIncomeSlide = ({
           <Select
             label="Type of Income"
             id="incomeType"
-            options={[
-              'Project Payment',
-              'Milestone Payment',
-              'Consultation Fee',
-              'Product Sale',
-              'Bonus / Incentive',
-            ]}
+            options={incomeCategories.categories}
             value={incomeType}
             onChange={(value) => {
               onIncomeTypeChange(value);
-              const categoryId =
-                incomeCategories.find((category) => category.name === value)?.id || '';
-              onTransactionChange({ ...transaction, categoryId });
+              onTransactionChange({ ...transaction, category:value });
             }}
             color="bg-white"
             width="100%"
@@ -144,8 +136,12 @@ export const AddIncomeSlide = ({
 
           {file && (
             <div>
-              <InfoRow label="Attachment" value={fileName} />
-              <div className="flex gap-[.5rem] items-center justify-end mt-[.1rem]">
+              <InfoRow
+              label="Attachment"
+              value={fileName}
+              hideBorder={true}
+              />
+              <div className="flex gap-[.5rem] items-center justify-end mt-[.1rem] text-gray-400">
                 <FileChange className="cursor-pointer" onClick={handleBrowseClick} />
                 |
                 <Trash className="cursor-pointer" onClick={onFileRemove} />

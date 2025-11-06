@@ -4,7 +4,7 @@ export interface TransactionFormat {
     type: 'expense' | 'income';
     title: string;
     date: string;
-    categoryId: string;
+    category: string;
     baseAmount: number | "";
     origin: string;
     paymentMethod: string;
@@ -17,16 +17,10 @@ export interface TransactionFormat {
   };
 
 
-  export interface Category {
-    id: string;
-    name: string;
-    type: string;
+  export interface TransactionCategory {
+    categories:[]
   }
 
-  export interface categoriesResonse {
-    income: Category[];
-    expense: Category[];
-  }
 
   export interface RecurrenceFormat {
     id: string;

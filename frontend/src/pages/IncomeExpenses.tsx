@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import Button from '../components/Button';
-// import { fontSizeOptions } from '@components/style/font';
 import Table from '@components/Table';
 import axios from 'axios';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -13,7 +12,7 @@ import { AddExpenseSlide } from '@components/incomeExpense/AddExpenseSlide';
 import {
   PostRecurrenceFormat,
   Meta,
-  categoriesResonse,
+  TransactionCategory,
   TransactionFormat,
   RecurrenceFormat,
 } from '@api/types/transaction';
@@ -39,6 +38,14 @@ export const IncomeExpenses = () => {
   };
   const [recurrence, setRecurrence] = useState<PostRecurrenceFormat>(initialRecurrence);
 
+  const [incomeCategories, setIncomeCategories] = useState<TransactionCategory>({
+    categories: [],
+  });
+
+  const [expenseCategories, setExpenseCategories] = useState<TransactionCategory>({
+    categories: [],
+  });
+
   interface TransactionResponse {
     data: TransactionFormat[];
     meta: Meta;
@@ -51,11 +58,6 @@ export const IncomeExpenses = () => {
       limit: 10,
       totalPages: 0,
     },
-  });
-
-  const [allCategories, setAllCategories] = useState<categoriesResonse>({
-    income: [],
-    expense: [],
   });
 
   const reset = () => {
@@ -111,6 +113,7 @@ export const IncomeExpenses = () => {
       const transactionResponse = response.data;
 
       setAllTransactions(transactionResponse);
+      console.log(allTransactions);
     } catch (error) {
       console.error('Error fetching transactions:', error);
     }
@@ -129,7 +132,7 @@ export const IncomeExpenses = () => {
     type: 'income',
     title: '',
     date: '',
-    categoryId: '',
+    category: '',
     baseAmount: '',
     origin: '',
     paymentMethod: '',
@@ -148,7 +151,7 @@ export const IncomeExpenses = () => {
       type: 'income',
       title: '',
       date: '',
-      categoryId: '',
+      category: '',
       baseAmount: 0,
       origin: '',
       paymentMethod: '',
@@ -163,7 +166,8 @@ export const IncomeExpenses = () => {
     setRepeatOption('');
   };
 
-  const postCategories = async () => {
+  //Fetch Categories-------
+  const getCategories = async (transactionType: string) => {
     try {
       const token = await getAccessTokenSilently({
         authorizationParams: {
@@ -171,14 +175,8 @@ export const IncomeExpenses = () => {
         },
       });
 
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}/settings/categories`,
-
-        {
-          name: 'Software & Tools',
-          type: 'expense',
-        },
-
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_BASE_URL}/settings/categories/${transactionType}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -186,39 +184,20 @@ export const IncomeExpenses = () => {
         },
       );
 
-      const postCategoryResponse = response.data;
-      console.log('Categories post successfully:', postCategoryResponse);
-    } catch (error) {
-      console.error('Error posting categories:', error);
-    }
-  };
-
-  //Fetch Categories-------
-  const getCategories = async () => {
-    try {
-      const token = await getAccessTokenSilently({
-        authorizationParams: {
-          audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
-        },
-      });
-
-      const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/settings/categories`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
       const categoriesResponse = response.data;
       console.log('Categories response:', categoriesResponse);
 
-      setAllCategories(categoriesResponse);
+      transactionType == 'incomes'
+        ? setIncomeCategories(categoriesResponse)
+        : setExpenseCategories(categoriesResponse);
     } catch (error) {
       console.error('Error fetching categories:', error);
     }
   };
 
   useEffect(() => {
-    getCategories();
+    getCategories('incomes');
+    getCategories('expenses');
   }, []);
 
   interface AllRecurrences {
@@ -275,31 +254,6 @@ export const IncomeExpenses = () => {
   );
 
   console.log(activeRepeatableTransaction);
-  const deleteCategory = async () => {
-    try {
-      const token = await getAccessTokenSilently({
-        authorizationParams: {
-          audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
-        },
-      });
-
-      const response = await axios.delete(
-        `${import.meta.env.VITE_API_BASE_URL}/settings/categories/69029ef9fa164996629c5e2b`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-
-      const categoryDeletedResponse = response.data;
-      console.log('Categories response:', categoryDeletedResponse);
-
-      // setAllCategories(categoriesResponse);
-    } catch (error) {
-      console.error('Error deleting category:', error);
-    }
-  };
 
   // ------upload Transaction-------------
 
@@ -308,7 +262,7 @@ export const IncomeExpenses = () => {
     type: oneTransaction.type,
     title: oneTransaction.title,
     date: oneTransaction.date,
-    categoryId: oneTransaction.categoryId,
+    category: oneTransaction.category,
     baseAmount: oneTransaction.baseAmount,
     origin: oneTransaction.origin,
     paymentMethod: 'Credit Card',
@@ -420,7 +374,9 @@ export const IncomeExpenses = () => {
   // fake data
 
   //Add filter logic-------
-  const incomeData = allTransactions?.data?.filter((transaction) => transaction.type == 'income' && !transaction.isArchived);
+  const incomeData = allTransactions?.data?.filter(
+    (transaction) => transaction.type == 'income' && !transaction.isArchived,
+  );
   const incomeFilteredData = incomeData
     .map((transaction) => {
       const dateObj = new Date(transaction.date);
@@ -434,16 +390,16 @@ export const IncomeExpenses = () => {
         id: transaction.id,
         date: formattedDate,
         amount: Number(transaction.baseAmount),
-        category:
-          allCategories.income.find((incomeCategory) => transaction.categoryId == incomeCategory.id)
-            ?.name || 'Unknown',
+        category: transaction.category || 'Unknown',
         details: 'View',
       };
     })
     .slice((incomePage - 1) * 10, (incomePage - 1) * 10 + 10);
 
   //Add filter logic-----------------
-  const expenseData = allTransactions?.data?.filter((transaction) => transaction.type == 'expense' && !transaction.isArchived);
+  const expenseData = allTransactions?.data?.filter(
+    (transaction) => transaction.type == 'expense' && !transaction.isArchived,
+  );
 
   const expenseFilteredData = expenseData
     .map((transaction) => {
@@ -458,10 +414,7 @@ export const IncomeExpenses = () => {
         id: transaction.id,
         date: formattedDate,
         amount: Number(transaction.baseAmount),
-        category:
-          allCategories.expense.find(
-            (expenseCategory) => transaction.categoryId == expenseCategory.id,
-          )?.name || 'Unknown',
+        category: transaction.category || 'Unknown',
         details: 'View',
       };
     })
@@ -474,7 +427,7 @@ export const IncomeExpenses = () => {
     { key: 'expense', label: 'Expense' },
   ];
 
-  const [selectedOption, setSelectedOption] = useState(options[1]);
+  const [selectedOption, setSelectedOption] = useState(options[0]);
 
   const handleToggle = (option: { key: string; label: string }) => {
     setSelectedOption(option);
@@ -531,26 +484,32 @@ export const IncomeExpenses = () => {
 
   return (
     <div>
-      <div className="md:hidden flex justify-center mb-[1rem]">
-        <ToggleButton options={options} option={selectedOption} onClick={handleToggle} />
-      </div>
-      <div className="flex flex-row flex-wrap gap-[1rem]">
-        <div className="flex-1 flex flex-col flex-nowrap gap-[1rem]">
-          <div className="md:flex flex-row flex-nowrap justify-between items-center hidden">
-            <h2 className="text-2xl">Income</h2>
-            <Button
-              buttonColor="regularButton"
-              onClick={() => {
-                addIncome();
-                resetForm();
-              }}
-              textColor="white"
-            >
-              Add Income
-            </Button>
-          </div>
+      <div>
+        <div className="md:hidden flex justify-center mb-[1rem]">
+          <ToggleButton options={options} option={selectedOption} onClick={handleToggle} />
+        </div>
 
-          <div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-[1rem]">
+          {/* Income Section */}
+          <div
+            className={`flex flex-col gap-[1rem] ${
+              selectedOption.key === 'expense' ? 'hidden md:flex' : 'flex'
+            }`}
+          >
+            <div className="md:flex flex-row justify-between items-center hidden">
+              <h2 className="text-2xl">Income</h2>
+              <Button
+                buttonColor="regularButton"
+                onClick={() => {
+                  addIncome();
+                  resetForm();
+                }}
+                textColor="white"
+              >
+                Add Income
+              </Button>
+            </div>
+
             {incomeFilteredData.length === 0 ? (
               <EmptyState
                 description="You haven't added any income yet. Add your first one to start tracking your finances"
@@ -562,7 +521,6 @@ export const IncomeExpenses = () => {
               />
             ) : (
               <Table
-                // --------------------------------------
                 onClickChildren={handleTransactionDetail}
                 headers={headers}
                 data={incomeFilteredData}
@@ -573,23 +531,27 @@ export const IncomeExpenses = () => {
               />
             )}
           </div>
-        </div>
 
-        <div className="flex-1 flex flex-col flex-nowrap gap-[1rem]">
-          <div className="md:flex flex-row flex-nowrap justify-between items-center hidden">
-            <h2 className="text-2xl">Expense</h2>
-            <Button
-              buttonColor="regularButton"
-              onClick={() => {
-                addExpenses();
-                resetForm();
-              }}
-              textColor="white"
-            >
-              Add Expenses
-            </Button>
-          </div>
-          <div>
+          {/* Expense Section */}
+          <div
+            className={`flex flex-col gap-[1rem] ${
+              selectedOption.key === 'income' ? 'hidden md:flex' : 'flex'
+            }`}
+          >
+            <div className="md:flex flex-row justify-between items-center hidden">
+              <h2 className="text-2xl">Expense</h2>
+              <Button
+                buttonColor="regularButton"
+                onClick={() => {
+                  addExpenses();
+                  resetForm();
+                }}
+                textColor="white"
+              >
+                Add Expenses
+              </Button>
+            </div>
+
             {expenseFilteredData.length === 0 ? (
               <EmptyState
                 description="You haven't added any expense yet. Add your first one to start tracking your finances"
@@ -601,7 +563,6 @@ export const IncomeExpenses = () => {
               />
             ) : (
               <Table
-                // ----------------------------------------
                 onClickChildren={handleTransactionDetail}
                 headers={headers}
                 data={expenseFilteredData}
@@ -640,7 +601,7 @@ export const IncomeExpenses = () => {
         incomeType={incomeType}
         file={file}
         fileName={fileName}
-        incomeCategories={allCategories.income}
+        incomeCategories={incomeCategories}
         onTransactionChange={setOneTransaction}
         onIncomeTypeChange={(value) => setIncomeType(value)}
         onCancel={cancelOperation}
@@ -685,7 +646,7 @@ export const IncomeExpenses = () => {
         expenseType={expenseType}
         file={file}
         fileName={fileName}
-        expenseCategories={allCategories.expense}
+        expenseCategories={expenseCategories}
         onTransactionChange={setOneTransaction}
         onExpenseTypeChange={(value) => setExpenseType(value)}
         onRepeatToggle={() => setRepeat(!repeat)}
@@ -706,12 +667,17 @@ export const IncomeExpenses = () => {
       />
 
       <IncomeExpenseViewSlide
-      editIncome={()=>{setIndetailSlide('0px');setTransactionDetail('110%')}}
-      editExpense={()=>{setExdetailSlide('0px');setTransactionDetail('110%')}}
+        editIncome={() => {
+          setIndetailSlide('0px');
+          setTransactionDetail('110%');
+        }}
+        editExpense={() => {
+          setExdetailSlide('0px');
+          setTransactionDetail('110%');
+        }}
         oneTransaction={oneTransaction}
         transactionDetail={transactionDetail}
         cancelOperation={cancelOperation}
-        allCategories={allCategories}
         activeRepeatableTransaction={activeRepeatableTransaction || null}
         deleteTransaction={deleteTransaction}
       />

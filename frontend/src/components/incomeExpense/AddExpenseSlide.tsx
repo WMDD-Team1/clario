@@ -6,7 +6,7 @@ import InfoRow from '@components/InfoRow';
 import Loader from '@components/Loader';
 import Success from '@components/Success';
 import { FileChange, Trash, TransactionUploadSuccess } from '@assets/icons/index';
-import { TransactionFormat, Category, PostRecurrenceFormat } from '@api/types/transaction';
+import { TransactionFormat, TransactionCategory, PostRecurrenceFormat } from '@api/types/transaction';
 
 interface ExpenseDetailSlideProps {
   slide: string;
@@ -19,7 +19,7 @@ interface ExpenseDetailSlideProps {
   recurrence: PostRecurrenceFormat;
   file: File | null;
   fileName: string;
-  expenseCategories: Category[];
+  expenseCategories: TransactionCategory;
   onTransactionChange: (transaction: TransactionFormat) => void;
   onExpenseTypeChange: (value: string) => void;
   onRepeatToggle: () => void;
@@ -63,7 +63,7 @@ export const AddExpenseSlide = ({
     <Slide
       title="Add Expense"
       slide={slide}
-      confirmText="cancel"
+      confirmText="Cancel"
       onConfirm={onCancel}
       extralText={success ? 'view' : 'Add'}
       onExtra={success ? onView : onAdd}
@@ -101,21 +101,11 @@ export const AddExpenseSlide = ({
           <Select
             label="Type of Expense"
             id="expenseType"
-            options={[
-              'Software & Tools',
-              'Equipment / Hardware',
-              'Internet & Utilities',
-              'Marketing & Advertising',
-              'Subscription Fees',
-              'Travel & Transportation',
-              'Other Expenses',
-            ]}
+            options={expenseCategories.categories}
             value={expenseType}
             onChange={(value) => {
               onExpenseTypeChange(value);
-              const categoryId =
-                expenseCategories.find((category) => category.name === value)?.id || '';
-              onTransactionChange({ ...transaction, categoryId });
+              onTransactionChange({ ...transaction, category:value });
             }}
             color="bg-white"
             width="100%"
@@ -195,8 +185,12 @@ export const AddExpenseSlide = ({
 
           {file && (
             <div>
-              <InfoRow label="Attachment" value={fileName} />
-              <div className="flex gap-[.5rem] items-center justify-end mt-[.1rem]">
+              <InfoRow
+              label="Attachment"
+              value={fileName}
+              hideBorder={true}
+              />
+              <div className="flex gap-[.5rem] items-center justify-end mt-[.1rem] text-gray-400">
                 <FileChange className="cursor-pointer" onClick={handleBrowseClick} />
                 |
                 <Trash className="cursor-pointer" onClick={onFileRemove} />

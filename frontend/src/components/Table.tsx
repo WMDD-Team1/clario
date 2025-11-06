@@ -140,7 +140,7 @@ const Table = ({
                                             }
                                             className={`px-6 py-4 whitespace-nowrap text-sm text-gray-600 ${header.key.toLowerCase().includes("amount") ||
                                                 header.key.toLowerCase().includes("price")
-                                                ? "text-right"
+                                                ? "text-left"
                                                 : ""
                                                 }`}
                                         >

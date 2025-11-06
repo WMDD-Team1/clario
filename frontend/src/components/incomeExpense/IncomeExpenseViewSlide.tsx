@@ -1,14 +1,13 @@
 import Slide from "@components/Slide";
 import InfoRow from "@components/InfoRow";
 import Button from "@components/Button";
-import { TransactionFormat, categoriesResonse, RecurrenceFormat } from "@api/types/transaction";
+import { TransactionFormat, RecurrenceFormat } from "@api/types/transaction";
 
 
 interface IncomeExpenseViewSlideProps {
   oneTransaction: TransactionFormat;
   transactionDetail: string;
   cancelOperation: () => void;
-  allCategories: categoriesResonse;
   activeRepeatableTransaction: RecurrenceFormat | null;
   deleteTransaction: () => void;
   editIncome: () => void;
@@ -18,7 +17,6 @@ export const IncomeExpenseViewSlide = ({
     oneTransaction,
     transactionDetail,
     cancelOperation,
-    allCategories,
     activeRepeatableTransaction,
     deleteTransaction,
     editIncome,
@@ -28,8 +26,8 @@ export const IncomeExpenseViewSlide = ({
         <Slide
         title={oneTransaction.type == 'income' ? 'Income' : 'Expense'}
         slide={transactionDetail}
-        confirmText="Close"
-        onConfirm={cancelOperation}
+        confirmText="Delete"
+        onConfirm={deleteTransaction}
         extralText="Edit"
         onExtra={oneTransaction.type == 'income' ?editIncome: editExpense}
         onClose={cancelOperation}
@@ -45,15 +43,7 @@ export const IncomeExpenseViewSlide = ({
         />
         <InfoRow
           label={`Type of ${oneTransaction.type == 'income' ? 'Income' : 'Expense'}`}
-          value={
-            oneTransaction.type == 'income'
-              ? allCategories.income.find(
-                  (incomeCategory) => oneTransaction.categoryId == incomeCategory.id,
-                )?.name || 'Unknown'
-              : allCategories.expense.find(
-                  (expenseCategory) => oneTransaction.categoryId == expenseCategory.id,
-                )?.name || 'Unknown'
-          }
+          value ={oneTransaction.category || 'Unknown'}
         />
         <InfoRow label="Invoice #" value={oneTransaction.origin} />
         {activeRepeatableTransaction && (
@@ -65,27 +55,38 @@ export const IncomeExpenseViewSlide = ({
           <InfoRow
             label="Base Amount"
             value={`$ ${String(oneTransaction.baseAmount.toLocaleString())}`}
+            hideBorder={true}
           />
           <InfoRow
             label="Tax(5%)"
             value={`$ ${String(((Number(oneTransaction.baseAmount) * 5) / 100).toLocaleString())}`}
+            hideBorder={true}
           />
           <InfoRow
             label="Total Income"
             value={`$ ${String(((Number(oneTransaction.baseAmount) * 105) / 100).toLocaleString())}`}
+            hideBorder={true}
           />
         </div>
 
-        <InfoRow label="Notes" value={oneTransaction.notes} vertical={true} />
-        <InfoRow label="Attachment" value={oneTransaction.attachmentURL} />
-        <Button
+        <InfoRow
+        label="Notes"
+        value={oneTransaction.notes}
+        vertical={true} />
+
+        <InfoRow
+        label="Attachment"
+        value={oneTransaction.attachmentURL}
+        hideBorder={true}
+        />
+        {/* <Button
           buttonColor='deleteButton'
           width="100%"
           textColor="white"
           onClick={deleteTransaction}
         >
           Delete
-        </Button>
+        </Button> */}
       </Slide>
     )
 }
