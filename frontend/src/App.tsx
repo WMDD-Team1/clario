@@ -65,15 +65,7 @@ function App() {
           </PrivateRoute>
         }
       />
-      {/* <Route
-      <Route
-        path="/financial-dashboard"
-        element={
-          <PrivateRoute>
-            <FinancialDashboard />
-          </PrivateRoute>
-        }
-      />
+
       <Route
         path="/settings"
         element={
@@ -81,11 +73,7 @@ function App() {
             <Settings />
           </PrivateRoute>
         }
-      /> */}
-      {/* Dev-only shortcut */}
-      <Route path="/dev-dashboard" element={<Dashboard />} />
-      <Route path="/fin-dashboard" element={<FinancialDashboard />} />
-      <Route path="/ts-settings" element={<Settings />} />
+      />
     </Routes>
   );
 }

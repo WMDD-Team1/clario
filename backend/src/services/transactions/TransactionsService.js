@@ -1,4 +1,6 @@
 import { Transaction } from "../../models/index.js";
+import { uploadToFirebase } from "../../utils/fileHandler.js";
+import { extractImageText, extractPdfText, extractTransactionFields } from "../../utils/parser.js";
 import { SettingsService } from "../index.js";
 
 // CRUD
@@ -91,3 +93,33 @@ export const archive = async (id, userId, isArchived) => {
         { new: true }
     );
 };
+
+export const scanAndUpload = async (file, userId) => {
+    if (!file) throw new Error("No file uploaded");
+
+    let transactionInput = {};
+    let parsedText = [];
+
+    // Upload file to firebase
+    const { fileName, fileUrl, fileType, size } = await uploadToFirebase(file, `transactions/${userId}`);
+
+    // Parse file to text
+    try {
+        if (fileType === "pdf") parsedText = await extractPdfText(fileUrl);
+        else if (["png", "jpeg", "jpg"].includes(fileType)) parsedText = await extractImageText(fileUrl);
+    } catch (err) {
+        console.error("Parsing error:", err);
+        parsedText = [];
+    }
+
+    // send parsed text to AI
+    const fullText = parsedText.map((p) => p.content).join(" ");
+    if (fullText.trim().length > 50) {
+        try {
+            transactionInput = await extractTransactionFields(fullText);
+        } catch (err) {
+            console.error("AI field extraction error:", err);
+        }
+    }
+    return { transactionInput, fileUrl };
+}

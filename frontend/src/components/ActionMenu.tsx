@@ -4,7 +4,7 @@ import { createPortal } from 'react-dom';
 
 interface Action {
     id: string;
-    label: string;
+    label: string | ((record: any) => string);
     action: (record?: any) => void;
 }
 
@@ -73,7 +73,7 @@ const ActionMenu: React.FC<ActionMenuProps> = ({ actions, record, direction }: A
                             }}
                             className={`block w-full text-left px-4 py-2 text-sm text-[var(--primitive-colors-gray-light-mode-600)] hover:bg-[var(--sublight)] hover:text-[var(--tertiary-text)] transition`}
                         >
-                            {item.label}
+                            {typeof item.label === "function" ? item.label(record) : item.label}
                         </button>
                     ))}
                 </div>,

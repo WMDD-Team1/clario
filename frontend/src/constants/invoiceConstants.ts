@@ -1,10 +1,10 @@
 export const INVOICE_HEADERS = [
     {
-        key: "invoiceNumber",
+        key: "milestoneName",
         value: "Name"
     },
     {
-        key: "id",
+        key: "invoiceNumber",
         value: "Invoice ID"
     },
     {

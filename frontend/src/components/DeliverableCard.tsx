@@ -34,7 +34,7 @@ export default function DeliverableCard({ deliverable, milestone, onEdit, onDele
                 <div className="flex items-center gap-2">
                     <div className="flex items-center text-[var(--primitive-colors-gray-light-mode-700)] text-xs">
                         <Paperclip size={14} className="mr-1" />
-                        {deliverable?.fileUrls?.length ?? 0}
+                        {deliverable?.files?.length ?? 0}
                     </div>
 
                     <ActionMenu actions={actions} direction='vertical' />

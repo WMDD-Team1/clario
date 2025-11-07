@@ -9,12 +9,14 @@ import {
 	getExpenseCategoriesService,
 	updateExpenseCategoriesService,
 	exportTransactionsCSV,
+	updateUserPasswordService,
+	verifyPassword,
 } from "../../services/settings/SettingsService.js";
 
 export const updateProfile = async (req, res) => {
 	try {
-		const { id: userId } = req.user;
-		const data = await updateUserProfile(userId, req.body);
+		const { sub: auth0Id } = req.auth;
+		const data = await updateUserProfile(auth0Id, req.body);
 
 		res.status(200).json({
 			message: "Profile updated successfully",
@@ -126,5 +128,35 @@ export const exportCSV = async (req, res) => {
 	} catch (err) {
 		console.error("Error exporting transactions:", err);
 		res.status(500).json({ message: "Failed to export transactions" });
+	}
+};
+
+export const updatePassword = async (req, res) => {
+	try {
+		const { email } = req.user;
+		const { sub: auth0Id } = req.auth;
+		const { currentPassword, newPassword, confirmPassword } = req.body;
+		console.log(email, currentPassword);
+
+		const isValid = await verifyPassword(email, currentPassword);
+		if (!isValid) {
+			return res.status(400).json({
+				message: "Current password is incorrect",
+			});
+		}
+		if (newPassword !== confirmPassword) {
+			return res.status(400).json({
+				message: "New passwords do not match",
+			});
+		}
+
+		await updateUserPasswordService(auth0Id, { password: newPassword });
+
+		res.status(200).json({
+			message: "Password updated successfully",
+		});
+	} catch (err) {
+		console.error("Error updating password:", err);
+		res.status(500).json({ message: "Internal Server Error" });
 	}
 };
