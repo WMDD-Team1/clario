@@ -6,6 +6,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import FormFooter from "../FormFooter";
+import { useState } from "react";
+import SuccessForm from "../SuccessForm";
 
 // Validation schema
 const milestoneSchema = z.object({
@@ -32,6 +34,7 @@ interface Props {
 
 export default function ProjectForm({ onCancel, milestone, projectId }: Props) {
     const queryClient = useQueryClient();
+    const [isSuccess, setIsSuccess] = useState(false);
 
     const isEditMode = !!milestone;
     const defaultValues = isEditMode ? {
@@ -55,7 +58,7 @@ export default function ProjectForm({ onCancel, milestone, projectId }: Props) {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["projects", projectId] });
-            onCancel();
+            setIsSuccess(true);
         },
     });
 
@@ -81,6 +84,15 @@ export default function ProjectForm({ onCancel, milestone, projectId }: Props) {
             <Loader />
         </div>
     );
+
+    if (isSuccess) {
+        return <SuccessForm
+            iconPath={isEditMode ? "/update-success.svg" : "/create-success.svg"}
+            title={isEditMode ? "Milestone updated successfully" : "Milestone created successfully"}
+            message={isEditMode ? "The milestone details were updated. You can view the latest updates in your project overview." : "Your milestone has been saved successfully."}
+            onCancel={onCancel}
+        />
+    }
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
