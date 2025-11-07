@@ -48,7 +48,7 @@ const Input: React.FC<InputProps> = ({
           </div>
         )}
       </div>
-      {/* {children} */}
+      {children}
     </div>
   );
 };
