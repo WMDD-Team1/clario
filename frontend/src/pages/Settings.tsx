@@ -281,7 +281,7 @@ const Settings: React.FC = () => {
     return <div className="p-10 text-gray-600">Please log in to view settings.</div>;
 
   return (
-    <div className="flex flex-col gap-8 w-full px-10 md:px-14 pr-16">
+    <div className="flex flex-col gap-8">
       {/* Drawer with dynamic content */}
       <SettingsDrawer
         isOpen={isOpen}
@@ -295,7 +295,7 @@ const Settings: React.FC = () => {
         Settings
       </h1>
 
-      <div className="max-w-[1200px]">
+      <div>
         <ToggleButton
           options={[
             { key: "general", label: "General" },
