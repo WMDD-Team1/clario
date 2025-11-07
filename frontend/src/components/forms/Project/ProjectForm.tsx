@@ -7,12 +7,14 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Spinner from "../../Spinner";
 import FormFooter from "../FormFooter";
+import TextArea from "@components/TextArea";
 
 // Validation schema
 const projectSchema = z.object({
     name: z.string().min(3, "Project name is required"),
     clientId: z.string().optional(),
     description: z.string().optional(),
+    upfrontAmount: z.number().optional(),
     startDate: z.string().nonempty("Start date required"),
     dueDate: z.string().nonempty("Due date required"),
     totalBudget: z.number().positive("Budget must be greater than 0"),
@@ -21,6 +23,12 @@ const projectSchema = z.object({
     {
         error: "Due Date must be after Start Sate",
         path: ["dueDate"]
+    }
+).refine(
+    (data) => data.upfrontAmount === undefined || data.upfrontAmount <= data.totalBudget,
+    {
+        message: "Upfront amount cannot exceed total budget",
+        path: ["upfrontAmount"]
     }
 )
 
@@ -45,6 +53,7 @@ export default function ProjectForm({ onCancel, project }: ProjectFormProps) {
         name: project.name,
         clientId: typeof project.clientId === "object" && project.clientId !== null ? project.clientId.id : (typeof project.clientId === "string" ? project.clientId : ""),
         description: project.description ?? "",
+        upfrontAmount: project.upfrontAmount ?? 0,
         startDate: project.startDate.split("T")[0],
         dueDate: project.dueDate.split("T")[0],
         totalBudget: project.totalBudget,
@@ -55,6 +64,7 @@ export default function ProjectForm({ onCancel, project }: ProjectFormProps) {
         startDate: "",
         dueDate: "",
         totalBudget: 0,
+        upfrontAmount: 0,
     }
 
     const clients = data?.data ?? [];
@@ -96,7 +106,7 @@ export default function ProjectForm({ onCancel, project }: ProjectFormProps) {
     );
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5 mb-40">
             {/* Project Name */}
             <div>
                 <Input
@@ -126,57 +136,64 @@ export default function ProjectForm({ onCancel, project }: ProjectFormProps) {
 
             {/* Description */}
             <div>
-                <label className="block text-sm text-gray-500">Project Description</label>
-                <textarea
-                    {...register("description")}
-                    placeholder="Description..."
-                    rows={3}
-                    className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-400 focus:outline-none resize-none"
+                <TextArea
+                    label="Project Description"
+                    color="bg-white"
+                    register={register("description")}
                 />
             </div>
 
             {/* Dates */}
             <div className="grid grid-cols-2 gap-3">
                 <div>
-                    <label className="block text-sm text-gray-500">Start Date</label>
-                    <input
+                    <Input
+                        color="bg-white"
+                        label="Start Date"
                         type="date"
-                        {...register("startDate")}
-                        className="w-full border border-gray-300 rounded-lg px-2 py-1 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                        min={0}
+                        register={register("startDate")}
                     />
-                    {errors.startDate && (
-                        <p className="text-sm text-red-500">{errors.startDate.message}</p>
-                    )}
+                    {errors.startDate && <p className="text-sm text-red-500">{errors.startDate.message}</p>}
                 </div>
 
                 <div>
-                    <label className="block text-sm text-gray-500">Due Date</label>
-                    <input
+                    <Input
+                        color="bg-white"
+                        label="Due Date"
                         type="date"
-                        {...register("dueDate")}
-                        className="w-full border border-gray-300 rounded-lg px-2 py-1 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                        min={0}
+                        register={register("dueDate")}
                     />
-                    {errors.dueDate && (
-                        <p className="text-sm text-red-500">{errors.dueDate.message}</p>
-                    )}
+                    {errors.dueDate && <p className="text-sm text-red-500">{errors.dueDate.message}</p>}
                 </div>
+            </div>
+
+            {/* Upfront */}
+            <div>
+                <Input
+                    color="bg-white"
+                    label="Upfront Amount"
+                    placeholder="120"
+                    type="number"
+                    min={0}
+                    register={register("upfrontAmount", { valueAsNumber: true })}
+                    endAdornment={<span>CAD</span>}
+                />
+                {errors.upfrontAmount && <p className="text-sm text-red-500">{errors.upfrontAmount.message}</p>}
             </div>
 
             {/* Budget */}
             <div>
-                <label className="block text-sm text-gray-500">Total Budget</label>
-                <div className="flex items-center border-b border-gray-300 py-1">
-                    <input
-                        type="number"
-                        {...register("totalBudget", { valueAsNumber: true })}
-                        placeholder="3000"
-                        className="w-full outline-none"
-                    />
-                    <span className="text-gray-500 text-sm font-medium">CAD</span>
-                </div>
-                {errors.totalBudget && (
-                    <p className="text-sm text-red-500">{errors.totalBudget.message}</p>
-                )}
+                <Input
+                    color="bg-white"
+                    label="Total Budget"
+                    placeholder="3000"
+                    type="number"
+                    min={0}
+                    register={register("totalBudget", { valueAsNumber: true })}
+                    endAdornment={<span>CAD</span>}
+                />
+                {errors.totalBudget && <p className="text-sm text-red-500">{errors.totalBudget.message}</p>}
             </div>
 
             <FormFooter

@@ -89,3 +89,4 @@ export const fetchProjectsOverview = async (): Promise<OverviewItem[]> => {
         return overview;
     }
 };
+
