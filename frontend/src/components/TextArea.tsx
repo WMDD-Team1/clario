@@ -1,12 +1,14 @@
 import React from 'react';
+import { UseFormRegisterReturn } from 'react-hook-form';
 
 interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
   color?: string;
   borderColor?: string;
+  register?: UseFormRegisterReturn;
 }
 
-const TextArea: React.FC<TextAreaProps> = ({ label, color, borderColor, id, ...props }) => (
+const TextArea: React.FC<TextAreaProps> = ({ label, color, borderColor, id, register, ...props }) => (
   <div className="relative">
     {label && (
       <label
@@ -18,6 +20,7 @@ const TextArea: React.FC<TextAreaProps> = ({ label, color, borderColor, id, ...p
     )}
     <textarea
       id={id}
+      {...register}
       {...props}
       className={`p-[1rem] rounded-[1rem] border-2 ${borderColor || 'border-neutral-300'} w-full resize-none`}
     />
