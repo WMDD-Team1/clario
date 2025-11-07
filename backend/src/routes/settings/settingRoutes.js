@@ -20,3 +20,4 @@ router.get("/categories/expenses", SettingController.getExpenseCategories);
 router.patch("/categories/expenses", SettingController.updateExpenseCategories);
 
 router.get("/export/transactions", SettingController.exportCSV);
+router.post("/password", SettingController.updatePassword);

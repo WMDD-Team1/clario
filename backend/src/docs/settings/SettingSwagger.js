@@ -314,3 +314,78 @@
  *       500:
  *         description: Internal server error
  */
+
+/**
+ * @swagger
+ * /api/settings/password:
+ *   post:
+ *     summary: Change user password
+ *     description: >
+ *       Allows a logged-in user to change their password.
+ *       <br><br>
+ *       Even if the user is already authenticated, the current password must be verified again
+ *       for security reasons before updating the password in Auth0.
+ *     tags:
+ *       - Settings
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - currentPassword
+ *               - newPassword
+ *               - confirmPassword
+ *             properties:
+ *               currentPassword:
+ *                 type: string
+ *                 format: password
+ *                 example: myCurrentPassword123!
+ *                 description: The user's current password (for verification).
+ *               newPassword:
+ *                 type: string
+ *                 format: password
+ *                 example: MyNewPassword!2025
+ *                 description: The new password to set.
+ *               confirmPassword:
+ *                 type: string
+ *                 format: password
+ *                 example: MyNewPassword!2025
+ *                 description: Must match the newPassword.
+ *     responses:
+ *       200:
+ *         description: Password updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Password updated successfully
+ *       400:
+ *         description: Bad Request – current password is incorrect or new passwords do not match.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Current password incorrect
+ *       401:
+ *         description: Unauthorized – user token missing or invalid.
+ *       500:
+ *         description: Internal Server Error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Internal Server Error
+ */
