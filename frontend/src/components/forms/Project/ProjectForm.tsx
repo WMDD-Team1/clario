@@ -13,6 +13,7 @@ const projectSchema = z.object({
     name: z.string().min(3, "Project name is required"),
     clientId: z.string().optional(),
     description: z.string().optional(),
+    upfrontAmount: z.number().optional(),
     startDate: z.string().nonempty("Start date required"),
     dueDate: z.string().nonempty("Due date required"),
     totalBudget: z.number().positive("Budget must be greater than 0"),
@@ -45,6 +46,7 @@ export default function ProjectForm({ onCancel, project }: ProjectFormProps) {
         name: project.name,
         clientId: typeof project.clientId === "object" && project.clientId !== null ? project.clientId.id : (typeof project.clientId === "string" ? project.clientId : ""),
         description: project.description ?? "",
+        upfrontAmount: project.upfrontAmount ?? 0,
         startDate: project.startDate.split("T")[0],
         dueDate: project.dueDate.split("T")[0],
         totalBudget: project.totalBudget,
@@ -55,6 +57,7 @@ export default function ProjectForm({ onCancel, project }: ProjectFormProps) {
         startDate: "",
         dueDate: "",
         totalBudget: 0,
+        upfrontAmount: 0,
     }
 
     const clients = data?.data ?? [];
@@ -96,7 +99,7 @@ export default function ProjectForm({ onCancel, project }: ProjectFormProps) {
     );
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 mb-40">
             {/* Project Name */}
             <div>
                 <Input
@@ -160,6 +163,19 @@ export default function ProjectForm({ onCancel, project }: ProjectFormProps) {
                         <p className="text-sm text-red-500">{errors.dueDate.message}</p>
                     )}
                 </div>
+            </div>
+
+            {/* Upfront */}
+            <div>
+                <Input
+                    color="bg-white"
+                    label="Upfront Amount"
+                    placeholder="120"
+                    type="number"
+                    min={0}
+                    register={register("upfrontAmount", { valueAsNumber: true })}
+                />
+                {errors.upfrontAmount && <p className="text-sm text-red-500">{errors.upfrontAmount.message}</p>}
             </div>
 
             {/* Budget */}
