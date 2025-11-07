@@ -8,6 +8,8 @@ import { z } from "zod";
 import FormFooter from "../FormFooter";
 import FileUpload from "@components/FileUpload";
 import { useState } from "react";
+import Button from "@components/Button";
+import SuccessForm from "../SuccessForm";
 
 // Validation schema
 const deliverableSchema = z.object({
@@ -28,6 +30,7 @@ interface Props {
 export default function DeliverableForm({ onCancel, deliverable, milestoneId, projectId }: Props) {
     const queryClient = useQueryClient();
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+    const [isSuccess, setIsSuccess] = useState(false);
 
     const isEditMode = !!deliverable;
     const defaultValues = isEditMode ? {
@@ -57,7 +60,7 @@ export default function DeliverableForm({ onCancel, deliverable, milestoneId, pr
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["projects", projectId] });
-            onCancel();
+            setIsSuccess(true);
         },
     });
 
@@ -83,6 +86,15 @@ export default function DeliverableForm({ onCancel, deliverable, milestoneId, pr
             <Loader />
         </div>
     );
+
+    if (isSuccess) {
+        return <SuccessForm
+            iconPath={isEditMode ? "/update-success.svg" : "/create-success.svg"}
+            title={isEditMode ? "Deliverable updated successfully" : "Deliverable created successfully"}
+            message={isEditMode ? "The deliverable details were updated. You can view the latest updates in your project overview." : "Your deliverable has been saved successfully."}
+            onCancel={onCancel}
+        />
+    }
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4  pb-40 ">
