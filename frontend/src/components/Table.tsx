@@ -15,7 +15,7 @@ interface Header {
 
 interface Action {
     id: string;
-    label: string;
+    label: string | ((record: any) => string);
     action: (record: any) => void;
 }
 
