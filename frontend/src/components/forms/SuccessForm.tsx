@@ -4,10 +4,11 @@ interface Props {
     iconPath: string;
     title: string;
     message: string;
+    label?: string;
     onCancel: () => void;
 }
 
-const SuccessForm = ({ iconPath, title, message, onCancel }: Props) => {
+const SuccessForm = ({ iconPath, title, message, label="Done", onCancel }: Props) => {
     return (
         <div className="flex flex-col items-center justify-center text-center px-6">
             <img
@@ -23,7 +24,7 @@ const SuccessForm = ({ iconPath, title, message, onCancel }: Props) => {
             </p>
             <div className="flex justify-between gap-2 absolute bottom-0 right-0 left-0 p-[30px] bg-[var(--primitive-colors-brand-primary-75)] rounded-bl-[50px]">
                 <Button buttonColor="regularButton" onClick={onCancel} width="100%" textColor="white">
-                    <p>Done</p>
+                    <p>{label}</p>
                 </Button>
             </div>
         </div>

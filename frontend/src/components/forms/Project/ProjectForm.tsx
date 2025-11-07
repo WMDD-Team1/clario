@@ -8,6 +8,9 @@ import { z } from "zod";
 import Spinner from "../../Spinner";
 import FormFooter from "../FormFooter";
 import TextArea from "@components/TextArea";
+import { useState } from "react";
+import SuccessForm from "../SuccessForm";
+import { useNavigate } from "react-router-dom";
 
 // Validation schema
 const projectSchema = z.object({
@@ -41,6 +44,9 @@ interface ProjectFormProps {
 
 export default function ProjectForm({ onCancel, project }: ProjectFormProps) {
     const queryClient = useQueryClient();
+    const navigate = useNavigate();
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [newProjectId, setNewProjectId] = useState<string | null>(null);
 
     // Fetch clients
     const { data, isLoading: clientsLoading } = useQuery({
@@ -74,10 +80,11 @@ export default function ProjectForm({ onCancel, project }: ProjectFormProps) {
         mutationFn: (values: ProjectFormData) => {
             return isEditMode ? updateProject(project.id, values) : createProject(values);
         },
-        onSuccess: () => {
+        onSuccess: (project) => {
             if (project) queryClient.invalidateQueries({ queryKey: ["projects", project.id] });
             if (!project) queryClient.invalidateQueries({ queryKey: ["projects"] });
-            onCancel();
+            setIsSuccess(true);
+            setNewProjectId(project?.id ?? null);
         },
     });
 
@@ -104,6 +111,16 @@ export default function ProjectForm({ onCancel, project }: ProjectFormProps) {
             <Loader />
         </div>
     );
+
+    if (isSuccess) {
+        return <SuccessForm
+            iconPath={isEditMode ? "/update-success.svg" : "/create-success.svg"}
+            title={isEditMode ? "Project updated successfully" : "All Set!"}
+            label={!isEditMode ? "View" : undefined}
+            message={isEditMode ? "The project details were updated. You can view the latest updates in your project overview." : "Your project has been saved successfully."}
+            onCancel={isEditMode ? onCancel : newProjectId ? () => navigate(`/projects/${newProjectId}`) : onCancel}
+        />
+    }
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5 mb-40">
