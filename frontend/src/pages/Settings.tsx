@@ -66,12 +66,12 @@ const Settings: React.FC = () => {
       {/* Profile */}
       <section>
         <h3 className="font-semibold text-gray-900 text-lg mb-3">Profile</h3>
-        <div className="divide-y border-b">
+        <div className="divide-y lg:border-b">
           <div className="flex justify-between items-center py-4">
             <span className="text-sm text-gray-600 w-1/3">Name</span>
             <span className="text-gray-800 flex-1">{profile.name}</span>
             <Button
-              className="rounded-xl px-5 py-1"
+              className="px-5 py-1"
               buttonColor="regularButton"
               textColor="white"
               onClick={() =>
@@ -86,7 +86,7 @@ const Settings: React.FC = () => {
             <span className="text-sm text-gray-600 w-1/3">Email</span>
             <span className="text-gray-800 flex-1">{profile.email}</span>
             <Button
-              className="bg-blue-600 text-white rounded-xl px-5 py-1"
+              className="px-5 py-1"
               buttonColor="regularButton"
               textColor="white"
               onClick={() =>
@@ -97,11 +97,11 @@ const Settings: React.FC = () => {
             </Button>
           </div>
 
-          <div className="flex justify-between items-center py-4">
+          <div className="hidden md:flex justify-between items-center py-4">
             <span className="text-sm text-gray-600 w-1/3">Address</span>
             <span className="text-gray-800 flex-1">{profile.address}</span>
             <Button
-              className="bg-blue-600 text-white rounded-xl px-5 py-1"
+              className="px-5 py-1"
               buttonColor="regularButton"
               textColor="white"
               onClick={() =>
@@ -114,9 +114,9 @@ const Settings: React.FC = () => {
 
           <div className="flex justify-between items-center py-4">
             <span className="text-sm text-gray-600 w-1/3">Password</span>
-            <span className="text-gray-800 flex-1">*************</span>
+            <span className="text-gray-800 flex-1"></span>
             <Button
-              className="bg-blue-600 text-white rounded-xl px-5 py-1"
+              className="px-5 py-1 md:px-10"
               buttonColor="regularButton"
               textColor="white"
               onClick={() =>
@@ -132,7 +132,7 @@ const Settings: React.FC = () => {
       {/* Preferences */}
       <section>
         <h3 className="font-semibold text-gray-900 text-lg mb-3">Preferences</h3>
-        <div className="divide-y border-b">
+        <div className="divide-y lg:border-b">
           <div className="flex justify-between items-center py-4">
             <span className="text-sm text-gray-600 w-1/3">Language</span>
             <span className="text-gray-800 flex-1">{preferences.language}</span>
@@ -171,8 +171,8 @@ const Settings: React.FC = () => {
   const renderFinance = () => (
     <div className="flex flex-col gap-6 mt-4">
       {/* Expense Categories */}
-      <section className="divide-y border-b border-gray-300">
-        <div className="flex justify-between items-center">
+      <section className="divide-y lg:border-b border-gray-300">
+        <div className="flex justify-between pb-4 items-center">
           <h3 className="w-1/5 font-semibold text-gray-900 text-base flex-shrink-0">
             Expense Categories
           </h3>
@@ -203,8 +203,8 @@ const Settings: React.FC = () => {
       </section>
 
       {/* Income Categories */}
-      <section className="divide-y border-b border-gray-300">
-        <div className="flex justify-between items-center">
+      <section className="divide-y lg:border-b border-gray-300">
+        <div className="flex justify-between pb-4 items-center">
           <h3 className="w-1/5 font-semibold text-gray-900 text-base flex-shrink-0">
             Income Categories
           </h3>
@@ -236,8 +236,8 @@ const Settings: React.FC = () => {
       </section>
 
       {/* Tax Regime */}
-      <section className="divide-y border-b border-gray-300">
-        <div className="flex justify-between items-center">
+      <section className="divide-y lg:border-b border-gray-300">
+        <div className="flex justify-between pb-4 items-center">
           <h3 className="w-1/5 font-semibold text-gray-900 text-base flex-shrink-0">
             Tax Regime
           </h3>
@@ -257,8 +257,8 @@ const Settings: React.FC = () => {
       </section>
 
       {/* Export Data */}
-      <section className="divide-y border-b border-gray-300">
-        <div className="flex justify-between items-center mb-2">
+      <section className="divide-y lg:border-b border-gray-300">
+        <div className="flex justify-between pb-4 items-center mb-2">
           <h3 className="w-1/5 font-semibold text-gray-900 text-base flex-shrink-0">
             Export Data
           </h3>
