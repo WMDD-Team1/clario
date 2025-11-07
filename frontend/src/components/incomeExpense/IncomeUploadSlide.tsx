@@ -58,6 +58,7 @@ export const IncomeUploadSlide = ({
         <Input
           id="fileInput"
           hidden={true}
+          key={fileName}
           type="file"
           onChange={onFileChange}
           accept="image/*, application/pdf"

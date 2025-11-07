@@ -58,6 +58,7 @@ export const ExpenseUploadSlide = ({
 
         <Input
           id="fileInput"
+          key={fileName}
           hidden={true}
           type="file"
           onChange={onFileChange}

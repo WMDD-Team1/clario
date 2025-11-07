@@ -258,6 +258,7 @@ export const IncomeExpenses = () => {
   // ------upload Transaction-------------
 
   let newTransaction = {
+    //------confirm-project-id-------
     projectId: '670a12b4d9e4fa1234abcd99',
     type: oneTransaction.type,
     title: oneTransaction.title,
@@ -268,6 +269,42 @@ export const IncomeExpenses = () => {
     paymentMethod: 'Credit Card',
     notes: oneTransaction.notes,
     attachmentURL: 'https://example.com/attachment.pdf',
+  };
+
+  const scanReceipt = async () => {
+    if (file) {
+      // setLoader(true);
+      // setSuccess(false);
+      const token = await getAccessTokenSilently({
+        authorizationParams: {
+          audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
+        },
+      });
+
+      const formData = new FormData();
+      formData.append("file",file)
+
+      try {
+        setLoader(true);
+        const scanResponse = await axios.post(
+          `${import.meta.env.VITE_API_BASE_URL}/transactions/scan`,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        console.log(scanResponse.data);
+        setLoader(false);
+        // setSuccess(true);
+      } catch (error) {
+        setLoader(false);
+        console.error('Error scanning transaction:', error);
+      }
+    }
   };
 
   const addTransaction = async (payload: TransactionFormat) => {
@@ -584,7 +621,9 @@ export const IncomeExpenses = () => {
         onFileChange={handleFileChange}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
-        onNext={() => setIndetailSlide('0px')}
+        onNext={async () => {
+          await scanReceipt();
+          setIndetailSlide('0px')}}
         onClose={cancelOperation}
         onFileRemove={() => {
           setFile(null);
