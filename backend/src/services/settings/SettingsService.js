@@ -133,3 +133,40 @@ export const exportTransactionsCSV = async (userId) => {
 
 	return csv;
 };
+
+export const updateUserPasswordService = async (auth0Id, updates) => {
+	const token = await getManagementToken();
+
+	const allowedFields = ["password"];
+	const payload = {};
+
+	allowedFields.forEach((key) => {
+		if (updates[key]) payload[key] = updates[key];
+	});
+
+	await axios.patch(`https://${process.env.AUTH0_DOMAIN}/api/v2/users/${auth0Id}`, payload, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+			"Content-Type": "application/json",
+		},
+	});
+	return payload;
+};
+
+export const verifyPassword = async (email, currentPassword) => {
+	try {
+		await axios.post(`https://${process.env.AUTH0_DOMAIN}/oauth/token`, {
+			grant_type: "http://auth0.com/oauth/grant-type/password-realm",
+			realm: process.env.AUTH0_DB_CONNECTION,
+			username: email,
+			password: currentPassword,
+			client_id: process.env.AUTH0_SP_CLIENT_ID,
+			client_secret: process.env.AUTH0_SP_CLIENT_SECRET,
+			scope: "openid",
+		});
+		return true;
+	} catch (err) {
+		console.error("verifyPassword error:", err.response?.data || err.message);
+		return false;
+	}
+};
