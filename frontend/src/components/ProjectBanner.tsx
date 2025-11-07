@@ -56,6 +56,10 @@ const ProjectBanner = ({ project, onEdit }: Props) => {
                 </h3>
 
                 <div className="space-y-[13px] text-sm text-[var(--sub-text)]">
+                    <div className="flex justify-between border-b-1 border-[var(--border)] pb-[7px]">
+                        <span>Upfront </span>
+                        <span className="text-[var(--secondary-text)]">${formatCurrency(project.upfrontAmount ?? 0)}</span>
+                    </div>
                     {project.milestones?.map(milestone => (
                         <div key={milestone.id} className="flex justify-between border-b-1 border-[var(--border)] pb-[7px]">
                             <span>{milestone.name}</span>

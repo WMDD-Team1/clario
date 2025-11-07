@@ -16,6 +16,7 @@ export interface ProjectApiResponse {
     fileUrl: string;
     id: string;
     clientName: string | null;
+    upfrontAmount : number | null;
 }
 
 export interface MilestoneApiResponse {
