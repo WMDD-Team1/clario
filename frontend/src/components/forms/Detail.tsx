@@ -7,7 +7,6 @@ interface Props {
     detail: Detail;
 }
 
-// eslint-disable-next-line no-redeclare
 const Detail = ({ detail }: Props) => {
     return (
         <div className="flex justify-between border-b border-[var(--primitive-colors-gray-light-mode-200)] pb-5">

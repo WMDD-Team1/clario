@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Button from "@/components/Button";
-import { FaRegEye } from "react-icons/fa";
 
 interface Props {
     onClose: () => void;
@@ -36,13 +35,13 @@ const ChangePassword: React.FC<Props> = ({ onClose }) => {
                     </label>
                     <input
                         type="password"
-                        placeholder="Current Password"
+                        placeholder="Piripitiflautica"
                         value={currentPassword}
                         onChange={(e) => setCurrentPassword(e.target.value)}
                         className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     <span className="absolute right-4 top-3.5 text-blue-500 cursor-pointer text-lg">
-                        <FaRegEye />
+                        👁️
                     </span>
                 </div>
 
@@ -52,13 +51,13 @@ const ChangePassword: React.FC<Props> = ({ onClose }) => {
                     </label>
                     <input
                         type="password"
-                        placeholder="Enter New Password"
+                        placeholder="Watagatapitusberry"
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
                         className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     <span className="absolute right-4 top-3.5 text-blue-500 cursor-pointer text-lg">
-                        <FaRegEye />
+                        👁️
                     </span>
                 </div>
 
@@ -68,13 +67,13 @@ const ChangePassword: React.FC<Props> = ({ onClose }) => {
                     </label>
                     <input
                         type="password"
-                        placeholder="Re-enter New Password"
+                        placeholder="Watagatapitusberry"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     <span className="absolute right-4 top-3.5 text-blue-500 cursor-pointer text-lg">
-                        <FaRegEye />
+                        👁️
                     </span>
                 </div>
             </div>

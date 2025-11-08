@@ -8,6 +8,8 @@ interface Props {
 const ChangeAddress: React.FC<Props> = ({ onClose }) => {
   const [isSaved, setIsSaved] = useState(false);
   const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [postalCode, setPostalCode] = useState("");
   
 
   const handleSave = () => {
@@ -37,6 +39,28 @@ const ChangeAddress: React.FC<Props> = ({ onClose }) => {
             type="text"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
+            className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div className="relative mb-6">
+          <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">
+            City
+          </label>
+          <input
+            type="text"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+            className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div className="relative mb-6">
+          <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">
+            Postal Code
+          </label>
+          <input
+            type="text"
+            value={postalCode}
+            onChange={(e) => setPostalCode(e.target.value)}
             className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>

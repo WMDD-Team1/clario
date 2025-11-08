@@ -44,7 +44,7 @@ const Insight = () => {
 
   return (
     <div className="flex flex-col gap-4 w-full h-full max-w-full">
-      <p className="text-[24px] font-semibold text-gray-700">Insights of Your Work</p>
+      <p className="hidden md:block text-[24px] font-semibold text-gray-700 border-b-[1px] border-[var(--sub-text)]">Insights of Your Work</p>
 
       {insights?.map((insight, idx) => (
         <InsightCard key={idx} title={insight.title} text={insight.text} month={insight.month} />
