@@ -89,7 +89,7 @@ export const Dashboard = () => {
 
           <div className="flex flex-col xl:flex-row gap-4 w-full items-start">
             {/* LEFT SECTION */}
-            <div className="flex flex-col flex-1 gap-4 min-w-0">
+            <div className={`flex flex-col flex-1 gap-4 xl:min-w-0 lg:min-w-[100%] sm:min-w-[100%]`}>
               <Overview />
 
               <div className="flex flex-col lg:flex-row gap-4 w-full items-stretch ">
@@ -99,10 +99,10 @@ export const Dashboard = () => {
 
                 <div className="flex flex-col flex-1 gap-4 min-w-0">
                   <div className="grid grid-cols-2 md:grid-cols-2 gap-4 w-full">
-                    <div className="min-w-0">
+                    <div className="min-w-0 md:min-w-[50%]">
                       <BalanceChart />
                     </div>
-                    <div className="min-w-0">
+                    <div className="min-w-0 md:min-w-[50%]">
                       <ExpensesTable />
                     </div>
                   </div>
