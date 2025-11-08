@@ -1,55 +1,86 @@
-import React, { useState } from "react";
-import Button from "@/components/Button";
-import ToggleButton from "@/components/ToggleButton";
-import { useAuth0 } from "@auth0/auth0-react";
-import SettingsDrawer from "../components/forms/SettingsDrawer";
+import React, { useState } from 'react';
+import Button from '@/components/Button';
+import ToggleButton from '@/components/ToggleButton';
+import { useAuth0 } from '@auth0/auth0-react';
+import SettingsDrawer from '../components/forms/SettingsDrawer';
 
 // Import your forms/components
-import ChangeName from "@components/forms/ChangeName";
-import ChangePassword from "@components/forms/ChangePassword";
-import ChangeEmail from "@components/forms/ChangeEmail";
-import ChangeAddress from "@components/forms/ChangeAddress";
-import ChangeLanguage from "@components/forms/ChangeLanguage";
-import ExpensesCategories from "@components/forms/ExpensesCategories";
-import IncomeCategories from "@components/forms/IncomeCategories";
-import ChangeTaxRegime from "@components/forms/ChangeTaxRegime";
-
+import ChangeName from '@components/forms/ChangeName';
+import ChangePassword from '@components/forms/ChangePassword';
+import ChangeEmail from '@components/forms/ChangeEmail';
+import ChangeAddress from '@components/forms/ChangeAddress';
+import ChangeLanguage from '@components/forms/ChangeLanguage';
+import ExpensesCategories from '@components/forms/ExpensesCategories';
+import IncomeCategories from '@components/forms/IncomeCategories';
+import ChangeTaxRegime from '@components/forms/ChangeTaxRegime';
+import { useSelector } from 'react-redux';
+import { RootState } from '@store/index';
 
 const Settings: React.FC = () => {
   const { isAuthenticated, isLoading } = useAuth0();
+  const { data: user, loading } = useSelector((state: RootState) => state.user);
+  console.log(user);
 
   const [isOpen, setIsOpen] = useState(false);
-  const [drawerTitle, setDrawerTitle] = useState("");
+  const [drawerTitle, setDrawerTitle] = useState('');
   const [drawerContent, setDrawerContent] = useState<React.ReactNode>(null);
 
   const [activeSection, setActiveSection] = useState({
-    key: "general",
-    label: "General",
+    key: 'general',
+    label: 'General',
   });
 
-  const [profile] = useState({
-    name: "Yosimar Yotún",
-    email: "bebexito@emoxito.com",
-    address: "5 - 312 3rd Ave, Vancouver British Columbia, v6z-1y9",
-  });
+  const profile = {
+    name: user?.name || '',
+    email: user?.email || '',
+    address: user?.address
+      ? `${user.address.street || ''} ${user.address.city || ''} ${
+          user.address.country || ''
+        } ${user.address.postalCode || ''}`.trim()
+      : '',
+  };
+  const preferences = {
+    language: user?.settings?.general?.language === 'fr' ? 'French' : 'English',
+    mode: user?.settings?.general?.theme === 'dark' ? 'Dark Mode' : 'Light Mode',
+  };
 
-  const [preferences] = useState({
-    language: "English",
-    mode: "Bright Mode",
-  });
-
-  const [finance] = useState({
-    expenseCategories: [
-      "Software & Tools",
-      "Equipment & Hardware",
-      "Subscriptions",
-      "Professional Services",
+  const finance = {
+    expenseCategories: user?.settings?.finance?.expenseCategories || [
+      'Software & Tools',
+      'Equipment & Hardware',
+      'Subscriptions',
+      'Professional Services',
     ],
-    incomeCategories: ["Project Income", "Recurring Income", "Consulting"],
-    taxRegime: "British Columbia",
-  });
+    incomeCategories: user?.settings?.finance?.incomeCategories || [
+      'Project Income',
+      'Recurring Income',
+      'Consulting',
+    ],
+    taxRegime: user?.settings?.finance?.province || 'British Columbia',
+  };
 
-  // 🔹 Opens drawer with specific content
+  // const [profile] = useState({
+  //   name: "Yosimar Yotún",
+  //   email: "bebexito@emoxito.com",
+  //   address: "5 - 312 3rd Ave, Vancouver British Columbia, v6z-1y9",
+  // });
+
+  // const [preferences] = useState({
+  //   language: "English",
+  //   mode: "Bright Mode",
+  // });
+
+  // const [finance] = useState({
+  //   expenseCategories: [
+  //     "Software & Tools",
+  //     "Equipment & Hardware",
+  //     "Subscriptions",
+  //     "Professional Services",
+  //   ],
+  //   incomeCategories: ["Project Income", "Recurring Income", "Consulting"],
+  //   taxRegime: "British Columbia",
+  // });
+
   const openDrawer = (title: string, content: React.ReactNode) => {
     setDrawerTitle(title);
     setDrawerContent(content);
@@ -57,7 +88,7 @@ const Settings: React.FC = () => {
   };
 
   const handleExportData = () => {
-    console.log("Export data clicked");
+    console.log('Export data clicked');
   };
 
   // === General Section ===
@@ -75,7 +106,7 @@ const Settings: React.FC = () => {
               buttonColor="regularButton"
               textColor="white"
               onClick={() =>
-                openDrawer("Change Name", <ChangeName onClose={() => setIsOpen(false)} />)
+                openDrawer('Change Name', <ChangeName onClose={() => setIsOpen(false)} />)
               }
             >
               Edit
@@ -90,7 +121,7 @@ const Settings: React.FC = () => {
               buttonColor="regularButton"
               textColor="white"
               onClick={() =>
-                openDrawer("Update Email", <ChangeEmail onClose={() => setIsOpen(false)} />)
+                openDrawer('Update Email', <ChangeEmail onClose={() => setIsOpen(false)} />)
               }
             >
               Edit
@@ -105,7 +136,7 @@ const Settings: React.FC = () => {
               buttonColor="regularButton"
               textColor="white"
               onClick={() =>
-                openDrawer("Update Address", <ChangeAddress onClose={() => setIsOpen(false)} />)
+                openDrawer('Update Address', <ChangeAddress onClose={() => setIsOpen(false)} />)
               }
             >
               Edit
@@ -120,7 +151,7 @@ const Settings: React.FC = () => {
               buttonColor="regularButton"
               textColor="white"
               onClick={() =>
-                openDrawer("Change Password", <ChangePassword onClose={() => setIsOpen(false)} />)
+                openDrawer('Change Password', <ChangePassword onClose={() => setIsOpen(false)} />)
               }
             >
               Change password
@@ -141,7 +172,7 @@ const Settings: React.FC = () => {
               buttonColor="regularButton"
               textColor="white"
               onClick={() =>
-                openDrawer("Update Language", <ChangeLanguage onClose={() => setIsOpen(false)} />)
+                openDrawer('Update Language', <ChangeLanguage onClose={() => setIsOpen(false)} />)
               }
             >
               Change
@@ -155,9 +186,7 @@ const Settings: React.FC = () => {
               className="bg-blue-600 text-white rounded-xl px-5 py-1"
               buttonColor="regularButton"
               textColor="white"
-              onClick={() =>
-                openDrawer("Change Mode", <div>ModeChange Component Here</div>)
-              }
+              onClick={() => openDrawer('Change Mode', <div>ModeChange Component Here</div>)}
             >
               Change
             </Button>
@@ -194,8 +223,14 @@ const Settings: React.FC = () => {
             buttonColor="regularButton"
             textColor="white"
             onClick={() =>
-                openDrawer("Expenses Categories", <ExpensesCategories expenseCategories={finance.expenseCategories} onClose={() => setIsOpen(false)} />)
-              }
+              openDrawer(
+                'Expenses Categories',
+                <ExpensesCategories
+                  expenseCategories={finance.expenseCategories}
+                  onClose={() => setIsOpen(false)}
+                />,
+              )
+            }
           >
             Add/Edit
           </Button>
@@ -215,7 +250,6 @@ const Settings: React.FC = () => {
               <span
                 key={cat}
                 className="px-3 py-1 mx-2 text-sm rounded-full text-gray-700 flex-shrink-0 whitespace-nowrap border border-black"
-
               >
                 {cat}
               </span>
@@ -227,8 +261,14 @@ const Settings: React.FC = () => {
             buttonColor="regularButton"
             textColor="white"
             onClick={() =>
-                openDrawer("Income Categories", <IncomeCategories incCategories={finance.incomeCategories} onClose={() => setIsOpen(false)} />)
-              }
+              openDrawer(
+                'Income Categories',
+                <IncomeCategories
+                  incCategories={finance.incomeCategories}
+                  onClose={() => setIsOpen(false)}
+                />,
+              )
+            }
           >
             Add/Edit
           </Button>
@@ -238,30 +278,28 @@ const Settings: React.FC = () => {
       {/* Tax Regime */}
       <section className="divide-y border-b border-gray-300">
         <div className="flex justify-between items-center">
-          <h3 className="w-1/5 font-semibold text-gray-900 text-base flex-shrink-0">
-            Tax Regime
-          </h3>
+          <h3 className="w-1/5 font-semibold text-gray-900 text-base flex-shrink-0">Tax Regime</h3>
           <p className="flex-1 gap-2 px-3 py-6 mx-6 text-gray-600 text-sm">{finance.taxRegime}</p>
           <Button
             className="bg-blue-600 text-white rounded-xl px-5 py-1 flex-shrink-0"
             buttonColor="regularButton"
             textColor="white"
             onClick={() =>
-                openDrawer("Update Tax Regime", <ChangeTaxRegime tax={finance.taxRegime} onClose={() => setIsOpen(false)} />)
-              }
+              openDrawer(
+                'Update Tax Regime',
+                <ChangeTaxRegime tax={finance.taxRegime} onClose={() => setIsOpen(false)} />,
+              )
+            }
           >
             Edit
           </Button>
         </div>
-
       </section>
 
       {/* Export Data */}
       <section className="divide-y border-b border-gray-300">
         <div className="flex justify-between items-center mb-2">
-          <h3 className="w-1/5 font-semibold text-gray-900 text-base flex-shrink-0">
-            Export Data
-          </h3>
+          <h3 className="w-1/5 font-semibold text-gray-900 text-base flex-shrink-0">Export Data</h3>
           <Button
             className="bg-blue-600 text-white rounded-xl px-5 py-1 flex-shrink-0"
             buttonColor="regularButton"
@@ -271,7 +309,6 @@ const Settings: React.FC = () => {
             Export
           </Button>
         </div>
-
       </section>
     </div>
   );
@@ -283,31 +320,25 @@ const Settings: React.FC = () => {
   return (
     <div className="flex flex-col gap-8 w-full px-10 md:px-14 pr-16">
       {/* Drawer with dynamic content */}
-      <SettingsDrawer
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        title={drawerTitle}
-      >
+      <SettingsDrawer isOpen={isOpen} onClose={() => setIsOpen(false)} title={drawerTitle}>
         {drawerContent}
       </SettingsDrawer>
 
-      <h1 className="text-2xl md:text-3xl font-semibold text-gray-800">
-        Settings
-      </h1>
+      <h1 className="text-2xl md:text-3xl font-semibold text-gray-800">Settings</h1>
 
       <div className="max-w-[1200px]">
         <ToggleButton
           options={[
-            { key: "general", label: "General" },
-            { key: "finance", label: "Finance" },
+            { key: 'general', label: 'General' },
+            { key: 'finance', label: 'Finance' },
           ]}
           option={activeSection}
           onClick={setActiveSection}
         />
 
         <div className="mt-2">
-          {activeSection.key === "general" && renderGeneral()}
-          {activeSection.key === "finance" && renderFinance()}
+          {activeSection.key === 'general' && renderGeneral()}
+          {activeSection.key === 'finance' && renderFinance()}
         </div>
       </div>
     </div>
