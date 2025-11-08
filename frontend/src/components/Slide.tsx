@@ -52,14 +52,14 @@ const Slide: React.FC<SlideProps> = ({
           <Forward className="w-8 h-8"/>
         </div>
         <h2
-          className={`text-[${fontSizeOptions.h2}] text-center bg-blue-50 p-[1rem] sticky top-0 z-10 sm:rounded-tl-[20px]`}
+          className={`text-[${fontSizeOptions.h2}] text-center bg-[var(--background-alternate)] p-[1rem] sticky top-0 z-10 sm:rounded-tl-[20px]`}
         >
           {title}
         </h2>
         <div className="flex flex-col gap-[1.5rem] p-[2rem] h-full overflow-y-auto">{children}</div>
 
         {showFooter && (
-          <div className="flex flex-row justify-center gap-[1rem] sticky bottom-0 w-full p-[2rem] bg-blue-50 sm:rounded-bl-[20px]">
+          <div className="flex flex-row justify-center gap-[1rem] sticky bottom-0 w-full p-[2rem] bg-[var(--background-alternate)] sm:rounded-bl-[20px]">
             {showConfirm && onConfirm && (
               <Button
                 buttonColor="whiteButton"

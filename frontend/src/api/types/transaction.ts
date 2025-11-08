@@ -1,6 +1,6 @@
 export interface TransactionFormat {
     id?: string;
-    projectId: string;
+    projectId?: string;
     type: 'expense' | 'income';
     title: string;
     date: string;

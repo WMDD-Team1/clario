@@ -2,6 +2,9 @@ import Slide from "@components/Slide";
 import InfoRow from "@components/InfoRow";
 import Button from "@components/Button";
 import { TransactionFormat, RecurrenceFormat } from "@api/types/transaction";
+import Loader from "@components/Loader";
+import Success from "@components/Success";
+import { DeleteTransactionSuccess } from "@assets/icons";
 
 
 interface IncomeExpenseViewSlideProps {
@@ -12,6 +15,8 @@ interface IncomeExpenseViewSlideProps {
   deleteTransaction: () => void;
   editIncome: () => void;
   editExpense: () => void;
+  loader: boolean;
+  deleteSuccess: boolean
 }
 export const IncomeExpenseViewSlide = ({
     oneTransaction,
@@ -20,18 +25,35 @@ export const IncomeExpenseViewSlide = ({
     activeRepeatableTransaction,
     deleteTransaction,
     editIncome,
-    editExpense
+    editExpense,
+    loader,
+    deleteSuccess
 }:IncomeExpenseViewSlideProps)=>{
     return(
         <Slide
         title={oneTransaction.type == 'income' ? 'Income' : 'Expense'}
         slide={transactionDetail}
-        confirmText="Delete"
-        onConfirm={deleteTransaction}
-        extralText="Edit"
-        onExtra={oneTransaction.type == 'income' ?editIncome: editExpense}
+        confirmText={deleteSuccess?"Close":"Delete"}
+        onConfirm={deleteSuccess?cancelOperation:deleteTransaction}
+        extralText={deleteSuccess?"Done":"Edit"}
+        onExtra={deleteSuccess? cancelOperation:oneTransaction.type == 'income' ?editIncome: editExpense}
         onClose={cancelOperation}
       >
+
+        {loader ? (
+        <div className="flex flex-col h-full justify-center">
+          <Loader />
+        </div>
+      ) : deleteSuccess ? (
+        <Success
+          title="Deleted Successfully!"
+          p1="All set!"
+          p2={`The item's been deletetd.`}
+        >
+          <DeleteTransactionSuccess className="w-25 h-25" />
+        </Success>
+      ) : (
+        <>
         <InfoRow label="Title" value={oneTransaction.title} />
         <InfoRow
           label="Date"
@@ -50,7 +72,7 @@ export const IncomeExpenseViewSlide = ({
           <InfoRow label="Repeat" value={activeRepeatableTransaction.frequency} />
         )}
 
-        <div className="flex flex-col p-[1rem] border-gray-200 bg-blue-50 rounded-[1rem] my-[1rem]">
+        <div className="flex flex-col p-[1rem] border-gray-200 bg-[var(--background-alternate)] rounded-[1rem] my-[1rem]">
           <p>Financial Breakdown</p>
           <InfoRow
             label="Base Amount"
@@ -74,11 +96,13 @@ export const IncomeExpenseViewSlide = ({
         value={oneTransaction.notes}
         vertical={true} />
 
-        <InfoRow
+       {oneTransaction.attachmentURL && <InfoRow
         label="Attachment"
         value={oneTransaction.attachmentURL}
         hideBorder={true}
-        />
+        />}
+
+        </>)}
         {/* <Button
           buttonColor='deleteButton'
           width="100%"

@@ -5,13 +5,13 @@ import TextArea from '@components/TextArea';
 import InfoRow from '@components/InfoRow';
 import Loader from '@components/Loader';
 import Success from '@components/Success';
-import { FileChange, Trash, TransactionUploadSuccess } from '@assets/icons/index';
+import { FileChange, Trash, ClientUpdateSuccess } from '@assets/icons/index';
 import { TransactionFormat, TransactionCategory } from '@api/types/transaction';
 
 interface IncomeDetailSlideProps {
   slide: string;
   loader: boolean;
-  success: boolean;
+  updateSuccess: boolean;
   transaction: TransactionFormat;
   incomeType: string;
   file: File | null;
@@ -26,10 +26,10 @@ interface IncomeDetailSlideProps {
   onFileRemove: () => void;
 }
 
-export const AddIncomeSlide = ({
+export const EditIncomeSlide = ({
   slide,
   loader,
-  success,
+  updateSuccess,
   transaction,
   incomeType,
   file,
@@ -49,25 +49,25 @@ export const AddIncomeSlide = ({
 
   return (
     <Slide
-      title="Add Income"
+      title="Edit Income"
       slide={slide}
-      confirmText="Cancel"
+      confirmText={updateSuccess?"Close":"Cancel"}
       onConfirm={onCancel}
-      extralText={success ? 'view' : 'Add'}
-      onExtra={success ? onView : onAdd}
+      extralText={updateSuccess ? 'view' : 'Save'}
+      onExtra={updateSuccess ? onView : onAdd}
       onClose={onClose}
     >
       {loader ? (
         <div className="flex flex-col h-full justify-center">
           <Loader />
         </div>
-      ) : success ? (
+      ) : updateSuccess ? (
         <Success
           title="Successful!"
           p1="Your Income has been recorded"
           p2={`It's saved in Income List`}
         >
-          <TransactionUploadSuccess className="w-25 h-25" />
+          <ClientUpdateSuccess className="w-25 h-25" />
         </Success>
       ) : (
         <form className="flex flex-col gap-4">
@@ -83,14 +83,14 @@ export const AddIncomeSlide = ({
             id="incomeDate"
             type="date"
             color="bg-white"
-            value={transaction.date.split('T')[0]}
+            value={new Date(transaction.date).toLocaleDateString('en-CA')}
             onChange={(e) => onTransactionChange({ ...transaction, date: e.target.value })}
           />
           <Select
             label="Type of Income"
             id="incomeType"
             options={incomeCategories.categories}
-            value={incomeType}
+            value={transaction.category}
             onChange={(value) => {
               onIncomeTypeChange(value);
               onTransactionChange({ ...transaction, category:value });
@@ -134,18 +134,18 @@ export const AddIncomeSlide = ({
             onChange={(e) => onTransactionChange({ ...transaction, notes: e.target.value })}
           />
 
-          {file && (
+          {transaction.attachmentURL && (
             <div>
               <InfoRow
               label="Attachment"
-              value={fileName}
+              value={transaction.attachmentURL}
               hideBorder={true}
               />
-              <div className="flex gap-[.5rem] items-center justify-end mt-[.1rem] text-gray-400">
+              {/* <div className="flex gap-[.5rem] items-center justify-end mt-[.1rem] text-gray-400">
                 <FileChange className="cursor-pointer" onClick={handleBrowseClick} />
                 |
                 <Trash className="cursor-pointer" onClick={onFileRemove} />
-              </div>
+              </div> */}
             </div>
           )}
         </form>

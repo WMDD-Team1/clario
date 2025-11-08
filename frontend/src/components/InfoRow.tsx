@@ -12,7 +12,7 @@ const InfoRow = ({
   <div
     className={`${vertical ? 'flex flex-col items-start gap-[1rem]' : 'flex justify-between items-center'} ${hideBorder ? '' : 'border-b-2'} py-3 border-gray-200`}
   >
-    <p className="text-gray-400">{label}</p>
+    <p className="text-[var(--primitive-colors-gray-light-mode-400)]">{label}</p>
     <p>{value || '-'}</p>
   </div>
 );

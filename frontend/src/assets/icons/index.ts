@@ -18,6 +18,8 @@ import TransactionUploadSuccess from "./transaction-upload-success.svg?react";
 import ChevronDown from "./chevron-down.svg?react";
 import ClientUploadSuccess from "./client-upload-success.svg?react";
 import ClientUpdateSuccess from "./client-update-success.svg?react";
+import DeleteTransactionSuccess from "./delete-transaction-success.svg?react";
+import Plus from "./plus.svg?react";
 
 export {
   DashboardActiveIcon,
@@ -39,5 +41,7 @@ export {
   TransactionUploadSuccess,
   ChevronDown,
   ClientUploadSuccess,
-  ClientUpdateSuccess
+  ClientUpdateSuccess,
+  DeleteTransactionSuccess,
+  Plus
 };

@@ -5,7 +5,7 @@ import TextArea from '@components/TextArea';
 import InfoRow from '@components/InfoRow';
 import Loader from '@components/Loader';
 import Success from '@components/Success';
-import { FileChange, Trash, TransactionUploadSuccess } from '@assets/icons/index';
+import { FileChange, Trash, TransactionUploadSuccess, ClientUpdateSuccess } from '@assets/icons/index';
 import {
   TransactionFormat,
   TransactionCategory,
@@ -15,11 +15,12 @@ import {
 interface ExpenseDetailSlideProps {
   slide: string;
   loader: boolean;
-  success: boolean;
+  updateSuccess: boolean;
   transaction: TransactionFormat;
   expenseType: string;
   repeat: boolean;
   repeatOption: string;
+  activeRepeatableTransaction: PostRecurrenceFormat | undefined;
   recurrence: PostRecurrenceFormat;
   file: File | null;
   fileName: string;
@@ -36,10 +37,10 @@ interface ExpenseDetailSlideProps {
   onFileRemove: () => void;
 }
 
-export const AddExpenseSlide = ({
+export const EditExpenseSlide = ({
   slide,
   loader,
-  success,
+  updateSuccess,
   transaction,
   expenseType,
   repeat,
@@ -58,6 +59,7 @@ export const AddExpenseSlide = ({
   onView,
   onClose,
   onFileRemove,
+  activeRepeatableTransaction,
 }: ExpenseDetailSlideProps) => {
   const handleBrowseClick = () => {
     document.getElementById('fileInput')?.click();
@@ -65,25 +67,25 @@ export const AddExpenseSlide = ({
 
   return (
     <Slide
-      title="Add Expense"
+      title="Edit Expense"
       slide={slide}
       confirmText="Cancel"
       onConfirm={onCancel}
-      extralText={success ? 'view' : 'Add'}
-      onExtra={success ? onView : onAdd}
+      extralText={updateSuccess ? 'view' : 'Save'}
+      onExtra={updateSuccess ? onView : onAdd}
       onClose={onClose}
     >
       {loader ? (
         <div className="flex flex-col h-full justify-center">
           <Loader />
         </div>
-      ) : success ? (
+      ) : updateSuccess ? (
         <Success
           title="Successful!"
           p1="Your Expense has been recorded"
           p2={`It's saved in Expense List`}
         >
-          <TransactionUploadSuccess className="w-25 h-25" />
+          <ClientUpdateSuccess className="w-25 h-25" />
         </Success>
       ) : (
         <form className="flex flex-col gap-4">
@@ -99,14 +101,14 @@ export const AddExpenseSlide = ({
             id="expenseDate"
             type="date"
             color="bg-white"
-            value={transaction.date.split('T')[0]}
+            value={new Date(transaction.date).toLocaleDateString('en-CA')}
             onChange={(e) => onTransactionChange({ ...transaction, date: e.target.value })}
           />
           <Select
             label="Type of Expense"
             id="expenseType"
             options={expenseCategories.categories}
-            value={expenseType}
+            value={transaction.type}
             onChange={(value) => {
               onExpenseTypeChange(value);
               onTransactionChange({ ...transaction, category: value });
@@ -191,14 +193,14 @@ export const AddExpenseSlide = ({
             onChange={(e) => onTransactionChange({ ...transaction, notes: e.target.value })}
           />
 
-          {file && (
+          {transaction.attachmentURL && (
             <div>
-              <InfoRow label="Attachment" value={fileName} hideBorder={true} />
-              <div className="flex gap-[.5rem] items-center justify-end mt-[.1rem] text-gray-400">
+              <InfoRow label="Attachment" value={transaction.attachmentURL} hideBorder={true} />
+              {/* <div className="flex gap-[.5rem] items-center justify-end mt-[.1rem] text-gray-400">
                 <FileChange className="cursor-pointer" onClick={handleBrowseClick} />
                 |
                 <Trash className="cursor-pointer" onClick={onFileRemove} />
-              </div>
+              </div> */}
             </div>
           )}
         </form>
