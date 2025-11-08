@@ -1,7 +1,6 @@
 interface Detail {
     label: string;
-    value?: string;
-    values?: string[]
+    value: string;
 }
 
 interface Props {
@@ -13,7 +12,7 @@ const Detail = ({ detail }: Props) => {
         <div className="flex justify-between border-b border-[var(--primitive-colors-gray-light-mode-200)] pb-5">
             <span>{detail.label}</span>
             <span className="font-medium text-[var(--page-title)]">
-                {!detail.values?.length ? detail.value: detail.values.map(v => <p>{v}</p>)}
+                {detail.value}
             </span>
         </div>
     )
