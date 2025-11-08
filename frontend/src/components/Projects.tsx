@@ -1,7 +1,7 @@
 import { FILTERS, PROJECT_HEADERS, SORT_OPTIONS, STAGES } from "@/constants";
-import { fetchAllProjects } from "@api/index";
+import { fetchAllProjects, ProjectApiResponse, toggleArchiveProject } from "@api/index";
 import Table from "@components/Table";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useDebounce } from "use-debounce";
 import EmptyState from "./EmptyState";
@@ -14,6 +14,7 @@ interface Props {
 }
 
 const Projects = ({onCreate}: Props) => {
+    const queryClient = useQueryClient();
     const [currentFilter, setCurrentFilter] = useState(FILTERS[0]);
     const [search, setSearch] = useState<string>();
     const [debouncedSearch] = useDebounce(search, 400);
@@ -58,6 +59,11 @@ const Projects = ({onCreate}: Props) => {
         navigate(`/projects/${projectId}`);
     }
 
+    const handleArchiveProject = async (project: ProjectApiResponse) => {
+        const res = await toggleArchiveProject(project.id, !project.isArchived);
+        queryClient.invalidateQueries({queryKey: ["projects"]})
+    }
+
     return (
         <>
             {/* Table Filtering */}
@@ -87,6 +93,7 @@ const Projects = ({onCreate}: Props) => {
                 <Table
                     headers={PROJECT_HEADERS}
                     data={projects}
+                    actions={[{ id: 'archive', label: (project) => project.isArchived ? 'Unarchive' : 'Archive', action: (project) => handleArchiveProject(project) }]}
                     total={meta.total}
                     page={meta.page}
                     pageSize={meta.limit}

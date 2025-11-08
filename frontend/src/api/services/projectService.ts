@@ -52,6 +52,16 @@ export const updateProject = async (id: string, data: any): Promise<ProjectApiRe
     return data;
 }
 
+export const toggleArchiveProject = async (id: string, isArchived: boolean): Promise<boolean> => {
+    try {
+        const res = await api.patch<ProjectApiResponse>(`/projects/${id}/archive`, { isArchived });
+        return true;
+    } catch (err) {
+        console.log('Error creating project: ' + err);
+        return false;
+    }
+}
+
 export const fetchProjectsOverview = async (): Promise<OverviewItem[]> => {
     const overview: OverviewItem[] = [
         { key: "totalBudget", title: "Total", value: "$0" },
@@ -79,3 +89,4 @@ export const fetchProjectsOverview = async (): Promise<OverviewItem[]> => {
         return overview;
     }
 };
+

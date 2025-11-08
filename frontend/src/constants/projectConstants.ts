@@ -52,7 +52,7 @@ export const PROJECT_HEADERS = [
         value: "End Date",
     },
     {
-        key: "clientName",
+        key: "clientId.name",
         value: "Client",
     },
     {

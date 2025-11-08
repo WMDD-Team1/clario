@@ -117,14 +117,14 @@ export const getTopExpenses = async (userId) => {
 	})
 		.sort({ totalAmount: -1 })
 		.limit(4)
-		.select("title totalAmount date categoryId")
-		.populate("categoryId", "name")
+		.select("title totalAmount date category")
+		.populate("category", "name")
 		.lean();
 
 	const formatted = expenses.map((exp) => ({
 		title: exp.title,
 		amount: exp.totalAmount,
-		category: exp.categoryId?.name || "Uncategorized",
+		category: exp.category?.name || "Uncategorized",
 		date: exp.date,
 	}));
 

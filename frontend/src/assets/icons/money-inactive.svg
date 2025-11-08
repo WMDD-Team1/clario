@@ -1,12 +1,7 @@
-<svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g clip-path="url(#clip0_743_7757)">
-<path d="M13 10.5H27.9756C29.3563 10.5 30.4756 11.6193 30.4756 13V28.1064C30.4756 29.0702 29.9217 29.9485 29.0518 30.3633L14.0762 37.5029C12.4171 38.2939 10.5 37.0841 10.5 35.2461V13L10.5127 12.7441C10.6408 11.4836 11.7057 10.5 13 10.5Z" stroke="#02005D"/>
-<foreignObject x="22.6172" y="20.9062" width="18.3828" height="18.1914"><div xmlns="http://www.w3.org/1999/xhtml" style="backdrop-filter:blur(0.5px);clip-path:url(#bgblur_1_743_7757_clip_path);height:100%;width:100%"></div></foreignObject><path data-figma-bg-blur-radius="1" d="M31.8096 22.4062C36.0632 22.4064 39.501 25.8129 39.501 30.002C39.5007 34.1908 36.0631 37.5965 31.8096 37.5967C27.5559 37.5967 24.1174 34.1909 24.1172 30.002C24.1172 25.8128 27.5557 22.4062 31.8096 22.4062Z" stroke="#02005D"/>
-</g>
+<svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+<foreignObject x="0" y="0" width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" style="backdrop-filter:blur(0.5px);clip-path:url(#bgblur_0_1130_11668_clip_path);height:100%;width:100%"></div></foreignObject><circle data-figma-bg-blur-radius="1" cx="19" cy="18" r="10.5" stroke="#98A2B3"/>
+<path d="M17.9756 0C19.6324 0 20.9756 1.34315 20.9756 3V7.17969C20.647 7.12009 20.3136 7.07464 19.9756 7.04492V3C19.9756 1.89543 19.0802 1 17.9756 1H3C1.89543 1 1 1.89543 1 3V25.2461C1 26.7164 2.53315 27.6842 3.86035 27.0518L9.89551 24.1738C10.0868 24.4554 10.29 24.7282 10.5059 24.9902L4.29102 27.9541L4.10352 28.0361C2.15855 28.8119 0 27.3828 0 25.2461V3C3.91392e-07 1.34315 1.34315 3.52611e-08 3 0H17.9756Z" fill="#98A2B3"/>
 <defs>
-<clipPath id="bgblur_1_743_7757_clip_path" transform="translate(-22.6172 -20.9062)"><path d="M31.8096 22.4062C36.0632 22.4064 39.501 25.8129 39.501 30.002C39.5007 34.1908 36.0631 37.5965 31.8096 37.5967C27.5559 37.5967 24.1174 34.1909 24.1172 30.002C24.1172 25.8128 27.5557 22.4062 31.8096 22.4062Z"/>
-</clipPath><clipPath id="clip0_743_7757">
-<rect width="30" height="30" fill="white" transform="translate(10 10)"/>
-</clipPath>
-</defs>
+<clipPath id="bgblur_0_1130_11668_clip_path" transform="translate(0 0)"><circle cx="19" cy="18" r="10.5"/>
+</clipPath></defs>
 </svg>

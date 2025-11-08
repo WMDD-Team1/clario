@@ -32,3 +32,13 @@ export const updateInvoice = async (id: string, status: string): Promise<boolean
         return false;
     }
 }
+
+export const sendInvoice = async (id: string): Promise<boolean> => {
+    try {
+        const res = await api.post<{success: boolean}>(`/invoices/${id}/send`);
+        return res.data.success ?? false;
+    } catch (err) {
+        console.log('Error updating invoice: ' + err);
+        return false;
+    }
+}

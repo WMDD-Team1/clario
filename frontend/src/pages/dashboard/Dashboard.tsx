@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useAppSelector } from '@/store/hooks';
-import Card from '@/components/Card';
 import BalanceChart from '@/components/BalanceChart';
 import { ExpensesTable } from '@/components/ExpensesTable';
 import MoneyFlowAreaChart from '@/components/MoneyFlowAreaChart';
@@ -145,7 +144,6 @@ export const Dashboard = () => {
             ))}
           </div>
         </div>
-
         {/* Conditional Content */}
         {activeTab === 'reminders' && renderReminders()}
         {activeTab === 'dashboard' && renderDashboard()}
