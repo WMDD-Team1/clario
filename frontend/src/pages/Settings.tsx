@@ -13,6 +13,7 @@ import ChangeLanguage from '@components/forms/ChangeLanguage';
 import ExpensesCategories from '@components/forms/ExpensesCategories';
 import IncomeCategories from '@components/forms/IncomeCategories';
 import ChangeTaxRegime from '@components/forms/ChangeTaxRegime';
+import ModeChange from '@components/forms/ModeChange';
 
 const Settings: React.FC = () => {
   const { isAuthenticated, isLoading } = useAuth0();
@@ -297,7 +298,7 @@ const Settings: React.FC = () => {
                 className="bg-blue-600 text-white rounded-xl px-5 py-1"
                 buttonColor="regularButton"
                 textColor="white"
-                onClick={() => openDrawer('Change Mode', <div>ModeChange Component Here</div>)}
+                onClick={() => openDrawer('Change Mode', <div></div>)}
               >
                 Change
               </Button>
@@ -321,7 +322,7 @@ const Settings: React.FC = () => {
                 className="bg-blue-600 text-white rounded-xl px-5 py-1 flex-shrink-0"
                 buttonColor="regularButton"
                 textColor="white"
-                onClick={() => openDrawer('Change Mode', <div>ModeChange Component Here</div>)}
+                onClick={() => openDrawer('Change Mode', <div></div>)}
               >
                 Change
               </Button>
