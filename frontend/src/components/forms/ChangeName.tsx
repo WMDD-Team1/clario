@@ -1,56 +1,63 @@
-import React, { useState } from "react";
-import Button from "@/components/Button";
+import React, { useState } from 'react';
+import Button from '@/components/Button';
+import { useDispatch } from 'react-redux';
+import { updateUserProfile } from '@api/services/settingService';
+import { updateUser } from '@store/userSlice';
 
 interface Props {
   onClose: () => void;
 }
 
 const ChangeName: React.FC<Props> = ({ onClose }) => {
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [name, setName] = useState('');
 
-  const handleSave = () => {
-    // your save logic (API call, etc.)
+  const handleSave = async () => {
+    if (!name.trim()) return;
+    setLoading(true);
+    const updated = await updateUserProfile({ name });
+    dispatch(updateUser(updated.data));
+    setLoading(false);
+    onClose();
     setIsSaved(true);
   };
 
   const handleCancel = () => {
-    console.log("Cancelled");
+    console.log('Cancelled');
     onClose();
   };
 
   const handleClose = () => {
-    console.log("Closed");
+    console.log('Closed');
     onClose();
     setIsSaved(false);
   };
 
   return (
-    <div className="flex flex-col h-full" >
+    <div className="flex flex-col h-full">
       <div className="flex-1 flex flex-col justify-top">
         <div className="relative mb-6">
-          <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">
-            Full Name
-          </label>
+          <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">Name</label>
           <input
             type="text"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
+            value={name}
+            name="name"
+            onChange={(e) => setName(e.target.value)}
             className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
       </div>
       <>
         {!isSaved ? (
-          <div className="flex justify-between bg-[var(--background-alternate)] -m-5 p-5 rounded-bl-[50px] mt-auto">
-
+          <div className="flex justify-between bg-[var(--background-alternate)] -m-6 p-5 rounded-bl-[50px]">
             <Button
               onClick={handleCancel}
               className="py-4 mr-2"
               buttonColor="white"
               textColor="black"
-              width="46%"
+              width="48%"
             >
               Cancel
             </Button>
@@ -59,20 +66,19 @@ const ChangeName: React.FC<Props> = ({ onClose }) => {
               className="py-4 ml-2"
               buttonColor="regularButton"
               textColor="white"
-              width="46%"
+              width="48%"
             >
               Save
             </Button>
           </div>
         ) : (
-          <div className="flex justify-between bg-[var(--background-alternate)] -m-5 rounded-bl-[50px] p-5">
-
+          <div className="flex justify-between bg-[var(--background-alternate)] -m-6 rounded-bl-[50px] p-5">
             <Button
               onClick={handleClose}
               className="w-full py-4"
               buttonColor="regularButton"
               textColor="white"
-              width="96%"
+              width="98%"
             >
               Close
             </Button>

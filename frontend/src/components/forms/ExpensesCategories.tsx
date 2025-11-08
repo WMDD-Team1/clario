@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from "react";
-import Button from "@/components/Button";
-import TextArea from "@components/TextArea";
+import React, { useState, useEffect } from 'react';
+import Button from '@/components/Button';
+import TextArea from '@components/TextArea';
+import { useDispatch } from 'react-redux';
+import { updateExpenseCategories } from '@api/services/settingService';
+import { updateUser } from '@store/userSlice';
 
 interface Props {
   onClose: () => void;
@@ -8,28 +11,54 @@ interface Props {
 }
 
 const ExpensesCategories: React.FC<Props> = ({ onClose, expenseCategories }) => {
+  const dispatch = useDispatch();
   const [isSaved, setIsSaved] = useState(false);
-  const [categories, setCategories] = useState("");
+  const [categories, setCategories] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Initialize categories with comma-separated values
   useEffect(() => {
     if (expenseCategories.length > 0) {
-      setCategories(expenseCategories.join(", "));
+      setCategories(expenseCategories.join(', '));
     }
   }, [expenseCategories]);
 
-  const handleSave = () => {
-    console.log("Saved categories:", categories);
-    setIsSaved(true);
+  const handleSave = async () => {
+    const trimmed = categories
+      .split(',')
+      .map((cat) => cat.trim())
+      .filter((cat) => cat.length > 0);
+
+    if (trimmed.length === 0) {
+      setError('Please enter at least one category.');
+      return;
+    }
+
+    try {
+      setError(null);
+      setLoading(true);
+
+      const { message, categories } = await updateExpenseCategories(trimmed);
+      dispatch(updateUser({ settings: { finance: { expenseCategories: categories } } }));
+
+      setIsSaved(true);
+    } catch (err: any) {
+      console.error(err);
+      const message = err.response?.data?.message || 'Failed to update expense categories.';
+      setError(message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleCancel = () => {
-    console.log("Cancelled");
+    console.log('Cancelled');
     onClose();
   };
 
   const handleClose = () => {
-    console.log("Closed");
+    console.log('Closed');
     onClose();
     setIsSaved(false);
   };
@@ -47,12 +76,13 @@ const ExpensesCategories: React.FC<Props> = ({ onClose, expenseCategories }) => 
             color="text-gray-500 bg-white"
           />
           <span>Separate the categories with “,”</span>
-        </div>
+        </div>{' '}
+        {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
       </div>
 
       <>
         {!isSaved ? (
-          <div className="flex justify-between bg-[var(--background-alternate)] -m-5 p-5 rounded-bl-[50px]">
+          <div className="flex justify-between bg-[var(--background-alternate)] -m-6 p-5 rounded-bl-[50px]">
             <Button
               onClick={handleCancel}
               className="py-4 mr-2"
@@ -73,7 +103,7 @@ const ExpensesCategories: React.FC<Props> = ({ onClose, expenseCategories }) => 
             </Button>
           </div>
         ) : (
-          <div className="flex justify-between bg-[var(--background-alternate)] -m-5 rounded-bl-[50px] p-5">
+          <div className="flex justify-between bg-[var(--background-alternate)] -m-6 rounded-bl-[50px] p-5">
             <Button
               onClick={handleClose}
               className="w-full py-4"

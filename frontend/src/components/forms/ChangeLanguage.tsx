@@ -1,26 +1,55 @@
-import React, { useState } from "react";
-import Button from "@/components/Button";
+import React, { useState } from 'react';
+import Button from '@/components/Button';
+import { updateUserPreferences } from '@api/services/settingService';
+import { updateUser } from '@store/userSlice';
+import { useDispatch } from 'react-redux';
 
 interface Props {
   onClose: () => void;
 }
 
 const ChangeLanguage: React.FC<Props> = ({ onClose }) => {
+  const dispatch = useDispatch();
   const [isSaved, setIsSaved] = useState(false);
-  const [language, setLanguage] = useState("");
+  const [language, setLanguage] = useState<'' | 'en' | 'fr'>('');
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleSave = () => {
-    console.log("Saved language:", language);
-    setIsSaved(true);
+  const handleSave = async () => {
+    if (!language) {
+      setError('Please select a language.');
+      return;
+    }
+    setError(null);
+    setLoading(true);
+
+    try {
+      const res = await updateUserPreferences({ language });
+      dispatch(updateUser(res.data));
+      setIsSaved(true);
+      // onClose();
+    } catch (err: any) {
+      const message = err.response?.data?.message || 'Failed to update language.';
+      setError(message);
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
+  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    if (value === 'en' || value === 'fr' || value === '') {
+      setLanguage(value);
+    }
+  };
   const handleCancel = () => {
-    console.log("Cancelled");
+    console.log('Cancelled');
     onClose();
   };
 
   const handleClose = () => {
-    console.log("Closed");
+    console.log('Closed');
     onClose();
     setIsSaved(false);
   };
@@ -35,21 +64,21 @@ const ChangeLanguage: React.FC<Props> = ({ onClose }) => {
 
           <select
             value={language}
-            onChange={(e) => setLanguage(e.target.value)}
+            onChange={handleLanguageChange}
             className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
           >
             <option value="" disabled>
               Select a language
             </option>
-            <option value="english">English</option>
-            <option value="french">French</option>
+            <option value="en">English</option>
+            <option value="fr">French</option>
           </select>
         </div>
       </div>
 
       <>
         {!isSaved ? (
-          <div className="flex justify-between bg-[var(--background-alternate)] -m-5 p-5 rounded-bl-[50px]">
+          <div className="flex justify-between bg-[var(--background-alternate)] -m-6 p-5 rounded-bl-[50px]">
             <Button
               onClick={handleCancel}
               className="py-4 mr-2"
@@ -71,7 +100,7 @@ const ChangeLanguage: React.FC<Props> = ({ onClose }) => {
             </Button>
           </div>
         ) : (
-          <div className="flex justify-between bg-[var(--background-alternate)] -m-5 rounded-bl-[50px] p-5">
+          <div className="flex justify-between bg-[var(--background-alternate)] -m-6 rounded-bl-[50px] p-5">
             <Button
               onClick={handleClose}
               className="w-full py-4"

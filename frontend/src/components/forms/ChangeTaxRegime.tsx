@@ -1,5 +1,8 @@
-import React, { useEffect, useState } from "react";
-import Button from "@/components/Button";
+import React, { useEffect, useState } from 'react';
+import Button from '@/components/Button';
+import { useDispatch } from 'react-redux';
+import { updateFinanceSettings } from '@api/services/settingService';
+import { updateUser } from '@store/userSlice';
 
 interface Props {
   onClose: () => void;
@@ -7,25 +10,48 @@ interface Props {
 }
 
 const ChangeTaxRegime: React.FC<Props> = ({ onClose, tax }) => {
+  const dispatch = useDispatch();
   const [isSaved, setIsSaved] = useState(false);
-  const [taxRegime, setTaxRegime] = useState("");
+  const [taxRegime, setTaxRegime] = useState<'' | 'British Columbia' | 'Quebec'>('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    setTaxRegime(tax);
-  })
+    if (tax === 'British Columbia' || tax === 'Quebec') {
+      setTaxRegime(tax);
+    } else {
+      setTaxRegime('');
+    }
+  }, [tax]);
 
-  const handleSave = () => {
-    console.log("Saved tax Regime:", taxRegime);
-    setIsSaved(true);
+  const handleSave = async () => {
+    if (!taxRegime) return;
+
+    try {
+      setLoading(true);
+      setError(null);
+
+      const { data } = await updateFinanceSettings({ province: taxRegime });
+      console.log(data.province);
+      dispatch(updateUser({ settings: { finance: { province: data.province } } }));
+
+      setIsSaved(true);
+    } catch (err: any) {
+      console.error(err);
+      const message = err.response?.data?.message || 'Failed to update tax regime.';
+      setError(message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleCancel = () => {
-    console.log("Cancelled");
+    console.log('Cancelled');
     onClose();
   };
 
   const handleClose = () => {
-    console.log("Closed");
+    console.log('Closed');
     onClose();
     setIsSaved(false);
   };
@@ -40,27 +66,29 @@ const ChangeTaxRegime: React.FC<Props> = ({ onClose, tax }) => {
 
           <select
             value={taxRegime}
-            onChange={(e) => setTaxRegime(e.target.value)}
+            onChange={(e) => setTaxRegime(e.target.value as 'British Columbia' | 'Quebec')}
             className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
           >
             <option value="" disabled>
               Select your Tax Regime
             </option>
-            <option value="english">British Columbia</option>
-            <option value="french">Quebec</option>
+            <option value="British Columbia">British Columbia</option>
+            <option value="Quebec">Quebec</option>
           </select>
         </div>
+        {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
       </div>
 
       <>
         {!isSaved ? (
-          <div className="flex justify-between bg-[var(--background-alternate)] -m-5 p-5 rounded-bl-[50px]">
+          <div className="flex justify-between bg-[var(--background-alternate)] -m-6 p-5 rounded-bl-[50px]">
             <Button
               onClick={handleCancel}
               className="py-4 mr-2"
               buttonColor="white"
               textColor="black"
               width="48%"
+              disabled={loading}
             >
               Cancel
             </Button>
@@ -70,13 +98,13 @@ const ChangeTaxRegime: React.FC<Props> = ({ onClose, tax }) => {
               buttonColor="regularButton"
               textColor="white"
               width="48%"
-              disabled={!taxRegime}
+              disabled={!taxRegime || loading}
             >
               Save
             </Button>
           </div>
         ) : (
-          <div className="flex justify-between bg-[var(--background-alternate)] -m-5 rounded-bl-[50px] p-5">
+          <div className="flex justify-between bg-[var(--background-alternate)] -m-6 rounded-bl-[50px] p-5">
             <Button
               onClick={handleClose}
               className="w-full py-4"

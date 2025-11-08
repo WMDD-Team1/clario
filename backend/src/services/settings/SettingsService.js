@@ -13,6 +13,7 @@ export const updateAuth0Profile = async (auth0Id, updates) => {
 	allowedFields.forEach((key) => {
 		if (updates[key]) payload[key] = updates[key];
 	});
+	if (Object.keys(payload).length === 0) return {};
 
 	await axios.patch(`https://${process.env.AUTH0_DOMAIN}/api/v2/users/${auth0Id}`, payload, {
 		headers: {
@@ -20,11 +21,11 @@ export const updateAuth0Profile = async (auth0Id, updates) => {
 			"Content-Type": "application/json",
 		},
 	});
+
 	return payload;
 };
 
-export const updateUserProfile = async (userId, updates) => {
-	const user = await User.findById(userId);
+export const updateUserProfile = async (user, updates) => {
 	if (!user) throw new Error("User not found");
 
 	await updateAuth0Profile(user.auth0Id, updates);
@@ -32,6 +33,15 @@ export const updateUserProfile = async (userId, updates) => {
 	if (updates.name) user.name = updates.name;
 	if (updates.email) user.email = updates.email;
 	if (updates.picture) user.picture = updates.picture;
+
+	if (updates.address && typeof updates.address === "object") {
+		user.address = {
+			street: updates.address.street ?? user.address?.street ?? null,
+			city: updates.address.city ?? user.address?.city ?? null,
+			postalCode: updates.address.postalCode ?? user.address?.postalCode ?? null,
+			country: updates.address.country ?? user.address?.country ?? null,
+		};
+	}
 
 	await user.save();
 
@@ -105,6 +115,7 @@ export const updateExpenseCategoriesService = async (userId, categories) => {
 	const user = await User.findById(userId);
 	if (!user) throw new Error("User not found");
 
+	console.log(categories);
 	user.settings.finance.expenseCategories = categories;
 	await user.save();
 
@@ -113,7 +124,7 @@ export const updateExpenseCategoriesService = async (userId, categories) => {
 
 export const exportTransactionsCSV = async (userId) => {
 	const records = await Transaction.find({ userId }).lean();
-	if (!records.length) throw new Error("No data to export");
+	if (!records.length) return null;
 
 	const fields = [
 		{ label: "Title", value: "title" },
