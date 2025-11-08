@@ -1,5 +1,6 @@
 import Project from "../../models/Project.js";
 import Client from "../../models/Client.js";
+import Contract from "../../models/Contract.js";
 
 // CRUD
 export const findAllProjects = async (userId, query = {}) => {
@@ -72,10 +73,19 @@ export const findAllProjects = async (userId, query = {}) => {
 };
 
 export const findByProjectId = async (id, userId) => {
-	return await Project.findOne({ _id: id, userId }).populate({
+	const project = await Project.findOne({ _id: id, userId }).populate({
 		path: "clientId",
 		select: "_id name email",
 	});
+	if (!project) return null;
+
+	const contract = await Contract.findOne({ projectId: id, userId }).select(
+		"_id contractName contractUrl status fileType size createdAt updatedAt"
+	);
+	const data = project.toJSON();
+	data.contract = contract ? contract.toJSON() : null;
+
+	return data;
 };
 
 export const createNewProject = async (data, userId) => {

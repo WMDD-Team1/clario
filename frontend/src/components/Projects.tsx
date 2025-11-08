@@ -93,7 +93,7 @@ const Projects = ({onCreate}: Props) => {
                 <Table
                     headers={PROJECT_HEADERS}
                     data={projects}
-                    actions={[{ id: 'archive', label: 'Archive', action: (project) => handleArchiveProject(project) }]}
+                    actions={[{ id: 'archive', label: (project) => project.isArchived ? 'Unarchive' : 'Archive', action: (project) => handleArchiveProject(project) }]}
                     total={meta.total}
                     page={meta.page}
                     pageSize={meta.limit}

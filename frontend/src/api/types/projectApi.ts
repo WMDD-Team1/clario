@@ -13,8 +13,10 @@ export interface ProjectApiResponse {
     milestones?: MilestoneApiResponse[]; // define below if needed
     createdAt: string;
     updatedAt: string;
+    fileUrl: string;
     id: string;
     clientName: string | null;
+    upfrontAmount : number | null;
 }
 
 export interface MilestoneApiResponse {

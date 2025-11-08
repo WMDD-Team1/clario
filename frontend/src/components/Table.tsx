@@ -15,7 +15,7 @@ interface Header {
 
 interface Action {
     id: string;
-    label: string;
+    label: string | ((record: any) => string);
     action: (record: any) => void;
 }
 
@@ -136,7 +136,7 @@ const Table = ({
                                         <td
                                             key={header.key}
                                             onClick={() =>
-                                                onClickChildren && row.id && onClickChildren(row.id)
+                                                onClickChildren && !header.render && row.id && onClickChildren(row.id)
                                             }
                                             className={`px-6 py-4 whitespace-nowrap text-sm text-gray-600 ${header.key.toLowerCase().includes("amount") ||
                                                 header.key.toLowerCase().includes("price")

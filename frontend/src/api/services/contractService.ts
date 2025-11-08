@@ -10,3 +10,18 @@ export const generateContractDraft = async (projectId: string): Promise<string> 
         return "";
     }
 }
+
+export const postAnalyzeContract = async (projectId: string, file: File): Promise<string> => {
+    try {
+        const { data } = await api.post<DraftApiResponse>("/contracts/upload", {
+            file,
+            projectId
+        });
+        if (!data.message.includes("successfully")) return "";
+        await api.post(`/contracts/analyze/${projectId}`);
+        return data.contract.contractUrl;
+    } catch (err) {
+        console.error("Error generating the contract: " + err);
+        return "";
+    }
+}

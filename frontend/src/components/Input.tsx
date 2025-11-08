@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -8,7 +8,8 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   register?: UseFormRegisterReturn;
   hidden?: boolean;
   children?: React.ReactNode
-  padding?:string
+  padding?: string
+  endAdornment?: ReactNode;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -18,8 +19,9 @@ const Input: React.FC<InputProps> = ({
   id,
   register,
   children,
-  hidden=false,
+  hidden = false,
   padding,
+  endAdornment,
   ...props
 }) => {
   return (
@@ -33,14 +35,19 @@ const Input: React.FC<InputProps> = ({
         </label>
       )}
 
-      <input
-        id={id}
-        {...register}
-        {...props}
-        className={`w-full p-[1rem] rounded-[1rem] border-2 ${color} ${padding} ${
-          borderColor || "border-neutral-300"
-        }`}
-      />
+      <div className={`flex justify-between rounded-[1rem] border-2 ${color} ${padding} ${borderColor || "border-neutral-300"}`}>
+        <input
+          id={id}
+          {...register}
+          {...props}
+          className="w-full p-[1rem] rounded-[1rem]"
+        />
+        {endAdornment && (
+          <div className="m-2 flex items-center text-[var(--primitive-colors-brand-primary-500-base)]">
+            {endAdornment}
+          </div>
+        )}
+      </div>
       {children}
     </div>
   );
