@@ -27,7 +27,7 @@ const ChangeName: React.FC<Props> = ({ onClose }) => {
   };
 
   return (
-    <div className="flex flex-col h-full" >
+    <div className="flex flex-col h-full">
       <div className="flex-1 flex flex-col justify-top">
         <div className="relative mb-6">
           <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">
@@ -55,14 +55,13 @@ const ChangeName: React.FC<Props> = ({ onClose }) => {
       </div>
       <>
         {!isSaved ? (
-          <div className="flex justify-between bg-[var(--background-alternate)] -m-5 p-5 rounded-bl-[50px] mt-auto">
-
+          <div className="flex justify-between bg-[var(--background-alternate)] -m-6 p-5 rounded-bl-[50px]">
             <Button
               onClick={handleCancel}
               className="py-4 mr-2"
               buttonColor="white"
               textColor="black"
-              width="46%"
+              width="48%"
             >
               Cancel
             </Button>
@@ -71,20 +70,19 @@ const ChangeName: React.FC<Props> = ({ onClose }) => {
               className="py-4 ml-2"
               buttonColor="regularButton"
               textColor="white"
-              width="46%"
+              width="48%"
             >
               Save
             </Button>
           </div>
         ) : (
-          <div className="flex justify-between bg-[var(--background-alternate)] -m-5 rounded-bl-[50px] p-5">
-
+          <div className="flex justify-between bg-[var(--background-alternate)] -m-6 rounded-bl-[50px] p-5">
             <Button
               onClick={handleClose}
               className="w-full py-4"
               buttonColor="regularButton"
               textColor="white"
-              width="96%"
+              width="98%"
             >
               Close
             </Button>

@@ -55,8 +55,8 @@ export const RemindersList: React.FC = () => {
     loadReminders();
   }, []);
   return (
-
-    <div className="space-y-4 md:grid md:grid-col-3 lg:grid-cols-3 md:gap-4 xl:grid-cols-1">
+    <div className="space-y-4">
+      <h3 className="font-semibold text-[24px] text-gray-700">Reminders</h3>
       {reminders?.map((reminder, idx) => (
         <Reminder data={reminder} key={idx} />
       ))}

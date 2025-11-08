@@ -6,7 +6,7 @@ const UserPicture = ({ imgURL }: Props) => {
     return (
         <>
             {imgURL && (<div>
-                <img src={imgURL} alt="Profile Picture" className='w-[50px] h-[50px] rounded-full bg-amber-100 object-cover' />
+                <img src={imgURL} alt="Profile Picture" className='w-[60px] h-[60px] rounded-full bg-amber-100 object-cover' />
             </div>)}
         </>
     )
