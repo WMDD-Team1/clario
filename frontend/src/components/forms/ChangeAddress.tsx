@@ -55,6 +55,17 @@ const ChangeAddress: React.FC<Props> = ({ onClose }) => {
         </div>
         <div className="relative mb-6">
           <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">
+            Country
+          </label>
+          <input
+            type="text"
+            value={postalCode}
+            onChange={(e) => setPostalCode(e.target.value)}
+            className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div className="relative mb-6">
+          <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">
             Postal Code
           </label>
           <input
