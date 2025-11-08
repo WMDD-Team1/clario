@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Button from "@/components/Button";
+import eye from "@/assets/icons/eye.svg";
 
 interface Props {
     onClose: () => void;
@@ -41,7 +42,7 @@ const ChangePassword: React.FC<Props> = ({ onClose }) => {
                         className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     <span className="absolute right-4 top-3.5 text-blue-500 cursor-pointer text-lg">
-                        👁️
+                        <img src={eye} alt="Show password" />
                     </span>
                 </div>
 
@@ -57,7 +58,7 @@ const ChangePassword: React.FC<Props> = ({ onClose }) => {
                         className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     <span className="absolute right-4 top-3.5 text-blue-500 cursor-pointer text-lg">
-                        👁️
+                        <img src={eye} alt="Show password" />
                     </span>
                 </div>
 
@@ -73,7 +74,7 @@ const ChangePassword: React.FC<Props> = ({ onClose }) => {
                         className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     <span className="absolute right-4 top-3.5 text-blue-500 cursor-pointer text-lg">
-                        👁️
+                        <img src={eye} alt="Show password" />
                     </span>
                 </div>
             </div>

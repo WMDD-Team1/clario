@@ -31,24 +31,12 @@ const ChangeName: React.FC<Props> = ({ onClose }) => {
       <div className="flex-1 flex flex-col justify-top">
         <div className="relative mb-6">
           <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">
-            Name
+            Full Name
           </label>
           <input
             type="text"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
-            className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        <div className="relative">
-          <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">
-            Last Name
-          </label>
-          <input
-            type="text"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
             className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
