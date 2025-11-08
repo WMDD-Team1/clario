@@ -16,6 +16,41 @@ CategorySchema.set("toJSON", {
 	},
 });
 
+const GeneralSettingsSchema = new mongoose.Schema(
+	{
+		language: { type: String, enum: ["en", "fr"], default: "en" },
+		theme: { type: String, enum: ["light", "dark"], default: "light" },
+	},
+	{ _id: false }
+);
+
+const FinanceSettingsSchema = new mongoose.Schema(
+	{
+		province: {
+			type: String,
+			enum: ["British Columbia", "Quebec"],
+			default: "British Columbia",
+		},
+		incomeCategories: {
+			type: [String],
+			default: ["Project Income", "Recurring Income", "Professional Services"],
+		},
+		expenseCategories: {
+			type: [String],
+			default: ["Software & Tools", "Equipment & Hardware", "Subscriptions", "Professional Services"],
+		},
+	},
+	{ _id: false }
+);
+
+const SettingsSchema = new mongoose.Schema(
+	{
+		general: { type: GeneralSettingsSchema, default: () => ({}) },
+		finance: { type: FinanceSettingsSchema, default: () => ({}) },
+	},
+	{ _id: false }
+);
+
 const UserSchema = new mongoose.Schema(
 	{
 		auth0Id: {
@@ -53,35 +88,7 @@ const UserSchema = new mongoose.Schema(
 			type: Date,
 			default: null,
 		},
-		settings: {
-			general: {
-				language: {
-					type: String,
-					enum: ["en", "fr"],
-					default: "en",
-				},
-				theme: {
-					type: String,
-					enum: ["light", "dark"],
-					default: "light",
-				},
-			},
-			finance: {
-				province: {
-					type: String,
-					enum: ["British Columbia", "Quebec"],
-					default: "British Columbia",
-				},
-				incomeCategories: {
-					type: [String],
-					default: ["Project Income", "Recurring Income", "Professional Services"],
-				},
-				expenseCategories: {
-					type: [String],
-					default: ["Software & Tools", "Equipment & Hardware", "Subscriptions", "Professional Services"],
-				},
-			},
-		},
+		settings: { type: SettingsSchema, default: () => ({}) },
 	},
 	{
 		timestamps: true,
