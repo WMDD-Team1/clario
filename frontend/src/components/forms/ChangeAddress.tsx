@@ -33,7 +33,7 @@ const ChangeAddress: React.FC<Props> = ({ onClose }) => {
       <div className="flex-1 flex flex-col justify-top">
         <div className="relative mb-6">
           <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">
-            Address
+            Address Line
           </label>
           <input
             type="text"
@@ -44,7 +44,7 @@ const ChangeAddress: React.FC<Props> = ({ onClose }) => {
         </div>
         <div className="relative mb-6">
           <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">
-            City
+            Postal Code
           </label>
           <input
             type="text"
@@ -55,7 +55,7 @@ const ChangeAddress: React.FC<Props> = ({ onClose }) => {
         </div>
         <div className="relative mb-6">
           <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">
-            Country
+            City
           </label>
           <input
             type="text"
@@ -66,7 +66,7 @@ const ChangeAddress: React.FC<Props> = ({ onClose }) => {
         </div>
         <div className="relative mb-6">
           <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">
-            Postal Code
+            Country
           </label>
           <input
             type="text"
