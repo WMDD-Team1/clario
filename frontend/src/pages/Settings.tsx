@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import Button from '@/components/Button';
 import ToggleButton from '@/components/ToggleButton';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -13,13 +13,15 @@ import ChangeLanguage from '@components/forms/ChangeLanguage';
 import ExpensesCategories from '@components/forms/ExpensesCategories';
 import IncomeCategories from '@components/forms/IncomeCategories';
 import ChangeTaxRegime from '@components/forms/ChangeTaxRegime';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@store/index';
+
+import { exportUserTransactions } from '@api/services/settingService';
 
 const Settings: React.FC = () => {
   const { isAuthenticated, isLoading } = useAuth0();
+  const dispatch = useDispatch();
   const { data: user, loading } = useSelector((state: RootState) => state.user);
-  console.log(user);
 
   const [isOpen, setIsOpen] = useState(false);
   const [drawerTitle, setDrawerTitle] = useState('');
@@ -29,16 +31,20 @@ const Settings: React.FC = () => {
     key: 'general',
     label: 'General',
   });
+  console.log(user);
 
-  const profile = {
-    name: user?.name || '',
-    email: user?.email || '',
-    address: user?.address
-      ? `${user.address.street || ''} ${user.address.city || ''} ${
-          user.address.country || ''
-        } ${user.address.postalCode || ''}`.trim()
-      : '',
-  };
+  const profile = useMemo(
+    () => ({
+      name: user?.name || '',
+      email: user?.email || '',
+      address: user?.address
+        ? `${user.address.street || ''} ${user.address.city || ''} ${
+            user.address.country || ''
+          } ${user.address.postalCode || ''}`.trim()
+        : '',
+    }),
+    [user],
+  );
   const preferences = {
     language: user?.settings?.general?.language === 'fr' ? 'French' : 'English',
     mode: user?.settings?.general?.theme === 'dark' ? 'Dark Mode' : 'Light Mode',
@@ -59,36 +65,25 @@ const Settings: React.FC = () => {
     taxRegime: user?.settings?.finance?.province || 'British Columbia',
   };
 
-  // const [profile] = useState({
-  //   name: "Yosimar Yotún",
-  //   email: "bebexito@emoxito.com",
-  //   address: "5 - 312 3rd Ave, Vancouver British Columbia, v6z-1y9",
-  // });
-
-  // const [preferences] = useState({
-  //   language: "English",
-  //   mode: "Bright Mode",
-  // });
-
-  // const [finance] = useState({
-  //   expenseCategories: [
-  //     "Software & Tools",
-  //     "Equipment & Hardware",
-  //     "Subscriptions",
-  //     "Professional Services",
-  //   ],
-  //   incomeCategories: ["Project Income", "Recurring Income", "Consulting"],
-  //   taxRegime: "British Columbia",
-  // });
-
   const openDrawer = (title: string, content: React.ReactNode) => {
     setDrawerTitle(title);
     setDrawerContent(content);
     setIsOpen(true);
   };
 
-  const handleExportData = () => {
-    console.log('Export data clicked');
+  const handleExportData = async () => {
+    const blob = await exportUserTransactions();
+
+    if (!blob || blob.size === 0) {
+      // when there's no data, show toast
+      console.log('No transactions found to export.');
+      return;
+    }
+
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'transactions.csv';
+    link.click();
   };
 
   // === General Section ===

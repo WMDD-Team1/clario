@@ -1,27 +1,36 @@
-import React, { useState } from "react";
-import Button from "@/components/Button";
+import React, { useState } from 'react';
+import Button from '@/components/Button';
+import { useDispatch } from 'react-redux';
+import { updateUserProfile } from '@api/services/settingService';
+import { updateUser } from '@store/userSlice';
 
 interface Props {
   onClose: () => void;
 }
 
 const ChangeName: React.FC<Props> = ({ onClose }) => {
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [name, setName] = useState('');
 
-  const handleSave = () => {
-    // your save logic (API call, etc.)
+  const handleSave = async () => {
+    if (!name.trim()) return;
+    setLoading(true);
+    const updated = await updateUserProfile({ name });
+    dispatch(updateUser(updated.data));
+    setLoading(false);
+    onClose();
     setIsSaved(true);
   };
 
   const handleCancel = () => {
-    console.log("Cancelled");
+    console.log('Cancelled');
     onClose();
   };
 
   const handleClose = () => {
-    console.log("Closed");
+    console.log('Closed');
     onClose();
     setIsSaved(false);
   };
@@ -30,25 +39,12 @@ const ChangeName: React.FC<Props> = ({ onClose }) => {
     <div className="flex flex-col h-full">
       <div className="flex-1 flex flex-col justify-top">
         <div className="relative mb-6">
-          <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">
-            Name
-          </label>
+          <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">Name</label>
           <input
             type="text"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        <div className="relative">
-          <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">
-            Last Name
-          </label>
-          <input
-            type="text"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
+            value={name}
+            name="name"
+            onChange={(e) => setName(e.target.value)}
             className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>

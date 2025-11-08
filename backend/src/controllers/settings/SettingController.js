@@ -15,8 +15,7 @@ import {
 
 export const updateProfile = async (req, res) => {
 	try {
-		const { sub: auth0Id } = req.auth;
-		const data = await updateUserProfile(auth0Id, req.body);
+		const data = await updateUserProfile(req.user, req.body);
 
 		res.status(200).json({
 			message: "Profile updated successfully",
@@ -120,6 +119,15 @@ export const exportCSV = async (req, res) => {
 	try {
 		const { id: userId } = req.user;
 		const csvBuffer = await exportTransactionsCSV(userId);
+		console.log(csvBuffer);
+
+		// no data
+		if (!csvBuffer) {
+			return res.status(200).json({
+				empty: true,
+				message: "No transactions found to export",
+			});
+		}
 
 		res.setHeader("Content-Type", "text/csv");
 		res.setHeader("Content-Disposition", "attachment; filename=transactions.csv");
@@ -135,18 +143,13 @@ export const updatePassword = async (req, res) => {
 	try {
 		const { email } = req.user;
 		const { sub: auth0Id } = req.auth;
-		const { currentPassword, newPassword, confirmPassword } = req.body;
+		const { currentPassword, newPassword } = req.body;
 		console.log(email, currentPassword);
 
 		const isValid = await verifyPassword(email, currentPassword);
 		if (!isValid) {
 			return res.status(400).json({
 				message: "Current password is incorrect",
-			});
-		}
-		if (newPassword !== confirmPassword) {
-			return res.status(400).json({
-				message: "New passwords do not match",
 			});
 		}
 

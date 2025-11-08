@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from "react";
-import Button from "@/components/Button";
-import TextArea from "@components/TextArea";
+import React, { useState, useEffect } from 'react';
+import Button from '@/components/Button';
+import TextArea from '@components/TextArea';
+import { useDispatch } from 'react-redux';
+import { updateIncomeCategories } from '@api/services/settingService';
+import { updateUser } from '@store/userSlice';
 
 interface Props {
   onClose: () => void;
@@ -8,28 +11,54 @@ interface Props {
 }
 
 const IncomeCategories: React.FC<Props> = ({ onClose, incCategories }) => {
+  const dispatch = useDispatch();
   const [isSaved, setIsSaved] = useState(false);
-  const [categories, setCategories] = useState("");
+  const [categories, setCategories] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Initialize categories with comma-separated values
   useEffect(() => {
     if (incCategories.length > 0) {
-      setCategories(incCategories.join(", "));
+      setCategories(incCategories.join(', '));
     }
   }, [incCategories]);
 
-  const handleSave = () => {
-    console.log("Saved categories:", categories);
-    setIsSaved(true);
-  };
+  const handleSave = async () => {
+    const trimmed = categories
+      .split(',')
+      .map((cat) => cat.trim())
+      .filter((cat) => cat.length > 0);
 
+    if (trimmed.length === 0) {
+      setError('Please enter at least one category.');
+      return;
+    }
+
+    try {
+      setError(null);
+      setLoading(true);
+
+      const { message, categories } = await updateIncomeCategories(trimmed);
+
+      dispatch(updateUser({ settings: { finance: { incomeCategories: categories } } }));
+
+      setIsSaved(true);
+    } catch (err: any) {
+      console.error(err);
+      const message = err.response?.data?.message || 'Failed to update income categories.';
+      setError(message);
+    } finally {
+      setLoading(false);
+    }
+  };
   const handleCancel = () => {
-    console.log("Cancelled");
+    console.log('Cancelled');
     onClose();
   };
 
   const handleClose = () => {
-    console.log("Closed");
+    console.log('Closed');
     onClose();
     setIsSaved(false);
   };
@@ -48,7 +77,7 @@ const IncomeCategories: React.FC<Props> = ({ onClose, incCategories }) => {
           />
           <span>Separate the categories with “,”</span>
         </div>
-        
+        {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
       </div>
 
       <>
