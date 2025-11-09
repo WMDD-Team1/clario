@@ -13,6 +13,7 @@ import ChangeLanguage from '@components/forms/ChangeLanguage';
 import ExpensesCategories from '@components/forms/ExpensesCategories';
 import IncomeCategories from '@components/forms/IncomeCategories';
 import ChangeTaxRegime from '@components/forms/ChangeTaxRegime';
+import ChangeMode from '@components/forms/ChangeMode';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@store/index';
 
@@ -181,7 +182,9 @@ const Settings: React.FC = () => {
               className="bg-blue-600 text-white rounded-xl px-5 py-1"
               buttonColor="regularButton"
               textColor="white"
-              onClick={() => openDrawer('Change Mode', <div>ModeChange Component Here</div>)}
+              onClick={() =>
+                openDrawer('Change Mode', <ChangeMode onClose={() => setIsOpen(false)} />)
+              }
             >
               Change
             </Button>
