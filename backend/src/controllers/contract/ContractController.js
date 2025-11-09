@@ -56,9 +56,8 @@ export const analyzeContract = async (req, res) => {
 export const generateContract = async (req, res) => {
 	try {
 		const { projectId } = req.params;
-		const { id: userId } = req.user;
 
-		const contract = await generateContractService(userId, projectId);
+		const contract = await generateContractService(req.user, projectId);
 		res.status(201).json({
 			message: "Draft contract generated successfully",
 			contract,

@@ -4,6 +4,7 @@ import successImage from "@/assets/icons/client-upload-success.svg";
 import { updateUserPreferences } from '@api/services/settingService';
 import { updateUser } from '@store/userSlice';
 import { useDispatch } from 'react-redux';
+import SuccessForm from './SuccessForm';
 
 interface Props {
   onClose: () => void;
@@ -11,10 +12,10 @@ interface Props {
 
 const ChangeLanguage: React.FC<Props> = ({ onClose }) => {
   const dispatch = useDispatch();
-  const [isSaved, setIsSaved] = useState(false);
   const [language, setLanguage] = useState<'' | 'en' | 'fr'>('');
-  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSave = async () => {
     if (!language) {
@@ -27,7 +28,7 @@ const ChangeLanguage: React.FC<Props> = ({ onClose }) => {
     try {
       const res = await updateUserPreferences({ language });
       dispatch(updateUser(res.data));
-      setIsSaved(true);
+
       // onClose();
     } catch (err: any) {
       const message = err.response?.data?.message || 'Failed to update language.';
@@ -38,41 +39,30 @@ const ChangeLanguage: React.FC<Props> = ({ onClose }) => {
     }
   };
 
+  if (isSuccess)
+    return (
+      <SuccessForm
+        iconPath="/setting-update-success.svg"
+        title="Language changed!"
+        message="Your language preference has been updated successfully."
+        onCancel={onClose}
+      />
+    );
+
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
     if (value === 'en' || value === 'fr' || value === '') {
       setLanguage(value);
     }
   };
-  const handleCancel = () => {
-    console.log('Cancelled');
-    onClose();
-  };
-
-  const handleClose = () => {
-    console.log('Closed');
-    onClose();
-    setIsSaved(false);
-  };
 
   return (
-    <div className="relative flex flex-col h-full">
-      {isSaved && (
-        <div className="absolute inset-0 flex justify-center items-center z-0">
-          <img
-            src={successImage}
-            alt="Success"
-            className="w-40 h-40 object-contain"
-          />
-        </div>
-      )}
-
-      {!isSaved && (
-        <div className="flex-1 flex flex-col justify-top z-10">
-          <div className="relative mb-6">
-            <label className="absolute -top-2.5 left-4 bg-white px-1 text-sm text-gray-500">
-              Language
-            </label>
+    <form className="flex flex-col h-full">
+      <div className="flex-1 flex flex-col justify-top">
+        <div className="relative mb-6">
+          <label className="absolute -top-2.5 left-4 bg-white px-1 text-sm text-gray-500">
+            Language
+          </label>
 
             <select
               value={language}
@@ -89,44 +79,28 @@ const ChangeLanguage: React.FC<Props> = ({ onClose }) => {
         </div>
       )}
 
-      <div className="flex justify-between bg-[var(--background-alternate)] -m-5 p-5 md:rounded-bl-[50px] z-20 mt-auto">
-        {!isSaved ? (
-          <>
-            <Button
-              onClick={handleCancel}
-              className="py-4 mr-2"
-              buttonColor="white"
-              textColor="black"
-              width="48%"
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={handleSave}
-              className="py-4 ml-2"
-              buttonColor="regularButton"
-              textColor="white"
-              width="48%"
-              disabled={!language}
-            >
-              Save
-            </Button>
-          </>
-        ) : (
-          <div className="flex justify-between bg-[var(--background-alternate)] -m-6 rounded-bl-[50px] p-5">
-            <Button
-              onClick={handleClose}
-              className="w-full py-4"
-              buttonColor="regularButton"
-              textColor="white"
-              width="98%"
-            >
-              Close
-            </Button>
-          </div>
-        )}
+      <div className="flex justify-between gap-2 absolute bottom-0 right-0 left-0 p-[30px] bg-[var(--primitive-colors-brand-primary-75)] rounded-bl-[50px]">
+        <Button
+          onClick={onClose}
+          className="py-4 mr-2"
+          buttonColor="white"
+          textColor="black"
+          width="48%"
+        >
+          Cancel
+        </Button>
+        <Button
+          onClick={handleSave}
+          disabled={loading}
+          className="py-4 ml-2"
+          buttonColor="regularButton"
+          textColor="white"
+          width="48%"
+        >
+          {loading ? 'Saving...' : 'Save'}
+        </Button>
       </div>
-    </div>
+    </form>
   );
 };
 

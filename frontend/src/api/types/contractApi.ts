@@ -1,11 +1,22 @@
-export interface Contract {
-    id: string;
+export interface ContractApiResponse {
+    contractName: string;
     contractUrl: string;
-    fileType: string;
+    createdAt: string;
+    updatedAt: string;
+    fileType: "pdf";
+    id: string;
     size: number;
+    aiAnalysis?: { riskyClauses: RiskAnalysisApiResponse[] };
+}
+
+export interface RiskAnalysisApiResponse {
+    category: string;
+    paragraph: string;
+    reason: string;
+    riskLevel: "Low" | "Medium" | "High";
 }
 
 export interface DraftApiResponse {
     message: string;
-    contract: Contract;
+    contract: ContractApiResponse;
 }
