@@ -93,7 +93,7 @@ const MyWork = () => {
             </div>
 
             {/* Projects or Clients */}
-            <div>{view.key === 'projects' ? <Projects /> : <Clients slide={slide} setSlide = {setSlide}/>}</div>
+            <div>{view.key === 'projects' ? <Projects onCreate={() => setIsOpen(true)} /> : <Clients slide={slide} setSlide = {setSlide}/>}</div>
         </>
     )
 }
