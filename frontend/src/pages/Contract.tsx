@@ -1,12 +1,14 @@
-import { fetchProjectById } from '@api/index';
+import { fetchProjectById, updateProject } from '@api/index';
 import Button from '@components/Button';
 import Loader from '@components/Loader';
 import { useQuery } from '@tanstack/react-query';
 import { ChevronLeft } from 'lucide-react';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const Contract = () => {
     const { projectId } = useParams<{ projectId: string }>();
+    const [toastSetup, setToastSetup] = useState<{ success: boolean, message: string }>();
     const navigate = useNavigate();
     const { data: project, isLoading, error } = useQuery({
         queryKey: ["projects", projectId],
@@ -24,12 +26,25 @@ const Contract = () => {
 
     const contract = project.contract;
 
+    const handleConfirmDraft = async () => {
+        try {
+            await updateProject(project.id, { isActive: true });
+            navigate(-1);
+        } catch (error) {
+            setToastSetup({
+                success: false,
+                message: "Error saving your contract",
+            })
+            console.error("Error confirming draft:", error);
+        }
+    }
+
     return (
         <>
             {/* Header */}
             <div className='flex justify-start items-center gap-2 mb-7'>
                 <ChevronLeft size={30} onClick={(e) => navigate(-1)} className='cursor-pointer' />
-                <h2>{contract?.contractName ?? "Contract Draft"}</h2>
+                <h2>Contract Draft</h2>
             </div>
             {/* PDF Viewer */}
             <div className="flex-1 bg-white rounded-xl shadow-sm border overflow-hidden">
@@ -47,15 +62,15 @@ const Contract = () => {
             </div>
 
             {/* Footer buttons (optional) */}
-            <div className="flex justify-center gap-5 mt-6">
+            <div className="flex justify-center gap-5 mt-6 max-w-[500px] mx-auto">
                 <Button buttonColor="regularButton"
-                    onClick={() => navigate(-1)}
+                    onClick={() => navigate(-1)} width='45%'
                     textColor="white"
                     type="submit">
                     Cancel
                 </Button>
                 <Button buttonColor="regularButton"
-                    onClick={() => navigate(-1)}
+                    onClick={() => handleConfirmDraft()} width='45%'
                     textColor="white"
                     type="submit">
                     Confirm

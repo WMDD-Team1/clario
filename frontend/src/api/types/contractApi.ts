@@ -6,6 +6,13 @@ export interface ContractApiResponse {
     fileType: "pdf";
     id: string;
     size: number;
+    aiAnalysis?: { riskyClauses: RiskAnalysisApiResponse[] };
+}
+
+export interface RiskAnalysisApiResponse {
+    category: string;
+    paragraph: string;
+    riskLevel: "Low" | "Medium" | "High";
 }
 
 export interface DraftApiResponse {

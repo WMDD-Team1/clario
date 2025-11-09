@@ -4,8 +4,8 @@ import { Tooltip } from "@mui/material";
 import { useQueryClient } from "@tanstack/react-query";
 import { Info } from "lucide-react";
 import { useCallback, useMemo } from "react";
-import ContractCard from "./ContractCard";
 import { useNavigate } from "react-router-dom";
+import ContractCard from "./ContractCard";
 
 interface Props {
     project: ProjectApiResponse;
@@ -14,6 +14,10 @@ const ContractCardDrawer = ({ project }: Props) => {
     const { setIsLoading } = useLoader();
     const queryClient = useQueryClient();
     const navigate = useNavigate();
+
+    const contractFolder = useMemo(() => {
+        return project.contract?.contractUrl.includes("draft") ? "draft" : "uploaded";
+    }, [project.contract]);
 
     const noMilestonesTooltip = useMemo(
         () => (
@@ -81,8 +85,7 @@ const ContractCardDrawer = ({ project }: Props) => {
                     console.error("No file returned from generateContractDraft");
                     return;
                 }
-                await queryClient.invalidateQueries({ queryKey: ["projects", project!.id] });
-                handleDownloadFile(fileURL);
+                navigate(`/projects/${project!.id}/contract`);
             } catch (err) {
                 console.error("Error generating contract draft:", err);
             }
@@ -133,12 +136,31 @@ const ContractCardDrawer = ({ project }: Props) => {
                     tooltip={!project.milestones?.length && noMilestonesTooltip}
                     onGenerateDraft={() => handleContractAction(handleGenerateContract)}
                     onUpload={() => handleContractAction(handleUpload)}
-                /> :
-                <ContractCard
-                    status="active"
-                    onDownload={() => handleContractAction(handleDownloadFile)}
-                    onView={() => navigate(`/projects/${project.id}/contract`)}
-                />}
+                />
+                : contractFolder === "draft" ?
+                    <ContractCard
+                        status="active"
+                        onDownload={() => handleContractAction(handleDownloadFile)}
+                        onView={() => navigate(`/projects/${project.id}/contract`)}
+                        onUpload={() => handleContractAction(handleUpload)}
+                    />
+                    : project.contract?.aiAnalysis?.riskyClauses.length ?
+                        <ContractCard
+                            status="risks"
+                            risksDetected={project.contract.aiAnalysis.riskyClauses.length}
+                            onDownload={() => handleContractAction(handleDownloadFile)}
+                            onView={() => navigate(`/projects/${project.id}/contract`)}
+                            onUpload={() => handleContractAction(handleUpload)}
+                        />
+                        :
+                        <ContractCard
+                            status="clear"
+                            onDownload={() => handleContractAction(handleDownloadFile)}
+                            onView={() => navigate(`/projects/${project.id}/contract`)}
+                            onUpload={() => handleContractAction(handleUpload)}
+                        />
+            }
+
         </>
     )
 }
