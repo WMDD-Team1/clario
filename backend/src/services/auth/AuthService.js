@@ -9,7 +9,7 @@ export const createUser = async (auth0Id, email, name, picture) => {
 		email,
 		name,
 		picture,
-	});
+	}).toJSON();
 	return { user: newUser, isNew: true };
 };
 

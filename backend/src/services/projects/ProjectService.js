@@ -79,9 +79,7 @@ export const findByProjectId = async (id, userId) => {
 	});
 	if (!project) return null;
 
-	const contract = await Contract.findOne({ projectId: id, userId }).select(
-		"_id contractName contractUrl status fileType size createdAt updatedAt"
-	);
+	const contract = await Contract.findOne({ projectId: id, userId });
 	const data = project.toJSON();
 	data.contract = contract ? contract.toJSON() : null;
 
