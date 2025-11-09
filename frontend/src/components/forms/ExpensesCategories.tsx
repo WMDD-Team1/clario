@@ -52,7 +52,7 @@ const ExpensesCategories: React.FC<Props> = ({ onClose, expenseCategories }) => 
 
       <>
         {!isSaved ? (
-          <div className="flex justify-between bg-[var(--background-alternate)] -m-5 p-5 rounded-bl-[50px]">
+          <div className="flex justify-between bg-[var(--background-alternate)] -m-5 p-5 md:rounded-bl-[50px]">
             <Button
               onClick={handleCancel}
               className="py-4 mr-2"

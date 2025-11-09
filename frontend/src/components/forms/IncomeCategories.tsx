@@ -48,7 +48,7 @@ const IncomeCategories: React.FC<Props> = ({ onClose, incCategories }) => {
           />
           <span>Separate the categories with “,”</span>
         </div>
-        
+
       </div>
 
       <>
@@ -74,7 +74,7 @@ const IncomeCategories: React.FC<Props> = ({ onClose, incCategories }) => {
             </Button>
           </div>
         ) : (
-          <div className="flex justify-between bg-[var(--background-alternate)] -m-5 rounded-bl-[50px] p-5">
+          <div className="flex justify-between bg-[var(--background-alternate)] -m-5 md:rounded-bl-[50px] p-5">
             <Button
               onClick={handleClose}
               className="w-full py-4"

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Button from "@/components/Button";
-
+import successImg from "@/assets/icons/client-upload-success.svg"; 
 interface Props {
   onClose: () => void;
 }
@@ -27,58 +27,70 @@ const ChangeName: React.FC<Props> = ({ onClose }) => {
   };
 
   return (
-    <div className="flex flex-col h-full" >
+    <div className="flex flex-col h-full">
+      {/* MAIN SECTION */}
       <div className="flex-1 flex flex-col justify-top">
-        <div className="relative mb-6">
-          <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">
-            Full Name
-          </label>
-          <input
-            type="text"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-      </div>
-      <>
         {!isSaved ? (
-          <div className="flex justify-between bg-[var(--background-alternate)] -m-5 p-5 rounded-bl-[50px] mt-auto">
-
-            <Button
-              onClick={handleCancel}
-              className="py-4 mr-2"
-              buttonColor="white"
-              textColor="black"
-              width="46%"
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={handleSave}
-              className="py-4 ml-2"
-              buttonColor="regularButton"
-              textColor="white"
-              width="46%"
-            >
-              Save
-            </Button>
-          </div>
+          <>
+            <div className="relative mb-6">
+              <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">
+                Name
+              </label>
+              <input
+                type="text"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          </>
         ) : (
-          <div className="flex justify-between bg-[var(--background-alternate)] -m-5 rounded-bl-[50px] p-5">
-
-            <Button
-              onClick={handleClose}
-              className="w-full py-4"
-              buttonColor="regularButton"
-              textColor="white"
-              width="96%"
-            >
-              Close
-            </Button>
+          
+          <div className="flex flex-1 justify-center items-center">
+            <img
+              src={successImg}
+              alt="Success"
+              className="w-28 h-28 object-contain"
+            />
           </div>
         )}
-      </>
+      </div>
+
+      {/* FOOTER BUTTONS */}
+      {!isSaved ? (
+        <div className="flex justify-between bg-[var(--background-alternate)] -m-5 p-5 md:rounded-bl-[50px] mt-auto">
+          <Button
+            onClick={handleCancel}
+            className="py-4 mr-2"
+            buttonColor="white"
+            textColor="black"
+            width="46%"
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleSave}
+            className="py-4 ml-2"
+            buttonColor="regularButton"
+            textColor="white"
+            width="46%"
+          >
+            Save
+          </Button>
+        </div>
+      ) : (
+        <div className="flex justify-between bg-[var(--background-alternate)] -m-5 md:rounded-bl-[50px] p-5">
+          <Button
+            onClick={handleClose}
+            className="w-full py-4"
+            buttonColor="regularButton"
+            textColor="white"
+            width="96%"
+          >
+            Close
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

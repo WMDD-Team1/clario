@@ -4,14 +4,13 @@ import FormDrawer from "@components/forms/FormDrawer";
 interface SettingsDrawerProps {
   isOpen: boolean;
   onClose: () => void;
-  title: string; // Now you can pass custom title per use
-  children: ReactNode; // Accept any form or component
+  title: string; 
+  children: ReactNode; 
 }
 
 const SettingsDrawer = ({ isOpen, onClose, title, children }: SettingsDrawerProps) => {
   const divRef = useRef<HTMLDivElement>(null);
 
-  // Close when clicking outside
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (!divRef.current?.contains(e.target as Node)) {

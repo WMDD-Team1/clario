@@ -56,7 +56,7 @@ export const RemindersList: React.FC = () => {
   }, []);
   return (
 
-    <div className="space-y-4 md:grid md:grid-col-3 lg:grid-cols-3 md:gap-4 xl:grid-cols-1">
+    <div className="md:grid md:grid-cols-2 lg:grid-cols-3 sm:gap-4 xl:grid-cols-1 pb-4">
       {reminders?.map((reminder, idx) => (
         <Reminder data={reminder} key={idx} />
       ))}
