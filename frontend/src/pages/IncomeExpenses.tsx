@@ -16,10 +16,13 @@ import {
   TransactionCategory,
   TransactionFormat,
   RecurrenceFormat,
+  TransactionFilter,
 } from '@api/types/transaction';
 import EmptyState from '@components/EmptyState';
 import { MenuScale, Plus } from '@assets/icons';
 import { EditExpenseSlide } from '@components/incomeExpense/EditExpenseSlide';
+import { IncomeFilterSlide } from '@components/incomeExpense/IncomeFilter';
+import { ExpenseFilterSlide } from '@components/incomeExpense/ExpenseFilter';
 
 export const IncomeExpenses = () => {
   const [incomeSlide, setIncomeSlide] = useState('110%');
@@ -37,6 +40,23 @@ export const IncomeExpenses = () => {
   const [success, setSuccess] = useState(false);
   const [deletetSuccess, setDeleteSuccess] = useState(false);
   const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [incomeFilterSlide, setIncomeFilterSlide] = useState('110%');
+  const [expenseFilterSlide, setExpenseFilterSlide] = useState('110%');
+  const [incomeFilterConditions, setIncomeFilterConditions] = useState<TransactionFilter>({
+    dateStart: '',
+    dateEnd: '',
+    type: [],
+    amountStart: 0,
+    amountEnd: 0,
+  });
+
+  const [expenseFilterConditions, setExpenseFilterConditions] = useState<TransactionFilter>({
+    dateStart: '',
+    dateEnd: '',
+    type: [],
+    amountStart: 0,
+    amountEnd: 0,
+  });
 
   let initialRecurrence = {
     templateTransactionId: '',
@@ -86,6 +106,8 @@ export const IncomeExpenses = () => {
     setRepeat(false);
     setRecurrence(initialRecurrence);
     setUpdateSuccess(false);
+    setIncomeFilterSlide('110%');
+    setExpenseFilterSlide('110%');
   };
 
   const addIncome = () => {
@@ -410,6 +432,31 @@ export const IncomeExpenses = () => {
       console.log(updateResponse.data);
       if (activeRepeatableTransaction) {
         const payload = {
+          // templateTransactionId: oneTransaction.id,
+          frequency: recurrence.frequency,
+          //--------confirm if endate is needed?------
+          // endDate: '2025-10-05',
+        };
+
+        console.log(payload);
+        try {
+          const updateRecurrenceResponse = await axios.patch(
+            `${import.meta.env.VITE_API_BASE_URL}/recurrences/${activeRepeatableTransaction.id}`,
+            JSON.stringify(payload),
+            {
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+              },
+            },
+          );
+
+          console.log(updateRecurrenceResponse);
+        } catch (error) {
+          console.error('Error saving recurrence:', error);
+        }
+      } else {
+        const payload = {
           templateTransactionId: oneTransaction.id,
           frequency: recurrence.frequency,
           //--------confirm if endate is needed?------
@@ -418,8 +465,8 @@ export const IncomeExpenses = () => {
 
         console.log(payload);
         try {
-          const recurrenceResponse = await axios.patch(
-            `${import.meta.env.VITE_API_BASE_URL}/recurrences/${activeRepeatableTransaction.id}`,
+          const recurrenceResponse = await axios.post(
+            `${import.meta.env.VITE_API_BASE_URL}/recurrences`,
             payload,
             {
               headers: {
@@ -498,43 +545,162 @@ export const IncomeExpenses = () => {
   // fake data
 
   //Add filter logic-------
-  const incomeData = allTransactions?.data?.filter(
-    (transaction) => transaction.type == 'income' && !transaction.isArchived,
-  );
-  const incomeFilteredData = incomeData
-    .map((transaction) => {
-      const formattedDate = transaction.date;
 
-      return {
-        id: transaction.id,
-        date: formattedDate,
-        amount: Number(transaction.baseAmount),
-        category: transaction.category || 'Unknown',
-        details: 'View',
-      };
+ // ----------------------------
+// Applied Filter Conditions
+const [appliedIncomeFilter, setAppliedIncomeFilter] = useState<TransactionFilter>({
+  dateStart: '',
+  dateEnd: '',
+  type: [],
+  amountStart: 0,
+  amountEnd: 0,
+});
+const [appliedExpenseFilter, setAppliedExpenseFilter] = useState<TransactionFilter>({
+  dateStart: '',
+  dateEnd: '',
+  type: [],
+  amountStart: 0,
+  amountEnd: 0,
+});
+
+// ----------------------------
+// Types
+let incomeTypes: string[] = [];
+let expenseTypes: string[] = [];
+
+allTransactions?.data.forEach((transaction) => {
+  const category = transaction.category || 'Unknown';
+  if (transaction.type === 'income' && !transaction.isArchived && !incomeTypes.includes(category)) {
+    incomeTypes.push(category);
+  }
+  if (transaction.type === 'expense' && !transaction.isArchived && !expenseTypes.includes(category)) {
+    expenseTypes.push(category);
+  }
+});
+
+// ----------------------------
+// Filtered Income Data
+const getFilteredIncomeData = () => {
+  return allTransactions?.data
+    .filter((t) => t.type === 'income' && !t.isArchived)
+    .filter((t) => {
+      const date = new Date(t.date);
+      const startDate = appliedIncomeFilter.dateStart ? new Date(appliedIncomeFilter.dateStart) : null;
+      const endDate = appliedIncomeFilter.dateEnd ? new Date(appliedIncomeFilter.dateEnd) : null;
+      if (startDate && date < startDate) return false;
+      if (endDate && date > endDate) return false;
+      return true;
     })
-    .slice((incomePage - 1) * 10, (incomePage - 1) * 10 + 10);
-
-  //Add filter logic-----------------
-  const expenseData = allTransactions?.data?.filter(
-    (transaction) => transaction.type == 'expense' && !transaction.isArchived,
-  );
-
-  const expenseFilteredData = expenseData
-    .map((transaction) => {
-      const formattedDate = transaction.date;
-
-      return {
-        id: transaction.id,
-        date: formattedDate,
-        amount: Number(transaction.baseAmount),
-        category: transaction.category || 'Unknown',
-        details: 'View',
-      };
+    .filter((t) => {
+      if (!appliedIncomeFilter.type || appliedIncomeFilter.type.length === 0) return true;
+      return appliedIncomeFilter.type.includes(t.category);
     })
-    .slice((expensePage - 1) * 10, (expensePage - 1) * 10 + 10);
+    .filter((t) => {
+      const amount = Number(t.baseAmount);
+      if (amount < appliedIncomeFilter.amountStart) return false;
+      if (appliedIncomeFilter.amountEnd && amount > appliedIncomeFilter.amountEnd) return false;
+      return true;
+    })
+    .map((t) => ({
+      id: t.id,
+      date: t.date,
+      amount: Number(t.baseAmount),
+      category: t.category || 'Unknown',
+      details: 'View',
+    }));
+};
 
-  // console.log(expenseFilteredData);
+const incomeFilteredData = getFilteredIncomeData().slice(
+  (incomePage - 1) * 10,
+  (incomePage - 1) * 10 + 10
+);
+
+// ----------------------------
+// Filtered Expense Data
+const getFilteredExpenseData = () => {
+  return allTransactions?.data
+    .filter((t) => t.type === 'expense' && !t.isArchived)
+    .filter((t) => {
+      const date = new Date(t.date);
+      const startDate = appliedExpenseFilter.dateStart ? new Date(appliedExpenseFilter.dateStart) : null;
+      const endDate = appliedExpenseFilter.dateEnd ? new Date(appliedExpenseFilter.dateEnd) : null;
+      if (startDate && date < startDate) return false;
+      if (endDate && date > endDate) return false;
+      return true;
+    })
+    .filter((t) => {
+      if (!appliedExpenseFilter.type || appliedExpenseFilter.type.length === 0) return true;
+      return appliedExpenseFilter.type.includes(t.category);
+    })
+    .filter((t) => {
+      const amount = Number(t.baseAmount);
+      if (amount < appliedExpenseFilter.amountStart) return false;
+      if (appliedExpenseFilter.amountEnd && amount > appliedExpenseFilter.amountEnd) return false;
+      return true;
+    })
+    .map((t) => ({
+      id: t.id,
+      date: t.date,
+      amount: Number(t.baseAmount),
+      category: t.category || 'Unknown',
+      details: 'View',
+    }));
+};
+
+const expenseFilteredData = getFilteredExpenseData().slice(
+  (expensePage - 1) * 10,
+  (expensePage - 1) * 10 + 10
+);
+
+// ----------------------------
+// Apply & Reset Filters
+const applyIncomeFilter = () => {
+  setAppliedIncomeFilter({ ...incomeFilterConditions });
+  setIncomePage(1);
+  setIncomeFilterSlide('110%');
+};
+const resetIncomeFilter = () => {
+  setIncomeFilterConditions({
+    dateStart: '',
+    dateEnd: '',
+    type: [],
+    amountStart: 0,
+    amountEnd: 0,
+  });
+  setAppliedIncomeFilter({
+    dateStart: '',
+    dateEnd: '',
+    type: [],
+    amountStart: 0,
+    amountEnd: 0,
+  });
+  setIncomePage(1);
+  setIncomeFilterSlide('110%');
+};
+
+const applyExpenseFilter = () => {
+  setAppliedExpenseFilter({ ...expenseFilterConditions });
+  setExpensePage(1);
+  setExpenseFilterSlide('110%');
+};
+const resetExpenseFilter = () => {
+  setExpenseFilterConditions({
+    dateStart: '',
+    dateEnd: '',
+    type: [],
+    amountStart: 0,
+    amountEnd: 0,
+  });
+  setAppliedExpenseFilter({
+    dateStart: '',
+    dateEnd: '',
+    type: [],
+    amountStart: 0,
+    amountEnd: 0,
+  });
+  setExpensePage(1);
+  setExpenseFilterSlide('110%');
+};
 
   const options = [
     { key: 'income', label: 'Income' },
@@ -608,13 +774,16 @@ export const IncomeExpenses = () => {
           <div
             className={`flex flex-col ${
               selectedOption.key === 'expense' ? 'hidden md:flex' : 'flex'
-            } rounded-2xl bg-white border-gray-200 border`}
+            }`}
           >
-            <div className="flex flex-row flex-wrap justify-between items-center p-[1rem]">
+            <div className="flex flex-row flex-wrap justify-between items-center p-[1rem] bg-white border-gray-200 border rounded-tl-2xl rounded-tr-2xl">
               <h3 className="text-2xl">Incomes</h3>
               <div className="md:flex hidden flex-row flex-nowrap justify-end items-center gap-[1rem]">
-                <div className="p-[1rem] bg-[var(--background)] rounded-[1rem] flex flex-row justify-between items-center gap-[3rem]">
-                  <MenuScale />
+                <div
+                className="p-[1rem] bg-[var(--background)] rounded-[1rem] flex flex-row justify-between items-center gap-[3rem] cursor-pointer"
+                onClick={() => setIncomeFilterSlide('0px')}
+                >
+                  <MenuScale/>
                   <p>Filter</p>
                 </div>
 
@@ -630,7 +799,10 @@ export const IncomeExpenses = () => {
                 </Button>
               </div>
               <div className="md:hidden flex flex-row flex-nowrap justify-between items-center gap-[2rem]">
-                <MenuScale className="h-7 w-7" />
+                <MenuScale
+                className="h-7 w-7 cursor-pointer"
+                onClick={() => setIncomeFilterSlide('0px')}
+                />
                 <p
                   className="p-[.7rem] bg-[var(--primitive-colors-brand-primary-95)] rounded-[1rem] flex flex-row justify-between items-center gap-[1rem] text-[var(--primitive-colors-brand-primary-925)]"
                   onClick={() => {
@@ -658,10 +830,11 @@ export const IncomeExpenses = () => {
                 onClickChildren={handleTransactionDetail}
                 headers={headers}
                 data={incomeFilteredData}
-                total={incomeData.length}
+                total={incomeFilteredData.length}
                 page={incomePage}
                 pageSize={10}
                 onPageChange={handleIncomePageChange}
+                topRemoveRounded={true}
               />
             )}
           </div>
@@ -670,14 +843,17 @@ export const IncomeExpenses = () => {
           <div
             className={`flex flex-col ${
               selectedOption.key === 'income' ? 'hidden md:flex' : 'flex'
-            } rounded-2xl bg-white border-gray-200 border`}
+            }`}
           >
-            <div className="flex flex-row flex-wrap justify-between items-center p-[1rem]">
+            <div className="flex flex-row flex-wrap justify-between items-center p-[1rem] bg-white border-gray-200 border rounded-tl-2xl rounded-tr-2xl">
               <h3 className="text-2xl">Expenses</h3>
 
               <div className="md:flex hidden flex-row flex-nowrap justify-end items-center gap-[1rem]">
-                <div className="p-[1rem] bg-[var(--background)] rounded-[1rem] flex flex-row justify-between items-center gap-[3rem]">
-                  <MenuScale />
+                <div
+                className="p-[1rem] bg-[var(--background)] rounded-[1rem] flex flex-row justify-between items-center gap-[3rem] cursor-pointer"
+                onClick={() => setExpenseFilterSlide('0px')}
+                >
+                  <MenuScale/>
                   <p>Filter</p>
                 </div>
 
@@ -693,9 +869,11 @@ export const IncomeExpenses = () => {
                 </Button>
               </div>
 
-
               <div className="md:hidden flex flex-row flex-nowrap justify-between items-center gap-[2rem]">
-                <MenuScale className="h-7 w-7" />
+                <MenuScale
+                className="h-7 w-7 cursor-pointer"
+                onClick={() => setExpenseFilterSlide('0px')}
+                />
                 <p
                   className="p-[.7rem] bg-[var(--primitive-colors-brand-primary-95)] rounded-[1rem] flex flex-row justify-between items-center gap-[1rem] text-[var(--primitive-colors-brand-primary-925)]"
                   onClick={() => {
@@ -723,10 +901,11 @@ export const IncomeExpenses = () => {
                 onClickChildren={handleTransactionDetail}
                 headers={headers}
                 data={expenseFilteredData}
-                total={expenseData.length}
+                total={expenseFilteredData.length}
                 page={expensePage}
                 pageSize={10}
                 onPageChange={handleExpensePageChange}
+                topRemoveRounded={true}
               />
             )}
           </div>
@@ -924,6 +1103,27 @@ export const IncomeExpenses = () => {
           setFileName('');
         }}
       />
+
+      <IncomeFilterSlide
+        slide={incomeFilterSlide}
+        applyFilter={applyIncomeFilter}
+        resetFilter={resetIncomeFilter}
+        onClose={cancelOperation}
+        filterConditions={incomeFilterConditions}
+        setFilterConditions={setIncomeFilterConditions}
+        incomeTypes={incomeTypes}
+      />
+
+      <ExpenseFilterSlide
+        slide={expenseFilterSlide}
+        applyFilter={applyExpenseFilter}
+        resetFilter={resetExpenseFilter}
+        onClose={cancelOperation}
+        filterConditions={expenseFilterConditions}
+        setFilterConditions={setExpenseFilterConditions}
+        expenseTypes={expenseTypes}
+      />
+
     </div>
   );
 };

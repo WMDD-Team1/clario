@@ -47,3 +47,11 @@ export interface TransactionFormat {
     limit: number;
     totalPages: number;
   }
+
+  export interface TransactionFilter {
+    dateStart: string;
+    dateEnd: string;
+    type: string[];
+    amountStart: number;
+    amountEnd: number;
+  }

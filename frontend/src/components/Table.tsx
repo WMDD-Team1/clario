@@ -28,6 +28,7 @@ interface Props {
     onPageChange: (page: number) => void;
     onClickChildren?: (childId: string) => void;
     actions?: Action[]
+    topRemoveRounded?: boolean
 }
 
 const Table = ({
@@ -39,6 +40,7 @@ const Table = ({
     pageSize,
     onPageChange,
     onClickChildren,
+    topRemoveRounded
 }: Props) => {
     const totalPages = Math.ceil(total / pageSize);
 
@@ -91,7 +93,7 @@ const Table = ({
     };
 
     return (
-        <div className="w-full bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+        <div className={`w-full bg-white border border-gray-200 ${topRemoveRounded?'rounded-bl-2xl rounded-br-2xl':'rounded-2xl'} shadow-sm overflow-hidden`}>
             {/* Table Section */}
             <div className="overflow-x-auto">
                 <table
