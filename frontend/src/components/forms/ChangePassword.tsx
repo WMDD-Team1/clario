@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
-import Button from '@/components/Button';
+import React, { useState } from "react";
+import Button from "@/components/Button";
+import successImage from "@/assets/icons/client-upload-success.svg"; 
+
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 import { updateUserPassword } from '@api/services/settingService';
 import SuccessForm from './SuccessForm';
 interface Props {
   onClose: () => void;
 }
+
 const ChangePassword: React.FC<Props> = ({ onClose }) => {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');

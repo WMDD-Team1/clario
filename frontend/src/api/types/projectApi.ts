@@ -1,3 +1,5 @@
+import { ContractApiResponse } from "./contractApi";
+
 export interface ProjectApiResponse {
     userId: string;
     clientId: string | null | { id: string, name: string };
@@ -13,10 +15,10 @@ export interface ProjectApiResponse {
     milestones?: MilestoneApiResponse[]; // define below if needed
     createdAt: string;
     updatedAt: string;
-    fileUrl: string;
+    contract?: ContractApiResponse;
     id: string;
     clientName: string | null;
-    upfrontAmount : number | null;
+    upfrontAmount: number | null;
 }
 
 export interface MilestoneApiResponse {

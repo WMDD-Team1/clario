@@ -18,7 +18,7 @@ const Reminder: React.FC<{ data: ReminderResponse }> = ({ data }) => {
   return (
     <div
       key={deliverableId}
-      className="p-5 rounded-2xl bg-[#DBE7FB] text-white shadow-md hover:shadow-lg transition-all duration-300"
+      className="p-5 rounded-2xl bg-[#DBE7FB] text-white shadow-md hover:shadow-lg transition-all duration-300 mb-5 md:mb-0"
     >
       {/* Top Row — Icon, Title, Client */}
       <div className="flex justify-between items-start">
