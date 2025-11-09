@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import Button from '../components/Button';
-// import { fontSizeOptions } from '@components/style/font';
 import Table from '@components/Table';
 import axios from 'axios';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -10,20 +9,28 @@ import { IncomeUploadSlide } from '@components/incomeExpense/IncomeUploadSlide';
 import { ExpenseUploadSlide } from '@components/incomeExpense/ExpenseUploadSlide';
 import { AddIncomeSlide } from '@components/incomeExpense/AddIncomeSlide';
 import { AddExpenseSlide } from '@components/incomeExpense/AddExpenseSlide';
+import { EditIncomeSlide } from '@components/incomeExpense/EditIncomeSlide';
 import {
   PostRecurrenceFormat,
   Meta,
-  categoriesResonse,
+  TransactionCategory,
   TransactionFormat,
   RecurrenceFormat,
+  TransactionFilter,
 } from '@api/types/transaction';
 import EmptyState from '@components/EmptyState';
+import { MenuScale, Plus } from '@assets/icons';
+import { EditExpenseSlide } from '@components/incomeExpense/EditExpenseSlide';
+import { IncomeFilterSlide } from '@components/incomeExpense/IncomeFilter';
+import { ExpenseFilterSlide } from '@components/incomeExpense/ExpenseFilter';
 
 export const IncomeExpenses = () => {
   const [incomeSlide, setIncomeSlide] = useState('110%');
   const [expenseSlide, setExpenseSlide] = useState('110%');
   const [inDetailSlide, setIndetailSlide] = useState('110%');
   const [exDetailSlide, setExdetailSlide] = useState('110%');
+  const [editIncome, setEditIncome] = useState('110%');
+  const [editExpense, setEditExpense] = useState('110%');
   const [incomeType, setIncomeType] = useState('');
   const [expenseType, setExpenseType] = useState('');
   const [repeat, setRepeat] = useState(false);
@@ -31,6 +38,25 @@ export const IncomeExpenses = () => {
   const [transactionDetail, setTransactionDetail] = useState('110%');
   const [loader, setLoader] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [deletetSuccess, setDeleteSuccess] = useState(false);
+  const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [incomeFilterSlide, setIncomeFilterSlide] = useState('110%');
+  const [expenseFilterSlide, setExpenseFilterSlide] = useState('110%');
+  const [incomeFilterConditions, setIncomeFilterConditions] = useState<TransactionFilter>({
+    dateStart: '',
+    dateEnd: '',
+    type: [],
+    amountStart: 0,
+    amountEnd: 0,
+  });
+
+  const [expenseFilterConditions, setExpenseFilterConditions] = useState<TransactionFilter>({
+    dateStart: '',
+    dateEnd: '',
+    type: [],
+    amountStart: 0,
+    amountEnd: 0,
+  });
 
   let initialRecurrence = {
     templateTransactionId: '',
@@ -38,6 +64,14 @@ export const IncomeExpenses = () => {
     endDate: '',
   };
   const [recurrence, setRecurrence] = useState<PostRecurrenceFormat>(initialRecurrence);
+
+  const [incomeCategories, setIncomeCategories] = useState<TransactionCategory>({
+    categories: [],
+  });
+
+  const [expenseCategories, setExpenseCategories] = useState<TransactionCategory>({
+    categories: [],
+  });
 
   interface TransactionResponse {
     data: TransactionFormat[];
@@ -53,26 +87,27 @@ export const IncomeExpenses = () => {
     },
   });
 
-  const [allCategories, setAllCategories] = useState<categoriesResonse>({
-    income: [],
-    expense: [],
-  });
-
   const reset = () => {
     setIncomeSlide('110%');
     setExpenseSlide('110%');
     setIndetailSlide('110%');
     setExdetailSlide('110%');
     setTransactionDetail('110%');
+    setEditExpense('110%');
+    setEditIncome('110%');
     setRepeat(false);
     setFile(null);
     setFileName('');
     setLoader(false);
     setSuccess(false);
+    setDeleteSuccess(false);
     setExpenseType('');
     setIncomeType('');
     setRepeat(false);
     setRecurrence(initialRecurrence);
+    setUpdateSuccess(false);
+    setIncomeFilterSlide('110%');
+    setExpenseFilterSlide('110%');
   };
 
   const addIncome = () => {
@@ -111,6 +146,7 @@ export const IncomeExpenses = () => {
       const transactionResponse = response.data;
 
       setAllTransactions(transactionResponse);
+      console.log(allTransactions);
     } catch (error) {
       console.error('Error fetching transactions:', error);
     }
@@ -120,16 +156,13 @@ export const IncomeExpenses = () => {
     getTransactionData();
   }, []);
 
-  // ------fetch one transaction-------------
-  const getOneTransaction = async () => {};
-
   const [oneTransaction, setOneTransaction] = useState<TransactionFormat>({
     id: '',
     projectId: '',
     type: 'income',
     title: '',
     date: '',
-    categoryId: '',
+    category: '',
     baseAmount: '',
     origin: '',
     paymentMethod: '',
@@ -148,7 +181,7 @@ export const IncomeExpenses = () => {
       type: 'income',
       title: '',
       date: '',
-      categoryId: '',
+      category: '',
       baseAmount: 0,
       origin: '',
       paymentMethod: '',
@@ -163,7 +196,8 @@ export const IncomeExpenses = () => {
     setRepeatOption('');
   };
 
-  const postCategories = async () => {
+  //Fetch Categories-------
+  const getCategories = async (transactionType: string) => {
     try {
       const token = await getAccessTokenSilently({
         authorizationParams: {
@@ -171,14 +205,8 @@ export const IncomeExpenses = () => {
         },
       });
 
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}/settings/categories`,
-
-        {
-          name: 'Software & Tools',
-          type: 'expense',
-        },
-
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_BASE_URL}/settings/categories/${transactionType}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -186,39 +214,20 @@ export const IncomeExpenses = () => {
         },
       );
 
-      const postCategoryResponse = response.data;
-      console.log('Categories post successfully:', postCategoryResponse);
-    } catch (error) {
-      console.error('Error posting categories:', error);
-    }
-  };
-
-  //Fetch Categories-------
-  const getCategories = async () => {
-    try {
-      const token = await getAccessTokenSilently({
-        authorizationParams: {
-          audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
-        },
-      });
-
-      const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/settings/categories`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
       const categoriesResponse = response.data;
       console.log('Categories response:', categoriesResponse);
 
-      setAllCategories(categoriesResponse);
+      transactionType == 'incomes'
+        ? setIncomeCategories(categoriesResponse)
+        : setExpenseCategories(categoriesResponse);
     } catch (error) {
       console.error('Error fetching categories:', error);
     }
   };
 
   useEffect(() => {
-    getCategories();
+    getCategories('incomes');
+    getCategories('expenses');
   }, []);
 
   interface AllRecurrences {
@@ -275,45 +284,57 @@ export const IncomeExpenses = () => {
   );
 
   console.log(activeRepeatableTransaction);
-  const deleteCategory = async () => {
-    try {
+
+  // ------upload Transaction-------------
+
+  let newTransaction = {
+    //------confirm-project-id-------
+    // projectId: '670a12b4d9e4fa1234abcd99',
+    type: oneTransaction.type,
+    title: oneTransaction.title,
+    date: oneTransaction.date,
+    category: oneTransaction.category,
+    baseAmount: oneTransaction.baseAmount,
+    origin: oneTransaction.origin,
+    paymentMethod: 'Credit Card',
+    notes: oneTransaction.notes,
+    // attachmentURL: 'https://',
+  };
+
+  const scanReceipt = async () => {
+    if (file) {
+      // setLoader(true);
+      // setSuccess(false);
       const token = await getAccessTokenSilently({
         authorizationParams: {
           audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
         },
       });
 
-      const response = await axios.delete(
-        `${import.meta.env.VITE_API_BASE_URL}/settings/categories/69029ef9fa164996629c5e2b`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        setLoader(true);
+        const scanResponse = await axios.post(
+          `${import.meta.env.VITE_API_BASE_URL}/transactions/scan`,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Authorization: `Bearer ${token}`,
+            },
           },
-        },
-      );
+        );
 
-      const categoryDeletedResponse = response.data;
-      console.log('Categories response:', categoryDeletedResponse);
-
-      // setAllCategories(categoriesResponse);
-    } catch (error) {
-      console.error('Error deleting category:', error);
+        console.log(scanResponse.data);
+        setLoader(false);
+        // setSuccess(true);
+      } catch (error) {
+        setLoader(false);
+        console.error('Error scanning transaction:', error);
+      }
     }
-  };
-
-  // ------upload Transaction-------------
-
-  let newTransaction = {
-    projectId: '670a12b4d9e4fa1234abcd99',
-    type: oneTransaction.type,
-    title: oneTransaction.title,
-    date: oneTransaction.date,
-    categoryId: oneTransaction.categoryId,
-    baseAmount: oneTransaction.baseAmount,
-    origin: oneTransaction.origin,
-    paymentMethod: 'Credit Card',
-    notes: oneTransaction.notes,
-    attachmentURL: 'https://example.com/attachment.pdf',
   };
 
   const addTransaction = async (payload: TransactionFormat) => {
@@ -374,29 +395,133 @@ export const IncomeExpenses = () => {
     }
   };
 
-  //---delete transaction-------------------
-  const deleteTransaction = async () => {
+  const updateTransaction = async () => {
+    setLoader(true);
+    setUpdateSuccess(false);
     const token = await getAccessTokenSilently({
       authorizationParams: {
         audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
       },
     });
 
-    const response = await axios.patch(
-      `${import.meta.env.VITE_API_BASE_URL}/transactions/${oneTransaction.id}/archive`,
-      {
-        isArchived: true,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
+    const payload = {
+      // projectId: '670a12b4d9e4fa1234abcd99',
+      type: oneTransaction.type,
+      title: oneTransaction.title,
+      date: oneTransaction.date,
+      category: oneTransaction.category,
+      baseAmount: oneTransaction.baseAmount,
+      origin: oneTransaction.origin,
+      paymentMethod: 'Credit Card',
+      notes: oneTransaction.notes,
+      attachmentURL: oneTransaction.attachmentURL,
+    };
+
+    try {
+      const updateResponse = await axios.patch(
+        `${import.meta.env.VITE_API_BASE_URL}/transactions/${oneTransaction.id}`,
+        payload,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
         },
+      );
+
+      console.log(updateResponse.data);
+      if (activeRepeatableTransaction) {
+        const payload = {
+          // templateTransactionId: oneTransaction.id,
+          frequency: recurrence.frequency,
+          //--------confirm if endate is needed?------
+          // endDate: '2025-10-05',
+        };
+
+        console.log(payload);
+        try {
+          const updateRecurrenceResponse = await axios.patch(
+            `${import.meta.env.VITE_API_BASE_URL}/recurrences/${activeRepeatableTransaction.id}`,
+            JSON.stringify(payload),
+            {
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+              },
+            },
+          );
+
+          console.log(updateRecurrenceResponse);
+        } catch (error) {
+          console.error('Error saving recurrence:', error);
+        }
+      } else {
+        const payload = {
+          templateTransactionId: oneTransaction.id,
+          frequency: recurrence.frequency,
+          //--------confirm if endate is needed?------
+          endDate: '2025-10-05',
+        };
+
+        console.log(payload);
+        try {
+          const recurrenceResponse = await axios.post(
+            `${import.meta.env.VITE_API_BASE_URL}/recurrences`,
+            payload,
+            {
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+              },
+            },
+          );
+        } catch (error) {
+          console.error('Error saving recurrence:', error);
+        }
+      }
+
+      getAllRecurrences();
+      setLoader(false);
+      setUpdateSuccess(true);
+      await getTransactionData();
+    } catch (error) {
+      setLoader(false);
+      console.error('Error updating transaction:', error);
+    }
+  };
+
+  //---delete transaction-------------------
+  const deleteTransaction = async () => {
+    setLoader(true);
+    setDeleteSuccess(false);
+    const token = await getAccessTokenSilently({
+      authorizationParams: {
+        audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
       },
-    );
-    const data = await response.data;
-    console.log(data);
-    await getTransactionData();
-    setTransactionDetail('110%');
+    });
+
+    try {
+      const response = await axios.patch(
+        `${import.meta.env.VITE_API_BASE_URL}/transactions/${oneTransaction.id}/archive`,
+        {
+          isArchived: true,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      const data = await response.data;
+      console.log(data);
+      await getTransactionData();
+      // setTransactionDetail('110%');
+      setLoader(false);
+      setDeleteSuccess(true);
+    } catch (error) {
+      setLoader(false);
+      console.error('Error deleting transaction', error);
+    }
   };
 
   const [incomePage, setIncomePage] = useState(1);
@@ -420,61 +545,169 @@ export const IncomeExpenses = () => {
   // fake data
 
   //Add filter logic-------
-  const incomeData = allTransactions?.data?.filter((transaction) => transaction.type == 'income' && !transaction.isArchived);
-  const incomeFilteredData = incomeData
-    .map((transaction) => {
-      const dateObj = new Date(transaction.date);
-      const formattedDate = dateObj.toLocaleDateString('en-US', {
-        month: 'short',
-        day: '2-digit',
-        year: 'numeric',
-      });
 
-      return {
-        id: transaction.id,
-        date: formattedDate,
-        amount: Number(transaction.baseAmount),
-        category:
-          allCategories.income.find((incomeCategory) => transaction.categoryId == incomeCategory.id)
-            ?.name || 'Unknown',
-        details: 'View',
-      };
+ // ----------------------------
+// Applied Filter Conditions
+const [appliedIncomeFilter, setAppliedIncomeFilter] = useState<TransactionFilter>({
+  dateStart: '',
+  dateEnd: '',
+  type: [],
+  amountStart: 0,
+  amountEnd: 0,
+});
+const [appliedExpenseFilter, setAppliedExpenseFilter] = useState<TransactionFilter>({
+  dateStart: '',
+  dateEnd: '',
+  type: [],
+  amountStart: 0,
+  amountEnd: 0,
+});
+
+// ----------------------------
+// Types
+let incomeTypes: string[] = [];
+let expenseTypes: string[] = [];
+
+allTransactions?.data.forEach((transaction) => {
+  const category = transaction.category || 'Unknown';
+  if (transaction.type === 'income' && !transaction.isArchived && !incomeTypes.includes(category)) {
+    incomeTypes.push(category);
+  }
+  if (transaction.type === 'expense' && !transaction.isArchived && !expenseTypes.includes(category)) {
+    expenseTypes.push(category);
+  }
+});
+
+// ----------------------------
+// Filtered Income Data
+const getFilteredIncomeData = () => {
+  return allTransactions?.data
+    .filter((t) => t.type === 'income' && !t.isArchived)
+    .filter((t) => {
+      const date = new Date(t.date);
+      const startDate = appliedIncomeFilter.dateStart ? new Date(appliedIncomeFilter.dateStart) : null;
+      const endDate = appliedIncomeFilter.dateEnd ? new Date(appliedIncomeFilter.dateEnd) : null;
+      if (startDate && date < startDate) return false;
+      if (endDate && date > endDate) return false;
+      return true;
     })
-    .slice((incomePage - 1) * 10, (incomePage - 1) * 10 + 10);
-
-  //Add filter logic-----------------
-  const expenseData = allTransactions?.data?.filter((transaction) => transaction.type == 'expense' && !transaction.isArchived);
-
-  const expenseFilteredData = expenseData
-    .map((transaction) => {
-      const dateObj = new Date(transaction.date);
-      const formattedDate = dateObj.toLocaleDateString('en-US', {
-        month: 'short',
-        day: '2-digit',
-        year: 'numeric',
-      });
-
-      return {
-        id: transaction.id,
-        date: formattedDate,
-        amount: Number(transaction.baseAmount),
-        category:
-          allCategories.expense.find(
-            (expenseCategory) => transaction.categoryId == expenseCategory.id,
-          )?.name || 'Unknown',
-        details: 'View',
-      };
+    .filter((t) => {
+      if (!appliedIncomeFilter.type || appliedIncomeFilter.type.length === 0) return true;
+      return appliedIncomeFilter.type.includes(t.category);
     })
-    .slice((expensePage - 1) * 10, (expensePage - 1) * 10 + 10);
+    .filter((t) => {
+      const amount = Number(t.baseAmount);
+      if (amount < appliedIncomeFilter.amountStart) return false;
+      if (appliedIncomeFilter.amountEnd && amount > appliedIncomeFilter.amountEnd) return false;
+      return true;
+    })
+    .map((t) => ({
+      id: t.id,
+      date: t.date,
+      amount: Number(t.baseAmount),
+      category: t.category || 'Unknown',
+      details: 'View',
+    }));
+};
 
-  // console.log(expenseFilteredData);
+const incomeFilteredData = getFilteredIncomeData().slice(
+  (incomePage - 1) * 10,
+  (incomePage - 1) * 10 + 10
+);
+
+// ----------------------------
+// Filtered Expense Data
+const getFilteredExpenseData = () => {
+  return allTransactions?.data
+    .filter((t) => t.type === 'expense' && !t.isArchived)
+    .filter((t) => {
+      const date = new Date(t.date);
+      const startDate = appliedExpenseFilter.dateStart ? new Date(appliedExpenseFilter.dateStart) : null;
+      const endDate = appliedExpenseFilter.dateEnd ? new Date(appliedExpenseFilter.dateEnd) : null;
+      if (startDate && date < startDate) return false;
+      if (endDate && date > endDate) return false;
+      return true;
+    })
+    .filter((t) => {
+      if (!appliedExpenseFilter.type || appliedExpenseFilter.type.length === 0) return true;
+      return appliedExpenseFilter.type.includes(t.category);
+    })
+    .filter((t) => {
+      const amount = Number(t.baseAmount);
+      if (amount < appliedExpenseFilter.amountStart) return false;
+      if (appliedExpenseFilter.amountEnd && amount > appliedExpenseFilter.amountEnd) return false;
+      return true;
+    })
+    .map((t) => ({
+      id: t.id,
+      date: t.date,
+      amount: Number(t.baseAmount),
+      category: t.category || 'Unknown',
+      details: 'View',
+    }));
+};
+
+const expenseFilteredData = getFilteredExpenseData().slice(
+  (expensePage - 1) * 10,
+  (expensePage - 1) * 10 + 10
+);
+
+// ----------------------------
+// Apply & Reset Filters
+const applyIncomeFilter = () => {
+  setAppliedIncomeFilter({ ...incomeFilterConditions });
+  setIncomePage(1);
+  setIncomeFilterSlide('110%');
+};
+const resetIncomeFilter = () => {
+  setIncomeFilterConditions({
+    dateStart: '',
+    dateEnd: '',
+    type: [],
+    amountStart: 0,
+    amountEnd: 0,
+  });
+  setAppliedIncomeFilter({
+    dateStart: '',
+    dateEnd: '',
+    type: [],
+    amountStart: 0,
+    amountEnd: 0,
+  });
+  setIncomePage(1);
+  setIncomeFilterSlide('110%');
+};
+
+const applyExpenseFilter = () => {
+  setAppliedExpenseFilter({ ...expenseFilterConditions });
+  setExpensePage(1);
+  setExpenseFilterSlide('110%');
+};
+const resetExpenseFilter = () => {
+  setExpenseFilterConditions({
+    dateStart: '',
+    dateEnd: '',
+    type: [],
+    amountStart: 0,
+    amountEnd: 0,
+  });
+  setAppliedExpenseFilter({
+    dateStart: '',
+    dateEnd: '',
+    type: [],
+    amountStart: 0,
+    amountEnd: 0,
+  });
+  setExpensePage(1);
+  setExpenseFilterSlide('110%');
+};
 
   const options = [
     { key: 'income', label: 'Income' },
     { key: 'expense', label: 'Expense' },
   ];
 
-  const [selectedOption, setSelectedOption] = useState(options[1]);
+  const [selectedOption, setSelectedOption] = useState(options[0]);
 
   const handleToggle = (option: { key: string; label: string }) => {
     setSelectedOption(option);
@@ -531,26 +764,58 @@ export const IncomeExpenses = () => {
 
   return (
     <div>
-      <div className="md:hidden flex justify-center mb-[1rem]">
-        <ToggleButton options={options} option={selectedOption} onClick={handleToggle} />
-      </div>
-      <div className="flex flex-row flex-wrap gap-[1rem]">
-        <div className="flex-1 flex flex-col flex-nowrap gap-[1rem]">
-          <div className="md:flex flex-row flex-nowrap justify-between items-center hidden">
-            <h2 className="text-2xl">Income</h2>
-            <Button
-              buttonColor="regularButton"
-              onClick={() => {
-                addIncome();
-                resetForm();
-              }}
-              textColor="white"
-            >
-              Add Income
-            </Button>
-          </div>
+      <div>
+        <div className="md:hidden flex justify-center mb-[1rem]">
+          <ToggleButton options={options} option={selectedOption} onClick={handleToggle} />
+        </div>
 
-          <div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-[1rem]">
+          {/* Income Section */}
+          <div
+            className={`flex flex-col ${
+              selectedOption.key === 'expense' ? 'hidden md:flex' : 'flex'
+            }`}
+          >
+            <div className="flex flex-row flex-wrap justify-between items-center p-[1rem] bg-white border-gray-200 border rounded-tl-2xl rounded-tr-2xl">
+              <h3 className="text-2xl">Incomes</h3>
+              <div className="md:flex hidden flex-row flex-nowrap justify-end items-center gap-[1rem]">
+                <div
+                className="p-[1rem] bg-[var(--background)] rounded-[1rem] flex flex-row justify-between items-center gap-[3rem] cursor-pointer"
+                onClick={() => setIncomeFilterSlide('0px')}
+                >
+                  <MenuScale/>
+                  <p>Filter</p>
+                </div>
+
+                <Button
+                  buttonColor="regularButton"
+                  onClick={() => {
+                    addIncome();
+                    resetForm();
+                  }}
+                  textColor="white"
+                >
+                  Add Income
+                </Button>
+              </div>
+              <div className="md:hidden flex flex-row flex-nowrap justify-between items-center gap-[2rem]">
+                <MenuScale
+                className="h-7 w-7 cursor-pointer"
+                onClick={() => setIncomeFilterSlide('0px')}
+                />
+                <p
+                  className="p-[.7rem] bg-[var(--primitive-colors-brand-primary-95)] rounded-[1rem] flex flex-row justify-between items-center gap-[1rem] text-[var(--primitive-colors-brand-primary-925)]"
+                  onClick={() => {
+                    addIncome();
+                    resetForm();
+                  }}
+                >
+                  <Plus />
+                  Add Income
+                </p>
+              </div>
+            </div>
+
             {incomeFilteredData.length === 0 ? (
               <EmptyState
                 description="You haven't added any income yet. Add your first one to start tracking your finances"
@@ -562,34 +827,66 @@ export const IncomeExpenses = () => {
               />
             ) : (
               <Table
-                // --------------------------------------
                 onClickChildren={handleTransactionDetail}
                 headers={headers}
                 data={incomeFilteredData}
-                total={incomeData.length}
+                total={incomeFilteredData.length}
                 page={incomePage}
                 pageSize={10}
                 onPageChange={handleIncomePageChange}
+                topRemoveRounded={true}
               />
             )}
           </div>
-        </div>
 
-        <div className="flex-1 flex flex-col flex-nowrap gap-[1rem]">
-          <div className="md:flex flex-row flex-nowrap justify-between items-center hidden">
-            <h2 className="text-2xl">Expense</h2>
-            <Button
-              buttonColor="regularButton"
-              onClick={() => {
-                addExpenses();
-                resetForm();
-              }}
-              textColor="white"
-            >
-              Add Expenses
-            </Button>
-          </div>
-          <div>
+          {/* Expense Section */}
+          <div
+            className={`flex flex-col ${
+              selectedOption.key === 'income' ? 'hidden md:flex' : 'flex'
+            }`}
+          >
+            <div className="flex flex-row flex-wrap justify-between items-center p-[1rem] bg-white border-gray-200 border rounded-tl-2xl rounded-tr-2xl">
+              <h3 className="text-2xl">Expenses</h3>
+
+              <div className="md:flex hidden flex-row flex-nowrap justify-end items-center gap-[1rem]">
+                <div
+                className="p-[1rem] bg-[var(--background)] rounded-[1rem] flex flex-row justify-between items-center gap-[3rem] cursor-pointer"
+                onClick={() => setExpenseFilterSlide('0px')}
+                >
+                  <MenuScale/>
+                  <p>Filter</p>
+                </div>
+
+                <Button
+                  buttonColor="regularButton"
+                  onClick={() => {
+                    addExpenses();
+                    resetForm();
+                  }}
+                  textColor="white"
+                >
+                  Add Expense
+                </Button>
+              </div>
+
+              <div className="md:hidden flex flex-row flex-nowrap justify-between items-center gap-[2rem]">
+                <MenuScale
+                className="h-7 w-7 cursor-pointer"
+                onClick={() => setExpenseFilterSlide('0px')}
+                />
+                <p
+                  className="p-[.7rem] bg-[var(--primitive-colors-brand-primary-95)] rounded-[1rem] flex flex-row justify-between items-center gap-[1rem] text-[var(--primitive-colors-brand-primary-925)]"
+                  onClick={() => {
+                    addExpenses();
+                    resetForm();
+                  }}
+                >
+                  <Plus />
+                  Add Expense
+                </p>
+              </div>
+            </div>
+
             {expenseFilteredData.length === 0 ? (
               <EmptyState
                 description="You haven't added any expense yet. Add your first one to start tracking your finances"
@@ -601,14 +898,14 @@ export const IncomeExpenses = () => {
               />
             ) : (
               <Table
-                // ----------------------------------------
                 onClickChildren={handleTransactionDetail}
                 headers={headers}
                 data={expenseFilteredData}
-                total={expenseData.length}
+                total={expenseFilteredData.length}
                 page={expensePage}
                 pageSize={10}
                 onPageChange={handleExpensePageChange}
+                topRemoveRounded={true}
               />
             )}
           </div>
@@ -623,7 +920,10 @@ export const IncomeExpenses = () => {
         onFileChange={handleFileChange}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
-        onNext={() => setIndetailSlide('0px')}
+        onNext={async () => {
+          await scanReceipt();
+          setIndetailSlide('0px');
+        }}
         onClose={cancelOperation}
         onFileRemove={() => {
           setFile(null);
@@ -640,7 +940,7 @@ export const IncomeExpenses = () => {
         incomeType={incomeType}
         file={file}
         fileName={fileName}
-        incomeCategories={allCategories.income}
+        incomeCategories={incomeCategories}
         onTransactionChange={setOneTransaction}
         onIncomeTypeChange={(value) => setIncomeType(value)}
         onCancel={cancelOperation}
@@ -685,7 +985,7 @@ export const IncomeExpenses = () => {
         expenseType={expenseType}
         file={file}
         fileName={fileName}
-        expenseCategories={allCategories.expense}
+        expenseCategories={expenseCategories}
         onTransactionChange={setOneTransaction}
         onExpenseTypeChange={(value) => setExpenseType(value)}
         onRepeatToggle={() => setRepeat(!repeat)}
@@ -706,15 +1006,124 @@ export const IncomeExpenses = () => {
       />
 
       <IncomeExpenseViewSlide
-      editIncome={()=>{setIndetailSlide('0px');setTransactionDetail('110%')}}
-      editExpense={()=>{setExdetailSlide('0px');setTransactionDetail('110%')}}
+        deleteSuccess={deletetSuccess}
+        loader={loader}
+        editIncome={() => {
+          setEditIncome('0px');
+          setUpdateSuccess(false);
+          setTransactionDetail('110%');
+        }}
+        editExpense={() => {
+          if (activeRepeatableTransaction) {
+            const formattedFrequency =
+              activeRepeatableTransaction.frequency.charAt(0).toUpperCase() +
+              activeRepeatableTransaction.frequency.slice(1).toLowerCase();
+
+            setRepeatOption(formattedFrequency);
+            setRecurrence({
+              ...recurrence,
+              frequency: activeRepeatableTransaction.frequency.toLowerCase(),
+              templateTransactionId: activeRepeatableTransaction.templateTransactionId,
+              endDate: activeRepeatableTransaction.endDate || '',
+            });
+            setRepeat(true);
+          } else {
+            setRepeatOption('');
+            setRecurrence(initialRecurrence);
+            setRepeat(false);
+          }
+          setEditExpense('0px');
+          setUpdateSuccess(false);
+          setTransactionDetail('110%');
+        }}
         oneTransaction={oneTransaction}
         transactionDetail={transactionDetail}
         cancelOperation={cancelOperation}
-        allCategories={allCategories}
         activeRepeatableTransaction={activeRepeatableTransaction || null}
         deleteTransaction={deleteTransaction}
       />
+
+      <EditIncomeSlide
+        // onRepeatToggle={() => setRepeat(!repeat)}
+        // onRepeatOptionChange={(value) => setRepeatOption(value)}
+        // onRecurrenceChange={setRecurrence}
+        // repeat={repeat}
+        // repeatOption={repeatOption}
+        // recurrence={recurrence}
+        slide={editIncome}
+        loader={loader}
+        updateSuccess={updateSuccess}
+        transaction={oneTransaction}
+        incomeType={incomeType}
+        file={file}
+        fileName={fileName}
+        incomeCategories={incomeCategories}
+        onTransactionChange={setOneTransaction}
+        onIncomeTypeChange={(value) => setIncomeType(value)}
+        onCancel={cancelOperation}
+        onAdd={() => updateTransaction()}
+        onView={() => {
+          setEditIncome('110%');
+          setTransactionDetail('0px');
+        }}
+        onClose={cancelOperation}
+        onFileRemove={() => {
+          setFile(null);
+          setFileName('');
+        }}
+      />
+
+      <EditExpenseSlide
+        activeRepeatableTransaction={activeRepeatableTransaction}
+        repeat={repeat}
+        repeatOption={repeatOption}
+        recurrence={recurrence}
+        slide={editExpense}
+        loader={loader}
+        updateSuccess={updateSuccess}
+        transaction={oneTransaction}
+        expenseType={expenseType}
+        file={file}
+        fileName={fileName}
+        expenseCategories={expenseCategories}
+        onTransactionChange={setOneTransaction}
+        onExpenseTypeChange={(value) => setExpenseType(value)}
+        onRepeatToggle={() => setRepeat(!repeat)}
+        onRepeatOptionChange={(value) => setRepeatOption(value)}
+        onRecurrenceChange={setRecurrence}
+        onCancel={cancelOperation}
+        onAdd={() => updateTransaction()}
+        onView={() => {
+          setEditExpense('110%');
+          setTransactionDetail('0px');
+        }}
+        onClose={cancelOperation}
+        onFileRemove={() => {
+          setFile(null);
+          setFileName('');
+        }}
+      />
+
+      <IncomeFilterSlide
+        slide={incomeFilterSlide}
+        applyFilter={applyIncomeFilter}
+        resetFilter={resetIncomeFilter}
+        onClose={cancelOperation}
+        filterConditions={incomeFilterConditions}
+        setFilterConditions={setIncomeFilterConditions}
+        incomeTypes={incomeTypes}
+      />
+
+      <ExpenseFilterSlide
+        slide={expenseFilterSlide}
+        applyFilter={applyExpenseFilter}
+        resetFilter={resetExpenseFilter}
+        onClose={cancelOperation}
+        filterConditions={expenseFilterConditions}
+        setFilterConditions={setExpenseFilterConditions}
+        expenseTypes={expenseTypes}
+      />
+
     </div>
   );
 };

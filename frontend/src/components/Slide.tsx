@@ -51,15 +51,15 @@ const Slide: React.FC<SlideProps> = ({
         >
           <Forward className="w-8 h-8"/>
         </div>
-        <h3
-          className={`text-3xl font-semibold text-center bg-blue-50 p-[2rem] sticky top-0 z-10 sm:rounded-tl-[50px]`}
+        <h2
+          className={`text-3xl font-semibold text-center bg-[var(--background-alternate)] p-[2rem] sticky top-0 z-10 sm:rounded-tl-[50px]`}
         >
           {title}
         </h3>
         <div className="flex flex-col gap-[1.5rem] p-[2rem] h-full overflow-y-auto pt-[2.5rem]">{children}</div>
 
         {showFooter && (
-          <div className="flex flex-row justify-center gap-[1rem] sticky bottom-0 w-full p-[2rem] bg-blue-50 sm:rounded-bl-[50px]">
+          <div className="flex flex-row justify-center gap-[1rem] sticky bottom-0 w-full p-[2rem] bg-[var(--background-alternate)] sm:rounded-bl-[50px]">
             {showConfirm && onConfirm && (
               <Button
                 buttonColor="whiteButton"
