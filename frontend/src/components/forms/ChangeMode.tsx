@@ -1,86 +1,82 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Button from '@/components/Button';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateFinanceSettings } from '@api/services/settingService';
+import { updateUserPreferences } from '@api/services/settingService';
 import { updateUser } from '@store/userSlice';
-import { RootState } from '@store/index';
+import { useDispatch, useSelector } from 'react-redux';
 import SuccessForm from './SuccessForm';
+import { RootState } from '@store/index';
 
 interface Props {
   onClose: () => void;
-  tax: string;
 }
 
-const ChangeTaxRegime: React.FC<Props> = ({ onClose, tax }) => {
+const ChangeMode: React.FC<Props> = ({ onClose }) => {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user.data);
-  const currentProvince = user?.settings?.finance?.province;
-
-  const [taxRegime, setTaxRegime] = useState<'British Columbia' | 'Quebec'>('British Columbia');
+  const [mode, setMode] = useState<'light' | 'dark'>(user?.settings?.general.theme || 'light');
   const [loading, setLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (tax === 'Quebec' || currentProvince === 'Quebec') {
-      setTaxRegime('Quebec');
-    } else {
-      setTaxRegime('British Columbia');
-    }
-  }, [tax, currentProvince]);
-
   const handleSave = async () => {
-    if (!taxRegime) {
-      setError('Please select a tax regime.');
+    if (!mode) {
+      setError('Please select a display mode.');
       return;
     }
 
-    setLoading(true);
     setError(null);
+    setLoading(true);
 
     try {
-      const { data } = await updateFinanceSettings({ province: taxRegime });
-      dispatch(updateUser({ settings: { finance: { province: data.province } } }));
+      const res = await updateUserPreferences({ theme: mode });
+      dispatch(updateUser(res.data));
       setIsSuccess(true);
     } catch (err: any) {
-      console.error('Error updating tax regime:', err);
-      const message = err.response?.data?.message || 'Failed to update tax regime.';
+      const message = err.response?.data?.message || 'Failed to update mode.';
       setError(message);
+      console.error(err);
     } finally {
       setLoading(false);
     }
   };
+
   if (isSuccess)
     return (
       <SuccessForm
         iconPath="/setting-update-success.svg"
-        title="Tax regime updated!"
-        message="Your tax province has been updated successfully."
+        title="Display mode changed!"
+        message="Your theme mode has been updated successfully."
         onCancel={onClose}
       />
     );
 
+  const handleModeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    if (value === 'light' || value === 'dark') {
+      setMode(value);
+    }
+    if (error) setError(null);
+  };
   return (
     <form className="flex flex-col h-full">
-      <div className="flex-1 flex flex-col justify-top">
+      <div className="flex-1 flex flex-col justify-start">
         <div className="relative mb-6">
           <label className="absolute -top-2.5 left-4 bg-white px-1 text-sm text-gray-500">
-            Tax Regime
+            Display Mode
           </label>
 
           <select
-            value={taxRegime}
-            onChange={(e) => setTaxRegime(e.target.value as 'British Columbia' | 'Quebec')}
+            value={mode}
+            onChange={handleModeChange}
             className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
           >
             <option value="" disabled>
-              Select your Tax Regime
+              Select a display mode
             </option>
-            <option value="British Columbia">British Columbia</option>
-            <option value="Quebec">Quebec</option>
+            <option value="light">Light Mode</option>
+            <option value="dark">Dark Mode</option>
           </select>
+          {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
         </div>
-        {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
       </div>
 
       <div className="flex justify-between gap-2 absolute bottom-0 right-0 left-0 p-[30px] bg-[var(--primitive-colors-brand-primary-75)] rounded-bl-[50px]">
@@ -90,17 +86,16 @@ const ChangeTaxRegime: React.FC<Props> = ({ onClose, tax }) => {
           buttonColor="white"
           textColor="black"
           width="48%"
-          disabled={loading}
         >
           Cancel
         </Button>
         <Button
           onClick={handleSave}
+          disabled={loading || !mode}
           className="py-4 ml-2"
           buttonColor="regularButton"
           textColor="white"
           width="48%"
-          disabled={loading}
         >
           {loading ? 'Saving...' : 'Save'}
         </Button>
@@ -109,4 +104,4 @@ const ChangeTaxRegime: React.FC<Props> = ({ onClose, tax }) => {
   );
 };
 
-export default ChangeTaxRegime;
+export default ChangeMode;

@@ -145,23 +145,30 @@ export const analyzeContractService = async (contract) => {
 	};
 };
 
-export const generateContractService = async (userId, projectId) => {
+export const generateContractService = async (user, projectId) => {
 	const project = await Project.findById(projectId).populate("clientId", "name email address phone").lean();
 	if (!project) throw new Error("Project not found");
 
+	const client = await Client.findById(project.clientId);
+
+	const { id: userId } = user;
 	const today = new Date().toLocaleDateString("en-CA");
 	const { milestones = [], upfrontAmount = 0 } = project;
 
 	const data = {
 		userType: project.type || "Contractor",
-		clientName: project.clientId?.name || "Client Name",
-		clientAddress: project.clientId?.address || "Client Address",
+		clientName: client?.name || "Client Name",
+		clientAddress:
+			`${client?.address?.street}, ${client?.address?.city}, ${client?.address?.postalCode}, ${client?.address?.country}` ||
+			"Client Address",
 		clientEmail: project.clientId?.email || "client@email.com",
 		clientPhone: project.clientId?.phone || "N/A",
-		userName: project.userName || "Freelancer",
-		userEmail: project.userEmail || "user@email.com",
-		userAddress: project.userAddress || "User Address",
-		userProvince: project.userProvince || "British Columbia",
+		userName: user?.name || "Freelancer",
+		userEmail: user?.email || "user@email.com",
+		userAddress:
+			`${user?.address?.street}, ${user?.address?.city}, ${user?.address?.postalCode}, ${user?.address?.country}` ||
+			"User Address",
+		userProvince: user?.settings?.general?.province || "British Columbia",
 		projectName: project.name || "Untitled Project",
 		milestoneName: project.milestones?.[0]?.name || "",
 		deliverableName: project.milestones?.[0]?.deliverables?.[0]?.name || "",
@@ -219,7 +226,7 @@ export const generateContractService = async (userId, projectId) => {
 			createdAt: new Date(),
 		});
 	}
-	await Project.findByIdAndUpdate(projectId, { isActive: true });
+	await Project.findByIdAndUpdate(projectId);
 	fs.unlinkSync(pdfPath);
 
 	return contract;

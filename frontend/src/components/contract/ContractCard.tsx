@@ -28,7 +28,6 @@ export default function ContractCard({
     onUpload = () => { },
     onDownload = () => { },
     onView = () => { },
-    onViewRisk = () => { },
     onUploadNew = () => { },
 }: ContractCardProps) {
     const card = useMemo(() => {
@@ -45,14 +44,14 @@ export default function ContractCard({
                     description:
                         "This project is currently inactive. Generate or upload a contract to activate it.",
                     border: "border-[var(--primitive-colors-brand-primary-51)]",
-                    text: "text-[var(--primitive-colors-brand-primary-700-base)]",
+                    text: "text-[var(--primitive-colors-gray-dark-mode-700)]",
                     actions,
                 };
 
             case "active":
                 actions = [
                     { label: "Download", variant: "secondary", onClick: onDownload },
-                    { label: "Review", variant: "primary", onClick: onView },
+                    { label: "Upload", variant: "primary", onClick: onUpload },
                 ];
                 return {
                     title: "Project Active",
@@ -65,7 +64,7 @@ export default function ContractCard({
             case "clear":
                 actions = [
                     { label: "Download", variant: "darkGreen", onClick: onDownload },
-                    { label: "Upload New", variant: "lightGreen", onClick: onUploadNew },
+                    { label: "Upload New", variant: "lightGreen", onClick: onUpload },
                 ];
                 return {
                     title: "Contract All Clear",
@@ -77,14 +76,14 @@ export default function ContractCard({
 
             case "risks":
                 actions = [
-                    { label: "View Risk", variant: "primary", onClick: onViewRisk },
-                    { label: "Upload New", variant: "secondary", onClick: onUploadNew },
+                    { label: "View Risk", variant: "primary", onClick: onView },
+                    { label: "Upload New", variant: "secondary", onClick: onUpload },
                 ];
                 return {
                     title: "Contract Risks Found",
                     description: "Analysis done. Check risks or upload a new contract.",
                     border: "border-[var(--primitive-colors-brand-primary-51)]",
-                    text: "text-[var(--primitive-colors-success-600)]",
+                    text: "text-[var(--primitive-colors-brand-primary-700-base)]",
                     actions,
                 };
 
@@ -97,7 +96,6 @@ export default function ContractCard({
         onUpload,
         onDownload,
         onView,
-        onViewRisk,
         onUploadNew,
     ]);
 
@@ -111,7 +109,7 @@ export default function ContractCard({
                 <h3 className="font-semibold">{card.title}</h3>
                 <p>{card.description}</p>
                 {status === "risks" && (
-                    <p className="text-[var(--primitive-colors-danger-600-base)] font-medium">
+                    <p className="text-[var(--error-accent1)] font-bold">
                         {risksDetected} Risks Detected
                     </p>
                 )}

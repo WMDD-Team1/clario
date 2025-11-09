@@ -13,9 +13,14 @@ export const generateContractDraft = async (projectId: string): Promise<string> 
 
 export const postAnalyzeContract = async (projectId: string, file: File): Promise<string> => {
     try {
-        const { data } = await api.post<DraftApiResponse>("/contracts/upload", {
-            file,
-            projectId
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("projectId", projectId);
+
+        const { data } = await api.post<DraftApiResponse>("/contracts/upload", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
         });
         if (!data.message.includes("successfully")) return "";
         await api.post(`/contracts/analyze/${projectId}`);
