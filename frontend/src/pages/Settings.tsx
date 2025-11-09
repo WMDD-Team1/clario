@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import Button from '@/components/Button';
 import ToggleButton from '@/components/ToggleButton';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -13,9 +13,15 @@ import ChangeLanguage from '@components/forms/ChangeLanguage';
 import ExpensesCategories from '@components/forms/ExpensesCategories';
 import IncomeCategories from '@components/forms/IncomeCategories';
 import ChangeTaxRegime from '@components/forms/ChangeTaxRegime';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@store/index';
+
+import { exportUserTransactions } from '@api/services/settingService';
 
 const Settings: React.FC = () => {
   const { isAuthenticated, isLoading } = useAuth0();
+  const dispatch = useDispatch();
+  const { data: user, loading } = useSelector((state: RootState) => state.user);
 
   const [isOpen, setIsOpen] = useState(false);
   const [drawerTitle, setDrawerTitle] = useState('');
@@ -25,44 +31,64 @@ const Settings: React.FC = () => {
     key: 'general',
     label: 'General',
   });
+  console.log(user);
 
-  const [profile] = useState({
-    name: 'Yosimar Yotún',
-    email: 'bebexito@emoxito.com',
-    address: '5 - 312 3rd Ave, Vancouver British Columbia, v6z-1y9',
-  });
+  const profile = useMemo(
+    () => ({
+      name: user?.name || '',
+      email: user?.email || '',
+      address: user?.address
+        ? `${user.address.street || ''} ${user.address.city || ''} ${
+            user.address.country || ''
+          } ${user.address.postalCode || ''}`.trim()
+        : '',
+    }),
+    [user],
+  );
+  const preferences = {
+    language: user?.settings?.general?.language === 'fr' ? 'French' : 'English',
+    mode: user?.settings?.general?.theme === 'dark' ? 'Dark Mode' : 'Light Mode',
+  };
 
-  const [preferences] = useState({
-    language: 'English',
-    mode: 'Bright Mode',
-  });
-
-  const [finance] = useState({
-    expenseCategories: [
+  const finance = {
+    expenseCategories: user?.settings?.finance?.expenseCategories || [
       'Software & Tools',
       'Equipment & Hardware',
       'Subscriptions',
       'Professional Services',
     ],
-    incomeCategories: ['Project Income', 'Recurring Income', 'Consulting'],
-    taxRegime: 'British Columbia',
-  });
+    incomeCategories: user?.settings?.finance?.incomeCategories || [
+      'Project Income',
+      'Recurring Income',
+      'Consulting',
+    ],
+    taxRegime: user?.settings?.finance?.province || 'British Columbia',
+  };
 
-  // 🔹 Opens drawer with specific content
   const openDrawer = (title: string, content: React.ReactNode) => {
     setDrawerTitle(title);
     setDrawerContent(content);
     setIsOpen(true);
   };
 
-  const handleExportData = () => {
-    console.log('Export data clicked');
+  const handleExportData = async () => {
+    const blob = await exportUserTransactions();
+
+    if (!blob || blob.size === 0) {
+      // when there's no data, show toast
+      console.log('No transactions found to export.');
+      return;
+    }
+
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'transactions.csv';
+    link.click();
   };
 
   // === General Section ===
   const renderGeneral = () => (
-    <div>
-    <div className="flex flex-col gap-8 mt-4 md:border-b">
+    <div className="flex flex-col gap-8 mt-4">
       {/* Profile */}
       <section>
         <h3 className="font-semibold text-gray-900 text-lg mb-3">Profile</h3>
@@ -239,9 +265,7 @@ const Settings: React.FC = () => {
           </div>
         </div>
       </section>
-      </div>
 
-      <div className="flex flex-col gap-8 mt-4 md:border-b">
       {/* Preferences */}
       <section>
         <h3 className="font-semibold text-gray-900 text-lg mb-3">Preferences</h3>
@@ -329,13 +353,12 @@ const Settings: React.FC = () => {
           </div>
         </div>
       </section>
-      </div>
     </div>
   );
 
   // === Finance Section ===
   const renderFinance = () => (
-    <div className="flex flex-col gap-6 mt-4 md:border-b border-gray-300">
+    <div className="flex flex-col gap-6 mt-4">
       {/* Expense Categories */}
       <section className="divide-y lg:border-b border-gray-300">
         <div className="flex flex-col gap-2 pb-4 border rounded-xl border-gray-300 md:border-none md:rounded-none p-4 md:p-0">
@@ -343,26 +366,8 @@ const Settings: React.FC = () => {
           <div className="flex justify-between items-center w-full md:hidden">
             <h3 className="font-semibold text-gray-900 text-base">Expense Categories</h3>
 
-            <Button
-              className="bg-blue-600 text-white rounded-xl px-4 py-1"
-              buttonColor="regularButton"
-              textColor="white"
-              onClick={() =>
-                openDrawer(
-                  'Expenses Categories',
-                  <ExpensesCategories
-                    expenseCategories={finance.expenseCategories}
-                    onClose={() => setIsOpen(false)}
-                  />,
-                )
-              }
-            >
-              Add/Edit
-            </Button>
-          </div>
-
-          {/* Options on mobile (wrap normally, not scrollable) */}
-          <div className="flex flex-wrap gap-2 py-2 md:hidden">
+          {/* Categories scrollable */}
+          <div className="gap-2 overflow-x-auto mx-4 py-5 flex-1">
             {finance.expenseCategories.map((cat) => (
               <span
                 key={cat}
@@ -408,35 +413,18 @@ const Settings: React.FC = () => {
             </Button>
           </div>
         </div>
+        </div>
       </section>
 
       {/* Income Categories */}
-      <section className="divide-y lg:border-b border-gray-300">
-        <div className="flex flex-col gap-2 pb-4 border rounded-xl border-gray-300 md:border-none md:rounded-none p-4 md:p-0">
-          {/* Mobile top row: Heading + Button */}
-          <div className="flex justify-between items-center w-full md:hidden">
-            <h3 className="font-semibold text-gray-900 text-base">Income Categories</h3>
+      <section className="divide-y border-b border-gray-300">
+        <div className="flex justify-between items-center">
+          <h3 className="w-1/5 font-semibold text-gray-900 text-base flex-shrink-0">
+            Income Categories
+          </h3>
 
-            <Button
-              className="bg-blue-600 text-white rounded-xl px-4 py-1"
-              buttonColor="regularButton"
-              textColor="white"
-              onClick={() =>
-                openDrawer(
-                  'Income Categories',
-                  <IncomeCategories
-                    incCategories={finance.incomeCategories}
-                    onClose={() => setIsOpen(false)}
-                  />,
-                )
-              }
-            >
-              Add/Edit
-            </Button>
-          </div>
-
-          {/* Categories on mobile (wrap normally, not scrollable) */}
-          <div className="flex flex-wrap gap-2 py-2 md:hidden">
+          {/* Categories scrollable */}
+          <div className="gap-2 overflow-x-auto mx-4 py-5 flex-1">
             {finance.incomeCategories.map((cat) => (
               <span
                 key={cat}
@@ -538,7 +526,7 @@ const Settings: React.FC = () => {
           <h3 className="font-semibold text-gray-900 text-base flex-[0_0_200px]">Export Data</h3>
 
           <Button
-            className="bg-blue-600 text-white rounded-xl px-4 py-1 md:px-5 flex-shrink-0"
+            className="bg-blue-600 text-white rounded-xl px-5 py-1 flex-shrink-0"
             buttonColor="regularButton"
             textColor="white"
             onClick={handleExportData}
@@ -555,7 +543,7 @@ const Settings: React.FC = () => {
     return <div className="p-10 text-gray-600">Please log in to view settings.</div>;
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-8 w-full px-10 md:px-14 pr-16">
       {/* Drawer with dynamic content */}
       <SettingsDrawer isOpen={isOpen} onClose={() => setIsOpen(false)} title={drawerTitle}>
         {drawerContent}
@@ -563,7 +551,7 @@ const Settings: React.FC = () => {
 
       <h1 className="text-2xl md:text-3xl font-semibold text-gray-800">Settings</h1>
 
-      <div>
+      <div className="max-w-[1200px]">
         <ToggleButton
           options={[
             { key: 'general', label: 'General' },
