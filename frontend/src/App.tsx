@@ -8,6 +8,7 @@ import Logout from '@pages/Logout';
 import FinancialDashboard from '@pages/FinancialDashboard';
 import Settings from '@pages/Settings';
 import ProjectDetails from '@pages/ProjectDetails';
+import Contract from '@pages/Contract';
 
 function App() {
   return (
@@ -62,6 +63,15 @@ function App() {
         element={
           <PrivateRoute>
             <ProjectDetails />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/projects/:projectId/contract/"
+        element={
+          <PrivateRoute>
+            <Contract />
           </PrivateRoute>
         }
       />

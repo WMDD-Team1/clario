@@ -5,6 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Info } from "lucide-react";
 import { useCallback, useMemo } from "react";
 import ContractCard from "./ContractCard";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
     project: ProjectApiResponse;
@@ -12,6 +13,7 @@ interface Props {
 const ContractCardDrawer = ({ project }: Props) => {
     const { setIsLoading } = useLoader();
     const queryClient = useQueryClient();
+    const navigate = useNavigate();
 
     const noMilestonesTooltip = useMemo(
         () => (
@@ -56,7 +58,7 @@ const ContractCardDrawer = ({ project }: Props) => {
      * Handles file download via dynamic anchor.
      */
     const handleDownloadFile = useCallback((fileURL?: string) => {
-        if (!fileURL) fileURL = project!.fileUrl;
+        if (!fileURL) fileURL = project!.contract?.contractUrl;
         if (!fileURL) return;
         const link = document.createElement("a");
         link.href = fileURL;
@@ -135,7 +137,7 @@ const ContractCardDrawer = ({ project }: Props) => {
                 <ContractCard
                     status="active"
                     onDownload={() => handleContractAction(handleDownloadFile)}
-                    onView={() => console.log("Viewing contract...")}
+                    onView={() => navigate(`/projects/${project.id}/contract`)}
                 />}
         </>
     )

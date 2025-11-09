@@ -1,11 +1,14 @@
-export interface Contract {
-    id: string;
+export interface ContractApiResponse {
+    contractName: string;
     contractUrl: string;
-    fileType: string;
+    createdAt: string;
+    updatedAt: string;
+    fileType: "pdf";
+    id: string;
     size: number;
 }
 
 export interface DraftApiResponse {
     message: string;
-    contract: Contract;
+    contract: ContractApiResponse;
 }
