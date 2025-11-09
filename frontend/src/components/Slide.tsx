@@ -55,7 +55,7 @@ const Slide: React.FC<SlideProps> = ({
           className={`text-3xl font-semibold text-center bg-[var(--background-alternate)] p-[2rem] sticky top-0 z-10 sm:rounded-tl-[50px]`}
         >
           {title}
-        </h3>
+        </h2>
         <div className="flex flex-col gap-[1.5rem] p-[2rem] h-full overflow-y-auto pt-[2.5rem]">{children}</div>
 
         {showFooter && (
