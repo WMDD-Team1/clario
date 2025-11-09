@@ -1,10 +1,12 @@
 import { fetchProjectById, updateProject } from '@api/index';
 import Button from '@components/Button';
+import { ContractViewer } from '@components/contract/ContractViewer';
 import Loader from '@components/Loader';
 import { useQuery } from '@tanstack/react-query';
 import { ChevronLeft } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+
 
 const Contract = () => {
     const { projectId } = useParams<{ projectId: string }>();
@@ -24,7 +26,11 @@ const Contract = () => {
     if (error) return <p>Error getting your project</p>
     if (!project) return <p>No project was found</p>
 
+
+    const contractFolder = project.contract?.contractUrl.includes("draft") ? "draft" : "uploaded";
+
     const contract = project.contract;
+    const contractUrl = contract?.contractUrl.split("&")[0];
 
     const handleConfirmDraft = async () => {
         try {
@@ -38,44 +44,53 @@ const Contract = () => {
             console.error("Error confirming draft:", error);
         }
     }
-
+    if (!contract) {
+        return <div className="flex items-center justify-center h-[calc(100vh-220px)] text-gray-500">
+            No contract PDF available
+        </div>;
+    }
+    
     return (
         <>
             {/* Header */}
             <div className='flex justify-start items-center gap-2 mb-7'>
                 <ChevronLeft size={30} onClick={(e) => navigate(-1)} className='cursor-pointer' />
-                <h2>Contract Draft</h2>
-            </div>
-            {/* PDF Viewer */}
-            <div className="flex-1 bg-white rounded-xl shadow-sm border overflow-hidden">
-                {contract?.contractUrl ? (
-                    <iframe
-                        src={contract.contractUrl}
-                        className="w-full h-[calc(100vh-220px)] rounded-xl"
-                        title="Contract PDF"
-                    />
-                ) : (
-                    <div className="flex items-center justify-center h-[calc(100vh-220px)] text-gray-500">
-                        No contract PDF available
-                    </div>
-                )}
+                <h2>{contractUrl === "draft" ? "Contract Draft" : "Contract Review"}</h2>
             </div>
 
-            {/* Footer buttons (optional) */}
-            <div className="flex justify-center gap-5 mt-6 max-w-[500px] mx-auto">
-                <Button buttonColor="regularButton"
-                    onClick={() => navigate(-1)} width='45%'
-                    textColor="white"
-                    type="submit">
-                    Cancel
-                </Button>
-                <Button buttonColor="regularButton"
-                    onClick={() => handleConfirmDraft()} width='45%'
-                    textColor="white"
-                    type="submit">
-                    Confirm
-                </Button>
-            </div>
+            {/* PDF Viewer */}
+            {contractFolder === "uploaded" ?
+                (
+                    <div className='relative 100vh'>
+                        <ContractViewer pdfUrl={contractUrl!} riskyClauses={contract.aiAnalysis?.riskyClauses ?? []} />
+                    </div>
+                ) :
+                (
+                    <>
+                        <div className="relative bg-white rounded-xl shadow-sm border 100vh">
+                            <iframe
+                                src={contract.contractUrl}
+                                className="w-full h-[calc(100vh-240px)] rounded-xl"
+                                title="Contract PDF"
+                            />
+                        </div>
+                        <div className="flex justify-center gap-5 mt-6 max-w-[500px] mx-auto">
+                            <Button buttonColor="regularButton"
+                                onClick={() => navigate(-1)} width='45%'
+                                textColor="white"
+                                type="submit">
+                                Cancel
+                            </Button>
+                            <Button buttonColor="regularButton"
+                                onClick={() => handleConfirmDraft()} width='45%'
+                                textColor="white"
+                                type="submit">
+                                Confirm
+                            </Button>
+                        </div>
+                    </>
+                )}
+
         </>
     )
 }

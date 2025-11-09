@@ -43,7 +43,6 @@ const ProjectDetails = () => {
             label: "Invoices",
         }
     ];
-    console.log("Project data:", project);
 
     return (
         <>

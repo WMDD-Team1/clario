@@ -28,7 +28,6 @@ export default function ContractCard({
     onUpload = () => { },
     onDownload = () => { },
     onView = () => { },
-    onViewRisk = () => { },
     onUploadNew = () => { },
 }: ContractCardProps) {
     const card = useMemo(() => {
@@ -77,7 +76,7 @@ export default function ContractCard({
 
             case "risks":
                 actions = [
-                    { label: "View Risk", variant: "primary", onClick: onViewRisk },
+                    { label: "View Risk", variant: "primary", onClick: onView },
                     { label: "Upload New", variant: "secondary", onClick: onUpload },
                 ];
                 return {
@@ -97,7 +96,6 @@ export default function ContractCard({
         onUpload,
         onDownload,
         onView,
-        onViewRisk,
         onUploadNew,
     ]);
 

@@ -12,6 +12,7 @@ export interface ContractApiResponse {
 export interface RiskAnalysisApiResponse {
     category: string;
     paragraph: string;
+    reason: string;
     riskLevel: "Low" | "Medium" | "High";
 }
 
