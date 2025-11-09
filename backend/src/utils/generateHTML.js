@@ -14,7 +14,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 const __dirname = import.meta.dirname;
 
 export const generateInvoicePDF = async (invoice) => {
-	const templatePATH = path.join(__dirname, "../public/templates/invoice-template.html");
+	const templatePATH = path.join(__dirname, "../assets/templates/invoice-template.html");
 	const templateHTML = fs.readFileSync(templatePATH, "utf8");
 
 	const template = Handlebars.compile(templateHTML);
@@ -42,7 +42,7 @@ export const generateInvoicePDF = async (invoice) => {
 };
 
 export const generateContractPDF = async (data) => {
-	const templatePATH = path.join(__dirname, "../public/templates/contract-template.html");
+	const templatePATH = path.join(__dirname, "../assets/templates/contract-template.html");
 	if (!fs.existsSync(templatePATH)) throw new Error("Contract template not found");
 
 	const templateHTML = fs.readFileSync(templatePATH, "utf8");
@@ -72,7 +72,7 @@ export const generateContractPDF = async (data) => {
 };
 
 export const generateEmail = async ({ invoice, client, project, user }) => {
-	const templatePATH = path.join(__dirname, "../public/templates/email-template.html");
+	const templatePATH = path.join(__dirname, "../assets/templates/email-template.html");
 	if (!fs.existsSync(templatePATH)) throw new Error("Email template not found");
 
 	const htmlTemplate = fs.readFileSync(templatePATH, "utf8");
