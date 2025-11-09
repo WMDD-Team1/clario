@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import Button from '@/components/Button';
+import React, { useState } from "react";
+import Button from "@/components/Button";
+import successImage from "@/assets/icons/client-upload-success.svg";
 import { updateUserProfile } from '@api/services/settingService';
 import { useDispatch } from 'react-redux';
 import { updateUser } from '@store/userSlice';
@@ -26,7 +27,7 @@ const ChangeAddress: React.FC<Props> = ({ onClose }) => {
   };
 
   const handleSave = async () => {
-    if (!street.trim() || !city.trim() || !country.trim()) {
+    if (!street.trim() || !city.trim() || !postalCode.trim() || !country.trim()) {
       setError('Please fill in all required fields.');
       return;
     }
@@ -73,6 +74,7 @@ const ChangeAddress: React.FC<Props> = ({ onClose }) => {
   return (
     <form className="flex flex-col h-full">
       <div className="flex-1 flex flex-col justify-top">
+
         <div className="relative mb-6">
           <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">
             Address Line
@@ -88,6 +90,23 @@ const ChangeAddress: React.FC<Props> = ({ onClose }) => {
             className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
+
+        <div className="relative mb-6">
+          <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">
+            City
+          </label>
+          <input
+            type="text"
+            value={city}
+            onChange={(e) => {
+              setCity(e.target.value);
+              clearErrorOnInput();
+            }}
+            placeholder="Vancouver"
+            className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
         <div className="relative mb-6">
           <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">
             Postal Code
@@ -103,19 +122,7 @@ const ChangeAddress: React.FC<Props> = ({ onClose }) => {
             className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-        <div className="relative mb-6">
-          <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">City</label>
-          <input
-            type="text"
-            value={city}
-            onChange={(e) => {
-              setCity(e.target.value);
-              clearErrorOnInput();
-            }}
-            placeholder="Vancouver"
-            className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+
         <div className="relative mb-6">
           <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">
             Country
@@ -131,6 +138,8 @@ const ChangeAddress: React.FC<Props> = ({ onClose }) => {
             className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
+
+        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
       </div>
       <div className="flex justify-between gap-2 absolute bottom-0 right-0 left-0 p-[30px] bg-[var(--primitive-colors-brand-primary-75)] rounded-bl-[50px]">
         <Button

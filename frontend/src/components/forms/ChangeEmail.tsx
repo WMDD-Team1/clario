@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import Button from '@/components/Button';
+import React, { useState } from "react";
+import Button from "@/components/Button";
+import successImg from "@/assets/icons/client-upload-success.svg"; 
 import { useDispatch } from 'react-redux';
 import { updateUserProfile } from '@api/services/settingService';
 import { updateUser } from '@store/userSlice';
