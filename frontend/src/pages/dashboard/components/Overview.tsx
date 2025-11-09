@@ -47,14 +47,20 @@ const Overview = () => {
 
   return (
     <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 pb-4">
-      {stats.map(({ label, value }, idx) => (
-        <InsightCard
-          key={idx}
-          title={label}
-          value={value}
-          className="flex flex-col justify-center items-center h-[96px] p-4 rounded-2xl shadow-sm border border-gray-100 bg-white transition-all duration-200"
-        />
-      ))}
+      {stats.map(({ label, value }, idx) => {
+        const isLast = idx === stats.length - 1;
+        const isOdd = stats.length % 2 !== 0; // adjust if your layout breaks on sm/md/lg
+        return (
+          <InsightCard
+            key={idx}
+            title={label}
+            value={value}
+            className={`flex flex-col justify-center items-center h-[96px] p-4 rounded-2xl shadow-sm border border-gray-100 bg-white transition-all duration-200 ${
+              isLast && isOdd ? 'sm:col-span-2 md:col-span-2 lg:col-span-4 xl:col-span-1' : ''
+            }`}
+          />
+        );
+      })}
     </div>
   );
 };

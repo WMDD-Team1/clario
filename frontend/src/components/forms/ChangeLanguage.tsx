@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import Button from '@/components/Button';
+import React, { useState } from "react";
+import Button from "@/components/Button";
+import successImage from "@/assets/icons/client-upload-success.svg";
 import { updateUserPreferences } from '@api/services/settingService';
 import { updateUser } from '@store/userSlice';
 import { useDispatch } from 'react-redux';
@@ -63,19 +64,20 @@ const ChangeLanguage: React.FC<Props> = ({ onClose }) => {
             Language
           </label>
 
-          <select
-            value={language}
-            onChange={handleLanguageChange}
-            className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-          >
-            <option value="" disabled>
-              Select a language
-            </option>
-            <option value="en">English</option>
-            <option value="fr">French</option>
-          </select>
+            <select
+              value={language}
+              onChange={(e) => setLanguage('en')}
+              className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+            >
+              <option value="" disabled>
+                Select a language
+              </option>
+              <option value="english">English</option>
+              <option value="french">French</option>
+            </select>
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="flex justify-between gap-2 absolute bottom-0 right-0 left-0 p-[30px] bg-[var(--primitive-colors-brand-primary-75)] rounded-bl-[50px]">
         <Button

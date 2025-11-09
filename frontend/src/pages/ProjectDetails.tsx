@@ -18,7 +18,7 @@ const ProjectDetails = () => {
         label: "Milestones",
     });
     const [isFormOpen, setIsFormOpen] = useState(false)
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const { data: project, isLoading, error } = useQuery({
         queryKey: ["projects", id],
         queryFn: () => fetchProjectById(id!),

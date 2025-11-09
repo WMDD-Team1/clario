@@ -75,6 +75,7 @@ const IncomeCategories: React.FC<Props> = ({ onClose, incCategories }) => {
           />
           <span>Separate the categories with “,”</span>
         </div>
+
         {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
       </div>
       <div className="flex justify-between gap-2 absolute bottom-0 right-0 left-0 p-[30px] bg-[var(--primitive-colors-brand-primary-75)] rounded-bl-[50px]">

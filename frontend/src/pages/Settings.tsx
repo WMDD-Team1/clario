@@ -16,13 +16,12 @@ import ChangeTaxRegime from '@components/forms/ChangeTaxRegime';
 import ChangeMode from '@components/forms/ChangeMode';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@store/index';
-
 import { exportUserTransactions } from '@api/services/settingService';
 
 const Settings: React.FC = () => {
   const { isAuthenticated, isLoading } = useAuth0();
   const dispatch = useDispatch();
-  const { data: user, loading } = useSelector((state: RootState) => state.user);
+  const { data: user } = useSelector((state: RootState) => state.user);
 
   const [isOpen, setIsOpen] = useState(false);
   const [drawerTitle, setDrawerTitle] = useState('');
@@ -32,7 +31,6 @@ const Settings: React.FC = () => {
     key: 'general',
     label: 'General',
   });
-  console.log(user);
 
   const profile = useMemo(
     () => ({
@@ -46,6 +44,7 @@ const Settings: React.FC = () => {
     }),
     [user],
   );
+
   const preferences = {
     language: user?.settings?.general?.language === 'fr' ? 'French' : 'English',
     mode: user?.settings?.general?.theme === 'dark' ? 'Dark Mode' : 'Light Mode',
@@ -74,13 +73,10 @@ const Settings: React.FC = () => {
 
   const handleExportData = async () => {
     const blob = await exportUserTransactions();
-
     if (!blob || blob.size === 0) {
-      // when there's no data, show toast
       console.log('No transactions found to export.');
       return;
     }
-
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = 'transactions.csv';
@@ -93,65 +89,141 @@ const Settings: React.FC = () => {
       {/* Profile */}
       <section>
         <h3 className="font-semibold text-gray-900 text-lg mb-3">Profile</h3>
-        <div className="divide-y border-b">
-          <div className="flex justify-between items-center py-4">
-            <span className="text-sm text-gray-600 w-1/3">Name</span>
-            <span className="text-gray-800 flex-1">{profile.name}</span>
-            <Button
-              className="rounded-xl px-5 py-1"
-              buttonColor="regularButton"
-              textColor="white"
-              onClick={() =>
-                openDrawer('Change Name', <ChangeName onClose={() => setIsOpen(false)} />)
-              }
-            >
-              Edit
-            </Button>
+        <div className="md:divide-y">
+          {/* Name */}
+          <div className="flex flex-col gap-2 py-4 ">
+            <div className="flex justify-between items-center md:hidden">
+              <span className="text-sm text-gray-600 font-semibold">Name</span>
+              <Button
+                className="px-5 py-1"
+                buttonColor="regularButton"
+                textColor="white"
+                onClick={() =>
+                  openDrawer('Change Name', <ChangeName onClose={() => setIsOpen(false)} />)
+                }
+              >
+                Edit
+              </Button>
+            </div>
+            <span className="text-gray-800 font-bold md:hidden">{profile.name}</span>
+            <div className="hidden md:flex items-center justify-between gap-4">
+              <span className="text-sm text-gray-600 font-semibold w-1/5">Name</span>
+              <span className="text-gray-800 font-bold flex-1 whitespace-nowrap">
+                {profile.name}
+              </span>
+              <Button
+                className="px-5 py-1 flex-shrink-0"
+                buttonColor="regularButton"
+                textColor="white"
+                onClick={() =>
+                  openDrawer('Change Name', <ChangeName onClose={() => setIsOpen(false)} />)
+                }
+              >
+                Edit
+              </Button>
+            </div>
           </div>
 
-          <div className="flex justify-between items-center py-4">
-            <span className="text-sm text-gray-600 w-1/3">Email</span>
-            <span className="text-gray-800 flex-1">{profile.email}</span>
-            <Button
-              className="bg-blue-600 text-white rounded-xl px-5 py-1"
-              buttonColor="regularButton"
-              textColor="white"
-              onClick={() =>
-                openDrawer('Update Email', <ChangeEmail onClose={() => setIsOpen(false)} />)
-              }
-            >
-              Edit
-            </Button>
+          {/* Email */}
+          <div className="flex flex-col gap-2 py-4">
+            <div className="flex justify-between items-center md:hidden">
+              <span className="text-sm text-gray-600 font-semibold">Email</span>
+              <Button
+                className="px-5 py-1"
+                buttonColor="regularButton"
+                textColor="white"
+                onClick={() =>
+                  openDrawer('Update Email', <ChangeEmail onClose={() => setIsOpen(false)} />)
+                }
+              >
+                Edit
+              </Button>
+            </div>
+            <span className="text-gray-800 font-bold md:hidden">{profile.email}</span>
+            <div className="hidden md:flex items-center justify-between gap-4">
+              <span className="text-sm text-gray-600 font-semibold w-1/5">Email</span>
+              <span className="text-gray-800 font-bold flex-1 whitespace-nowrap">
+                {profile.email}
+              </span>
+              <Button
+                className="px-5 py-1 flex-shrink-0"
+                buttonColor="regularButton"
+                textColor="white"
+                onClick={() =>
+                  openDrawer('Update Email', <ChangeEmail onClose={() => setIsOpen(false)} />)
+                }
+              >
+                Edit
+              </Button>
+            </div>
           </div>
 
-          <div className="flex justify-between items-center py-4">
-            <span className="text-sm text-gray-600 w-1/3">Address</span>
-            <span className="text-gray-800 flex-1">{profile.address}</span>
-            <Button
-              className="bg-blue-600 text-white rounded-xl px-5 py-1"
-              buttonColor="regularButton"
-              textColor="white"
-              onClick={() =>
-                openDrawer('Update Address', <ChangeAddress onClose={() => setIsOpen(false)} />)
-              }
-            >
-              Edit
-            </Button>
+          {/* Address */}
+          <div className="flex flex-col gap-2 py-4 ">
+            <div className="flex justify-between items-center md:hidden">
+              <span className="text-sm text-gray-600 font-semibold">Address</span>
+              <Button
+                className="px-5 py-1"
+                buttonColor="regularButton"
+                textColor="white"
+                onClick={() =>
+                  openDrawer('Update Address', <ChangeAddress onClose={() => setIsOpen(false)} />)
+                }
+              >
+                Edit
+              </Button>
+            </div>
+            <span className="text-gray-800 font-bold md:hidden">{profile.address}</span>
+            <div className="hidden md:flex items-center justify-between gap-4">
+              <span className="text-sm text-gray-600 font-semibold w-1/5">Address</span>
+              <span className="text-gray-800 font-bold flex-1 whitespace-nowrap">
+                {profile.address}
+              </span>
+              <Button
+                className="px-5 py-1 flex-shrink-0"
+                buttonColor="regularButton"
+                textColor="white"
+                onClick={() =>
+                  openDrawer('Update Address', <ChangeAddress onClose={() => setIsOpen(false)} />)
+                }
+              >
+                Edit
+              </Button>
+            </div>
           </div>
 
-          <div className="flex justify-between items-center py-4">
-            <span className="text-sm text-gray-600 w-1/3">Password</span>
-            <span className="text-gray-800 flex-1">*************</span>
-            <Button
-              className="bg-blue-600 text-white rounded-xl px-5 py-1"
-              buttonColor="regularButton"
-              textColor="white"
-              onClick={() =>
-                openDrawer('Change Password', <ChangePassword onClose={() => setIsOpen(false)} />)
-              }
-            >
-              Change password
-            </Button>
+          {/* Password */}
+          <div className="flex flex-col gap-2 py-4 ">
+            <div className="flex justify-between items-center md:hidden">
+              <span className="text-sm text-gray-600 font-semibold">Password</span>
+              <Button
+                className="px-5 py-1"
+                buttonColor="regularButton"
+                textColor="white"
+                onClick={() =>
+                  openDrawer('Change Password', <ChangePassword onClose={() => setIsOpen(false)} />)
+                }
+              >
+                Change password
+              </Button>
+            </div>
+            <span className="text-gray-800 font-bold md:hidden">**********</span>
+            <div className="hidden md:flex items-center justify-between gap-4">
+              <span className="text-sm text-gray-600 font-semibold w-1/5">Password</span>
+              <span className="text-gray-800 font-bold flex-1 whitespace-nowrap">
+                **********
+              </span>
+              <Button
+                className="px-5 py-1 md:px-10 flex-shrink-0"
+                buttonColor="regularButton"
+                textColor="white"
+                onClick={() =>
+                  openDrawer('Change Password', <ChangePassword onClose={() => setIsOpen(false)} />)
+                }
+              >
+                Change password
+              </Button>
+            </div>
           </div>
         </div>
       </section>
@@ -159,35 +231,69 @@ const Settings: React.FC = () => {
       {/* Preferences */}
       <section>
         <h3 className="font-semibold text-gray-900 text-lg mb-3">Preferences</h3>
-        <div className="divide-y border-b">
-          <div className="flex justify-between items-center py-4">
-            <span className="text-sm text-gray-600 w-1/3">Language</span>
-            <span className="text-gray-800 flex-1">{preferences.language}</span>
-            <Button
-              className="bg-blue-600 text-white rounded-xl px-5 py-1"
-              buttonColor="regularButton"
-              textColor="white"
-              onClick={() =>
-                openDrawer('Update Language', <ChangeLanguage onClose={() => setIsOpen(false)} />)
-              }
-            >
-              Change
-            </Button>
+        <div className="md:divide-y">
+          {/* Language */}
+          <div className="flex flex-col gap-2 py-4">
+            <div className="flex justify-between items-center md:hidden">
+              <span className="text-sm text-gray-600 font-semibold">Language</span>
+              <Button
+                className="bg-blue-600 text-white rounded-xl px-5 py-1"
+                buttonColor="regularButton"
+                textColor="white"
+                onClick={() =>
+                  openDrawer('Update Language', <ChangeLanguage onClose={() => setIsOpen(false)} />)
+                }
+              >
+                Change
+              </Button>
+            </div>
+            <span className="text-gray-800 font-bold md:hidden">{preferences.language}</span>
+            <div className="hidden md:flex items-center justify-between gap-4">
+              <span className="text-sm text-gray-600 font-semibold w-1/5">Language</span>
+              <span className="text-gray-800 font-bold flex-1 whitespace-nowrap">
+                {preferences.language}
+              </span>
+              <Button
+                className="bg-blue-600 text-white rounded-xl px-5 py-1 flex-shrink-0"
+                buttonColor="regularButton"
+                textColor="white"
+                onClick={() =>
+                  openDrawer('Update Language', <ChangeLanguage onClose={() => setIsOpen(false)} />)
+                }
+              >
+                Change
+              </Button>
+            </div>
           </div>
 
-          <div className="flex justify-between items-center py-4">
-            <span className="text-sm text-gray-600 w-1/3">Mode</span>
-            <span className="text-gray-800 flex-1">{preferences.mode}</span>
-            <Button
-              className="bg-blue-600 text-white rounded-xl px-5 py-1"
-              buttonColor="regularButton"
-              textColor="white"
-              onClick={() =>
-                openDrawer('Change Mode', <ChangeMode onClose={() => setIsOpen(false)} />)
-              }
-            >
-              Change
-            </Button>
+          {/* Mode */}
+          <div className="flex flex-col gap-2 py-4 ">
+            <div className="flex justify-between items-center md:hidden">
+              <span className="text-sm text-gray-600 font-semibold">Mode</span>
+              <Button
+                className="bg-blue-600 text-white rounded-xl px-5 py-1"
+                buttonColor="regularButton"
+                textColor="white"
+                onClick={() => openDrawer('Change Mode', <div>ModeChange Component Here</div>)}
+              >
+                Change
+              </Button>
+            </div>
+            <span className="text-gray-800 font-bold md:hidden">{preferences.mode}</span>
+            <div className="hidden md:flex items-center justify-between gap-4">
+              <span className="text-sm text-gray-600 font-semibold w-1/5">Mode</span>
+              <span className="text-gray-800 font-bold flex-1 whitespace-nowrap">
+                {preferences.mode}
+              </span>
+              <Button
+                className="bg-blue-600 text-white rounded-xl px-5 py-1 flex-shrink-0"
+                buttonColor="regularButton"
+                textColor="white"
+                onClick={() => openDrawer('Change Mode', <div>ModeChange Component Here</div>)}
+              >
+                Change
+              </Button>
+            </div>
           </div>
         </div>
       </section>
@@ -195,136 +301,196 @@ const Settings: React.FC = () => {
   );
 
   // === Finance Section ===
-  const renderFinance = () => (
-    <div className="flex flex-col gap-6 mt-4">
-      {/* Expense Categories */}
-      <section className="divide-y border-b border-gray-300">
-        <div className="flex justify-between items-center">
-          <h3 className="w-1/5 font-semibold text-gray-900 text-base flex-shrink-0">
-            Expense Categories
-          </h3>
+  const renderFinance = () => {
+    const hideScrollbar: React.CSSProperties = {
+      scrollbarWidth: 'none',
+      msOverflowStyle: 'none',
+      WebkitOverflowScrolling: 'touch',
+    };
 
-          {/* Categories scrollable */}
-          <div className="gap-2 overflow-x-auto mx-4 py-5 flex-1">
-            {finance.expenseCategories.map((cat) => (
-              <span
-                key={cat}
-                className="px-3 py-1 mx-2 text-sm rounded-full text-gray-700 flex-shrink-0 whitespace-nowrap border border-black"
-              >
-                {cat}
-              </span>
-            ))}
+    return (
+      <div className="flex flex-col gap-6 mt-4">
+        {/* Expense Categories */}
+        <section className="divide-y lg:border-b border-gray-300">
+          <div className="hidden md:flex items-center gap-4 pb-4">
+            <h3 className="font-semibold text-gray-900 text-base flex-[0_0_200px]">
+              Expense Categories
+            </h3>
+            <div
+              className="flex flex-wrap gap-2 flex-1 overflow-x-auto md:overflow-visible"
+              style={hideScrollbar}
+            >
+              {finance.expenseCategories.map((cat) => (
+                <span
+                  key={cat}
+                  className="px-3 py-1 text-sm rounded-full text-gray-700 border border-black whitespace-nowrap"
+                >
+                  {cat}
+                </span>
+              ))}
+            </div>
+            <Button
+              className="bg-blue-600 text-white rounded-xl px-5 py-1 flex-shrink-0"
+              buttonColor="regularButton"
+              textColor="white"
+              onClick={() =>
+                openDrawer(
+                  'Expenses Categories',
+                  <ExpensesCategories
+                    expenseCategories={finance.expenseCategories}
+                    onClose={() => setIsOpen(false)}
+                  />,
+                )
+              }
+            >
+              Add/Edit
+            </Button>
           </div>
 
-          <Button
-            className="bg-blue-600 text-white rounded-xl px-5 py-1 flex-shrink-0"
-            buttonColor="regularButton"
-            textColor="white"
-            onClick={() =>
-              openDrawer(
-                'Expenses Categories',
-                <ExpensesCategories
-                  expenseCategories={finance.expenseCategories}
-                  onClose={() => setIsOpen(false)}
-                />,
-              )
-            }
-          >
-            Add/Edit
-          </Button>
-        </div>
-      </section>
+          {/* Mobile */}
+          <div className="md:hidden flex flex-col gap-2">
+            <h3 className="font-semibold text-gray-900 text-base">Expense Categories</h3>
+            <div className="flex overflow-x-auto gap-2" style={hideScrollbar}>
+              {finance.expenseCategories.map((cat) => (
+                <span
+                  key={cat}
+                  className="px-3 py-1 text-sm rounded-full text-gray-700 border border-black whitespace-nowrap"
+                >
+                  {cat}
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
 
-      {/* Income Categories */}
-      <section className="divide-y border-b border-gray-300">
-        <div className="flex justify-between items-center">
-          <h3 className="w-1/5 font-semibold text-gray-900 text-base flex-shrink-0">
-            Income Categories
-          </h3>
-
-          {/* Categories scrollable */}
-          <div className="gap-2 overflow-x-auto mx-4 py-5 flex-1">
-            {finance.incomeCategories.map((cat) => (
-              <span
-                key={cat}
-                className="px-3 py-1 mx-2 text-sm rounded-full text-gray-700 flex-shrink-0 whitespace-nowrap border border-black"
-              >
-                {cat}
-              </span>
-            ))}
+        {/* Income Categories */}
+        <section className="divide-y border-b border-gray-300">
+          <div className="hidden md:flex items-center gap-4 pb-4">
+            <h3 className="font-semibold text-gray-900 text-base flex-[0_0_200px]">
+              Income Categories
+            </h3>
+            <div
+              className="flex flex-wrap gap-2 flex-1 overflow-x-auto md:overflow-visible"
+              style={hideScrollbar}
+            >
+              {finance.incomeCategories.map((cat) => (
+                <span
+                  key={cat}
+                  className="px-3 py-1 text-sm rounded-full text-gray-700 border border-black whitespace-nowrap"
+                >
+                  {cat}
+                </span>
+              ))}
+            </div>
+            <Button
+              className="bg-blue-600 text-white rounded-xl px-5 py-1 flex-shrink-0"
+              buttonColor="regularButton"
+              textColor="white"
+              onClick={() =>
+                openDrawer(
+                  'Income Categories',
+                  <IncomeCategories
+                    incCategories={finance.incomeCategories}
+                    onClose={() => setIsOpen(false)}
+                  />,
+                )
+              }
+            >
+              Add/Edit
+            </Button>
           </div>
 
-          <Button
-            className="bg-blue-600 text-white rounded-xl px-5 py-1 flex-shrink-0"
-            buttonColor="regularButton"
-            textColor="white"
-            onClick={() =>
-              openDrawer(
-                'Income Categories',
-                <IncomeCategories
-                  incCategories={finance.incomeCategories}
-                  onClose={() => setIsOpen(false)}
-                />,
-              )
-            }
-          >
-            Add/Edit
-          </Button>
-        </div>
-      </section>
+          {/* Mobile */}
+          <div className="md:hidden flex flex-col gap-2">
+            <h3 className="font-semibold text-gray-900 text-base">Income Categories</h3>
+            <div className="flex overflow-x-auto gap-2" style={hideScrollbar}>
+              {finance.incomeCategories.map((cat) => (
+                <span
+                  key={cat}
+                  className="px-3 py-1 text-sm rounded-full text-gray-700 border border-black whitespace-nowrap"
+                >
+                  {cat}
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
 
-      {/* Tax Regime */}
-      <section className="divide-y border-b border-gray-300">
-        <div className="flex justify-between items-center">
-          <h3 className="w-1/5 font-semibold text-gray-900 text-base flex-shrink-0">Tax Regime</h3>
-          <p className="flex-1 gap-2 px-3 py-6 mx-6 text-gray-600 text-sm">{finance.taxRegime}</p>
-          <Button
-            className="bg-blue-600 text-white rounded-xl px-5 py-1 flex-shrink-0"
-            buttonColor="regularButton"
-            textColor="white"
-            onClick={() =>
-              openDrawer(
-                'Update Tax Regime',
-                <ChangeTaxRegime tax={finance.taxRegime} onClose={() => setIsOpen(false)} />,
-              )
-            }
-          >
-            Edit
-          </Button>
-        </div>
-      </section>
+        {/* Tax Regime */}
+        <section className="divide-y lg:border-b border-gray-300">
+          <div className="hidden md:flex items-center gap-4 pb-4">
+            <h3 className="font-semibold text-gray-900 text-base flex-[0_0_200px]">Tax Regime</h3>
+            <p className="flex-1 px-3 py-2 text-gray-600 text-sm">{finance.taxRegime}</p>
+            <Button
+              className="bg-blue-600 text-white rounded-xl px-5 py-1 flex-shrink-0"
+              buttonColor="regularButton"
+              textColor="white"
+              onClick={() =>
+                openDrawer(
+                  'Update Tax Regime',
+                  <ChangeTaxRegime tax={finance.taxRegime} onClose={() => setIsOpen(false)} />,
+                )
+              }
+            >
+              Edit
+            </Button>
+          </div>
 
-      {/* Export Data */}
-      <section className="divide-y border-b border-gray-300">
-        <div className="flex justify-between items-center mb-2">
-          <h3 className="w-1/5 font-semibold text-gray-900 text-base flex-shrink-0">Export Data</h3>
-          <Button
-            className="bg-blue-600 text-white rounded-xl px-5 py-1 flex-shrink-0"
-            buttonColor="regularButton"
-            textColor="white"
-            onClick={handleExportData}
-          >
-            Export
-          </Button>
-        </div>
-      </section>
-    </div>
-  );
+          {/* Mobile */}
+          <div className="md:hidden flex flex-col gap-2">
+            <div className="flex justify-between items-center">
+              <h3 className="font-semibold text-gray-900 text-base">Tax Regime</h3>
+              <Button
+                className="bg-blue-600 text-white rounded-xl px-4 py-1"
+                buttonColor="regularButton"
+                textColor="white"
+                onClick={() =>
+                  openDrawer(
+                    'Update Tax Regime',
+                    <ChangeTaxRegime tax={finance.taxRegime} onClose={() => setIsOpen(false)} />,
+                  )
+                }
+              >
+                Edit
+              </Button>
+            </div>
+            <p className="text-gray-600 text-sm">{finance.taxRegime}</p>
+          </div>
+        </section>
+
+        {/* Export Data */}
+        <section className="border rounded-xl border-gray-300 md:border-none md:rounded-none p-4 md:p-0">
+          <div className="flex justify-between items-center w-full pb-4">
+            <h3 className="font-semibold text-gray-900 text-base flex-[0_0_200px]">Export Data</h3>
+            <Button
+              className="bg-blue-600 text-white rounded-xl px-5 py-1 flex-shrink-0"
+              buttonColor="regularButton"
+              textColor="white"
+              onClick={() =>
+                openDrawer('Change Mode', <ChangeMode onClose={() => setIsOpen(false)} />)
+              }
+            >
+              Export
+            </Button>
+          </div>
+        </section>
+      </div>
+    );
+  };
 
   if (isLoading) return <div className="p-10 text-gray-600">Loading...</div>;
   if (!isAuthenticated)
     return <div className="p-10 text-gray-600">Please log in to view settings.</div>;
 
   return (
-    <div className="flex flex-col gap-8 w-full px-10 md:px-14 pr-16">
-      {/* Drawer with dynamic content */}
+    <div className="flex flex-col gap-8 w-full">
       <SettingsDrawer isOpen={isOpen} onClose={() => setIsOpen(false)} title={drawerTitle}>
         {drawerContent}
       </SettingsDrawer>
 
       <h1 className="text-2xl md:text-3xl font-semibold text-gray-800">Settings</h1>
 
-      <div className="max-w-[1200px]">
+      <div className="max-w">
         <ToggleButton
           options={[
             { key: 'general', label: 'General' },
