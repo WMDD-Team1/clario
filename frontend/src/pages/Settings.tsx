@@ -285,7 +285,7 @@ const Settings: React.FC = () => {
                 {preferences.mode}
               </span>
               <Button
-                className="bg-blue-600 text-white rounded-xl px-5 py-1 flex-shrink-0"
+                className="bg-[--brand-equivalence] text-white rounded-xl px-5 py-1 flex-shrink-0"
                 buttonColor="regularButton"
                 textColor="white"
                 onClick={() => openDrawer('Change Mode', <div>ModeChange Component Here</div>)}
@@ -310,7 +310,7 @@ const Settings: React.FC = () => {
     return (
       <div className="flex flex-col gap-6 mt-4">
         {/* Expense Categories */}
-        <section className="divide-y lg:border-b border-gray-300">
+        <section className="divide-y lg:border-b-1 border-[#EBEBEB]">
           <div className="hidden md:flex items-center gap-4 pb-4">
             <h3 className="font-semibold text-gray-900 text-base flex-[0_0_200px]">
               Expense Categories
@@ -322,14 +322,14 @@ const Settings: React.FC = () => {
               {finance.expenseCategories.map((cat) => (
                 <span
                   key={cat}
-                  className="px-3 py-1 text-sm rounded-full text-gray-700 border border-black whitespace-nowrap"
+                  className="px-3 py-1 text-sm rounded-full text-gray-700 border whitespace-nowrap"
                 >
                   {cat}
                 </span>
               ))}
             </div>
             <Button
-              className="bg-blue-600 text-white rounded-xl px-5 py-1 flex-shrink-0"
+              className="bg-[--brand-equivalence] text-white rounded-xl px-5 py-1 flex-shrink-0"
               buttonColor="regularButton"
               textColor="white"
               onClick={() =>
@@ -353,7 +353,7 @@ const Settings: React.FC = () => {
               {finance.expenseCategories.map((cat) => (
                 <span
                   key={cat}
-                  className="px-3 py-1 text-sm rounded-full text-gray-700 border border-black whitespace-nowrap"
+                  className="px-3 py-1 text-sm rounded-full text-gray-700 border whitespace-nowrap"
                 >
                   {cat}
                 </span>
@@ -375,14 +375,14 @@ const Settings: React.FC = () => {
               {finance.incomeCategories.map((cat) => (
                 <span
                   key={cat}
-                  className="px-3 py-1 text-sm rounded-full text-gray-700 border border-black whitespace-nowrap"
+                  className="px-3 py-1 text-sm rounded-full text-gray-700 border whitespace-nowrap"
                 >
                   {cat}
                 </span>
               ))}
             </div>
             <Button
-              className="bg-blue-600 text-white rounded-xl px-5 py-1 flex-shrink-0"
+              className="bg-[--brand-equivalence] text-white rounded-xl px-5 py-1 flex-shrink-0"
               buttonColor="regularButton"
               textColor="white"
               onClick={() =>
@@ -406,7 +406,7 @@ const Settings: React.FC = () => {
               {finance.incomeCategories.map((cat) => (
                 <span
                   key={cat}
-                  className="px-3 py-1 text-sm rounded-full text-gray-700 border border-black whitespace-nowrap"
+                  className="px-3 py-1 text-sm rounded-full text-gray-700 border whitespace-nowrap"
                 >
                   {cat}
                 </span>

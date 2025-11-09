@@ -70,11 +70,11 @@ export const Dashboard = () => {
   );
 
   const renderReminders = () => 
-    <div className="flex flex-col gap-4 w-full max-w-md mx-auto px-4">
+    <div className="flex flex-col gap-4 w-full max-w-md mx-auto">
       <RemindersList />
     </div>
   const renderInsights = () => 
-  <div className="flex flex-col gap-4 w-full max-w-md mx-auto px-4">
+  <div className="flex flex-col gap-4 w-full max-w-md mx-auto">
     <Insight />
   </div>
 
@@ -119,7 +119,7 @@ export const Dashboard = () => {
       </div>
 
       {/* MOBILE VIEW */}
-      <div className="block sm:hidden px-4 pb-10">
+      <div className="block sm:hidden pb-10">
         <div className="h-10"></div>
 
         <p className="text-xl font-semibold mt-4 mb-2">
