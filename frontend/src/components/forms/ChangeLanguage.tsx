@@ -84,12 +84,6 @@ const ChangeLanguage: React.FC<Props> = ({ onClose }) => {
               </option>
               <option value="english">English</option>
               <option value="french">French</option>
-              <option value="spanish">Spanish</option>
-              <option value="german">German</option>
-              <option value="hindi">Hindi</option>
-              <option value="chinese">Chinese</option>
-              <option value="japanese">Japanese</option>
-              <option value="korean">Korean</option>
             </select>
           </div>
         </div>

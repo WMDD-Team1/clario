@@ -15,13 +15,12 @@ import IncomeCategories from '@components/forms/IncomeCategories';
 import ChangeTaxRegime from '@components/forms/ChangeTaxRegime';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@store/index';
-
 import { exportUserTransactions } from '@api/services/settingService';
 
 const Settings: React.FC = () => {
   const { isAuthenticated, isLoading } = useAuth0();
   const dispatch = useDispatch();
-  const { data: user, loading } = useSelector((state: RootState) => state.user);
+  const { data: user } = useSelector((state: RootState) => state.user);
 
   const [isOpen, setIsOpen] = useState(false);
   const [drawerTitle, setDrawerTitle] = useState('');
@@ -31,7 +30,6 @@ const Settings: React.FC = () => {
     key: 'general',
     label: 'General',
   });
-  console.log(user);
 
   const profile = useMemo(
     () => ({
@@ -45,6 +43,7 @@ const Settings: React.FC = () => {
     }),
     [user],
   );
+
   const preferences = {
     language: user?.settings?.general?.language === 'fr' ? 'French' : 'English',
     mode: user?.settings?.general?.theme === 'dark' ? 'Dark Mode' : 'Light Mode',
@@ -73,13 +72,10 @@ const Settings: React.FC = () => {
 
   const handleExportData = async () => {
     const blob = await exportUserTransactions();
-
     if (!blob || blob.size === 0) {
-      // when there's no data, show toast
       console.log('No transactions found to export.');
       return;
     }
-
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = 'transactions.csv';
@@ -93,8 +89,8 @@ const Settings: React.FC = () => {
       <section>
         <h3 className="font-semibold text-gray-900 text-lg mb-3">Profile</h3>
         <div className="md:divide-y">
+          {/* Name */}
           <div className="flex flex-col gap-2 py-4 ">
-            {/* Mobile: Heading + Button */}
             <div className="flex justify-between items-center md:hidden">
               <span className="text-sm text-gray-600 font-semibold">Name</span>
               <Button
@@ -108,21 +104,12 @@ const Settings: React.FC = () => {
                 Edit
               </Button>
             </div>
-
-            {/* Mobile: Value */}
             <span className="text-gray-800 font-bold md:hidden">{profile.name}</span>
-
-            {/* md+: Single row layout */}
             <div className="hidden md:flex items-center justify-between gap-4">
-              {/* Label */}
               <span className="text-sm text-gray-600 font-semibold w-1/5">Name</span>
-
-              {/* Value (centered) */}
-              <span className="text-gray-800 font-bold flex-1  whitespace-nowrap">
+              <span className="text-gray-800 font-bold flex-1 whitespace-nowrap">
                 {profile.name}
               </span>
-
-              {/* Button */}
               <Button
                 className="px-5 py-1 flex-shrink-0"
                 buttonColor="regularButton"
@@ -135,8 +122,9 @@ const Settings: React.FC = () => {
               </Button>
             </div>
           </div>
+
+          {/* Email */}
           <div className="flex flex-col gap-2 py-4">
-            {/* Mobile: Heading + Button */}
             <div className="flex justify-between items-center md:hidden">
               <span className="text-sm text-gray-600 font-semibold">Email</span>
               <Button
@@ -150,21 +138,12 @@ const Settings: React.FC = () => {
                 Edit
               </Button>
             </div>
-
-            {/* Mobile: Value */}
             <span className="text-gray-800 font-bold md:hidden">{profile.email}</span>
-
-            {/* md+: Single row layout */}
             <div className="hidden md:flex items-center justify-between gap-4">
-              {/* Label */}
               <span className="text-sm text-gray-600 font-semibold w-1/5">Email</span>
-
-              {/* Value (centered) */}
-              <span className="text-gray-800 font-bold flex-1  whitespace-nowrap">
+              <span className="text-gray-800 font-bold flex-1 whitespace-nowrap">
                 {profile.email}
               </span>
-
-              {/* Button */}
               <Button
                 className="px-5 py-1 flex-shrink-0"
                 buttonColor="regularButton"
@@ -178,8 +157,8 @@ const Settings: React.FC = () => {
             </div>
           </div>
 
+          {/* Address */}
           <div className="flex flex-col gap-2 py-4 ">
-            {/* Mobile: Heading + Button */}
             <div className="flex justify-between items-center md:hidden">
               <span className="text-sm text-gray-600 font-semibold">Address</span>
               <Button
@@ -193,21 +172,12 @@ const Settings: React.FC = () => {
                 Edit
               </Button>
             </div>
-
-            {/* Mobile: Value */}
             <span className="text-gray-800 font-bold md:hidden">{profile.address}</span>
-
-            {/* md+: Single row layout */}
             <div className="hidden md:flex items-center justify-between gap-4">
-              {/* Label */}
               <span className="text-sm text-gray-600 font-semibold w-1/5">Address</span>
-
-              {/* Value (centered) */}
-              <span className="text-gray-800 font-bold flex-1  whitespace-nowrap">
+              <span className="text-gray-800 font-bold flex-1 whitespace-nowrap">
                 {profile.address}
               </span>
-
-              {/* Button */}
               <Button
                 className="px-5 py-1 flex-shrink-0"
                 buttonColor="regularButton"
@@ -221,8 +191,8 @@ const Settings: React.FC = () => {
             </div>
           </div>
 
+          {/* Password */}
           <div className="flex flex-col gap-2 py-4 ">
-            {/* Mobile: Heading + Button */}
             <div className="flex justify-between items-center md:hidden">
               <span className="text-sm text-gray-600 font-semibold">Password</span>
               <Button
@@ -236,21 +206,12 @@ const Settings: React.FC = () => {
                 Change password
               </Button>
             </div>
-
-            {/* Mobile: Value */}
             <span className="text-gray-800 font-bold md:hidden">**********</span>
-
-            {/* md+: Single row layout */}
             <div className="hidden md:flex items-center justify-between gap-4">
-              {/* Label */}
               <span className="text-sm text-gray-600 font-semibold w-1/5">Password</span>
-
-              {/* Value (centered) */}
-              <span className="text-gray-800 font-bold flex-1  whitespace-nowrap">
+              <span className="text-gray-800 font-bold flex-1 whitespace-nowrap">
                 **********
               </span>
-
-              {/* Button */}
               <Button
                 className="px-5 py-1 md:px-10 flex-shrink-0"
                 buttonColor="regularButton"
@@ -270,14 +231,14 @@ const Settings: React.FC = () => {
       <section>
         <h3 className="font-semibold text-gray-900 text-lg mb-3">Preferences</h3>
         <div className="md:divide-y">
-          <div className="flex flex-col gap-2 py-4  ">
-            {/* Mobile: Heading + Button */}
+          {/* Language */}
+          <div className="flex flex-col gap-2 py-4">
             <div className="flex justify-between items-center md:hidden">
               <span className="text-sm text-gray-600 font-semibold">Language</span>
               <Button
-                className="bg-blue-600 text-white rounded-xl  px-5 py-1"
+                className="bg-blue-600 text-white rounded-xl px-5 py-1"
                 buttonColor="regularButton"
-                textColor="white" 
+                textColor="white"
                 onClick={() =>
                   openDrawer('Update Language', <ChangeLanguage onClose={() => setIsOpen(false)} />)
                 }
@@ -285,21 +246,12 @@ const Settings: React.FC = () => {
                 Change
               </Button>
             </div>
-
-            {/* Mobile: Value */}
             <span className="text-gray-800 font-bold md:hidden">{preferences.language}</span>
-
-            {/* md+: Single row layout */}
             <div className="hidden md:flex items-center justify-between gap-4">
-              {/* Label */}
               <span className="text-sm text-gray-600 font-semibold w-1/5">Language</span>
-
-              {/* Value (centered) */}
-              <span className="text-gray-800 font-bold flex-1  whitespace-nowrap">
+              <span className="text-gray-800 font-bold flex-1 whitespace-nowrap">
                 {preferences.language}
               </span>
-
-              {/* Button */}
               <Button
                 className="bg-blue-600 text-white rounded-xl px-5 py-1 flex-shrink-0"
                 buttonColor="regularButton"
@@ -313,8 +265,8 @@ const Settings: React.FC = () => {
             </div>
           </div>
 
+          {/* Mode */}
           <div className="flex flex-col gap-2 py-4 ">
-            {/* Mobile: Heading + Button */}
             <div className="flex justify-between items-center md:hidden">
               <span className="text-sm text-gray-600 font-semibold">Mode</span>
               <Button
@@ -326,21 +278,12 @@ const Settings: React.FC = () => {
                 Change
               </Button>
             </div>
-
-            {/* Mobile: Value */}
             <span className="text-gray-800 font-bold md:hidden">{preferences.mode}</span>
-
-            {/* md+: Single row layout */}
             <div className="hidden md:flex items-center justify-between gap-4">
-              {/* Label */}
               <span className="text-sm text-gray-600 font-semibold w-1/5">Mode</span>
-
-              {/* Value (centered) */}
-              <span className="text-gray-800 font-bold flex-1  whitespace-nowrap">
+              <span className="text-gray-800 font-bold flex-1 whitespace-nowrap">
                 {preferences.mode}
               </span>
-
-              {/* Button */}
               <Button
                 className="bg-blue-600 text-white rounded-xl px-5 py-1 flex-shrink-0"
                 buttonColor="regularButton"
@@ -357,44 +300,34 @@ const Settings: React.FC = () => {
   );
 
   // === Finance Section ===
-  const renderFinance = () => (
-    <div className="flex flex-col gap-6 mt-4">
-      {/* Expense Categories */}
-      <section className="divide-y lg:border-b border-gray-300">
-        <div className="flex flex-col gap-2 pb-4 border rounded-xl border-gray-300 md:border-none md:rounded-none p-4 md:p-0">
-          {/* Mobile top row: Heading + Button */}
-          <div className="flex justify-between items-center w-full md:hidden">
-            <h3 className="font-semibold text-gray-900 text-base">Expense Categories</h3>
+  const renderFinance = () => {
+    const hideScrollbar: React.CSSProperties = {
+      scrollbarWidth: 'none',
+      msOverflowStyle: 'none',
+      WebkitOverflowScrolling: 'touch',
+    };
 
-          {/* Categories scrollable */}
-          <div className="gap-2 overflow-x-auto mx-4 py-5 flex-1">
-            {finance.expenseCategories.map((cat) => (
-              <span
-                key={cat}
-                className="px-3 py-1 text-sm rounded-full text-gray-700 whitespace-nowrap border border-black"
-              >
-                {cat}
-              </span>
-            ))}
-          </div>
-
-          {/* md+ row: Heading + scrollable Categories + Button */}
+    return (
+      <div className="flex flex-col gap-6 mt-4">
+        {/* Expense Categories */}
+        <section className="divide-y lg:border-b border-gray-300">
           <div className="hidden md:flex items-center gap-4 pb-4">
             <h3 className="font-semibold text-gray-900 text-base flex-[0_0_200px]">
               Expense Categories
             </h3>
-
-            <div className="flex flex-1 gap-2 overflow-x-auto">
+            <div
+              className="flex flex-wrap gap-2 flex-1 overflow-x-auto md:overflow-visible"
+              style={hideScrollbar}
+            >
               {finance.expenseCategories.map((cat) => (
                 <span
                   key={cat}
-                  className="px-3 py-1 text-sm rounded-full text-gray-700 flex-shrink-0 whitespace-nowrap border border-black"
+                  className="px-3 py-1 text-sm rounded-full text-gray-700 border border-black whitespace-nowrap"
                 >
                   {cat}
                 </span>
               ))}
             </div>
-
             <Button
               className="bg-blue-600 text-white rounded-xl px-5 py-1 flex-shrink-0"
               buttonColor="regularButton"
@@ -412,46 +345,42 @@ const Settings: React.FC = () => {
               Add/Edit
             </Button>
           </div>
-        </div>
-        </div>
-      </section>
 
-      {/* Income Categories */}
-      <section className="divide-y border-b border-gray-300">
-        <div className="flex justify-between items-center">
-          <h3 className="w-1/5 font-semibold text-gray-900 text-base flex-shrink-0">
-            Income Categories
-          </h3>
-
-          {/* Categories scrollable */}
-          <div className="gap-2 overflow-x-auto mx-4 py-5 flex-1">
-            {finance.incomeCategories.map((cat) => (
-              <span
-                key={cat}
-                className="px-3 py-1 text-sm rounded-full text-gray-700 whitespace-nowrap border border-black"
-              >
-                {cat}
-              </span>
-            ))}
-          </div>
-
-          {/* md+ row: Heading + scrollable Categories + Button */}
-          <div className="hidden md:flex items-center gap-4 pb-4">
-            <h3 className="font-semibold text-gray-900 text-base flex-[0_0_200px]">
-              Income Categories
-            </h3>
-
-            <div className="flex flex-1 gap-2 overflow-x-auto">
-              {finance.incomeCategories.map((cat) => (
+          {/* Mobile */}
+          <div className="md:hidden flex flex-col gap-2">
+            <h3 className="font-semibold text-gray-900 text-base">Expense Categories</h3>
+            <div className="flex overflow-x-auto gap-2" style={hideScrollbar}>
+              {finance.expenseCategories.map((cat) => (
                 <span
                   key={cat}
-                  className="px-3 py-1 text-sm rounded-full text-gray-700 flex-shrink-0 whitespace-nowrap border border-black"
+                  className="px-3 py-1 text-sm rounded-full text-gray-700 border border-black whitespace-nowrap"
                 >
                   {cat}
                 </span>
               ))}
             </div>
+          </div>
+        </section>
 
+        {/* Income Categories */}
+        <section className="divide-y border-b border-gray-300">
+          <div className="hidden md:flex items-center gap-4 pb-4">
+            <h3 className="font-semibold text-gray-900 text-base flex-[0_0_200px]">
+              Income Categories
+            </h3>
+            <div
+              className="flex flex-wrap gap-2 flex-1 overflow-x-auto md:overflow-visible"
+              style={hideScrollbar}
+            >
+              {finance.incomeCategories.map((cat) => (
+                <span
+                  key={cat}
+                  className="px-3 py-1 text-sm rounded-full text-gray-700 border border-black whitespace-nowrap"
+                >
+                  {cat}
+                </span>
+              ))}
+            </div>
             <Button
               className="bg-blue-600 text-white rounded-xl px-5 py-1 flex-shrink-0"
               buttonColor="regularButton"
@@ -469,40 +398,28 @@ const Settings: React.FC = () => {
               Add/Edit
             </Button>
           </div>
-        </div>
-      </section>
 
-      {/* Tax Regime */}
-      <section className="divide-y lg:border-b border-gray-300">
-        <div className="flex flex-col gap-2 pb-4 border rounded-xl border-gray-300  md:border-none md:rounded-none p-4 md:p-0">
-          {/* Mobile top row: Heading + Button */}
-          <div className="flex justify-between items-center w-full md:hidden">
-            <h3 className="font-semibold text-gray-900 text-base">Tax Regime</h3>
-
-            <Button
-              className="bg-blue-600 text-white rounded-xl px-4 py-1"
-              buttonColor="regularButton"
-              textColor="white"
-              onClick={() =>
-                openDrawer(
-                  'Update Tax Regime',
-                  <ChangeTaxRegime tax={finance.taxRegime} onClose={() => setIsOpen(false)} />,
-                )
-              }
-            >
-              Edit
-            </Button>
+          {/* Mobile */}
+          <div className="md:hidden flex flex-col gap-2">
+            <h3 className="font-semibold text-gray-900 text-base">Income Categories</h3>
+            <div className="flex overflow-x-auto gap-2" style={hideScrollbar}>
+              {finance.incomeCategories.map((cat) => (
+                <span
+                  key={cat}
+                  className="px-3 py-1 text-sm rounded-full text-gray-700 border border-black whitespace-nowrap"
+                >
+                  {cat}
+                </span>
+              ))}
+            </div>
           </div>
+        </section>
 
-          {/* Value row on mobile */}
-          <p className="px-3 py-2 text-gray-600 text-sm md:hidden">{finance.taxRegime}</p>
-
-          {/* md+ row: Heading + Value + Button */}
+        {/* Tax Regime */}
+        <section className="divide-y lg:border-b border-gray-300">
           <div className="hidden md:flex items-center gap-4 pb-4">
             <h3 className="font-semibold text-gray-900 text-base flex-[0_0_200px]">Tax Regime</h3>
-
-            <p className="flex-1 gap-2 px-3 py-2 text-gray-600 text-sm">{finance.taxRegime}</p>
-
+            <p className="flex-1 px-3 py-2 text-gray-600 text-sm">{finance.taxRegime}</p>
             <Button
               className="bg-blue-600 text-white rounded-xl px-5 py-1 flex-shrink-0"
               buttonColor="regularButton"
@@ -517,41 +434,60 @@ const Settings: React.FC = () => {
               Edit
             </Button>
           </div>
-        </div>
-      </section>
 
-      {/* Export Data */}
-      <section className="border rounded-xl border-gray-300  md:border-none md:rounded-none p-4 md:p-0">
-        <div className="flex justify-between items-center w-full pb-4">
-          <h3 className="font-semibold text-gray-900 text-base flex-[0_0_200px]">Export Data</h3>
+          {/* Mobile */}
+          <div className="md:hidden flex flex-col gap-2">
+            <div className="flex justify-between items-center">
+              <h3 className="font-semibold text-gray-900 text-base">Tax Regime</h3>
+              <Button
+                className="bg-blue-600 text-white rounded-xl px-4 py-1"
+                buttonColor="regularButton"
+                textColor="white"
+                onClick={() =>
+                  openDrawer(
+                    'Update Tax Regime',
+                    <ChangeTaxRegime tax={finance.taxRegime} onClose={() => setIsOpen(false)} />,
+                  )
+                }
+              >
+                Edit
+              </Button>
+            </div>
+            <p className="text-gray-600 text-sm">{finance.taxRegime}</p>
+          </div>
+        </section>
 
-          <Button
-            className="bg-blue-600 text-white rounded-xl px-5 py-1 flex-shrink-0"
-            buttonColor="regularButton"
-            textColor="white"
-            onClick={handleExportData}
-          >
-            Export
-          </Button>
-        </div>
-      </section>
-    </div>
-  );
+        {/* Export Data */}
+        <section className="border rounded-xl border-gray-300 md:border-none md:rounded-none p-4 md:p-0">
+          <div className="flex justify-between items-center w-full pb-4">
+            <h3 className="font-semibold text-gray-900 text-base flex-[0_0_200px]">Export Data</h3>
+            <Button
+              className="bg-blue-600 text-white rounded-xl px-5 py-1 flex-shrink-0"
+              buttonColor="regularButton"
+              textColor="white"
+              onClick={handleExportData}
+            >
+              Export
+            </Button>
+          </div>
+        </section>
+      </div>
+    );
+  };
 
   if (isLoading) return <div className="p-10 text-gray-600">Loading...</div>;
   if (!isAuthenticated)
     return <div className="p-10 text-gray-600">Please log in to view settings.</div>;
 
   return (
-    <div className="flex flex-col gap-8 w-full px-10 md:px-14 pr-16">
-      {/* Drawer with dynamic content */}
+    <div className="flex flex-col gap-8 w-full">
       <SettingsDrawer isOpen={isOpen} onClose={() => setIsOpen(false)} title={drawerTitle}>
         {drawerContent}
       </SettingsDrawer>
 
       <h1 className="text-2xl md:text-3xl font-semibold text-gray-800">Settings</h1>
 
-      <div className="max-w-[1200px]">
+      <div className="max-w">
         <ToggleButton
           options={[
             { key: 'general', label: 'General' },

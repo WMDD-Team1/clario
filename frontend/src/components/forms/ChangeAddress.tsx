@@ -22,7 +22,7 @@ const ChangeAddress: React.FC<Props> = ({ onClose }) => {
   const [isSaved, setIsSaved] = useState(false);
 
   const handleSave = async () => {
-    if (!street.trim() || !city.trim() || !country.trim()) {
+    if (!street.trim() || !city.trim() || !postalCode.trim() || !country.trim()) {
       setError('Please fill in all required fields.');
       return;
     }
@@ -66,6 +66,7 @@ const ChangeAddress: React.FC<Props> = ({ onClose }) => {
     onClose();
     setIsSaved(false);
   };
+
   const clearErrorOnInput = () => {
     if (error) setError(null);
   };
@@ -73,6 +74,7 @@ const ChangeAddress: React.FC<Props> = ({ onClose }) => {
   return (
     <div className="flex flex-col h-full">
       <div className="flex-1 flex flex-col justify-top">
+
         <div className="relative mb-6">
           <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">
             Address Line
@@ -88,20 +90,26 @@ const ChangeAddress: React.FC<Props> = ({ onClose }) => {
             className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
+
         <div className="relative mb-6">
           <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">
             City
           </label>
           <input
             type="text"
-            value={postalCode}
-            onChange={(e) => setPostalCode(e.target.value)}
+            value={city}
+            onChange={(e) => {
+              setCity(e.target.value);
+              clearErrorOnInput();
+            }}
+            placeholder="Vancouver"
             className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
+
         <div className="relative mb-6">
           <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">
-            Country
+            Postal Code
           </label>
           <input
             type="text"
@@ -114,19 +122,7 @@ const ChangeAddress: React.FC<Props> = ({ onClose }) => {
             className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-        <div className="relative mb-6">
-          <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">City</label>
-          <input
-            type="text"
-            value={city}
-            onChange={(e) => {
-              setCity(e.target.value);
-              clearErrorOnInput();
-            }}
-            placeholder="Vancouver"
-            className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+
         <div className="relative mb-6">
           <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">
             Country
@@ -142,7 +138,10 @@ const ChangeAddress: React.FC<Props> = ({ onClose }) => {
             className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
+
+        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
       </div>
+
       <>
         {!isSaved ? (
           <div className="flex justify-between bg-[var(--background-alternate)] -m-6 p-5 rounded-bl-[50px]">
@@ -152,6 +151,7 @@ const ChangeAddress: React.FC<Props> = ({ onClose }) => {
               buttonColor="white"
               textColor="black"
               width="48%"
+              disabled={loading}
             >
               Cancel
             </Button>
@@ -161,10 +161,11 @@ const ChangeAddress: React.FC<Props> = ({ onClose }) => {
               buttonColor="regularButton"
               textColor="white"
               width="48%"
+              disabled={loading}
             >
-              Save
+              {loading ? "Saving..." : "Save"}
             </Button>
-          </>
+          </div>
         ) : (
           <div className="flex justify-between bg-[var(--background-alternate)] -m-6 rounded-bl-[50px] p-5">
             <Button
