@@ -9,6 +9,10 @@ export interface ContractApiResponse {
     aiAnalysis?: { riskyClauses: RiskAnalysisApiResponse[] };
 }
 
+export interface RiskWithId extends RiskAnalysisApiResponse {
+    id: string;
+}
+
 export interface RiskAnalysisApiResponse {
     category: string;
     paragraph: string;
