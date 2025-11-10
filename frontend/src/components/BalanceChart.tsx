@@ -9,6 +9,7 @@ type ChartItem = {
   value: number;
   color: string;
 };
+
 type PieSectorData = {
   percent?: number;
   name?: string | number;
@@ -27,11 +28,11 @@ type PieSectorData = {
 };
 
 const COLORS = ['#F04438', '#17B26A'];
+
 const DUMMY_DATA: ChartItem[] = [
   { name: 'Income', value: 12000, color: COLORS[1] },
   { name: 'Expense', value: 8000, color: COLORS[0] },
 ];
-
 
 const renderActiveShape = ({
   cx,
@@ -56,7 +57,7 @@ const renderActiveShape = ({
         outerRadius={(outerRadius ?? 0) + 3}
         startAngle={startAngle}
         endAngle={endAngle}
-        fill={fill}
+        fill={itemColor}
       />
       <text
         x={cx}
@@ -89,7 +90,6 @@ const renderActiveShape = ({
   );
 };
 
-
 const BalanceChart: React.FC = () => {
   const [data, setData] = useState<ChartItem[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -109,8 +109,8 @@ const BalanceChart: React.FC = () => {
         const chartData: ChartItem[] = isEmpty
           ? DUMMY_DATA
           : [
-              { name: 'Income', value: res.income, color: COLORS[0] },
-              { name: 'Expense', value: res.expense, color: COLORS[1] },
+              { name: 'Income', value: res.income, color: COLORS[1] }, // Green
+              { name: 'Expense', value: res.expense, color: COLORS[0] }, // Red
             ];
 
         setData(chartData);
@@ -142,7 +142,7 @@ const BalanceChart: React.FC = () => {
               onMouseEnter={onPieEnter}
             >
               {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.color || '#4B5563'} />
+                <Cell key={`cell-${index}`} fill={entry.color} />
               ))}
             </Pie>
           </PieChart>
