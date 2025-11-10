@@ -61,7 +61,7 @@ export const IncomeExpenseViewSlide = ({
             value={oneTransaction.category || 'Unknown'}
           />
           <InfoRow label="Invoice #" value={oneTransaction.origin} />
-          {activeRepeatableTransaction?.isArchived && (
+          {!activeRepeatableTransaction?.isArchived && (
             <InfoRow label="Repeat" value={activeRepeatableTransaction?.frequency} />
           )}
 

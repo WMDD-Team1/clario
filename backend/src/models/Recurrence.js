@@ -28,7 +28,7 @@ const RecurrenceSchema = new mongoose.Schema(
         },
         isArchived: {
             type: Boolean,
-            default: true,
+            default: false,
         }
     }
 );

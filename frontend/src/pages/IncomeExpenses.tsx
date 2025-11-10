@@ -281,7 +281,7 @@ export const IncomeExpenses = () => {
   const activeRepeatableTransaction = allRecurrences.data.find(
     (recurrence) =>
       //------initial isArchive should be false
-      recurrence.templateTransactionId == oneTransaction.id && recurrence.isArchived,
+      recurrence.templateTransactionId == oneTransaction.id && !recurrence.isArchived,
   );
 
   console.log(activeRepeatableTransaction);
@@ -443,19 +443,45 @@ export const IncomeExpenses = () => {
 
       console.log(updateResponse.data);
       if (activeRepeatableTransaction) {
+        const payload = repeat
+          ? {
+              // templateTransactionId: oneTransaction.id,
+              frequency: recurrence.frequency,
+              //--------confirm if endate is needed?------
+              // endDate: '2025-10-05',
+            }
+          : { isArchived: true };
+
+        console.log(payload);
+        try {
+          const recurrenceUrl = repeat
+        ? `${import.meta.env.VITE_API_BASE_URL}/recurrences/${activeRepeatableTransaction.id}`
+        : `${import.meta.env.VITE_API_BASE_URL}/recurrences/${activeRepeatableTransaction.id}/archive`;
+
+      const updateRecurrenceResponse = await axios.patch(recurrenceUrl, payload, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+          console.log(updateRecurrenceResponse);
+        } catch (error) {
+          console.error('Error saving recurrence:', error);
+        }
+      } else if (repeat) {
         const payload = {
-          // templateTransactionId: oneTransaction.id,
+          templateTransactionId: oneTransaction.id,
           frequency: recurrence.frequency,
-          ...(!repeat && { isArchived: false }),
           //--------confirm if endate is needed?------
-          // endDate: '2025-10-05',
+          endDate: '2025-10-05',
         };
 
         console.log(payload);
         try {
-          const updateRecurrenceResponse = await axios.patch(
-            `${import.meta.env.VITE_API_BASE_URL}/recurrences/${activeRepeatableTransaction.id}`,
-            JSON.stringify(payload),
+          const recurrenceResponse = await axios.post(
+            `${import.meta.env.VITE_API_BASE_URL}/recurrences`,
+            payload,
             {
               headers: {
                 'Content-Type': 'application/json',
@@ -463,42 +489,15 @@ export const IncomeExpenses = () => {
               },
             },
           );
-
-          console.log(updateRecurrenceResponse);
         } catch (error) {
           console.error('Error saving recurrence:', error);
         }
-      } else {
-        if (repeat) {
-          const payload = {
-            templateTransactionId: oneTransaction.id,
-            frequency: recurrence.frequency,
-            //--------confirm if endate is needed?------
-            endDate: '2025-10-05',
-          };
-
-          console.log(payload);
-          try {
-            const recurrenceResponse = await axios.post(
-              `${import.meta.env.VITE_API_BASE_URL}/recurrences`,
-              payload,
-              {
-                headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: `Bearer ${token}`,
-                },
-              },
-            );
-          } catch (error) {
-            console.error('Error saving recurrence:', error);
-          }
-        }
       }
 
-      getAllRecurrences();
+      await getAllRecurrences();
+      await getTransactionData();
       setLoader(false);
       setUpdateSuccess(true);
-      await getTransactionData();
     } catch (error) {
       setLoader(false);
       console.error('Error updating transaction:', error);
@@ -683,8 +682,7 @@ export const IncomeExpenses = () => {
       }));
   };
 
- const filteredExpenseData = getFilteredExpenseData();
-
+  const filteredExpenseData = getFilteredExpenseData();
 
   const expenseFilteredData = filteredExpenseData.slice(
     (incomePage - 1) * PAGE_SIZE,
@@ -1060,7 +1058,7 @@ export const IncomeExpenses = () => {
           setTransactionDetail('110%');
         }}
         editExpense={() => {
-          if (activeRepeatableTransaction?.isArchived) {
+          if (activeRepeatableTransaction?.isArchived == false) {
             const formattedFrequency =
               activeRepeatableTransaction.frequency.charAt(0).toUpperCase() +
               activeRepeatableTransaction.frequency.slice(1).toLowerCase();
