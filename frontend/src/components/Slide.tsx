@@ -46,7 +46,7 @@ const Slide: React.FC<SlideProps> = ({
         style={{ transform: `translateX(${slide})` }}
       >
         <div
-        className="absolute top-19 sm:left-[-1rem] left-[2rem] bg-blue-300 w-12 h-12 rounded-[1rem] cursor-pointer flex items-center justify-center shadow-md z-60"
+        className="absolute top-19 sm:left-[-1rem] left-[2rem] bg-[var(--primitive-colors-brand-primary-95)] w-12 h-12 rounded-[1rem] cursor-pointer flex items-center justify-center shadow-md z-60"
         onClick={onClose}
         >
           <Forward className="w-8 h-8"/>

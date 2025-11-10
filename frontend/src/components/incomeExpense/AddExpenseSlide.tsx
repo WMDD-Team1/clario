@@ -86,7 +86,7 @@ export const AddExpenseSlide = ({
           <TransactionUploadSuccess className="w-25 h-25" />
         </Success>
       ) : (
-        <form className="flex flex-col gap-4">
+        <form className="flex flex-col gap-[1.5rem]">
           <Input
             label="Expense Title"
             id="expenseTitle"

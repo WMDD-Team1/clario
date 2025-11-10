@@ -5,7 +5,9 @@ export const formatDate = (
   if (!isoDate) return '';
 
   const normalized = isoDate.length === 7 ? `${isoDate}-01` : isoDate;
-  const date = new Date(normalized);
+  const [year, month, day] = normalized.split('T')[0].split('-');
+  const date = new Date(Number(year), Number(month) - 1, Number(day));
+  // const date = new Date(normalized);
   if (isNaN(date.getTime())) return '';
 
   // If wants Oct 11, 2025
