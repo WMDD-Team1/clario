@@ -32,7 +32,6 @@ const DUMMY_DATA: ChartItem[] = [
   { name: 'Expense', value: 8000, color: COLORS[0] },
 ];
 
-
 const renderActiveShape = ({
   cx,
   cy,
@@ -58,37 +57,18 @@ const renderActiveShape = ({
         endAngle={endAngle}
         fill={fill}
       />
-      <text
-        x={cx}
-        y={(cy ?? 0) - 8}
-        textAnchor="middle"
-        className="text-sm"
-        fill={itemColor}
-      >
+      <text x={cx} y={(cy ?? 0) - 8} textAnchor="middle" className="text-sm" fill={itemColor}>
         {payload?.name}
       </text>
-      <text
-        x={cx}
-        y={(cy ?? 0) + 10}
-        textAnchor="middle"
-        className="text-xs"
-        fill={itemColor}
-      >
+      <text x={cx} y={(cy ?? 0) + 10} textAnchor="middle" className="text-xs" fill={itemColor}>
         {`CAD ${formatCurrency(value ?? 0, 0)}`}
       </text>
-      <text
-        x={cx}
-        y={(cy ?? 0) + 25}
-        textAnchor="middle"
-        className="text-xs"
-        fill={itemColor}
-      >
+      <text x={cx} y={(cy ?? 0) + 25} textAnchor="middle" className="text-xs" fill={itemColor}>
         {`(${((percent ?? 0) * 100).toFixed(1)}%)`}
       </text>
     </g>
   );
 };
-
 
 const BalanceChart: React.FC = () => {
   const [data, setData] = useState<ChartItem[]>([]);
@@ -109,8 +89,8 @@ const BalanceChart: React.FC = () => {
         const chartData: ChartItem[] = isEmpty
           ? DUMMY_DATA
           : [
-              { name: 'Income', value: res.income, color: COLORS[0] },
-              { name: 'Expense', value: res.expense, color: COLORS[1] },
+              { name: 'Income', value: res.income, color: COLORS[1] },
+              { name: 'Expense', value: res.expense, color: COLORS[0] },
             ];
 
         setData(chartData);
