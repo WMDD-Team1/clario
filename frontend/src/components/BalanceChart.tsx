@@ -28,8 +28,8 @@ type PieSectorData = {
 
 const COLORS = ['#F04438', '#17B26A'];
 const DUMMY_DATA: ChartItem[] = [
-  { name: 'Income', value: 12000, color: COLORS[0] },
-  { name: 'Expense', value: 8000, color: COLORS[1] },
+  { name: 'Income', value: 12000, color: COLORS[1] },
+  { name: 'Expense', value: 8000, color: COLORS[0] },
 ];
 
 
