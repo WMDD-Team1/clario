@@ -1,17 +1,24 @@
+import React from "react";
+
 const InfoRow = ({
   label,
   value,
   vertical = false,
+  hideBorder = false,
+  children
 }: {
   label: string;
   value?: string;
   vertical?: boolean;
+  hideBorder?: boolean;
+  children?:React.ReactNode
 }) => (
   <div
-    className={`${vertical ? 'flex flex-col items-start gap-[1rem]' : 'flex justify-between items-center'} border-b-2 py-4 border-gray-200`}
+    className={`${vertical ? 'flex flex-col items-start gap-[1rem]' : 'flex justify-between items-center'} ${hideBorder ? '' : 'border-b-2'} py-3 border-gray-200`}
   >
-    <p className="text-gray-400">{label}</p>
-    <p>{value || '-'}</p>
+    <p className="text-[var(--primitive-colors-gray-light-mode-400)]">{label}</p>
+    <p>{value}</p>
+    {children}
   </div>
 );
 

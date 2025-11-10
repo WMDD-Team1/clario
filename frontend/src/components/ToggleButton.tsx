@@ -9,15 +9,17 @@ interface Props {
 const ToggleButton = ({ options, option, onClick }: Props) => {
     const [firstOption, secondOption] = options;
     return (
-        <div className="toggle-view flex rounded-[20px] p-[10px] h-[60px] w-[400px] border-[2px] border-[#E4E7EC] justify-evenly bg-white">
-            <button className={`grow px-4 py-1 text-sm font-medium transition rounded-[15px] ${option.key === firstOption.key
-                ? "bg-[var(--primitive-colors-gray-light-mode-100)] text-[var(--brand-alpha)]"
+        <div className="relative toggle-view flex rounded-[20px] p-[10px] h-[60px] w-[400px] border-[2px] border-[#E4E7EC] justify-evenly bg-white">
+            <button className={`z-2 grow px-4 py-1 text-sm font-medium transition rounded-[15px] ${option.key === firstOption.key
+                ? " text-[var(--text-alpha)]"
                 : "text-[var(--primitive-colors-gray-light-mode-400)]"
                 }`} onClick={() => onClick(firstOption)}>{firstOption.label}</button>
-            <button className={`grow px-4 py-1 text-sm font-medium transition rounded-[15px] ${option.key === secondOption.key
-                ? "bg-[var(--primitive-colors-gray-light-mode-100)] text-[var(--brand-alpha)]"
+            <button className={`z-2 grow px-4 py-1 text-sm font-medium transition rounded-[15px] ${option.key === secondOption.key
+                ? "text-[var(--text-alpha)]"
                 : "text-[var(--primitive-colors-gray-light-mode-400)]"
                 }`} onClick={() => onClick(secondOption)}>{secondOption.label}</button>
+
+                <div className={`transition-all w-[45%] h-[35px] bg-[#73A9F2]  absolute z-1 rounded-[15px] left-[3%] ${option.key === firstOption.key ? '' : "translate-x-[109%]"}`}></div>
         </div>
     )
 }

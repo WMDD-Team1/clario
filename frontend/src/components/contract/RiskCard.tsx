@@ -1,20 +1,24 @@
-import { RiskAnalysisApiResponse } from '@api/index'
+import { RiskWithId } from '@api/index'
 import React from 'react'
 
 interface Props {
     category: string;
-    risks: RiskAnalysisApiResponse[];
+    risks: RiskWithId[];
 }
 
+const updateHash = (highlightId: string) => {
+    document.location.hash = `highlight-${highlightId}`;
+};
+
 const RiskCard = ({ category, risks }: Props) => {
-    const severityColors: Record<RiskAnalysisApiResponse["riskLevel"], string> = {
+    const severityColors: Record<RiskWithId["riskLevel"], string> = {
         High: "bg-[var(--primitive-colors-error-100)] text-[var(--primitive-colors-error-600)]",
         Medium: "bg-[var(--primitive-colors-warning-100)] text-[var(--primitive-colors-warning-700)]",
         Low: "bg-[var(--primitive-colors-success-100)] text-[var(--primitive-colors-success-700)]",
     };
 
     return (
-        <div className="bg-[var(--primitive-colors-gray-light-mode-0)] rounded-2xl p-4 border border-[var(--primitive-colors-gray-light-mode-200)] shadow-sm w-full max-w-sm">
+        <div className="bg-[var(--primitive-colors-gray-light-mode-0)] rounded-2xl p-4 border border-[var(--primitive-colors-gray-light-mode-200)] shadow-sm w-full max-w-sm cursor-pointer">
             <div className="flex items-center justify-between mb-3">
                 <h3 className="text-[17px] font-semibold text-[var(--primitive-colors-gray-light-mode-950)]">
                     {category}
@@ -26,7 +30,7 @@ const RiskCard = ({ category, risks }: Props) => {
 
             <div className="flex flex-col gap-3">
                 {risks.map((risk, index) => (
-                    <div key={index}>
+                    <div key={index} onClick={() => updateHash(risk.id)}>
                         <span
                             className={`px-2 py-0.5 rounded-full text-xs font-medium ${severityColors[risk.riskLevel]}`}
                         >

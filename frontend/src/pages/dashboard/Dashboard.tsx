@@ -31,7 +31,6 @@ export const Dashboard = () => {
     { id: 1, category: 'Rent', amount: 1200 },
     { id: 2, category: 'Groceries', amount: 300 },
   ];
-
   /** ---------------- MOBILE DASHBOARD ---------------- **/
   const renderDashboard = () => (
     <div className="flex flex-col w-full gap-4">
@@ -74,18 +73,17 @@ export const Dashboard = () => {
     <div className="flex flex-col gap-4 w-full max-w-md mx-auto px-0 md:px-4">
       <RemindersList />
     </div>
-  const renderInsights = () =>
-    <div className="flex flex-col gap-4 w-full max-w-md mx-auto px-0 md:px-4">
-      <Insight />
-    </div>
-
+  const renderInsights = () => 
+  <div className="flex flex-col gap-4 w-full max-w-md mx-auto px-4">
+    <Insight />
+  </div>
   /** ---------------- DESKTOP DASHBOARD ---------------- **/
   return (
     <>
       {/* DESKTOP VIEW */}
       <div className="hidden sm:block">
         <div className="flex flex-col w-full gap-4 overflow-hidden">
-          <WelcomeBanner userName={user?.name || 'User'} />
+          <WelcomeBanner userName={appUser?.name || 'User'} />
 
           <div className="flex flex-col xl:flex-row gap-4 w-full items-start">
             {/* LEFT SECTION */}

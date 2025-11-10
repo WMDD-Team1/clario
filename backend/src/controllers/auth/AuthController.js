@@ -3,14 +3,10 @@ import { createUser, getUserByAuth0Id, completeOnBoarding } from "../../services
 export const signup = async (req, res) => {
 	try {
 		const { sub: auth0Id } = req.auth;
-		// added credentials in access token so that backend can save the data right away to db.
-		const email = req.auth["https://clario.com/email"];
-		const name = req.auth["https://clario.com/name"];
-		const picture = req.auth["https://clario.com/picture"];
 
-		const { user, isNew } = await createUser(auth0Id, email, name, picture);
+		const { user, isNew } = await createUser(auth0Id);
 
-		return res.status(isNew ? 201 : 200).json(user);
+		return res.status(isNew ? 201 : 200).json(user, isNew);
 	} catch (err) {
 		console.error("Signup Error: ", err);
 		return res.status(500).json({ message: "Internal Server Error" });
