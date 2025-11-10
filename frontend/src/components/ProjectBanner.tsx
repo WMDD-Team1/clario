@@ -2,6 +2,7 @@ import { ProjectApiResponse } from "@api/index";
 import { formatCurrency } from "@utils/formatCurrency";
 import { Pencil } from "lucide-react";
 import ContractCardDrawer from "./contract/ContractCardDrawer";
+import { formatDate } from "@utils/formatDate";
 
 interface Props {
     project: ProjectApiResponse;
@@ -29,20 +30,10 @@ const ProjectBanner = ({ project, onEdit }: Props) => {
                 <div className="flex flex-col gap-[18px]">
                     <p className="flex justify-between"><span className="font-medium">Client:</span> <span>{clientName}</span></p>
                     <p className="flex justify-between"><span className="font-medium">Date Started:</span> <span>{
-                        new Date(project.startDate).toLocaleDateString("en-US", {
-                            day: "2-digit",
-                            month: "short",
-                            year: "numeric",
-
-                        })
+                        formatDate(project.startDate,{stringMonth:true})
                     }</span></p>
                     <p className="flex justify-between"><span className="font-medium">Due Date:</span> <span>{
-                        new Date(project.dueDate).toLocaleDateString("en-US", {
-                            day: "2-digit",
-                            month: "short",
-                            year: "numeric",
-
-                        })
+                        formatDate(project.dueDate,{stringMonth:true})
                     }</span></p>
                     <p className="flex justify-between"><span className="font-medium">Stage:</span> <span>{project.status}</span></p>
                     <p className="font-medium">Description</p>
