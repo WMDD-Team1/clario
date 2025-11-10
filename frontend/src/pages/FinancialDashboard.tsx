@@ -170,7 +170,6 @@ const FinancialDashboard: React.FC = () => {
       {/* === MOBILE VIEW === */}
       <div className="block sm:hidden px-4 pb-24">
         {/* Space for hidden header */}
-        <div className="h-10"></div>
 
         {/* Page Title */}
         <h2 className="text-xl font-semibold mb-4">Financial Dashboard</h2>

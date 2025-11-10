@@ -120,7 +120,6 @@ export const Dashboard = () => {
 
       {/* MOBILE VIEW */}
       <div className="block sm:hidden pb-10">
-        <div className="h-10"></div>
 
         <p className="text-xl font-semibold mt-4 mb-2">
           Hi {user?.name || 'User'}, Welcome Back
