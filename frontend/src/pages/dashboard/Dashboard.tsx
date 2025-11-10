@@ -31,6 +31,7 @@ export const Dashboard = () => {
     { id: 1, category: 'Rent', amount: 1200 },
     { id: 2, category: 'Groceries', amount: 300 },
   ];
+
   /** ---------------- MOBILE DASHBOARD ---------------- **/
   const renderDashboard = () => (
     <div className="flex flex-col w-full gap-4">
@@ -73,10 +74,11 @@ export const Dashboard = () => {
     <div className="flex flex-col gap-4 w-full max-w-md mx-auto px-0 md:px-4">
       <RemindersList />
     </div>
-  const renderInsights = () => 
-  <div className="flex flex-col gap-4 w-full max-w-md mx-auto px-4">
-    <Insight />
-  </div>
+  const renderInsights = () =>
+    <div className="flex flex-col gap-4 w-full max-w-md mx-auto px-0 md:px-4">
+      <Insight />
+    </div>
+
   /** ---------------- DESKTOP DASHBOARD ---------------- **/
   return (
     <>
@@ -87,7 +89,7 @@ export const Dashboard = () => {
 
           <div className="flex flex-col xl:flex-row gap-4 w-full items-start">
             {/* LEFT SECTION */}
-            <div className="flex flex-col flex-1 gap-4 xl:min-w-0 lg:min-w-[100%] sm:min-w-[100%]">
+            <div className={`flex flex-col flex-1 gap-4 xl:min-w-0 lg:min-w-[100%] sm:min-w-[100%]`}>
               <Overview />
 
               <div className="flex flex-col lg:flex-row gap-4 w-full items-stretch ">
@@ -110,7 +112,7 @@ export const Dashboard = () => {
             </div>
 
             {/* RIGHT SECTION */}
-            <div className="flex flex-col sm:min-w-[550px] md:min-w-[25%] xl:min-w-[25%] gap-4">
+            <div className="flex flex-col sm:min-w-[100%] md:min-w-[100%] xl:min-w-[25%] gap-4">
               <h3 className="font-semibold text-[24px] text-gray-700">Reminders</h3>
               <RemindersList />
             </div>
@@ -120,6 +122,7 @@ export const Dashboard = () => {
 
       {/* MOBILE VIEW */}
       <div className="block sm:hidden">
+        {/* <div className="h-10"></div> */}
 
         <p className="text-[28px] font-semibold font-merriweather mt-4 mb-2">
           Hi {user?.name || 'User'}, Welcome Back
@@ -132,7 +135,7 @@ export const Dashboard = () => {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab as any)}
-                className={`flex-1 py-2 rounded-xl text-[#02357C] text-sm font-medium transition-all ${activeTab === tab
+                className={`flex-1 py-2 rounded-xl text[#02357C] text-sm font-medium transition-all ${activeTab === tab
                     ? 'bg-[#0665EC] text-white shadow-md'
                     : 'text-[#02357C] hover:text-white'
                   }`}
