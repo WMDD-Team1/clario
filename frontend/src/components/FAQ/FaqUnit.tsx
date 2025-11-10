@@ -27,7 +27,7 @@ export const FaqUnit = ({ title, data }: FaqUnitFormat) => {
         {data.map((question, index) => (
           <div
             key={question.question}
-            className="relative overflow-hidden basis-[45%] cursor-pointer"
+            className="relative overflow-hidden md:basis-[45%] basis-[100%] cursor-pointer"
             onClick={() => toggleIndex(index)}
           >
             <p className="p-[1rem] text-[var(--tertiary-text)] rounded-2xl border-2 border-[var(--primitive-colors-brand-primary-75)] text-left">
@@ -39,7 +39,7 @@ export const FaqUnit = ({ title, data }: FaqUnitFormat) => {
             />
             <div
               className={`transition-all duration-500 ease-in-out overflow-hidden ${
-                openIndex.includes(index) ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
+                openIndex.includes(index) ? 'max-h-100 opacity-100' : 'max-h-0 opacity-0'
               }`}
             >
               <p className="p-[1rem] text-[var(--tertiary-text)] rounded-2xl border-2 border-[var(--primitive-colors-brand-primary-75)] text-left mt-[.5rem] bg-[var(--primitive-colors-brand-primary-75)]">

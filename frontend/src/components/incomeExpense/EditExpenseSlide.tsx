@@ -5,7 +5,12 @@ import TextArea from '@components/TextArea';
 import InfoRow from '@components/InfoRow';
 import Loader from '@components/Loader';
 import Success from '@components/Success';
-import { FileChange, Trash, TransactionUploadSuccess, ClientUpdateSuccess } from '@assets/icons/index';
+import {
+  FileChange,
+  Trash,
+  TransactionUploadSuccess,
+  ClientUpdateSuccess,
+} from '@assets/icons/index';
 import {
   TransactionFormat,
   TransactionCategory,
@@ -101,7 +106,7 @@ export const EditExpenseSlide = ({
             id="expenseDate"
             type="date"
             color="bg-white"
-            value={new Date(transaction.date).toLocaleDateString('en-CA')}
+            value={transaction.date}
             onChange={(e) => onTransactionChange({ ...transaction, date: e.target.value })}
           />
           <Select
@@ -195,7 +200,23 @@ export const EditExpenseSlide = ({
 
           {transaction.attachmentURL && (
             <div>
-              <InfoRow label="Attachment" value={transaction.attachmentURL} hideBorder={true} />
+              <InfoRow label="Attachment" hideBorder={true}>
+                <a
+                  href={transaction.attachmentURL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[var(--primitive-colors-brand-primary-500-base)] underline hover:opacity-80 transition"
+                >
+                  {transaction?.attachmentURL
+                    ? transaction.attachmentURL
+                        .split('/')
+                        .pop()
+                        ?.split('?')[0]
+                        .split('-')
+                        .slice(-2)
+                    : 'No attachment'}
+                </a>
+              </InfoRow>
               {/* <div className="flex gap-[.5rem] items-center justify-end mt-[.1rem] text-gray-400">
                 <FileChange className="cursor-pointer" onClick={handleBrowseClick} />
                 |
