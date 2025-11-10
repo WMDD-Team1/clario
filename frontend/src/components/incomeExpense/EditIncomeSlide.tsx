@@ -70,7 +70,7 @@ export const EditIncomeSlide = ({
           <ClientUpdateSuccess className="w-25 h-25" />
         </Success>
       ) : (
-        <form className="flex flex-col gap-4">
+        <form className="flex flex-col gap-[1.5rem]">
           <Input
             label="Income Title"
             id="incomeTitle"
@@ -83,7 +83,7 @@ export const EditIncomeSlide = ({
             id="incomeDate"
             type="date"
             color="bg-white"
-            value={transaction.date}
+            value={transaction.date.split('T')[0]}
             onChange={(e) => onTransactionChange({ ...transaction, date: e.target.value })}
           />
           <Select

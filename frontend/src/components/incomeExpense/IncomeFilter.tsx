@@ -65,8 +65,7 @@ export const IncomeFilterSlide = ({
         <div className="flex flex-col justify-between gap-[1.5rem] border-b-2 pb-[1rem] border-[var(--primitive-colors-gray-light-mode-200)]">
           <p className="text-[1.2rem]">Type of Income</p>
           <div className="flex flex-col gap-[1rem]">
-            {incomeTypes.map((type) => (
-              <>
+            {incomeTypes.map((type,index) => (
                 <label key={type} className="flex flex-row gap-[1rem]">
                   <input
                     type="checkbox"
@@ -80,7 +79,6 @@ export const IncomeFilterSlide = ({
                   ></input>
                   {type}
                 </label>
-              </>
             ))}
           </div>
         </div>
