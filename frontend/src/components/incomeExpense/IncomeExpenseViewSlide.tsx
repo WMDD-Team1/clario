@@ -108,7 +108,6 @@ export const IncomeExpenseViewSlide = ({
                       ?.split('?')[0]
                       .split('-')
                       .slice(-2)
-                      .join('-')
                   : 'No attachment'}
               </a>
               {/* <a href={oneTransaction.attachmentURL}>view file</a> */}

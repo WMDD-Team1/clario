@@ -214,7 +214,6 @@ export const EditExpenseSlide = ({
                         ?.split('?')[0]
                         .split('-')
                         .slice(-2)
-                        .join('-')
                     : 'No attachment'}
                 </a>
               </InfoRow>
