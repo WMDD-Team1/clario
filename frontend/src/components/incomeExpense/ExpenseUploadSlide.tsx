@@ -34,8 +34,8 @@ export const ExpenseUploadSlide = ({
     <Slide
       title="Add Expenses"
       slide={slide}
-      confirmText="Browse"
-      onConfirm={handleBrowseClick}
+      confirmText="Close"
+      onConfirm={onClose}
       extralText={file ? 'Next' : 'Skip'}
       onExtra={onNext}
       onClose={onClose}
@@ -58,6 +58,7 @@ export const ExpenseUploadSlide = ({
 
         <Input
           id="fileInput"
+          key={fileName}
           hidden={true}
           type="file"
           onChange={onFileChange}
@@ -67,8 +68,12 @@ export const ExpenseUploadSlide = ({
       </div>
       {file && (
         <div>
-          <InfoRow label="Attachment" value={fileName} />
-          <div className="flex gap-[.5rem] items-center justify-end mt-[.1rem]">
+          <InfoRow
+          label="Attachment"
+          value={fileName}
+          hideBorder={true}
+          />
+          <div className="flex gap-[.5rem] items-center justify-end mt-[.1rem] text-gray-400">
             <FileChange className="cursor-pointer" onClick={handleBrowseClick} />
             |
             <Trash className="cursor-pointer" onClick={onFileRemove} />
