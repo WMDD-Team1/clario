@@ -87,22 +87,32 @@ export const ExpenseFilterSlide = ({
               type="number"
               label="From"
               color="bg-white"
+              padding='pr-[3.5rem]'
               min={0}
               value={filterConditions.amountStart}
               onChange={(e) =>
                 setFilterConditions({ ...filterConditions, amountStart: Number(e.target.value) })
               }
-            />
+            >
+              <p className="absolute right-[1rem] top-4.5 text-[var(--primitive-colors-brand-primary-500-base)]">
+                CAD
+              </p>
+            </Input>
             <Input
               type="number"
               label="To"
               color="bg-white"
+              padding='pr-[3.5rem]'
               min={0}
               value={filterConditions.amountEnd}
               onChange={(e) =>
                 setFilterConditions({ ...filterConditions, amountEnd: Number(e.target.value) })
               }
-            />
+            >
+              <p className="absolute right-[1rem] top-4.5 text-[var(--primitive-colors-brand-primary-500-base)]">
+                CAD
+              </p>
+            </Input>
           </div>
         </div>
       </form>

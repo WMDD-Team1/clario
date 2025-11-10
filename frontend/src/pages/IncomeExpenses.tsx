@@ -298,7 +298,7 @@ export const IncomeExpenses = () => {
     origin: oneTransaction.origin,
     paymentMethod: 'Credit Card',
     notes: oneTransaction.notes,
-    // attachmentURL: 'https://',
+    attachmentURL: oneTransaction.attachmentURL,
   };
 
   const scanReceipt = async () => {
@@ -327,7 +327,18 @@ export const IncomeExpenses = () => {
           },
         );
 
-        console.log(scanResponse.data);
+        const scanInfo = scanResponse.data;
+
+        console.log(scanInfo);
+        setOneTransaction({
+          ...oneTransaction,
+          title: scanInfo.transaction.title,
+          date: scanInfo.transaction.date,
+          origin: scanInfo.transaction.origin,
+          baseAmount: Number(scanInfo.transaction.baseAmount),
+          notes: scanInfo.transaction.notes,
+          attachmentURL: scanInfo.fileUrl,
+        });
         setLoader(false);
         // setSuccess(true);
       } catch (error) {
@@ -546,161 +557,175 @@ export const IncomeExpenses = () => {
 
   //Add filter logic-------
 
- // ----------------------------
-// Applied Filter Conditions
-const [appliedIncomeFilter, setAppliedIncomeFilter] = useState<TransactionFilter>({
-  dateStart: '',
-  dateEnd: '',
-  type: [],
-  amountStart: 0,
-  amountEnd: 0,
-});
-const [appliedExpenseFilter, setAppliedExpenseFilter] = useState<TransactionFilter>({
-  dateStart: '',
-  dateEnd: '',
-  type: [],
-  amountStart: 0,
-  amountEnd: 0,
-});
-
-// ----------------------------
-// Types
-let incomeTypes: string[] = [];
-let expenseTypes: string[] = [];
-
-allTransactions?.data.forEach((transaction) => {
-  const category = transaction.category || 'Unknown';
-  if (transaction.type === 'income' && !transaction.isArchived && !incomeTypes.includes(category)) {
-    incomeTypes.push(category);
-  }
-  if (transaction.type === 'expense' && !transaction.isArchived && !expenseTypes.includes(category)) {
-    expenseTypes.push(category);
-  }
-});
-
-// ----------------------------
-// Filtered Income Data
-const getFilteredIncomeData = () => {
-  return allTransactions?.data
-    .filter((t) => t.type === 'income' && !t.isArchived)
-    .filter((t) => {
-      const date = new Date(t.date);
-      const startDate = appliedIncomeFilter.dateStart ? new Date(appliedIncomeFilter.dateStart) : null;
-      const endDate = appliedIncomeFilter.dateEnd ? new Date(appliedIncomeFilter.dateEnd) : null;
-      if (startDate && date < startDate) return false;
-      if (endDate && date > endDate) return false;
-      return true;
-    })
-    .filter((t) => {
-      if (!appliedIncomeFilter.type || appliedIncomeFilter.type.length === 0) return true;
-      return appliedIncomeFilter.type.includes(t.category);
-    })
-    .filter((t) => {
-      const amount = Number(t.baseAmount);
-      if (amount < appliedIncomeFilter.amountStart) return false;
-      if (appliedIncomeFilter.amountEnd && amount > appliedIncomeFilter.amountEnd) return false;
-      return true;
-    })
-    .map((t) => ({
-      id: t.id,
-      date: t.date,
-      amount: Number(t.baseAmount),
-      category: t.category || 'Unknown',
-      details: 'View',
-    }));
-};
-
-const incomeFilteredData = getFilteredIncomeData().slice(
-  (incomePage - 1) * 10,
-  (incomePage - 1) * 10 + 10
-);
-
-// ----------------------------
-// Filtered Expense Data
-const getFilteredExpenseData = () => {
-  return allTransactions?.data
-    .filter((t) => t.type === 'expense' && !t.isArchived)
-    .filter((t) => {
-      const date = new Date(t.date);
-      const startDate = appliedExpenseFilter.dateStart ? new Date(appliedExpenseFilter.dateStart) : null;
-      const endDate = appliedExpenseFilter.dateEnd ? new Date(appliedExpenseFilter.dateEnd) : null;
-      if (startDate && date < startDate) return false;
-      if (endDate && date > endDate) return false;
-      return true;
-    })
-    .filter((t) => {
-      if (!appliedExpenseFilter.type || appliedExpenseFilter.type.length === 0) return true;
-      return appliedExpenseFilter.type.includes(t.category);
-    })
-    .filter((t) => {
-      const amount = Number(t.baseAmount);
-      if (amount < appliedExpenseFilter.amountStart) return false;
-      if (appliedExpenseFilter.amountEnd && amount > appliedExpenseFilter.amountEnd) return false;
-      return true;
-    })
-    .map((t) => ({
-      id: t.id,
-      date: t.date,
-      amount: Number(t.baseAmount),
-      category: t.category || 'Unknown',
-      details: 'View',
-    }));
-};
-
-const expenseFilteredData = getFilteredExpenseData().slice(
-  (expensePage - 1) * 10,
-  (expensePage - 1) * 10 + 10
-);
-
-// ----------------------------
-// Apply & Reset Filters
-const applyIncomeFilter = () => {
-  setAppliedIncomeFilter({ ...incomeFilterConditions });
-  setIncomePage(1);
-  setIncomeFilterSlide('110%');
-};
-const resetIncomeFilter = () => {
-  setIncomeFilterConditions({
+  // ----------------------------
+  // Applied Filter Conditions
+  const [appliedIncomeFilter, setAppliedIncomeFilter] = useState<TransactionFilter>({
     dateStart: '',
     dateEnd: '',
     type: [],
     amountStart: 0,
     amountEnd: 0,
   });
-  setAppliedIncomeFilter({
+  const [appliedExpenseFilter, setAppliedExpenseFilter] = useState<TransactionFilter>({
     dateStart: '',
     dateEnd: '',
     type: [],
     amountStart: 0,
     amountEnd: 0,
   });
-  setIncomePage(1);
-  setIncomeFilterSlide('110%');
-};
 
-const applyExpenseFilter = () => {
-  setAppliedExpenseFilter({ ...expenseFilterConditions });
-  setExpensePage(1);
-  setExpenseFilterSlide('110%');
-};
-const resetExpenseFilter = () => {
-  setExpenseFilterConditions({
-    dateStart: '',
-    dateEnd: '',
-    type: [],
-    amountStart: 0,
-    amountEnd: 0,
+  // ----------------------------
+  // Types
+  let incomeTypes: string[] = [];
+  let expenseTypes: string[] = [];
+
+  allTransactions?.data.forEach((transaction) => {
+    const category = transaction.category || 'Unknown';
+    if (
+      transaction.type === 'income' &&
+      !transaction.isArchived &&
+      !incomeTypes.includes(category)
+    ) {
+      incomeTypes.push(category);
+    }
+    if (
+      transaction.type === 'expense' &&
+      !transaction.isArchived &&
+      !expenseTypes.includes(category)
+    ) {
+      expenseTypes.push(category);
+    }
   });
-  setAppliedExpenseFilter({
-    dateStart: '',
-    dateEnd: '',
-    type: [],
-    amountStart: 0,
-    amountEnd: 0,
-  });
-  setExpensePage(1);
-  setExpenseFilterSlide('110%');
-};
+
+  // ----------------------------
+  // Filtered Income Data
+  const getFilteredIncomeData = () => {
+    return allTransactions?.data
+      .filter((t) => t.type === 'income' && !t.isArchived)
+      .filter((t) => {
+        const date = new Date(t.date);
+        const startDate = appliedIncomeFilter.dateStart
+          ? new Date(appliedIncomeFilter.dateStart)
+          : null;
+        const endDate = appliedIncomeFilter.dateEnd ? new Date(appliedIncomeFilter.dateEnd) : null;
+        if (startDate && date < startDate) return false;
+        if (endDate && date > endDate) return false;
+        return true;
+      })
+      .filter((t) => {
+        if (!appliedIncomeFilter.type || appliedIncomeFilter.type.length === 0) return true;
+        return appliedIncomeFilter.type.includes(t.category);
+      })
+      .filter((t) => {
+        const amount = Number(t.baseAmount);
+        if (amount < appliedIncomeFilter.amountStart) return false;
+        if (appliedIncomeFilter.amountEnd && amount > appliedIncomeFilter.amountEnd) return false;
+        return true;
+      })
+      .map((t) => ({
+        id: t.id,
+        date: t.date,
+        amount: Number(t.baseAmount),
+        category: t.category || 'Unknown',
+        details: 'View',
+      }));
+  };
+
+  const incomeFilteredData = getFilteredIncomeData().slice(
+    (incomePage - 1) * 10,
+    (incomePage - 1) * 10 + 10,
+  );
+
+  // ----------------------------
+  // Filtered Expense Data
+  const getFilteredExpenseData = () => {
+    return allTransactions?.data
+      .filter((t) => t.type === 'expense' && !t.isArchived)
+      .filter((t) => {
+        const date = new Date(t.date);
+        const startDate = appliedExpenseFilter.dateStart
+          ? new Date(appliedExpenseFilter.dateStart)
+          : null;
+        const endDate = appliedExpenseFilter.dateEnd
+          ? new Date(appliedExpenseFilter.dateEnd)
+          : null;
+        if (startDate && date < startDate) return false;
+        if (endDate && date > endDate) return false;
+        return true;
+      })
+      .filter((t) => {
+        if (!appliedExpenseFilter.type || appliedExpenseFilter.type.length === 0) return true;
+        return appliedExpenseFilter.type.includes(t.category);
+      })
+      .filter((t) => {
+        const amount = Number(t.baseAmount);
+        if (amount < appliedExpenseFilter.amountStart) return false;
+        if (appliedExpenseFilter.amountEnd && amount > appliedExpenseFilter.amountEnd) return false;
+        return true;
+      })
+      .map((t) => ({
+        id: t.id,
+        date: t.date,
+        amount: Number(t.baseAmount),
+        category: t.category || 'Unknown',
+        details: 'View',
+      }));
+  };
+
+  const expenseFilteredData = getFilteredExpenseData().slice(
+    (expensePage - 1) * 10,
+    (expensePage - 1) * 10 + 10,
+  );
+
+  // ----------------------------
+  // Apply & Reset Filters
+  const applyIncomeFilter = () => {
+    setAppliedIncomeFilter({ ...incomeFilterConditions });
+    setIncomePage(1);
+    setIncomeFilterSlide('110%');
+  };
+  const resetIncomeFilter = () => {
+    setIncomeFilterConditions({
+      dateStart: '',
+      dateEnd: '',
+      type: [],
+      amountStart: 0,
+      amountEnd: 0,
+    });
+    setAppliedIncomeFilter({
+      dateStart: '',
+      dateEnd: '',
+      type: [],
+      amountStart: 0,
+      amountEnd: 0,
+    });
+    setIncomePage(1);
+    setIncomeFilterSlide('110%');
+  };
+
+  const applyExpenseFilter = () => {
+    setAppliedExpenseFilter({ ...expenseFilterConditions });
+    setExpensePage(1);
+    setExpenseFilterSlide('110%');
+  };
+  const resetExpenseFilter = () => {
+    setExpenseFilterConditions({
+      dateStart: '',
+      dateEnd: '',
+      type: [],
+      amountStart: 0,
+      amountEnd: 0,
+    });
+    setAppliedExpenseFilter({
+      dateStart: '',
+      dateEnd: '',
+      type: [],
+      amountStart: 0,
+      amountEnd: 0,
+    });
+    setExpensePage(1);
+    setExpenseFilterSlide('110%');
+  };
 
   const options = [
     { key: 'income', label: 'Income' },
@@ -780,10 +805,10 @@ const resetExpenseFilter = () => {
               <h3 className="text-2xl">Incomes</h3>
               <div className="md:flex hidden flex-row flex-nowrap justify-end items-center gap-[1rem]">
                 <div
-                className="p-[1rem] bg-[var(--background)] rounded-[1rem] flex flex-row justify-between items-center gap-[3rem] cursor-pointer"
-                onClick={() => setIncomeFilterSlide('0px')}
+                  className="p-[1rem] bg-[var(--background)] rounded-[1rem] flex flex-row justify-between items-center gap-[3rem] cursor-pointer"
+                  onClick={() => setIncomeFilterSlide('0px')}
                 >
-                  <MenuScale/>
+                  <MenuScale />
                   <p>Filter</p>
                 </div>
 
@@ -800,8 +825,8 @@ const resetExpenseFilter = () => {
               </div>
               <div className="md:hidden flex flex-row flex-nowrap justify-between items-center gap-[2rem]">
                 <MenuScale
-                className="h-7 w-7 cursor-pointer"
-                onClick={() => setIncomeFilterSlide('0px')}
+                  className="h-7 w-7 cursor-pointer"
+                  onClick={() => setIncomeFilterSlide('0px')}
                 />
                 <p
                   className="p-[.7rem] bg-[var(--primitive-colors-brand-primary-95)] rounded-[1rem] flex flex-row justify-between items-center gap-[1rem] text-[var(--primitive-colors-brand-primary-925)]"
@@ -850,10 +875,10 @@ const resetExpenseFilter = () => {
 
               <div className="md:flex hidden flex-row flex-nowrap justify-end items-center gap-[1rem]">
                 <div
-                className="p-[1rem] bg-[var(--background)] rounded-[1rem] flex flex-row justify-between items-center gap-[3rem] cursor-pointer"
-                onClick={() => setExpenseFilterSlide('0px')}
+                  className="p-[1rem] bg-[var(--background)] rounded-[1rem] flex flex-row justify-between items-center gap-[3rem] cursor-pointer"
+                  onClick={() => setExpenseFilterSlide('0px')}
                 >
-                  <MenuScale/>
+                  <MenuScale />
                   <p>Filter</p>
                 </div>
 
@@ -871,8 +896,8 @@ const resetExpenseFilter = () => {
 
               <div className="md:hidden flex flex-row flex-nowrap justify-between items-center gap-[2rem]">
                 <MenuScale
-                className="h-7 w-7 cursor-pointer"
-                onClick={() => setExpenseFilterSlide('0px')}
+                  className="h-7 w-7 cursor-pointer"
+                  onClick={() => setExpenseFilterSlide('0px')}
                 />
                 <p
                   className="p-[.7rem] bg-[var(--primitive-colors-brand-primary-95)] rounded-[1rem] flex flex-row justify-between items-center gap-[1rem] text-[var(--primitive-colors-brand-primary-925)]"
@@ -921,8 +946,8 @@ const resetExpenseFilter = () => {
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onNext={async () => {
-          await scanReceipt();
           setIndetailSlide('0px');
+          await scanReceipt();
         }}
         onClose={cancelOperation}
         onFileRemove={() => {
@@ -952,6 +977,8 @@ const resetExpenseFilter = () => {
         onView={() => setTransactionDetail('0px')}
         onClose={cancelOperation}
         onFileRemove={() => {
+          const { attachmentURL, ...rest } = oneTransaction;
+          setOneTransaction(rest);
           setFile(null);
           setFileName('');
         }}
@@ -965,7 +992,10 @@ const resetExpenseFilter = () => {
         onFileChange={handleFileChange}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
-        onNext={() => setExdetailSlide('0px')}
+        onNext={async () => {
+          setExdetailSlide('0px');
+          await scanReceipt();
+        }}
         onClose={cancelOperation}
         onFileRemove={() => {
           setFile(null);
@@ -1000,6 +1030,8 @@ const resetExpenseFilter = () => {
         onView={() => setTransactionDetail('0px')}
         onClose={cancelOperation}
         onFileRemove={() => {
+          const { attachmentURL, ...rest } = oneTransaction;
+          setOneTransaction(rest);
           setFile(null);
           setFileName('');
         }}
@@ -1123,7 +1155,6 @@ const resetExpenseFilter = () => {
         setFilterConditions={setExpenseFilterConditions}
         expenseTypes={expenseTypes}
       />
-
     </div>
   );
 };
