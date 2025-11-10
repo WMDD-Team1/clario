@@ -84,10 +84,14 @@ const UserSchema = new mongoose.Schema(
 			enum: ["Freelancer", "Contractor", "Developer", "Designer", "Consultant", "Other"],
 			default: null,
 		},
-		defaultFeeType: { type: String, enum: ["Fixed price", "Milestone based", "Hourly", "Retainer"], default: null },
+		defaultFeeType: {
+			type: String,
+			enum: ["Fixed Price", "Milestone Based", "Hourly", "Retainer"],
+			default: null,
+		},
 		goal: {
 			type: String,
-			enum: [" Keep finances stable", "Grow my business", "Save time", "Stay tax-ready"],
+			enum: ["Keep finances stable", "Grow my business", "Save time", "Stay tax-ready"],
 			default: null,
 		},
 		onBoardingCompletedAt: {
