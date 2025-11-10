@@ -23,6 +23,7 @@ import { MenuScale, Plus } from '@assets/icons';
 import { EditExpenseSlide } from '@components/incomeExpense/EditExpenseSlide';
 import { IncomeFilterSlide } from '@components/incomeExpense/IncomeFilter';
 import { ExpenseFilterSlide } from '@components/incomeExpense/ExpenseFilter';
+import { formatDate } from '@utils/formatDate';
 
 export const IncomeExpenses = () => {
   const [incomeSlide, setIncomeSlide] = useState('110%');
@@ -298,7 +299,7 @@ export const IncomeExpenses = () => {
     origin: oneTransaction.origin,
     paymentMethod: 'Credit Card',
     notes: oneTransaction.notes,
-    attachmentURL: oneTransaction.attachmentURL,
+    ...(oneTransaction.attachmentURL && { attachmentURL: oneTransaction.attachmentURL }),
   };
 
   const scanReceipt = async () => {
@@ -445,6 +446,7 @@ export const IncomeExpenses = () => {
         const payload = {
           // templateTransactionId: oneTransaction.id,
           frequency: recurrence.frequency,
+          ...(!repeat && { isArchived: false }),
           //--------confirm if endate is needed?------
           // endDate: '2025-10-05',
         };
@@ -467,27 +469,29 @@ export const IncomeExpenses = () => {
           console.error('Error saving recurrence:', error);
         }
       } else {
-        const payload = {
-          templateTransactionId: oneTransaction.id,
-          frequency: recurrence.frequency,
-          //--------confirm if endate is needed?------
-          endDate: '2025-10-05',
-        };
+        if (repeat) {
+          const payload = {
+            templateTransactionId: oneTransaction.id,
+            frequency: recurrence.frequency,
+            //--------confirm if endate is needed?------
+            endDate: '2025-10-05',
+          };
 
-        console.log(payload);
-        try {
-          const recurrenceResponse = await axios.post(
-            `${import.meta.env.VITE_API_BASE_URL}/recurrences`,
-            payload,
-            {
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
+          console.log(payload);
+          try {
+            const recurrenceResponse = await axios.post(
+              `${import.meta.env.VITE_API_BASE_URL}/recurrences`,
+              payload,
+              {
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${token}`,
+                },
               },
-            },
-          );
-        } catch (error) {
-          console.error('Error saving recurrence:', error);
+            );
+          } catch (error) {
+            console.error('Error saving recurrence:', error);
+          }
         }
       }
 
@@ -546,9 +550,10 @@ export const IncomeExpenses = () => {
   };
 
   const headers = [
+    { key: 'title', value: 'Title' },
+    { key: 'category', value: 'Category' },
     { key: 'date', value: 'Date' },
     { key: 'amount', value: 'Amount (CAD)' },
-    { key: 'category', value: 'Category' },
     { key: 'details', value: 'Details' },
   ];
 
@@ -624,6 +629,7 @@ export const IncomeExpenses = () => {
       })
       .map((t) => ({
         id: t.id,
+        title: t.title,
         date: t.date,
         amount: Number(t.baseAmount),
         category: t.category || 'Unknown',
@@ -631,9 +637,13 @@ export const IncomeExpenses = () => {
       }));
   };
 
-  const incomeFilteredData = getFilteredIncomeData().slice(
-    (incomePage - 1) * 10,
-    (incomePage - 1) * 10 + 10,
+  const filteredIncomeData = getFilteredIncomeData();
+
+  const PAGE_SIZE = 10;
+
+  const incomeFilteredData = filteredIncomeData.slice(
+    (incomePage - 1) * PAGE_SIZE,
+    incomePage * PAGE_SIZE,
   );
 
   // ----------------------------
@@ -665,6 +675,7 @@ export const IncomeExpenses = () => {
       })
       .map((t) => ({
         id: t.id,
+        title: t.title,
         date: t.date,
         amount: Number(t.baseAmount),
         category: t.category || 'Unknown',
@@ -672,9 +683,12 @@ export const IncomeExpenses = () => {
       }));
   };
 
-  const expenseFilteredData = getFilteredExpenseData().slice(
-    (expensePage - 1) * 10,
-    (expensePage - 1) * 10 + 10,
+ const filteredExpenseData = getFilteredExpenseData();
+
+
+  const expenseFilteredData = filteredExpenseData.slice(
+    (incomePage - 1) * PAGE_SIZE,
+    incomePage * PAGE_SIZE,
   );
 
   // ----------------------------
@@ -855,7 +869,7 @@ export const IncomeExpenses = () => {
                 onClickChildren={handleTransactionDetail}
                 headers={headers}
                 data={incomeFilteredData}
-                total={incomeFilteredData.length}
+                total={filteredIncomeData.length}
                 page={incomePage}
                 pageSize={10}
                 onPageChange={handleIncomePageChange}
@@ -926,7 +940,7 @@ export const IncomeExpenses = () => {
                 onClickChildren={handleTransactionDetail}
                 headers={headers}
                 data={expenseFilteredData}
-                total={expenseFilteredData.length}
+                total={filteredExpenseData.length}
                 page={expensePage}
                 pageSize={10}
                 onPageChange={handleExpensePageChange}
@@ -1046,7 +1060,7 @@ export const IncomeExpenses = () => {
           setTransactionDetail('110%');
         }}
         editExpense={() => {
-          if (activeRepeatableTransaction) {
+          if (activeRepeatableTransaction?.isArchived) {
             const formattedFrequency =
               activeRepeatableTransaction.frequency.charAt(0).toUpperCase() +
               activeRepeatableTransaction.frequency.slice(1).toLowerCase();

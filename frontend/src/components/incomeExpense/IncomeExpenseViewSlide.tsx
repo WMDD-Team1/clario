@@ -5,6 +5,7 @@ import { TransactionFormat, RecurrenceFormat } from '@api/types/transaction';
 import Loader from '@components/Loader';
 import Success from '@components/Success';
 import { DeleteTransactionSuccess } from '@assets/icons';
+import { formatDate } from '@utils/formatDate';
 
 interface IncomeExpenseViewSlideProps {
   oneTransaction: TransactionFormat;
@@ -53,19 +54,15 @@ export const IncomeExpenseViewSlide = ({
           <InfoRow label="Title" value={oneTransaction.title} />
           <InfoRow
             label="Date"
-            value={new Date(oneTransaction.date).toLocaleDateString('en-CA', {
-              year: 'numeric',
-              month: 'short',
-              day: '2-digit',
-            })}
+            value={formatDate(oneTransaction.date,{stringMonth:true})}
           />
           <InfoRow
             label={`Type of ${oneTransaction.type == 'income' ? 'Income' : 'Expense'}`}
             value={oneTransaction.category || 'Unknown'}
           />
           <InfoRow label="Invoice #" value={oneTransaction.origin} />
-          {activeRepeatableTransaction && (
-            <InfoRow label="Repeat" value={activeRepeatableTransaction.frequency} />
+          {activeRepeatableTransaction?.isArchived && (
+            <InfoRow label="Repeat" value={activeRepeatableTransaction?.frequency} />
           )}
 
           <div className="flex flex-col p-[1rem] border-gray-200 bg-[var(--background-alternate)] rounded-[1rem] my-[1rem]">

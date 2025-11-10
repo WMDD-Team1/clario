@@ -93,7 +93,7 @@ export const EditExpenseSlide = ({
           <ClientUpdateSuccess className="w-25 h-25" />
         </Success>
       ) : (
-        <form className="flex flex-col gap-4">
+        <form className="flex flex-col gap-[1.5rem]">
           <Input
             label="Expense Title"
             id="expenseTitle"
@@ -106,14 +106,14 @@ export const EditExpenseSlide = ({
             id="expenseDate"
             type="date"
             color="bg-white"
-            value={transaction.date}
+            value={transaction.date.split('T')[0]}
             onChange={(e) => onTransactionChange({ ...transaction, date: e.target.value })}
           />
           <Select
             label="Type of Expense"
             id="expenseType"
             options={expenseCategories.categories}
-            value={transaction.type}
+            value={transaction.category}
             onChange={(value) => {
               onExpenseTypeChange(value);
               onTransactionChange({ ...transaction, category: value });
