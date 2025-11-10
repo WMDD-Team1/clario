@@ -32,7 +32,7 @@ const DUMMY_DATA: ChartItem[] = [
   { name: 'Expense', value: 8000, color: COLORS[1] },
 ];
 
-// UPDATED FUNCTION BELOW
+
 const renderActiveShape = ({
   cx,
   cy,
@@ -45,7 +45,6 @@ const renderActiveShape = ({
   percent,
   value,
 }: PieSectorData) => {
-  // Use the chart item color for all texts
   const itemColor = payload?.color || fill || '#888';
 
   return (
@@ -89,7 +88,7 @@ const renderActiveShape = ({
     </g>
   );
 };
-// END UPDATED FUNCTION
+
 
 const BalanceChart: React.FC = () => {
   const [data, setData] = useState<ChartItem[]>([]);
@@ -128,7 +127,7 @@ const BalanceChart: React.FC = () => {
   if (loading) return <p>Loading balance...</p>;
 
   return (
-    <div className="flex flex-col justify-center items-center w-full max-w-[310px] h-auto aspect-square sm:h-[313px] p-5 hover:shadow-md rounded-2xl bg-white shadow-sm relative">
+    <div className="flex flex-col justify-center items-center w-full max-w-full sm:max-w-[100%] h-auto sm:h-[313px] p-5 hover:shadow-md rounded-2xl bg-white shadow-sm relative">
       <h3 className="font-semibold self-start text-[18px]">This Month Balance</h3>
       <div className="w-full h-[250px] flex justify-center items-center relative z-[60]">
         <ResponsiveContainer width="100%" height={250}>
