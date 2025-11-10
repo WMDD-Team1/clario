@@ -51,7 +51,7 @@ export const EditIncomeSlide = ({
     <Slide
       title="Edit Income"
       slide={slide}
-      confirmText={updateSuccess?"Close":"Cancel"}
+      confirmText={updateSuccess ? 'Close' : 'Cancel'}
       onConfirm={onCancel}
       extralText={updateSuccess ? 'view' : 'Save'}
       onExtra={updateSuccess ? onView : onAdd}
@@ -83,7 +83,7 @@ export const EditIncomeSlide = ({
             id="incomeDate"
             type="date"
             color="bg-white"
-            value={new Date(transaction.date).toLocaleDateString('en-CA')}
+            value={transaction.date}
             onChange={(e) => onTransactionChange({ ...transaction, date: e.target.value })}
           />
           <Select
@@ -93,7 +93,7 @@ export const EditIncomeSlide = ({
             value={transaction.category}
             onChange={(value) => {
               onIncomeTypeChange(value);
-              onTransactionChange({ ...transaction, category:value });
+              onTransactionChange({ ...transaction, category: value });
             }}
             color="bg-white"
             width="100%"
@@ -109,7 +109,7 @@ export const EditIncomeSlide = ({
             label="Amount"
             id="incomeAmount"
             type="number"
-            padding='pr-[3.5rem]'
+            padding="pr-[3.5rem]"
             // min={0}
             color="bg-white"
             value={transaction.baseAmount}
@@ -136,11 +136,23 @@ export const EditIncomeSlide = ({
 
           {transaction.attachmentURL && (
             <div>
-              <InfoRow
-              label="Attachment"
-              value={transaction.attachmentURL}
-              hideBorder={true}
-              />
+              <InfoRow label="Attachment" hideBorder={true}>
+                <a
+                  href={transaction.attachmentURL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[var(--primitive-colors-brand-primary-500-base)] underline hover:opacity-80 transition"
+                >
+                  {transaction?.attachmentURL
+                    ? transaction.attachmentURL
+                        .split('/')
+                        .pop()
+                        ?.split('?')[0]
+                        .split('-')
+                        .slice(-2)
+                    : 'No attachment'}
+                </a>
+              </InfoRow>
               {/* <div className="flex gap-[.5rem] items-center justify-end mt-[.1rem] text-gray-400">
                 <FileChange className="cursor-pointer" onClick={handleBrowseClick} />
                 |

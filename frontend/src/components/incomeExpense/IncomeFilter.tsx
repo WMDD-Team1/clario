@@ -98,7 +98,7 @@ export const IncomeFilterSlide = ({
               onChange={(e) =>
                 setFilterConditions({ ...filterConditions, amountStart: Number(e.target.value)})
               }>
-                <p className="absolute right-[1rem] top-4.5 text-blue-500">CAD</p>
+                <p className="absolute right-[1rem] top-4.5 text-[var(--primitive-colors-brand-primary-500-base)]">CAD</p>
             </Input>
             <Input
               type="number"
@@ -110,7 +110,7 @@ export const IncomeFilterSlide = ({
               onChange={(e) =>
                 setFilterConditions({ ...filterConditions, amountEnd: Number(e.target.value)})
               }>
-                <p className="absolute right-[1rem] top-4.5 text-blue-500">CAD</p>
+                <p className="absolute right-[1rem] top-4.5 text-[var(--primitive-colors-brand-primary-500-base)]">CAD</p>
             </Input>
           </div>
         </div>

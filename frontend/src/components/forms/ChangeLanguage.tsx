@@ -76,7 +76,7 @@ const ChangeLanguage: React.FC<Props> = ({ onClose }) => {
             <option value="french">French</option>
           </select>
         </div>
-      </div>
+      
 
       <div className="flex justify-between gap-2 absolute bottom-0 right-0 left-0 p-[30px] bg-[var(--primitive-colors-brand-primary-75)] rounded-bl-[50px]">
         <Button
