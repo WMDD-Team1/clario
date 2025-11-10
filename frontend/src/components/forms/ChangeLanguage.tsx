@@ -76,28 +76,28 @@ const ChangeLanguage: React.FC<Props> = ({ onClose }) => {
             <option value="french">French</option>
           </select>
         </div>
-      
 
-      <div className="flex justify-between gap-2 absolute bottom-0 right-0 left-0 p-[30px] bg-[var(--primitive-colors-brand-primary-75)] rounded-bl-[50px]">
-        <Button
-          onClick={onClose}
-          className="py-4 mr-2"
-          buttonColor="white"
-          textColor="black"
-          width="48%"
-        >
-          Cancel
-        </Button>
-        <Button
-          onClick={handleSave}
-          disabled={loading}
-          className="py-4 ml-2"
-          buttonColor="regularButton"
-          textColor="white"
-          width="48%"
-        >
-          {loading ? 'Saving...' : 'Save'}
-        </Button>
+        <div className="flex justify-between gap-2 absolute bottom-0 right-0 left-0 p-[30px] bg-[var(--primitive-colors-brand-primary-75)] rounded-bl-[50px]">
+          <Button
+            onClick={onClose}
+            className="py-4 mr-2"
+            buttonColor="white"
+            textColor="black"
+            width="48%"
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleSave}
+            disabled={loading}
+            className="py-4 ml-2"
+            buttonColor="regularButton"
+            textColor="white"
+            width="48%"
+          >
+            {loading ? 'Saving...' : 'Save'}
+          </Button>
+        </div>
       </div>
     </form>
   );
