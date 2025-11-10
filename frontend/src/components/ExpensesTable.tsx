@@ -35,7 +35,7 @@ export const ExpensesTable: React.FC = () => {
     <div
       className="
         flex flex-col justify-start items-start 
-        w-full max-w-[310px] h-auto aspect-square sm:h-[313px] shrink-0 
+        w-full max-w-full sm:max-w-[310px] h-auto sm:h-[313px] shrink-0 
         rounded-[20px] bg-white shadow-sm hover:shadow-md p-4
       "
     >

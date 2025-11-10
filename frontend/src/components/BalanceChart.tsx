@@ -75,7 +75,7 @@ const renderActiveShape = ({
         className="text-xs"
         fill={itemColor}
       >
-        {`CAD ${formatCurrency(value ?? 0, 0)}`}
+        {CAD ${formatCurrency(value ?? 0, 0)}}
       </text>
       <text
         x={cx}
@@ -84,7 +84,7 @@ const renderActiveShape = ({
         className="text-xs"
         fill={itemColor}
       >
-        {`(${((percent ?? 0) * 100).toFixed(1)}%)`}
+        {(${((percent ?? 0) * 100).toFixed(1)}%)}
       </text>
     </g>
   );
@@ -128,7 +128,8 @@ const BalanceChart: React.FC = () => {
   if (loading) return <p>Loading balance...</p>;
 
   return (
-    <div className="flex flex-col justify-center items-center w-full max-w-[310px] h-auto aspect-square sm:h-[313px] p-5 hover:shadow-md rounded-2xl bg-white shadow-sm relative">
+    <div className="flex flex-col justify-center items-center w-full max-w-full sm:max-w-[310px] h-auto sm:h-[313px] p-5 hover:shadow-md rounded-2xl bg-white shadow-sm relative">
+  {/* <div className="flex flex-col justify-center items-center w-full max-w-full sm:w-[313px] md:w-[400px] max-h-313px sm:h-[313px] p-5 hover:shadow-md rounded-2xl bg-white shadow-sm relative"> */}
       <h3 className="font-semibold self-start text-[18px]">This Month Balance</h3>
       <div className="w-full h-[250px] flex justify-center items-center relative z-[60]">
         <ResponsiveContainer width="100%" height={250}>
@@ -143,7 +144,7 @@ const BalanceChart: React.FC = () => {
               onMouseEnter={onPieEnter}
             >
               {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.color || '#4B5563'} />
+                <Cell key={cell-${index}} fill={entry.color || '#4B5563'} />
               ))}
             </Pie>
           </PieChart>
