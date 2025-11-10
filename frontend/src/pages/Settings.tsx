@@ -193,7 +193,7 @@ const Settings: React.FC = () => {
           </div>
 
           {/* Password */}
-          <div className="flex flex-col gap-2 py-4 ">
+          <div className="flex flex-col gap-2 py-4 border-b">
             <div className="flex justify-between items-center md:hidden">
               <span className="text-sm text-gray-600 font-semibold">Password</span>
               <Button
@@ -267,7 +267,7 @@ const Settings: React.FC = () => {
           </div>
 
           {/* Mode */}
-          <div className="flex flex-col gap-2 py-4 ">
+          <div className="flex flex-col gap-2 py-4 border-b">
             <div className="flex justify-between items-center md:hidden">
               <span className="text-sm text-gray-600 font-semibold">Mode</span>
               <Button
@@ -352,7 +352,7 @@ const Settings: React.FC = () => {
 
           {/* Desktop layout */}
           <div className="hidden md:flex items-center gap-4 pb-4 border-b border-gray-200">
-            <h3 className="font-semibold text-gray-900 text-base flex-[0_0_200px]">
+            <h3 className=" text-gray-900 text-base flex-[0_0_200px]">
               Expense Categories
             </h3>
             <div
@@ -429,7 +429,7 @@ const Settings: React.FC = () => {
 
           {/* Desktop layout */}
           <div className="hidden md:flex items-center gap-4 pb-4 border-b border-gray-200">
-            <h3 className="font-semibold text-gray-900 text-base flex-[0_0_200px]">
+            <h3 className=" text-gray-900 text-base flex-[0_0_200px]">
               Income Categories
             </h3>
             <div
@@ -489,7 +489,7 @@ const Settings: React.FC = () => {
 
           {/* Desktop layout */}
           <div className="hidden md:flex items-center gap-4 pb-4 border-b border-gray-200">
-            <h3 className="font-semibold text-gray-900 text-base flex-[0_0_200px]">Tax Regime</h3>
+            <h3 className="text-gray-900 text-base flex-[0_0_200px]">Tax Regime</h3>
             <p className="flex-1 px-3 py-2 text-gray-600 text-sm">{finance.taxRegime}</p>
             <Button
               className="bg-blue-600 text-white rounded-xl px-5 py-1 flex-shrink-0"
@@ -510,7 +510,7 @@ const Settings: React.FC = () => {
         {/* ===== Export Data ===== */}
         <section className="rounded-xl border border-gray-200 p-4 md:p-0 md:shadow-none md:border-none border-b border-gray-200">
           <div className="flex justify-between items-center">
-            <h3 className="font-semibold text-gray-900 text-base">Export Data</h3>
+            <h3 className=" text-gray-900 text-base">Export Data</h3>
             <Button
               className="bg-blue-600 text-white rounded-xl px-5 py-1"
               buttonColor="regularButton"
