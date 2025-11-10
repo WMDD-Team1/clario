@@ -32,7 +32,7 @@ const DUMMY_DATA: ChartItem[] = [
   { name: 'Expense', value: 8000, color: COLORS[1] },
 ];
 
-// ✅ FIXED FUNCTION
+
 const renderActiveShape = ({
   cx,
   cy,
@@ -88,7 +88,7 @@ const renderActiveShape = ({
     </g>
   );
 };
-// ✅ END FIXED FUNCTION
+
 
 const BalanceChart: React.FC = () => {
   const [data, setData] = useState<ChartItem[]>([]);
