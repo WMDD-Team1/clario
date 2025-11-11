@@ -62,7 +62,7 @@ export const IncomeExpenseViewSlide = ({
           />
           <InfoRow label="Invoice #" value={oneTransaction.origin} />
           {!activeRepeatableTransaction?.isArchived && (
-            <InfoRow label="Repeat" value={activeRepeatableTransaction?.frequency} />
+            <InfoRow label="Repeat" value={activeRepeatableTransaction?.frequency || 'None'} />
           )}
 
           <div className="flex flex-col p-[1rem] border-gray-200 bg-[var(--background-alternate)] rounded-[1rem] my-[1rem]">
