@@ -31,6 +31,7 @@ export const Dashboard = () => {
     { id: 1, category: 'Rent', amount: 1200 },
     { id: 2, category: 'Groceries', amount: 300 },
   ];
+
   /** ---------------- MOBILE DASHBOARD ---------------- **/
   const renderDashboard = () => (
     <div className="flex flex-col w-full gap-4">
@@ -42,10 +43,11 @@ export const Dashboard = () => {
           { label: 'Completed', value: '10' },
           { label: 'Active Projects', value: '5' },
           { label: 'Clients', value: '30' },
-        ].map((stat, index) => (
+        ].map((stat, index, arr) => (
           <div
             key={index}
-            className="flex flex-col justify-center items-center py-3 bg-white backdrop-blur-sm rounded-2xl hover:shadow-lg border border-gray-100"
+            className={`flex flex-col justify-center items-center py-3 bg-white backdrop-blur-sm rounded-2xl hover:shadow-lg border border-gray-100 
+        ${index === arr.length - 1 ? 'col-span-2 sm:col-span-1' : ''}`}
           >
             <p className="font-semibold text-gray-600 text-sm">{stat.label}</p>
             <p className="text-lg font-bold text-gray-800">{stat.value}</p>
@@ -54,7 +56,7 @@ export const Dashboard = () => {
       </div>
 
       {/* Charts and Tables */}
-      <div className=" flex bg-transparent rounded-2xl item-center justify-center w-full overflow-hidden">
+      <div className=" flex bg-transparent rounded-2xl item-center justify-center w-full sm:px-0 px-0 overflow-hidden">
         <BalanceChart />
       </div>
 
@@ -68,14 +70,15 @@ export const Dashboard = () => {
     </div>
   );
 
-  const renderReminders = () => 
-    <div className="flex flex-col gap-4 w-full max-w-md mx-auto px-4">
+  const renderReminders = () =>
+    <div className="flex flex-col gap-4 w-full max-w-md mx-auto px-0 md:px-4">
       <RemindersList />
     </div>
-  const renderInsights = () => 
-  <div className="flex flex-col gap-4 w-full max-w-md mx-auto px-4">
-    <Insight />
-  </div>
+  const renderInsights = () =>
+    <div className="flex flex-col gap-4 w-full max-w-md mx-auto px-0 md:px-4">
+      <Insight />
+    </div>
+
   /** ---------------- DESKTOP DASHBOARD ---------------- **/
   return (
     <>
@@ -95,21 +98,22 @@ export const Dashboard = () => {
                 </div>
 
                 <div className="flex flex-col flex-1 gap-4 min-w-0">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-                    <div className="min-w-0">
-                        <BalanceChart />
+                  <div className="grid grid-cols-2 md:grid-cols-2 gap-4 w-full">
+                    <div className="min-w-0 md:min-w-[50%]">
+                      <BalanceChart />
                     </div>
-                    <div className="min-w-0">
-                        <ExpensesTable />
+                    <div className="min-w-0 md:min-w-[50%]">
+                      <ExpensesTable />
                     </div>
                   </div>
-                    <MoneyFlowAreaChart />
+                  <MoneyFlowAreaChart />
                 </div>
               </div>
             </div>
 
             {/* RIGHT SECTION */}
-            <div className="flex flex-col xl:w-[25%] gap-4">
+            <div className="flex flex-col sm:min-w-[100%] md:min-w-[100%] xl:min-w-[25%] gap-4">
+              <h3 className="font-semibold text-[24px] text-gray-700">Reminders</h3>
               <RemindersList />
             </div>
           </div>
@@ -117,10 +121,10 @@ export const Dashboard = () => {
       </div>
 
       {/* MOBILE VIEW */}
-      <div className="block sm:hidden px-4 pb-10">
-        <div className="h-10"></div>
+      <div className="block sm:hidden">
+        {/* <div className="h-10"></div> */}
 
-        <p className="text-xl font-semibold mt-4 mb-2">
+        <p className="text-[28px] font-semibold font-merriweather mt-4 mb-2">
           Hi {user?.name || 'User'}, Welcome Back
         </p>
 
@@ -131,11 +135,10 @@ export const Dashboard = () => {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab as any)}
-                className={`flex-1 py-2 rounded-xl text[#02357C] text-sm font-medium transition-all ${
-                  activeTab === tab
+                className={`flex-1 py-2 rounded-xl text[#02357C] text-sm font-medium transition-all ${activeTab === tab
                     ? 'bg-[#0665EC] text-white shadow-md'
                     : 'text-[#02357C] hover:text-white'
-                }`}
+                  }`}
               >
                 {tab.charAt(0).toUpperCase() + tab.slice(1)}
               </button>

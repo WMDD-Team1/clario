@@ -42,7 +42,7 @@ const Sidebar = () => {
 
   const bottomMenu = [
     {
-      route: '/dashboard3',
+      route: '/faq',
       activeIcon: <FaqInactiveIcon />,
       inactiveIcon: <FaqInactiveIcon />,
       tooltip: 'Support & FAQ',

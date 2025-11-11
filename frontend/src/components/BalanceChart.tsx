@@ -28,11 +28,10 @@ type PieSectorData = {
 
 const COLORS = ['#F04438', '#17B26A'];
 const DUMMY_DATA: ChartItem[] = [
-  { name: 'Income', value: 12000, color: COLORS[0] },
-  { name: 'Expense', value: 8000, color: COLORS[1] },
+  { name: 'Income', value: 12000, color: COLORS[1] },
+  { name: 'Expense', value: 8000, color: COLORS[0] },
 ];
 
-// UPDATED FUNCTION BELOW
 const renderActiveShape = ({
   cx,
   cy,
@@ -45,7 +44,6 @@ const renderActiveShape = ({
   percent,
   value,
 }: PieSectorData) => {
-  // Use the chart item color for all texts
   const itemColor = payload?.color || fill || '#888';
 
   return (
@@ -59,37 +57,18 @@ const renderActiveShape = ({
         endAngle={endAngle}
         fill={fill}
       />
-      <text
-        x={cx}
-        y={(cy ?? 0) - 8}
-        textAnchor="middle"
-        className="text-sm"
-        fill={itemColor}
-      >
+      <text x={cx} y={(cy ?? 0) - 8} textAnchor="middle" className="text-sm" fill={itemColor}>
         {payload?.name}
       </text>
-      <text
-        x={cx}
-        y={(cy ?? 0) + 10}
-        textAnchor="middle"
-        className="text-xs"
-        fill={itemColor}
-      >
+      <text x={cx} y={(cy ?? 0) + 10} textAnchor="middle" className="text-xs" fill={itemColor}>
         {`CAD ${formatCurrency(value ?? 0, 0)}`}
       </text>
-      <text
-        x={cx}
-        y={(cy ?? 0) + 25}
-        textAnchor="middle"
-        className="text-xs"
-        fill={itemColor}
-      >
+      <text x={cx} y={(cy ?? 0) + 25} textAnchor="middle" className="text-xs" fill={itemColor}>
         {`(${((percent ?? 0) * 100).toFixed(1)}%)`}
       </text>
     </g>
   );
 };
-// END UPDATED FUNCTION
 
 const BalanceChart: React.FC = () => {
   const [data, setData] = useState<ChartItem[]>([]);
@@ -110,8 +89,8 @@ const BalanceChart: React.FC = () => {
         const chartData: ChartItem[] = isEmpty
           ? DUMMY_DATA
           : [
-              { name: 'Income', value: res.income, color: COLORS[0] },
-              { name: 'Expense', value: res.expense, color: COLORS[1] },
+              { name: 'Income', value: res.income, color: COLORS[1] },
+              { name: 'Expense', value: res.expense, color: COLORS[0] },
             ];
 
         setData(chartData);
@@ -128,7 +107,7 @@ const BalanceChart: React.FC = () => {
   if (loading) return <p>Loading balance...</p>;
 
   return (
-    <div className="flex flex-col justify-center items-center w-full max-w-[310px] h-auto aspect-square sm:h-[313px] p-5 hover:shadow-md rounded-2xl bg-white shadow-sm relative">
+    <div className="flex flex-col justify-center items-center w-full max-w-full sm:max-w-[100%] h-auto sm:h-[313px] p-5 hover:shadow-md rounded-2xl bg-white shadow-sm relative">
       <h3 className="font-semibold self-start text-[18px]">This Month Balance</h3>
       <div className="w-full h-[250px] flex justify-center items-center relative z-[60]">
         <ResponsiveContainer width="100%" height={250}>

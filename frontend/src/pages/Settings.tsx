@@ -193,7 +193,7 @@ const Settings: React.FC = () => {
           </div>
 
           {/* Password */}
-          <div className="flex flex-col gap-2 py-4 ">
+          <div className="flex flex-col gap-2 py-4 border-b">
             <div className="flex justify-between items-center md:hidden">
               <span className="text-sm text-gray-600 font-semibold">Password</span>
               <Button
@@ -267,14 +267,14 @@ const Settings: React.FC = () => {
           </div>
 
           {/* Mode */}
-          <div className="flex flex-col gap-2 py-4 ">
+          <div className="flex flex-col gap-2 py-4 border-b">
             <div className="flex justify-between items-center md:hidden">
               <span className="text-sm text-gray-600 font-semibold">Mode</span>
               <Button
                 className="bg-blue-600 text-white rounded-xl px-5 py-1"
                 buttonColor="regularButton"
                 textColor="white"
-                onClick={() => openDrawer('Change Mode', <div>ModeChange Component Here</div>)}
+                onClick={() => openDrawer('Change Mode', <ChangeMode onClose={() => setIsOpen(false)} />)}
               >
                 Change
               </Button>
@@ -286,10 +286,10 @@ const Settings: React.FC = () => {
                 {preferences.mode}
               </span>
               <Button
-                className="bg-blue-600 text-white rounded-xl px-5 py-1 flex-shrink-0"
+                className="bg-[--brand-equivalence] text-white rounded-xl px-5 py-1 flex-shrink-0"
                 buttonColor="regularButton"
                 textColor="white"
-                onClick={() => openDrawer('Change Mode', <div>ModeChange Component Here</div>)}
+                onClick={() => openDrawer('Change Mode', <ChangeMode onClose={() => setIsOpen(false)} />)}
               >
                 Change
               </Button>
@@ -310,10 +310,49 @@ const Settings: React.FC = () => {
 
     return (
       <div className="flex flex-col gap-6 mt-4">
-        {/* Expense Categories */}
-        <section className="divide-y lg:border-b border-gray-300">
-          <div className="hidden md:flex items-center gap-4 pb-4">
-            <h3 className="font-semibold text-gray-900 text-base flex-[0_0_200px]">
+        {/* ===== Expenses Categories ===== */}
+        <section className="rounded-xl border border-gray-200 p-4 md:p-0 md:shadow-none md:border-none">
+          {/* Mobile layout */}
+          <div className="md:hidden flex flex-col gap-3">
+            <div className="flex justify-between items-center">
+              <h3 className="font-semibold text-gray-900 text-base">
+                Expenses Categories
+              </h3>
+              <Button
+                className="bg-blue-600 text-white rounded-xl px-5 py-1"
+                buttonColor="regularButton"
+                textColor="white"
+                onClick={() =>
+                  openDrawer(
+                    'Expenses Categories',
+                    <ExpensesCategories
+                      expenseCategories={finance.expenseCategories}
+                      onClose={() => setIsOpen(false)}
+                    />,
+                  )
+                }
+              >
+                Add/Edit
+              </Button>
+            </div>
+            <div
+              className="flex flex-wrap gap-2 overflow-x-auto pb-1"
+              style={hideScrollbar}
+            >
+              {finance.expenseCategories.map((cat) => (
+                <span
+                  key={cat}
+                  className="px-3 py-1 text-sm rounded-full border border-gray-300 text-gray-700 whitespace-nowrap"
+                >
+                  {cat}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Desktop layout */}
+          <div className="hidden md:flex items-center gap-4 pb-4 border-b border-gray-200">
+            <h3 className=" text-gray-900 text-base flex-[0_0_200px]">
               Expense Categories
             </h3>
             <div
@@ -323,14 +362,14 @@ const Settings: React.FC = () => {
               {finance.expenseCategories.map((cat) => (
                 <span
                   key={cat}
-                  className="px-3 py-1 text-sm rounded-full text-gray-700 border border-black whitespace-nowrap"
+                  className="px-3 py-1 text-sm rounded-full border border-gray-300 text-gray-700 whitespace-nowrap"
                 >
                   {cat}
                 </span>
               ))}
             </div>
             <Button
-              className="bg-blue-600 text-white rounded-xl px-5 py-1 flex-shrink-0"
+              className="bg-[--brand-equivalence] text-white rounded-xl px-5 py-1 flex-shrink-0"
               buttonColor="regularButton"
               textColor="white"
               onClick={() =>
@@ -346,27 +385,51 @@ const Settings: React.FC = () => {
               Add/Edit
             </Button>
           </div>
+        </section>
 
-          {/* Mobile */}
-          <div className="md:hidden flex flex-col gap-2">
-            <h3 className="font-semibold text-gray-900 text-base">Expense Categories</h3>
-            <div className="flex overflow-x-auto gap-2" style={hideScrollbar}>
-              {finance.expenseCategories.map((cat) => (
+        {/* ===== Income Categories ===== */}
+        <section className="rounded-xl border border-gray-200 p-4 md:p-0 md:shadow-none md:border-none">
+          {/* Mobile layout */}
+          <div className="md:hidden flex flex-col gap-3">
+            <div className="flex justify-between items-center">
+              <h3 className="font-semibold text-gray-900 text-base">
+                Income Categories
+              </h3>
+              <Button
+                className="bg-blue-600 text-white rounded-xl px-5 py-1"
+                buttonColor="regularButton"
+                textColor="white"
+                onClick={() =>
+                  openDrawer(
+                    'Income Categories',
+                    <IncomeCategories
+                      incCategories={finance.incomeCategories}
+                      onClose={() => setIsOpen(false)}
+                    />,
+                  )
+                }
+              >
+                Add/Edit
+              </Button>
+            </div>
+            <div
+              className="flex flex-wrap gap-2 overflow-x-auto pb-1"
+              style={hideScrollbar}
+            >
+              {finance.incomeCategories.map((cat) => (
                 <span
                   key={cat}
-                  className="px-3 py-1 text-sm rounded-full text-gray-700 border border-black whitespace-nowrap"
+                  className="px-3 py-1 text-sm rounded-full border border-gray-300 text-gray-700 whitespace-nowrap"
                 >
                   {cat}
                 </span>
               ))}
             </div>
           </div>
-        </section>
 
-        {/* Income Categories */}
-        <section className="divide-y border-b border-gray-300">
-          <div className="hidden md:flex items-center gap-4 pb-4">
-            <h3 className="font-semibold text-gray-900 text-base flex-[0_0_200px]">
+          {/* Desktop layout */}
+          <div className="hidden md:flex items-center gap-4 pb-4 border-b border-gray-200">
+            <h3 className=" text-gray-900 text-base flex-[0_0_200px]">
               Income Categories
             </h3>
             <div
@@ -376,14 +439,14 @@ const Settings: React.FC = () => {
               {finance.incomeCategories.map((cat) => (
                 <span
                   key={cat}
-                  className="px-3 py-1 text-sm rounded-full text-gray-700 border border-black whitespace-nowrap"
+                  className="px-3 py-1 text-sm rounded-full border border-gray-300 text-gray-700 whitespace-nowrap"
                 >
                   {cat}
                 </span>
               ))}
             </div>
             <Button
-              className="bg-blue-600 text-white rounded-xl px-5 py-1 flex-shrink-0"
+              className="bg-[--brand-equivalence] text-white rounded-xl px-5 py-1 flex-shrink-0"
               buttonColor="regularButton"
               textColor="white"
               onClick={() =>
@@ -399,27 +462,34 @@ const Settings: React.FC = () => {
               Add/Edit
             </Button>
           </div>
-
-          {/* Mobile */}
-          <div className="md:hidden flex flex-col gap-2">
-            <h3 className="font-semibold text-gray-900 text-base">Income Categories</h3>
-            <div className="flex overflow-x-auto gap-2" style={hideScrollbar}>
-              {finance.incomeCategories.map((cat) => (
-                <span
-                  key={cat}
-                  className="px-3 py-1 text-sm rounded-full text-gray-700 border border-black whitespace-nowrap"
-                >
-                  {cat}
-                </span>
-              ))}
-            </div>
-          </div>
         </section>
 
-        {/* Tax Regime */}
-        <section className="divide-y lg:border-b border-gray-300">
-          <div className="hidden md:flex items-center gap-4 pb-4">
-            <h3 className="font-semibold text-gray-900 text-base flex-[0_0_200px]">Tax Regime</h3>
+        {/* ===== Tax Regime ===== */}
+        <section className="rounded-xl border border-gray-200 p-4 md:p-0 md:shadow-none md:border-none">
+          {/* Mobile layout */}
+          <div className="md:hidden flex flex-col gap-3">
+            <div className="flex justify-between items-center">
+              <h3 className="font-semibold text-gray-900 text-base">Tax Regime</h3>
+              <Button
+                className="bg-blue-600 text-white rounded-xl px-5 py-1"
+                buttonColor="regularButton"
+                textColor="white"
+                onClick={() =>
+                  openDrawer(
+                    'Update Tax Regime',
+                    <ChangeTaxRegime tax={finance.taxRegime} onClose={() => setIsOpen(false)} />,
+                  )
+                }
+              >
+                Edit
+              </Button>
+            </div>
+            <p className="text-gray-600 text-sm">{finance.taxRegime}</p>
+          </div>
+
+          {/* Desktop layout */}
+          <div className="hidden md:flex items-center gap-4 pb-4 border-b border-gray-200">
+            <h3 className="text-gray-900 text-base flex-[0_0_200px]">Tax Regime</h3>
             <p className="flex-1 px-3 py-2 text-gray-600 text-sm">{finance.taxRegime}</p>
             <Button
               className="bg-blue-600 text-white rounded-xl px-5 py-1 flex-shrink-0"
@@ -435,40 +505,17 @@ const Settings: React.FC = () => {
               Edit
             </Button>
           </div>
-
-          {/* Mobile */}
-          <div className="md:hidden flex flex-col gap-2">
-            <div className="flex justify-between items-center">
-              <h3 className="font-semibold text-gray-900 text-base">Tax Regime</h3>
-              <Button
-                className="bg-blue-600 text-white rounded-xl px-4 py-1"
-                buttonColor="regularButton"
-                textColor="white"
-                onClick={() =>
-                  openDrawer(
-                    'Update Tax Regime',
-                    <ChangeTaxRegime tax={finance.taxRegime} onClose={() => setIsOpen(false)} />,
-                  )
-                }
-              >
-                Edit
-              </Button>
-            </div>
-            <p className="text-gray-600 text-sm">{finance.taxRegime}</p>
-          </div>
         </section>
 
-        {/* Export Data */}
-        <section className="border rounded-xl border-gray-300 md:border-none md:rounded-none p-4 md:p-0">
-          <div className="flex justify-between items-center w-full pb-4">
-            <h3 className="font-semibold text-gray-900 text-base flex-[0_0_200px]">Export Data</h3>
+        {/* ===== Export Data ===== */}
+        <section className="rounded-xl border border-gray-200 p-4 md:p-0 md:shadow-none md:border-none border-b border-gray-200">
+          <div className="flex justify-between items-center">
+            <h3 className=" text-gray-900 text-base">Export Data</h3>
             <Button
-              className="bg-blue-600 text-white rounded-xl px-5 py-1 flex-shrink-0"
+              className="bg-blue-600 text-white rounded-xl px-5 py-1"
               buttonColor="regularButton"
               textColor="white"
-              onClick={() =>
-                openDrawer('Change Mode', <ChangeMode onClose={() => setIsOpen(false)} />)
-              }
+              onClick={handleExportData}
             >
               Export
             </Button>
