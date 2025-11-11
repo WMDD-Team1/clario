@@ -77,6 +77,7 @@ export const EditIncomeSlide = ({
             color="bg-white"
             value={transaction.title}
             onChange={(e) => onTransactionChange({ ...transaction, title: e.target.value })}
+            required
           />
           <Input
             label="Date"
@@ -85,6 +86,7 @@ export const EditIncomeSlide = ({
             color="bg-white"
             value={transaction.date.split('T')[0]}
             onChange={(e) => onTransactionChange({ ...transaction, date: e.target.value })}
+            required
           />
           <Select
             label="Type of Income"
@@ -99,6 +101,7 @@ export const EditIncomeSlide = ({
             width="100%"
           />
           <Input
+            required
             label="Invoice No."
             id="incomeInvoice"
             color="bg-white"
@@ -106,6 +109,7 @@ export const EditIncomeSlide = ({
             onChange={(e) => onTransactionChange({ ...transaction, origin: e.target.value })}
           />
           <Input
+            required
             label="Amount"
             id="incomeAmount"
             type="number"
@@ -126,6 +130,7 @@ export const EditIncomeSlide = ({
             <p className="absolute right-[1rem] top-4.5 text-blue-500">CAD</p>
           </Input>
           <TextArea
+            required
             label="Notes"
             id="incomeNotes"
             color="bg-white"
@@ -144,12 +149,7 @@ export const EditIncomeSlide = ({
                   className="text-[var(--primitive-colors-brand-primary-500-base)] underline hover:opacity-80 transition"
                 >
                   {transaction?.attachmentURL
-                    ? transaction.attachmentURL
-                        .split('/')
-                        .pop()
-                        ?.split('?')[0]
-                        .split('-')
-                        .slice(-2)
+                    ? transaction.attachmentURL.split('/').pop()?.split('?')[0].split('-').slice(-2)
                     : 'No attachment'}
                 </a>
               </InfoRow>

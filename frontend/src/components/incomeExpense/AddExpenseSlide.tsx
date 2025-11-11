@@ -88,6 +88,7 @@ export const AddExpenseSlide = ({
       ) : (
         <form className="flex flex-col gap-[1.5rem]">
           <Input
+            required
             label="Expense Title"
             id="expenseTitle"
             color="bg-white"
@@ -95,6 +96,7 @@ export const AddExpenseSlide = ({
             onChange={(e) => onTransactionChange({ ...transaction, title: e.target.value })}
           />
           <Input
+            required
             label="Date"
             id="expenseDate"
             type="date"
@@ -115,6 +117,7 @@ export const AddExpenseSlide = ({
             width="100%"
           />
           <Input
+            required
             label="Invoice No."
             id="expenseInvoice"
             color="bg-white"
@@ -122,6 +125,7 @@ export const AddExpenseSlide = ({
             onChange={(e) => onTransactionChange({ ...transaction, origin: e.target.value })}
           />
           <Input
+            required
             label="Amount"
             id="expenseAmount"
             type="number"
@@ -183,6 +187,7 @@ export const AddExpenseSlide = ({
           </div>
 
           <TextArea
+            required
             label="Notes"
             id="expenseNotes"
             color="bg-white"
@@ -201,6 +206,7 @@ export const AddExpenseSlide = ({
               </div>
             </div>
           )}
+          
         </form>
       )}
     </Slide>

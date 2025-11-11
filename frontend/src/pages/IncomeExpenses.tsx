@@ -443,72 +443,35 @@ export const IncomeExpenses = () => {
 
       console.log(updateResponse.data);
       if (activeRepeatableTransaction) {
-        if (!activeRepeatableTransaction.isArchived) {
-          const payload = repeat
-            ? {
-                frequency: recurrence.frequency,
-              }
-            : { isArchived: true };
-
-          console.log(payload);
-          try {
-            const recurrenceUrl = repeat
-              ? `${import.meta.env.VITE_API_BASE_URL}/recurrences/${activeRepeatableTransaction.id}`
-              : `${import.meta.env.VITE_API_BASE_URL}/recurrences/${activeRepeatableTransaction.id}/archive`;
-
-            const updateRecurrenceResponse = await axios.patch(recurrenceUrl, payload, {
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-              },
-            });
-
-            console.log(updateRecurrenceResponse);
-          } catch (error) {
-            console.error('Error saving recurrence:', error);
-          }
+        if (repeat) {
+          const payload = {
+            frequency: recurrence.frequency,
+          };
+          const archivePayLoad = { isArchived: false };
+          const recurrenceUrl = `${import.meta.env.VITE_API_BASE_URL}/recurrences/${activeRepeatableTransaction.id}`;
+          const archiveUrl = `${import.meta.env.VITE_API_BASE_URL}/recurrences/${activeRepeatableTransaction.id}/archive`;
+          await axios.patch(recurrenceUrl, payload, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          await axios.patch(archiveUrl, archivePayLoad, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
         } else {
-          const payload = { isArchived: false };
-
-          console.log(payload);
-          try {
-            const recurrenceUrl = `${import.meta.env.VITE_API_BASE_URL}/recurrences/${activeRepeatableTransaction.id}/archive`;
-
-            const updateRecurrenceResponse = await axios.patch(recurrenceUrl, payload, {
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-              },
-            });
-
-            console.log(updateRecurrenceResponse);
-          } catch (error) {
-            console.error('Error saving recurrence:', error);
-          }
+          const payload = { isArchived: true };
+          const recurrenceUrl = `${import.meta.env.VITE_API_BASE_URL}/recurrences/${activeRepeatableTransaction.id}/archive`;
+          await axios.patch(recurrenceUrl, payload, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
         }
       } else if (repeat) {
         const payload = {
           templateTransactionId: oneTransaction.id,
           frequency: recurrence.frequency,
-          //--------confirm if endate is needed?------
           endDate: '2025-10-05',
         };
-
-        console.log(payload);
-        try {
-          const recurrenceResponse = await axios.post(
-            `${import.meta.env.VITE_API_BASE_URL}/recurrences`,
-            payload,
-            {
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-              },
-            },
-          );
-        } catch (error) {
-          console.error('Error saving recurrence:', error);
-        }
+        await axios.post(`${import.meta.env.VITE_API_BASE_URL}/recurrences`, payload, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
       }
 
       await getAllRecurrences();

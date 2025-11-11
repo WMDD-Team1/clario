@@ -74,7 +74,7 @@ export const EditExpenseSlide = ({
     <Slide
       title="Edit Expense"
       slide={slide}
-      confirmText="Cancel"
+      confirmText={updateSuccess ? 'Close' : 'Cancel'}
       onConfirm={onCancel}
       extralText={updateSuccess ? 'view' : 'Save'}
       onExtra={updateSuccess ? onView : onAdd}
@@ -95,6 +95,7 @@ export const EditExpenseSlide = ({
       ) : (
         <form className="flex flex-col gap-[1.5rem]">
           <Input
+            required
             label="Expense Title"
             id="expenseTitle"
             color="bg-white"
@@ -102,6 +103,7 @@ export const EditExpenseSlide = ({
             onChange={(e) => onTransactionChange({ ...transaction, title: e.target.value })}
           />
           <Input
+            required
             label="Date"
             id="expenseDate"
             type="date"
@@ -122,6 +124,7 @@ export const EditExpenseSlide = ({
             width="100%"
           />
           <Input
+            required
             label="Invoice No."
             id="expenseInvoice"
             color="bg-white"
@@ -129,6 +132,7 @@ export const EditExpenseSlide = ({
             onChange={(e) => onTransactionChange({ ...transaction, origin: e.target.value })}
           />
           <Input
+            required
             label="Amount"
             id="expenseAmount"
             type="number"
@@ -190,6 +194,7 @@ export const EditExpenseSlide = ({
           </div>
 
           <TextArea
+            required
             label="Notes"
             id="expenseNotes"
             color="bg-white"
@@ -208,12 +213,7 @@ export const EditExpenseSlide = ({
                   className="text-[var(--primitive-colors-brand-primary-500-base)] underline hover:opacity-80 transition"
                 >
                   {transaction?.attachmentURL
-                    ? transaction.attachmentURL
-                        .split('/')
-                        .pop()
-                        ?.split('?')[0]
-                        .split('-')
-                        .slice(-2)
+                    ? transaction.attachmentURL.split('/').pop()?.split('?')[0].split('-').slice(-2)
                     : 'No attachment'}
                 </a>
               </InfoRow>

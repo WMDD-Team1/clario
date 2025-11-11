@@ -77,8 +77,10 @@ export const AddIncomeSlide = ({
             color="bg-white"
             value={transaction.title}
             onChange={(e) => onTransactionChange({ ...transaction, title: e.target.value })}
+            required
           />
           <Input
+            required
             label="Date"
             id="incomeDate"
             type="date"
@@ -93,12 +95,13 @@ export const AddIncomeSlide = ({
             value={incomeType}
             onChange={(value) => {
               onIncomeTypeChange(value);
-              onTransactionChange({ ...transaction, category:value });
+              onTransactionChange({ ...transaction, category: value });
             }}
             color="bg-white"
             width="100%"
           />
           <Input
+            required
             label="Invoice No."
             id="incomeInvoice"
             color="bg-white"
@@ -106,10 +109,11 @@ export const AddIncomeSlide = ({
             onChange={(e) => onTransactionChange({ ...transaction, origin: e.target.value })}
           />
           <Input
+            required
             label="Amount"
             id="incomeAmount"
             type="number"
-            padding='pr-[3.5rem]'
+            padding="pr-[3.5rem]"
             // min={0}
             color="bg-white"
             value={transaction.baseAmount}
@@ -126,6 +130,7 @@ export const AddIncomeSlide = ({
             <p className="absolute right-[1rem] top-4.5 text-blue-500">CAD</p>
           </Input>
           <TextArea
+            required
             label="Notes"
             id="incomeNotes"
             color="bg-white"
@@ -136,11 +141,7 @@ export const AddIncomeSlide = ({
 
           {file && (
             <div>
-              <InfoRow
-              label="Attachment"
-              value={fileName}
-              hideBorder={true}
-              />
+              <InfoRow label="Attachment" value={fileName} hideBorder={true} />
               <div className="flex gap-[.5rem] items-center justify-end mt-[.1rem] text-gray-400">
                 <FileChange className="cursor-pointer" onClick={handleBrowseClick} />
                 |
