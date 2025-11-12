@@ -6,7 +6,10 @@
 	"scripts": {
 		"test": "NODE_OPTIONS=--experimental-vm-modules jest --runInBand",
 		"dev": "nodemon --watch src ./src/server.js",
-		"start": "node ./src/server.js"
+		"start": "node ./src/server.js",
+		"build:frontend": "cd ../frontend && npm run build",
+		"copy:dist": "rm -rf public && mkdir public && cp -r ../frontend/dist/* public",
+		"deploy": "npm run build:frontend && npm run copy:dist && npm start"
 	},
 	"keywords": [],
 	"author": "",
