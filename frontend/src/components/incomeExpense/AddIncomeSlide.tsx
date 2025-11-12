@@ -6,7 +6,7 @@ import InfoRow from '@components/InfoRow';
 import Loader from '@components/Loader';
 import Success from '@components/Success';
 import { FileChange, Trash, TransactionUploadSuccess } from '@assets/icons/index';
-import { TransactionFormat, TransactionCategory } from '@api/types/transaction';
+import { TransactionFormat, TransactionCategory, FormErrors } from '@api/types/transaction';
 
 interface IncomeDetailSlideProps {
   slide: string;
@@ -16,7 +16,9 @@ interface IncomeDetailSlideProps {
   incomeType: string;
   file: File | null;
   fileName: string;
+  errors: FormErrors;
   incomeCategories: TransactionCategory;
+  setErrors: (errors: FormErrors) => void;
   onTransactionChange: (transaction: TransactionFormat) => void;
   onIncomeTypeChange: (value: string) => void;
   onCancel: () => void;
@@ -35,6 +37,8 @@ export const AddIncomeSlide = ({
   file,
   fileName,
   incomeCategories,
+  errors,
+  setErrors,
   onTransactionChange,
   onIncomeTypeChange,
   onCancel,
@@ -76,9 +80,14 @@ export const AddIncomeSlide = ({
             id="incomeTitle"
             color="bg-white"
             value={transaction.title}
-            onChange={(e) => onTransactionChange({ ...transaction, title: e.target.value })}
+            onChange={(e) => {
+              onTransactionChange({ ...transaction, title: e.target.value });
+              setErrors({ ...errors, title: '' });
+            }}
             required
-          />
+          >
+            {errors.title && <div style={{ color: 'red' }}>{errors.title}</div>}
+          </Input>
           <Input
             required
             label="Date"
@@ -86,8 +95,13 @@ export const AddIncomeSlide = ({
             type="date"
             color="bg-white"
             value={transaction.date.split('T')[0]}
-            onChange={(e) => onTransactionChange({ ...transaction, date: e.target.value })}
-          />
+            onChange={(e) => {
+              onTransactionChange({ ...transaction, date: e.target.value });
+              setErrors({ ...errors, date: '' });
+            }}
+          >
+            {errors.date && <div style={{ color: 'red' }}>{errors.date}</div>}
+          </Input>
           <Select
             label="Type of Income"
             id="incomeType"
@@ -96,18 +110,26 @@ export const AddIncomeSlide = ({
             onChange={(value) => {
               onIncomeTypeChange(value);
               onTransactionChange({ ...transaction, category: value });
+              setErrors({ ...errors, date: '' });
             }}
             color="bg-white"
             width="100%"
-          />
+          >
+            {errors.type && <div style={{ color: 'red' }}>{errors.type}</div>}
+          </Select>
           <Input
             required
             label="Invoice No."
             id="incomeInvoice"
             color="bg-white"
             value={transaction.origin}
-            onChange={(e) => onTransactionChange({ ...transaction, origin: e.target.value })}
-          />
+            onChange={(e) => {
+              onTransactionChange({ ...transaction, origin: e.target.value });
+              setErrors({ ...errors, origin: '' });
+            }}
+          >
+            {errors.origin && <div style={{ color: 'red' }}>{errors.origin}</div>}
+          </Input>
           <Input
             required
             label="Amount"
@@ -124,10 +146,12 @@ export const AddIncomeSlide = ({
                   ...transaction,
                   baseAmount: val === '' ? '' : Number(val),
                 });
-              }
+              };
+              setErrors({ ...errors, baseAmount: '' });
             }}
           >
-            <p className="absolute right-[1rem] top-4.5 text-blue-500">CAD</p>
+            <p className="absolute right-[1rem] top-4.5 text-[var(--primitive-colors-brand-primary-500-base)]">CAD</p>
+            {errors.baseAmount && <div style={{ color: 'red' }}>{errors.baseAmount}</div>}
           </Input>
           <TextArea
             required
@@ -137,12 +161,14 @@ export const AddIncomeSlide = ({
             rows={3}
             value={transaction.notes}
             onChange={(e) => onTransactionChange({ ...transaction, notes: e.target.value })}
-          />
+          >
+            {errors.notes && <div style={{ color: 'red' }}>{errors.notes}</div>}
+          </TextArea>
 
           {file && (
             <div>
               <InfoRow label="Attachment" value={fileName} hideBorder={true} />
-              <div className="flex gap-[.5rem] items-center justify-end mt-[.1rem] text-gray-400">
+              <div className="flex gap-[.5rem] items-center justify-end mt-[.1rem] text-[var(--primitive-colors-gray-light-mode-400)]">
                 <FileChange className="cursor-pointer" onClick={handleBrowseClick} />
                 |
                 <Trash className="cursor-pointer" onClick={onFileRemove} />

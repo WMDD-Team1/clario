@@ -88,6 +88,42 @@ export const IncomeExpenses = () => {
     },
   });
 
+  const [errors, setErrors] = useState({
+    title: '',
+    date: '',
+    type: '',
+    baseAmount: '',
+    origin: '',
+    notes: '',
+    recurrence: '',
+  });
+
+  const handleSubmitValidation = () => {
+    const newErrors = {
+      title: '',
+      date: '',
+      type: '',
+      baseAmount: '',
+      origin: '',
+      notes: '',
+      recurrence: '',
+    };
+
+    if (!oneTransaction.origin) newErrors.origin = 'Invoice No. is required!';
+    if (!oneTransaction.baseAmount) newErrors.baseAmount = 'Amount is required!';
+    if (!oneTransaction.date) newErrors.date = 'Date is required!';
+    if (!oneTransaction.title) newErrors.title = 'Title is required!';
+    if (!oneTransaction.category) newErrors.type = 'Type is required!';
+    if (repeat) {
+      if (!recurrence.frequency) newErrors.recurrence = 'Recurrence is required!';
+    }
+
+    const hasError = Object.values(newErrors).some((error) => error !== '');
+
+    setErrors(newErrors);
+    return hasError;
+  };
+
   const reset = () => {
     setIncomeSlide('110%');
     setExpenseSlide('110%');
@@ -109,6 +145,15 @@ export const IncomeExpenses = () => {
     setUpdateSuccess(false);
     setIncomeFilterSlide('110%');
     setExpenseFilterSlide('110%');
+    setErrors({
+      title: '',
+      date: '',
+      type: '',
+      baseAmount: '',
+      origin: '',
+      notes: '',
+      recurrence: '',
+    });
   };
 
   const addIncome = () => {
@@ -350,6 +395,11 @@ export const IncomeExpenses = () => {
   };
 
   const addTransaction = async (payload: TransactionFormat) => {
+    const hasError = handleSubmitValidation();
+
+    if (hasError) {
+      return;
+    }
     setLoader(true);
     setSuccess(false);
     const token = await getAccessTokenSilently({
@@ -408,6 +458,12 @@ export const IncomeExpenses = () => {
   };
 
   const updateTransaction = async () => {
+    const hasError = handleSubmitValidation();
+
+    if (hasError) {
+      return;
+    }
+
     setLoader(true);
     setUpdateSuccess(false);
     const token = await getAccessTokenSilently({
@@ -793,7 +849,7 @@ export const IncomeExpenses = () => {
               selectedOption.key === 'expense' ? 'hidden md:flex' : 'flex'
             }`}
           >
-            <div className="flex flex-row flex-wrap justify-between items-center p-[1rem] bg-white border-gray-200 border rounded-tl-2xl rounded-tr-2xl">
+            <div className="flex flex-row flex-wrap justify-between items-center p-[1rem] bg-[var(--general-alpha)] border-[var(--primitive-colors-gray-light-mode-200)] border rounded-tl-2xl rounded-tr-2xl">
               <h3 className="text-2xl">Incomes</h3>
               <div className="md:flex hidden flex-row flex-nowrap justify-end items-center gap-[1rem]">
                 <div
@@ -862,7 +918,7 @@ export const IncomeExpenses = () => {
               selectedOption.key === 'income' ? 'hidden md:flex' : 'flex'
             }`}
           >
-            <div className="flex flex-row flex-wrap justify-between items-center p-[1rem] bg-white border-gray-200 border rounded-tl-2xl rounded-tr-2xl">
+            <div className="flex flex-row flex-wrap justify-between items-center p-[1rem] bg-[var(--general-alpha)] border-[var(--primitive-colors-gray-light-mode-200)] border rounded-tl-2xl rounded-tr-2xl">
               <h3 className="text-2xl">Expenses</h3>
 
               <div className="md:flex hidden flex-row flex-nowrap justify-end items-center gap-[1rem]">
@@ -938,6 +994,7 @@ export const IncomeExpenses = () => {
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onNext={async () => {
+          setIncomeSlide('110%');
           setIndetailSlide('0px');
           await scanReceipt();
         }}
@@ -950,6 +1007,8 @@ export const IncomeExpenses = () => {
 
       {/* Income Detail Form---------------*/}
       <AddIncomeSlide
+        errors={errors}
+        setErrors={setErrors}
         slide={inDetailSlide}
         loader={loader}
         success={success}
@@ -985,6 +1044,7 @@ export const IncomeExpenses = () => {
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onNext={async () => {
+          setExpenseSlide('110%');
           setExdetailSlide('0px');
           await scanReceipt();
         }}
@@ -997,6 +1057,8 @@ export const IncomeExpenses = () => {
 
       {/* Expense Detail Form-------------- */}
       <AddExpenseSlide
+        errors={errors}
+        setErrors={setErrors}
         repeat={repeat}
         repeatOption={repeatOption}
         recurrence={recurrence}
@@ -1074,6 +1136,8 @@ export const IncomeExpenses = () => {
         // repeat={repeat}
         // repeatOption={repeatOption}
         // recurrence={recurrence}
+        errors={errors}
+        setErrors={setErrors}
         slide={editIncome}
         loader={loader}
         updateSuccess={updateSuccess}
@@ -1098,6 +1162,8 @@ export const IncomeExpenses = () => {
       />
 
       <EditExpenseSlide
+        errors={errors}
+        setErrors={setErrors}
         activeRepeatableTransaction={activeRepeatableTransaction}
         repeat={repeat}
         repeatOption={repeatOption}
