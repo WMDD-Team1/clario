@@ -182,6 +182,16 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
     setLoader(false);
     setSuccess(false);
     resetFormData();
+    setErrors({
+      name: '',
+      phone: '',
+      email: '',
+      notes: '',
+      streetAddress: '',
+      postalCode: '',
+      city: '',
+      country: '',
+    });
   };
 
   const handleClientDetail = async (id: string) => {
