@@ -1,16 +1,16 @@
 import { createProject, fetchAllClients, ProjectApiResponse, updateProject } from "@/api";
 import Input from "@components/Input";
 import Loader from "@components/Loader";
+import TextArea from "@components/TextArea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import Spinner from "../../Spinner";
 import FormFooter from "../FormFooter";
-import TextArea from "@components/TextArea";
-import { useState } from "react";
 import SuccessForm from "../SuccessForm";
-import { useNavigate } from "react-router-dom";
 
 // Validation schema
 const projectSchema = z.object({
@@ -40,9 +40,10 @@ type ProjectFormData = z.infer<typeof projectSchema>;
 interface ProjectFormProps {
     onCancel: () => void;
     project?: ProjectApiResponse | null;
+    isPrefilled: boolean;
 }
 
-export default function ProjectForm({ onCancel, project }: ProjectFormProps) {
+export default function ProjectForm({ onCancel, project, isPrefilled }: ProjectFormProps) {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
     const [isSuccess, setIsSuccess] = useState(false);
@@ -78,7 +79,7 @@ export default function ProjectForm({ onCancel, project }: ProjectFormProps) {
     // Submit mutation
     const mutation = useMutation({
         mutationFn: (values: ProjectFormData) => {
-            return isEditMode ? updateProject(project.id, values) : createProject(values);
+            return (isEditMode && !isPrefilled) ? updateProject(project.id, values) : createProject(values);
         },
         onSuccess: (project) => {
             if (project) queryClient.invalidateQueries({ queryKey: ["projects", project.id] });
@@ -114,11 +115,11 @@ export default function ProjectForm({ onCancel, project }: ProjectFormProps) {
 
     if (isSuccess) {
         return <SuccessForm
-            iconPath={isEditMode ? "/update-success.svg" : "/create-success.svg"}
-            title={isEditMode ? "Project updated successfully" : "All Set!"}
-            label={!isEditMode ? "View" : undefined}
-            message={isEditMode ? "The project details were updated. You can view the latest updates in your project overview." : "Your project has been saved successfully."}
-            onCancel={isEditMode ? onCancel : newProjectId ? () => navigate(`/projects/${newProjectId}`) : onCancel}
+            iconPath={(isEditMode && !isPrefilled) ? "/update-success.svg" : "/create-success.svg"}
+            title={(isEditMode && !isPrefilled) ? "Project updated successfully" : "All Set!"}
+            label={!(isEditMode && !isPrefilled) ? "View" : undefined}
+            message={(isEditMode && !isPrefilled) ? "The project details were updated. You can view the latest updates in your project overview." : "Your project has been saved successfully."}
+            onCancel={(isEditMode && !isPrefilled) ? onCancel : newProjectId ? () => navigate(`/projects/${newProjectId}`) : onCancel}
         />
     }
 
