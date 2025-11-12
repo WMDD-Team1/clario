@@ -59,7 +59,7 @@ export default function ProjectUploadStep({ onProjectDataReady, onCancel }: Proj
                         : "border-dashed border-[var(--primitive-colors-gray-light-mode-800)] bg-[var(--background-alternate)]"
                         } rounded-[20px] flex flex-col items-center justify-center transition-colors`}
                 >
-                    <CloudUpload className="w-[60px] h-[60px] text-[var(--brand-alpha)] mb-2" />
+                    <CloudUpload className="w-[60px] h-[60px] text-[var(--brand-alpha)] mb-2" strokeWidth={1} />
                     <p className="text-[15px] font-medium text-[var(--tertiary-text)]">
                         Choose a file or drag & drop it here
                     </p>

@@ -22,7 +22,7 @@ const TextArea: React.FC<TextAreaProps> = ({ label, color, borderColor, id, regi
       id={id}
       {...register}
       {...props}
-      className={`p-[1rem] rounded-[1rem] border-2 ${borderColor || 'border-neutral-300'} w-full resize-none`}
+      className={`p-[1rem] rounded-[1rem] border-2 ${borderColor || 'border-[var(--sublight-2)]'} w-full resize-none`}
     />
   </div>
 );

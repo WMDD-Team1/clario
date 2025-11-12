@@ -35,7 +35,7 @@ const Input: React.FC<InputProps> = ({
         </label>
       )}
 
-      <div className={`flex justify-between rounded-[1rem] border-2 ${color} ${padding} ${borderColor || "border-neutral-300"}`}>
+      <div className={`flex justify-between rounded-[1rem] border-2 ${color} ${padding} ${borderColor || "border-[var(--sublight-2)]"}`}>
         <input
           id={id}
           {...register}
