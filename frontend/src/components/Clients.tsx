@@ -407,12 +407,12 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
               }}
             ></div>
             <div
-              className={`absolute right-0 w-48 bg-white shadow-lg z-20 p-[1rem] rounded-[1rem] hidden md:block cursor-pointer ${
+              className={`absolute right-0 w-48 bg-[var(--general-alpha)] shadow-lg z-20 p-[1rem] rounded-[1rem] hidden md:block cursor-pointer ${
                 index >= pagedClients.length - 2 ? 'bottom-full mb-2' : 'mt-2'
               }`}
             >
               <div
-                className="cursor-pointer px-4 py-2 hover:bg-blue-100 rounded-[.5rem]"
+                className="cursor-pointer px-4 py-2 hover:bg-[var(--primitive-colors-brand-primary-75)] rounded-[.5rem]"
                 onClick={(e) => {
                   // handleClientDetail(client.id);
                   e.stopPropagation();
@@ -423,7 +423,7 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
                 View
               </div>
               <div
-                className="cursor-pointer px-4 py-2 hover:bg-blue-100 rounded-[.5rem]"
+                className="cursor-pointer px-4 py-2 hover:bg-[var(--primitive-colors-brand-primary-75)] rounded-[.5rem]"
                 onClick={(e) => {
                   // handleClientDetail(client.id);
                   e.stopPropagation();
@@ -434,7 +434,7 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
                 Edit
               </div>
               <div
-                className="cursor-pointer px-4 py-2 hover:bg-red-100 rounded-[.5rem]"
+                className="cursor-pointer px-4 py-2 hover:bg-[var(--error-background1)] rounded-[.5rem]"
                 onClick={(e) => {
                   // handleClientDetail(client.id);
                   e.stopPropagation();
@@ -525,19 +525,19 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
         ) : (
           <div className="flex flex-col gap-[1.5rem]">
             <Input
-              color="bg-white"
+              color="bg-[var(--general-alpha)]"
               label="Client Name"
               value={oneClient.name}
               onChange={(e) => setOneClient({ ...oneClient, name: e.target.value })}
             />
             <Input
-              color="bg-white"
+              color="bg-[var(--general-alpha)]"
               label="Phone"
               value={oneClient.phone}
               onChange={(e) => setOneClient({ ...oneClient, phone: e.target.value })}
             />
             <Input
-              color="bg-white"
+              color="bg-[var(--general-alpha)]"
               label="Email"
               type="email"
               value={oneClient.email}
@@ -545,14 +545,14 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
             />
             <TextArea
               label="Notes"
-              color="bg-white"
+              color="bg-[var(--general-alpha)]"
               value={oneClient.notes}
               onChange={(e) => setOneClient({ ...oneClient, notes: e.target.value })}
             />
 
             <p>Client's Address</p>
             <Input
-              color="bg-white"
+              color="bg-[var(--general-alpha)]"
               label="Street Address"
               value={oneClient.address?.street}
               onChange={(e) =>
@@ -563,7 +563,7 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
               }
             />
             <Input
-              color="bg-white"
+              color="bg-[var(--general-alpha)]"
               label="Postal Code"
               value={oneClient.address?.postalCode}
               onChange={(e) =>
@@ -574,7 +574,7 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
               }
             />
             <Input
-              color="bg-white"
+              color="bg-[var(--general-alpha)]"
               label="City"
               value={oneClient.address?.city}
               onChange={(e) =>
@@ -585,7 +585,7 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
               }
             />
             <Input
-              color="bg-white"
+              color="bg-[var(--general-alpha)]"
               label="Country"
               value={oneClient.address?.country}
               onChange={(e) =>
@@ -622,10 +622,10 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
         <InfoRow label="City" value={oneClient.address?.city} />
         <InfoRow label="Country" value={oneClient.address?.country} />
 
-        <div className="flex flex-col items-start p-[1rem] border-gray-200 bg-blue-50 rounded-[1rem] my-[1rem] gap-[1rem]">
+        <div className="flex flex-col items-start p-[1rem] border-[var(--primitive-colors-gray-light-mode-200)] border bg-[var(--primitive-colors-brand-primary-50)] rounded-[1rem] my-[1rem] gap-[1rem]">
           <p className="font-bold">Projects</p>
           {(oneClient.projects?.length == 0 || !oneClient.projects) ? (
-            <p className='text-gray-400'>No projects added.</p>
+            <p className='text-[var(--primitive-colors-gray-light-mode-400)]'>No projects added.</p>
           ) : (
             <>
               {oneClient.projects?.slice(0, 3).map((project) => (
@@ -682,19 +682,19 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
         ) : (
           <>
             <Input
-              color="bg-white"
+              color="bg-[var(--general-alpha)]"
               label="Client Name"
               value={oneClient.name}
               onChange={(e) => setOneClient({ ...oneClient, name: e.target.value })}
             />
             <Input
-              color="bg-white"
+              color="bg-[var(--general-alpha)]"
               label="Phone"
               value={oneClient.phone}
               onChange={(e) => setOneClient({ ...oneClient, phone: e.target.value })}
             />
             <Input
-              color="bg-white"
+              color="bg-[var(--general-alpha)]"
               label="Email"
               type="email"
               value={oneClient.email}
@@ -702,14 +702,14 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
             />
             <TextArea
               label="Notes"
-              color="bg-white"
+              color="bg-[var(--general-alpha)]"
               value={oneClient.notes}
               onChange={(e) => setOneClient({ ...oneClient, notes: e.target.value })}
             />
 
             <p className='font-bold text-center'>Client's Address</p>
             <Input
-              color="bg-white"
+              color="bg-[var(--general-alpha)]"
               label="Street Address"
               value={oneClient.address?.street}
               onChange={(e) =>
@@ -720,7 +720,7 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
               }
             />
             <Input
-              color="bg-white"
+              color="bg-[var(--general-alpha)]"
               label="Postal Code"
               value={oneClient.address?.postalCode}
               onChange={(e) =>
@@ -731,7 +731,7 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
               }
             />
             <Input
-              color="bg-white"
+              color="bg-[var(--general-alpha)]"
               label="City"
               value={oneClient.address?.city}
               onChange={(e) =>
@@ -742,7 +742,7 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
               }
             />
             <Input
-              color="bg-white"
+              color="bg-[var(--general-alpha)]"
               label="Country"
               value={oneClient.address?.country}
               onChange={(e) =>

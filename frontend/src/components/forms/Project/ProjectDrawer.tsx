@@ -8,9 +8,10 @@ interface Props {
     onClose: () => void;
     mode: "create" | "edit";
     project?: ProjectApiResponse | null;
+    onOpenClientSlide?:() => void;
 }
 
-const ProjectDrawer = ({ isOpen, onClose, mode, project }: Props) => {
+const ProjectDrawer = ({ isOpen, onClose, mode, project, onOpenClientSlide }: Props) => {
     const divRef = useRef<HTMLDivElement>(null);
 
     // Close when clicking outside
@@ -29,7 +30,7 @@ const ProjectDrawer = ({ isOpen, onClose, mode, project }: Props) => {
 
     return (
         <FormDrawer title={title} isOpen={isOpen} onClose={onClose} divRef={divRef}>
-            <ProjectForm onCancel={onClose} project={project} />
+            <ProjectForm onCancel={onClose} project={project} onOpenClientSlide={onOpenClientSlide}/>
         </FormDrawer>
     );
 };

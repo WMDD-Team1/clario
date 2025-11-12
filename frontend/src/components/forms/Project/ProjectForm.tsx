@@ -11,6 +11,7 @@ import TextArea from "@components/TextArea";
 import { useState } from "react";
 import SuccessForm from "../SuccessForm";
 import { useNavigate } from "react-router-dom";
+import { Plus } from "@assets/icons";
 
 // Validation schema
 const projectSchema = z.object({
@@ -40,9 +41,10 @@ type ProjectFormData = z.infer<typeof projectSchema>;
 interface ProjectFormProps {
     onCancel: () => void;
     project?: ProjectApiResponse | null;
+    onOpenClientSlide?:() => void;
 }
 
-export default function ProjectForm({ onCancel, project }: ProjectFormProps) {
+export default function ProjectForm({ onCancel, project, onOpenClientSlide }: ProjectFormProps) {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
     const [isSuccess, setIsSuccess] = useState(false);
@@ -136,7 +138,7 @@ export default function ProjectForm({ onCancel, project }: ProjectFormProps) {
             </div>
 
             {/* Client */}
-            <div>
+            <div className="relative">
                 <label className="block text-sm text-gray-500">Client</label>
                 <select
                     {...register("clientId")}
@@ -149,6 +151,10 @@ export default function ProjectForm({ onCancel, project }: ProjectFormProps) {
                         </option>
                     ))}
                 </select>
+                <Plus
+                className="absolute right-[1rem] top-6 cursor-pointer"
+                onClick={() => {onCancel();onOpenClientSlide?.()}}
+                />
                 {errors.clientId && <p className="text-sm text-red-500">{errors.clientId.message}</p>}
             </div>
 
