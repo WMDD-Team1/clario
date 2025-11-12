@@ -3,10 +3,12 @@ import { ExpenseItem } from '@api/types/dashboardApi';
 import { fetchTopExpenses } from '@api/services/dashboardService';
 import InfoCard from './InfoCard';
 import { formatDate } from '@utils/formatDate';
+import { useNavigate } from "react-router-dom";
 
 export const ExpensesTable: React.FC = () => {
   const [expenses, setExpenses] = useState<ExpenseItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const DUMMY_DATA: ExpenseItem[] = [
     { title: 'Office Rent', date: '2025-10-20', amount: 800, category: 'Rent' },
@@ -35,9 +37,18 @@ export const ExpensesTable: React.FC = () => {
     <div
       className="
         flex flex-col justify-start items-start 
-        w-full max-w-[310px] h-auto aspect-square sm:h-[313px] shrink-0 
-        rounded-[20px] bg-white shadow-sm hover:shadow-md p-4
+        w-full max-w-full sm:max-w-[100%] h-auto sm:h-[313px] shrink-0 
+        rounded-[20px] bg-white shadow-sm hover:shadow-md p-4 cursor-pointer
       "
+      onClick={() => {
+        console.log("Clicked!"); 
+        navigate("/transactions", {
+          state: {
+            name: "Money flow",
+            path: "/transactions"
+          },
+        });
+      }}
     >
       <h3 className="font-semibold text-[18px] text-gray-700 mb-3">Top Expenses</h3>
 

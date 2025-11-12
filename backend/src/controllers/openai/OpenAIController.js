@@ -8,7 +8,12 @@ export const getTransactionsInsights = async (req, res) => {
         const startOfYear = new Date(new Date().getFullYear(), 0, 1);
         const filters = { date: { $gte: startOfYear } }
         const transactions = await TransactionService.findAll(user.id, 1, -1, filters)
-        if (transactions.meta.total === 0) return res.status(404).json({ message: "No transactions found to analyze" });
+        if (transactions.meta.total === 0) return res.status(200).send({
+            data: [],
+            meta: {
+                total: 0
+            }
+        })
         const prompt = `
             Give 5 insights based on the transactions of my income and expenses.
             Each as an object with title, text and month. Month could be This Month ot Next Month.

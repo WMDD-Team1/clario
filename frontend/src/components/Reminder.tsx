@@ -18,7 +18,7 @@ const Reminder: React.FC<{ data: ReminderResponse }> = ({ data }) => {
   return (
     <div
       key={deliverableId}
-      className="p-5 rounded-2xl bg-[#DBE7FB] text-white shadow-md hover:shadow-lg transition-all duration-300"
+      className="flex flex-col justify-between gap-4 p-5 rounded-2xl bg-[#DBE7FB] text-white shadow-md hover:shadow-lg transition-all duration-300 mb-5 md:mb-0"
     >
       {/* Top Row — Icon, Title, Client */}
       <div className="flex justify-between items-start">
@@ -32,11 +32,9 @@ const Reminder: React.FC<{ data: ReminderResponse }> = ({ data }) => {
       
 
       {/* Date */}
-      <div className="flex flex-row mt-4 justify-between">
-        <div className="">
-          <p className=" flex justify-bottom text-[18px] font-small text-[#182230] mt-1">{milestoneName}</p>
-        </div>
-        <div className=""><span className="text-[18px] font-semibold text-[#0C111D]">{formatDate(dueDate)}</span></div>
+      <div className='flex flex-row justify-between align-bottom'>
+        <span className="text-[18px] font-small text-[#182230]">{milestoneName}</span>
+        <span className="text-[18px] font-semibold text-[#0C111D]">{formatDate(dueDate)}</span>
       </div>
     </div>
   );

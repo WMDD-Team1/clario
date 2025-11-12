@@ -46,27 +46,22 @@ const Slide: React.FC<SlideProps> = ({
         style={{ transform: `translateX(${slide})` }}
       >
         <div
-        className="absolute top-19 sm:left-[-1rem] left-[2rem] bg-blue-300 w-12 h-12 rounded-[1rem] cursor-pointer flex items-center justify-center shadow-md z-60"
+        className="absolute top-19 sm:left-[-1rem] left-[2rem] bg-[var(--primitive-colors-brand-primary-95)] w-12 h-12 rounded-[1rem] cursor-pointer flex items-center justify-center shadow-md z-60"
         onClick={onClose}
         >
-          <Forward className="w-8 h-8"/>
+          <Forward className="w-8 h-8" />
         </div>
-        <h3
-          className={`text-3xl font-semibold text-center bg-blue-50 p-[2rem] sticky top-0 z-10 sm:rounded-tl-[50px]`}
+        <h2
+          className={`text-3xl font-semibold text-center bg-[var(--background-alternate)] p-[2rem] sticky top-0 z-10 sm:rounded-tl-[50px]`}
         >
           {title}
-        </h3>
+        </h2>
         <div className="flex flex-col gap-[1.5rem] p-[2rem] h-full overflow-y-auto pt-[2.5rem]">{children}</div>
 
         {showFooter && (
-          <div className="flex flex-row justify-center gap-[1rem] sticky bottom-0 w-full p-[2rem] bg-blue-50 sm:rounded-bl-[50px]">
+          <div className="flex flex-row justify-center gap-[1rem] sticky bottom-0 w-full p-[2rem] bg-[var(--background-alternate)] sm:rounded-bl-[50px]">
             {showConfirm && onConfirm && (
-              <Button
-                buttonColor="whiteButton"
-                width="100%"
-                textColor="gray"
-                onClick={onConfirm}
-              >
+              <Button buttonColor="whiteButton" width="100%" textColor="gray" onClick={onConfirm}>
                 {confirmText}
               </Button>
             )}

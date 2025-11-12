@@ -30,7 +30,7 @@ const Sidebar = () => {
       route: '/transactions',
       activeIcon: <MoneyActiveIcon />,
       inactiveIcon: <MoneyInactiveIcon />,
-      tooltip: '',
+      tooltip: 'Transactions',
     },
     {
       route: '/settings',
@@ -42,7 +42,7 @@ const Sidebar = () => {
 
   const bottomMenu = [
     {
-      route: '/dashboard3',
+      route: '/faq',
       activeIcon: <FaqInactiveIcon />,
       inactiveIcon: <FaqInactiveIcon />,
       tooltip: 'Support & FAQ',

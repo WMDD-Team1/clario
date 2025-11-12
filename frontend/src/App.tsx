@@ -3,11 +3,13 @@ import { PrivateRoute } from './api/auth/PrivateRoute';
 import { Dashboard } from '@pages/dashboard/Dashboard';
 import { Landing } from './pages/Landing';
 import { IncomeExpenses } from '@pages/IncomeExpenses';
+import { Faq } from '@pages/Faq';
 import MyWork from '@pages/MyWork';
 import Logout from '@pages/Logout';
 import FinancialDashboard from '@pages/FinancialDashboard';
 import Settings from '@pages/Settings';
 import ProjectDetails from '@pages/ProjectDetails';
+import Contract from '@pages/Contract';
 
 function App() {
   return (
@@ -67,10 +69,28 @@ function App() {
       />
 
       <Route
+        path="/projects/:projectId/contract/"
+        element={
+          <PrivateRoute>
+            <Contract />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
         path="/settings"
         element={
           <PrivateRoute>
             <Settings />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/faq"
+        element={
+          <PrivateRoute>
+            <Faq/>
           </PrivateRoute>
         }
       />

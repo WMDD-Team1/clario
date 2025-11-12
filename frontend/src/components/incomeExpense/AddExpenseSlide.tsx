@@ -6,7 +6,11 @@ import InfoRow from '@components/InfoRow';
 import Loader from '@components/Loader';
 import Success from '@components/Success';
 import { FileChange, Trash, TransactionUploadSuccess } from '@assets/icons/index';
-import { TransactionFormat, Category, PostRecurrenceFormat } from '@api/types/transaction';
+import {
+  TransactionFormat,
+  TransactionCategory,
+  PostRecurrenceFormat,
+} from '@api/types/transaction';
 
 interface ExpenseDetailSlideProps {
   slide: string;
@@ -19,7 +23,7 @@ interface ExpenseDetailSlideProps {
   recurrence: PostRecurrenceFormat;
   file: File | null;
   fileName: string;
-  expenseCategories: Category[];
+  expenseCategories: TransactionCategory;
   onTransactionChange: (transaction: TransactionFormat) => void;
   onExpenseTypeChange: (value: string) => void;
   onRepeatToggle: () => void;
@@ -63,7 +67,7 @@ export const AddExpenseSlide = ({
     <Slide
       title="Add Expense"
       slide={slide}
-      confirmText="cancel"
+      confirmText="Cancel"
       onConfirm={onCancel}
       extralText={success ? 'view' : 'Add'}
       onExtra={success ? onView : onAdd}
@@ -82,7 +86,7 @@ export const AddExpenseSlide = ({
           <TransactionUploadSuccess className="w-25 h-25" />
         </Success>
       ) : (
-        <form className="flex flex-col gap-4">
+        <form className="flex flex-col gap-[1.5rem]">
           <Input
             label="Expense Title"
             id="expenseTitle"
@@ -95,27 +99,17 @@ export const AddExpenseSlide = ({
             id="expenseDate"
             type="date"
             color="bg-white"
-            value={transaction.date}
+            value={transaction.date.split('T')[0]}
             onChange={(e) => onTransactionChange({ ...transaction, date: e.target.value })}
           />
           <Select
             label="Type of Expense"
             id="expenseType"
-            options={[
-              'Software & Tools',
-              'Equipment / Hardware',
-              'Internet & Utilities',
-              'Marketing & Advertising',
-              'Subscription Fees',
-              'Travel & Transportation',
-              'Other Expenses',
-            ]}
+            options={expenseCategories.categories}
             value={expenseType}
             onChange={(value) => {
               onExpenseTypeChange(value);
-              const categoryId =
-                expenseCategories.find((category) => category.name === value)?.id || '';
-              onTransactionChange({ ...transaction, categoryId });
+              onTransactionChange({ ...transaction, category: value });
             }}
             color="bg-white"
             width="100%"
@@ -131,7 +125,7 @@ export const AddExpenseSlide = ({
             label="Amount"
             id="expenseAmount"
             type="number"
-            padding='pr-[3.5rem]'
+            padding="pr-[3.5rem]"
             // min={0}
             color="bg-white"
             value={transaction.baseAmount}
@@ -140,12 +134,12 @@ export const AddExpenseSlide = ({
               if (val === '' || Number(val) >= 0) {
                 onTransactionChange({
                   ...transaction,
-                  baseAmount: val === '' ? "" : Number(val),
+                  baseAmount: val === '' ? '' : Number(val),
                 });
               }
             }}
           >
-            <p className='absolute right-[1rem] top-4.5 text-blue-500'>CAD</p>
+            <p className="absolute right-[1rem] top-4.5 text-blue-500">CAD</p>
           </Input>
 
           {/* Recurring Expense */}
@@ -175,8 +169,12 @@ export const AddExpenseSlide = ({
                 options={['Weekly', 'Monthly']}
                 value={repeatOption}
                 onChange={(value) => {
-                  onRepeatOptionChange(value);
-                  onRecurrenceChange({ ...recurrence, frequency: value.toLowerCase() });
+                  if (repeat) {
+                    onRepeatOptionChange(value);
+                    onRecurrenceChange({ ...recurrence, frequency: value.toLowerCase() });
+                  } else {
+                    onRecurrenceChange({ ...recurrence, frequency: '' });
+                  }
                 }}
                 color="bg-white"
                 width="100%"
@@ -195,8 +193,8 @@ export const AddExpenseSlide = ({
 
           {file && (
             <div>
-              <InfoRow label="Attachment" value={fileName} />
-              <div className="flex gap-[.5rem] items-center justify-end mt-[.1rem]">
+              <InfoRow label="Attachment" value={fileName} hideBorder={true} />
+              <div className="flex gap-[.5rem] items-center justify-end mt-[.1rem] text-gray-400">
                 <FileChange className="cursor-pointer" onClick={handleBrowseClick} />
                 |
                 <Trash className="cursor-pointer" onClick={onFileRemove} />

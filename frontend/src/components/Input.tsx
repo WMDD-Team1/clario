@@ -25,7 +25,7 @@ const Input: React.FC<InputProps> = ({
   ...props
 }) => {
   return (
-    <div className={`relative ${hidden && 'hidden'}`}>
+    <div className={`relative ${hidden && 'hidden'} flex-1`}>
       {label && (
         <label
           htmlFor={id}

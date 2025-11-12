@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 // Validation schema
 const projectSchema = z.object({
     name: z.string().min(3, "Project name is required"),
-    clientId: z.string().optional(),
+    clientId: z.string().nonempty("Client is required"),
     description: z.string().optional(),
     upfrontAmount: z.number().optional(),
     startDate: z.string().nonempty("Start date required"),
@@ -149,6 +149,7 @@ export default function ProjectForm({ onCancel, project }: ProjectFormProps) {
                         </option>
                     ))}
                 </select>
+                {errors.clientId && <p className="text-sm text-red-500">{errors.clientId.message}</p>}
             </div>
 
             {/* Description */}

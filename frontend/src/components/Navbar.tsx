@@ -31,7 +31,7 @@ const menuItems = [
   {
     name: 'Settings',
     path: '/settings',
-    activeIcon: SettingsInactiveIcon, // only one version provided
+    activeIcon: SettingsInactiveIcon,
     inactiveIcon: SettingsInactiveIcon,
   },
 ];
@@ -43,10 +43,10 @@ const Navbar = () => {
         fixed bottom-[40px] left-0 mx-[30px] w-[90%]
         bg-white border-t border-gray-200
         flex items-center justify-around
-        py-[20px]
+        py-[10px]
         md:hidden
         rounded-[30px] shadow-sm
-        z-50
+        z-1000
       "
     >
       {menuItems.map(({ name, path, activeIcon: ActiveIcon, inactiveIcon: InactiveIcon }) => (
