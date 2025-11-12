@@ -35,14 +35,14 @@ const Slide: React.FC<SlideProps> = ({
   return (
     <>
       <div
-        className={`fixed inset-0 bg-black/40 transition-opacity duration-300 z-1010 ${
+        className={`fixed inset-0 transition-opacity duration-300 z-1010 ${
           slide === '0px' ? 'opacity-100 visible' : 'opacity-0 invisible'
         }`}
         onClick={onClose}
       />
 
       <div
-        className="fixed top-0 right-0 h-full shadow-lg bg-white transition-transform duration-300 ease-in-out sm:rounded-tl-[50px] sm:rounded-bl-[50px] z-1020 flex flex-col sm:w-[450px]  w-full"
+        className="fixed top-0 right-0 h-full shadow-lg bg-[var(--general-alpha)] transition-transform duration-600 ease-out sm:rounded-tl-[50px] sm:rounded-bl-[50px] z-1020 flex flex-col sm:w-[450px]  w-full"
         style={{ transform: `translateX(${slide})` }}
       >
         <div
@@ -51,11 +51,11 @@ const Slide: React.FC<SlideProps> = ({
         >
           <Forward className="w-8 h-8" />
         </div>
-        <h2
+        <h3
           className={`text-3xl font-semibold text-center bg-[var(--background-alternate)] p-[2rem] sticky top-0 z-10 sm:rounded-tl-[50px]`}
         >
           {title}
-        </h2>
+        </h3>
         <div className="flex flex-col gap-[1.5rem] p-[2rem] h-full overflow-y-auto pt-[2.5rem]">{children}</div>
 
         {showFooter && (

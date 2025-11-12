@@ -1,10 +1,12 @@
 import DashboardActiveIcon from "./dashboard-active.svg?react";
 import DashboardInactiveIcon from "./dashboard-inactive.svg?react";
 import FaqInactiveIcon from "./faq-inactive.svg?react";
+import FaqActiveIcon from "./faq-active.svg?react";
 import LogOutIcon from "./log-out.svg?react";
 import MoneyActiveIcon from "./money-active.svg?react";
 import MoneyInactiveIcon from "./money-inactive.svg?react";
 import SettingsInactiveIcon from "./settings-inactive.svg?react";
+import SettingsActiveIcon from "./settings-active.svg?react";
 import WorkActiveIcon from "./work-active.svg?react";
 import WorkInactiveIcon from "./work-inactive.svg?react";
 import Camera from "./camera.svg?react";
@@ -26,10 +28,12 @@ export {
   DashboardActiveIcon,
   DashboardInactiveIcon,
   FaqInactiveIcon,
+  FaqActiveIcon,
   LogOutIcon,
   MoneyActiveIcon,
   MoneyInactiveIcon,
   SettingsInactiveIcon,
+  SettingsActiveIcon,
   WorkActiveIcon,
   WorkInactiveIcon,
   Camera,

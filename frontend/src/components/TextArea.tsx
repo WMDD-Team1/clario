@@ -6,9 +6,10 @@ interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement
   color?: string;
   borderColor?: string;
   register?: UseFormRegisterReturn;
+  children?:React.ReactNode
 }
 
-const TextArea: React.FC<TextAreaProps> = ({ label, color, borderColor, id, register, ...props }) => (
+const TextArea: React.FC<TextAreaProps> = ({ label, color, borderColor, id, register,children, ...props }) => (
   <div className="relative">
     {label && (
       <label
@@ -22,8 +23,9 @@ const TextArea: React.FC<TextAreaProps> = ({ label, color, borderColor, id, regi
       id={id}
       {...register}
       {...props}
-      className={`p-[1rem] rounded-[1rem] border-2 ${borderColor || 'border-neutral-300'} w-full resize-none`}
+      className={`p-[1rem] rounded-[1rem] border-2 ${borderColor || 'border-[var(--primitive-colors-gray-light-mode-200)]'} w-full resize-none`}
     />
+    {children}
   </div>
 );
 

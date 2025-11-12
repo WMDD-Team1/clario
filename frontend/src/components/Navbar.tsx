@@ -3,6 +3,7 @@ import {
   DashboardInactiveIcon,
   MoneyActiveIcon,
   MoneyInactiveIcon,
+  SettingsActiveIcon,
   SettingsInactiveIcon,
   WorkActiveIcon,
   WorkInactiveIcon,
@@ -32,7 +33,7 @@ const menuItems = [
     name: 'Settings',
     path: '/settings',
     activeIcon: SettingsInactiveIcon,
-    inactiveIcon: SettingsInactiveIcon,
+    inactiveIcon: SettingsActiveIcon,
   },
 ];
 

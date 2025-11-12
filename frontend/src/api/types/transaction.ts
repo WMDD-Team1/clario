@@ -1,57 +1,67 @@
 export interface TransactionFormat {
-    id?: string;
-    projectId?: string;
-    type: 'expense' | 'income';
-    title: string;
-    date: string;
-    category: string;
-    baseAmount: number | "";
-    origin: string;
-    paymentMethod: string;
-    notes: string;
-    recurrence?: string;
-    attachmentURL?: string;
-    isArchived?: boolean;
-    createdAt?: string;
-    updatedAt?: string;
-  };
+  id?: string;
+  projectId?: string;
+  type: 'expense' | 'income';
+  title: string;
+  date: string;
+  category: string;
+  baseAmount: number | "";
+  origin: string;
+  paymentMethod: string;
+  notes: string;
+  recurrence?: string;
+  attachmentURL?: string;
+  isArchived?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+};
 
 
-  export interface TransactionCategory {
-    categories:[]
-  }
+export interface TransactionCategory {
+  categories: []
+}
 
 
-  export interface RecurrenceFormat {
-    id: string;
-    templateTransactionId: string;
-    frequency: string;
-    endDate: string;
-    lastRun: string;
-    nextRun: string;
-    isArchived: boolean;
-    createdAt: string;
-    updatedAt: string;
-  }
+export interface RecurrenceFormat {
+  id: string;
+  templateTransactionId: string;
+  frequency: string;
+  endDate: string;
+  lastRun: string;
+  nextRun: string;
+  isArchived: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
 
 
-  export interface PostRecurrenceFormat {
-    templateTransactionId: string;
-    frequency: string;
-    endDate: string;
-  }
+export interface PostRecurrenceFormat {
+  templateTransactionId: string;
+  frequency: string;
+  endDate: string;
+}
 
-  export interface Meta {
-    total: number;
-    page: number;
-    limit: number;
-    totalPages: number;
-  }
+export interface Meta {
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
 
-  export interface TransactionFilter {
-    dateStart: string;
-    dateEnd: string;
-    type: string[];
-    amountStart: number;
-    amountEnd: number;
-  }
+export interface TransactionFilter {
+  dateStart: string;
+  dateEnd: string;
+  type: string[];
+  amountStart: number;
+  amountEnd: number;
+}
+
+export interface FormErrors {
+  title: string;
+  date: string;
+  type: string;
+  baseAmount: string;
+  origin: string;
+  notes: string;
+  recurrence: string;
+}

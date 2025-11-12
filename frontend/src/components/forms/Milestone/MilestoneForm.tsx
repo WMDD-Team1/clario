@@ -8,6 +8,8 @@ import { z } from "zod";
 import FormFooter from "../FormFooter";
 import { useState } from "react";
 import SuccessForm from "../SuccessForm";
+import TextArea from "@components/TextArea";
+import { Select } from "@mui/material";
 
 // Validation schema
 const milestoneSchema = z.object({
@@ -95,7 +97,7 @@ export default function ProjectForm({ onCancel, milestone, projectId }: Props) {
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 pb-40">
             {/* Project Name */}
             <div>
                 <Input
@@ -109,27 +111,25 @@ export default function ProjectForm({ onCancel, milestone, projectId }: Props) {
 
             {/* Description */}
             <div>
-                <label className="block text-sm text-gray-500">Milestone Description</label>
-                <textarea
-                    {...register("description")}
+                <TextArea
+                    label="Milestone Description"
                     placeholder="Description..."
-                    rows={3}
-                    className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-400 focus:outline-none resize-none"
+                    color="bg-white"
+                    register={register("description")}
                 />
             </div>
 
             {/* Amount */}
             <div>
-                <label className="block text-sm text-gray-500">Amount</label>
-                <div className="flex items-center border-b border-gray-300 py-1">
-                    <input
-                        type="number"
-                        {...register("amount", { valueAsNumber: true })}
-                        placeholder="3000"
-                        className="w-full outline-none"
-                    />
-                    <span className="text-gray-500 text-sm font-medium">CAD</span>
-                </div>
+                <Input
+                    color="bg-white"
+                    label="Amount"
+                    placeholder="3000"
+                    type="number"
+                    min={0}
+                    register={register("amount", { valueAsNumber: true })}
+                    endAdornment={<span>CAD</span>}
+                />
                 {errors.amount && (
                     <p className="text-sm text-red-500">{errors.amount.message}</p>
                 )}
@@ -137,11 +137,12 @@ export default function ProjectForm({ onCancel, milestone, projectId }: Props) {
 
             {/* Dates */}
             <div>
-                <label className="block text-sm text-gray-500">Due Date</label>
-                <input
+                <Input
+                    color="bg-white"
+                    label="Due Date"
                     type="date"
-                    {...register("dueDate")}
-                    className="w-full border border-gray-300 rounded-lg px-2 py-1 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                    min={0}
+                    register={register("dueDate")}
                 />
                 {errors.dueDate && (
                     <p className="text-sm text-red-500">{errors.dueDate.message}</p>

@@ -43,7 +43,7 @@ export const IncomeUploadSlide = ({
       <div className="flex flex-col flex-nowrap items-center justify-center gap-[1rem] h-full">
         <p>Add your Income Receipt here</p>
         <div
-          className="flex flex-col flex-nowrap items-center gap-[1rem] p-[3rem] border-2 border-dashed border-blue-100 bg-blue-50 rounded-[20px] cursor-pointer"
+          className="flex flex-col flex-nowrap items-center gap-[1rem] p-[3rem] border-2 border-dashed border-[var(--primitive-colors-brand-primary-95)] bg-[var(--primitive-colors-brand-primary-50)]  rounded-[20px] cursor-pointer"
           onDrop={onDrop}
           onDragOver={onDragOver}
           onClick={handleBrowseClick}
@@ -52,7 +52,7 @@ export const IncomeUploadSlide = ({
           <Camera className="w-25 h-25 sm:hidden" />
           <p className="font-bold hidden sm:block">Choose a file or drag & drop it here</p>
           <p className="font-bold sm:hidden">Take a Picture and Upload</p>
-          <p className="text-gray-400 hidden sm:block">JPG, PNG or PDF formats up to 5MB</p>
+          <p className="text-[var(--primitive-colors-gray-light-mode-400)] hidden sm:block">JPG, PNG or PDF formats up to 5MB</p>
         </div>
 
         <Input
@@ -72,7 +72,7 @@ export const IncomeUploadSlide = ({
           value={fileName}
           hideBorder={true}
           />
-          <div className="flex gap-[.5rem] items-center justify-end mt-[.1rem] text-gray-400">
+          <div className="flex gap-[.5rem] items-center justify-end mt-[.1rem] text-[var(--primitive-colors-gray-light-mode-400)]">
             <FileChange className="cursor-pointer" onClick={handleBrowseClick} />
             |
             <Trash className="cursor-pointer" onClick={onFileRemove} />

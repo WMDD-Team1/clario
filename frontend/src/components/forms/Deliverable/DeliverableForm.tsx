@@ -10,6 +10,7 @@ import FileUpload from "@components/FileUpload";
 import { useState } from "react";
 import Button from "@components/Button";
 import SuccessForm from "../SuccessForm";
+import TextArea from "@components/TextArea";
 
 // Validation schema
 const deliverableSchema = z.object({
@@ -111,12 +112,10 @@ export default function DeliverableForm({ onCancel, deliverable, milestoneId, pr
 
             {/* Description */}
             <div>
-                <label className="block text-sm text-gray-500">Deliverable Description</label>
-                <textarea
-                    {...register("description")}
-                    placeholder="Description..."
-                    rows={3}
-                    className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-400 focus:outline-none resize-none"
+                <TextArea
+                    label="Deliverable Description"
+                    color="bg-white"
+                    register={register("description")}
                 />
             </div>
 
@@ -130,11 +129,12 @@ export default function DeliverableForm({ onCancel, deliverable, milestoneId, pr
 
             {/* Dates */}
             <div>
-                <label className="block text-sm text-gray-500">Due Date</label>
-                <input
+                <Input
+                    color="bg-white"
+                    label="Due Date"
                     type="date"
-                    {...register("dueDate")}
-                    className="w-full border border-gray-300 rounded-lg px-2 py-1 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                    min={0}
+                    register={register("dueDate")}
                 />
                 {errors.dueDate && (
                     <p className="text-sm text-red-500">{errors.dueDate.message}</p>

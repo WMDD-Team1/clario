@@ -80,7 +80,7 @@ export const ExpenseFilterSlide = ({
         </div>
 
         {/* Amount Range */}
-        <div className="flex flex-col justify-between gap-[1.5rem] border-b-2 pb-[1rem] border-[var(--primitive-colors-gray-light-mode-200)]">
+        <div className="flex flex-col justify-between gap-[1.5rem]">
           <p className="text-[1.2rem]">Amount Range</p>
           <div className="flex flex-row justify-between items-center gap-[1rem]">
             <Input
