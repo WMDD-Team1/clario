@@ -29,13 +29,13 @@ const Input: React.FC<InputProps> = ({
       {label && (
         <label
           htmlFor={id}
-          className={`absolute top-[-0.8rem] left-[1rem] ${color} px-[0.3rem] rounded-[1rem]`}
+          className={`absolute top-[-0.8rem] left-[1rem] bg-[var(--general-alpha)] px-[0.3rem] rounded-[1rem]`}
         >
           {label}
         </label>
       )}
 
-      <div className={`flex justify-between rounded-[1rem] border-2 ${color} ${padding} ${borderColor || "border-[var(--sublight-2)]"}`}>
+      <div className={`flex justify-between rounded-[1rem] border-2 ${color} ${padding} ${borderColor || "border-[var(--primitive-colors-gray-light-mode-200)]"}`}>
         <input
           id={id}
           {...register}

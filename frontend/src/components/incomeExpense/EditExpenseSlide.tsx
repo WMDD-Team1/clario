@@ -15,6 +15,7 @@ import {
   TransactionFormat,
   TransactionCategory,
   PostRecurrenceFormat,
+  FormErrors,
 } from '@api/types/transaction';
 
 interface ExpenseDetailSlideProps {
@@ -30,6 +31,8 @@ interface ExpenseDetailSlideProps {
   file: File | null;
   fileName: string;
   expenseCategories: TransactionCategory;
+  errors: FormErrors;
+  setErrors: (errors: FormErrors) => void;
   onTransactionChange: (transaction: TransactionFormat) => void;
   onExpenseTypeChange: (value: string) => void;
   onRepeatToggle: () => void;
@@ -54,6 +57,8 @@ export const EditExpenseSlide = ({
   file,
   fileName,
   expenseCategories,
+  errors,
+  setErrors,
   onTransactionChange,
   onExpenseTypeChange,
   onRepeatToggle,
@@ -74,7 +79,7 @@ export const EditExpenseSlide = ({
     <Slide
       title="Edit Expense"
       slide={slide}
-      confirmText="Cancel"
+      confirmText={updateSuccess ? 'Close' : 'Cancel'}
       onConfirm={onCancel}
       extralText={updateSuccess ? 'view' : 'Save'}
       onExtra={updateSuccess ? onView : onAdd}
@@ -95,20 +100,34 @@ export const EditExpenseSlide = ({
       ) : (
         <form className="flex flex-col gap-[1.5rem]">
           <Input
+            required
             label="Expense Title"
             id="expenseTitle"
             color="bg-white"
             value={transaction.title}
-            onChange={(e) => onTransactionChange({ ...transaction, title: e.target.value })}
-          />
+            onChange={(e) => {
+              onTransactionChange({ ...transaction, title: e.target.value });
+              setErrors({ ...errors, title: '' });
+            }}
+          >
+            {errors.title && <div style={{ color: 'red' }}>{errors.title}</div>}
+          </Input>
+
           <Input
+            required
             label="Date"
             id="expenseDate"
             type="date"
             color="bg-white"
             value={transaction.date.split('T')[0]}
-            onChange={(e) => onTransactionChange({ ...transaction, date: e.target.value })}
-          />
+            onChange={(e) => {
+              onTransactionChange({ ...transaction, date: e.target.value });
+              setErrors({ ...errors, date: '' });
+            }}
+          >
+            {errors.date && <div style={{ color: 'red' }}>{errors.date}</div>}
+          </Input>
+
           <Select
             label="Type of Expense"
             id="expenseType"
@@ -117,23 +136,34 @@ export const EditExpenseSlide = ({
             onChange={(value) => {
               onExpenseTypeChange(value);
               onTransactionChange({ ...transaction, category: value });
+              setErrors({ ...errors, type: '' });
             }}
             color="bg-white"
             width="100%"
-          />
+          >
+            {errors.type && <div style={{ color: 'red' }}>{errors.type}</div>}
+          </Select>
+
           <Input
+            required
             label="Invoice No."
             id="expenseInvoice"
             color="bg-white"
             value={transaction.origin}
-            onChange={(e) => onTransactionChange({ ...transaction, origin: e.target.value })}
-          />
+            onChange={(e) => {
+              onTransactionChange({ ...transaction, origin: e.target.value });
+              setErrors({ ...errors, origin: '' });
+            }}
+          >
+            {errors.origin && <div style={{ color: 'red' }}>{errors.origin}</div>}
+          </Input>
+
           <Input
+            required
             label="Amount"
             id="expenseAmount"
             type="number"
             padding="pr-[3.5rem]"
-            // min={0}
             color="bg-white"
             value={transaction.baseAmount}
             onChange={(e) => {
@@ -143,10 +173,14 @@ export const EditExpenseSlide = ({
                   ...transaction,
                   baseAmount: val === '' ? '' : Number(val),
                 });
+                setErrors({ ...errors, baseAmount: '' });
               }
             }}
           >
-            <p className="absolute right-[1rem] top-4.5 text-blue-500">CAD</p>
+            <p className="absolute right-[1rem] top-4.5 text-[var(--primitive-colors-brand-primary-500-base)]">
+              CAD
+            </p>
+            {errors.baseAmount && <div style={{ color: 'red' }}>{errors.baseAmount}</div>}
           </Input>
 
           {/* Recurring Expense */}
@@ -156,11 +190,11 @@ export const EditExpenseSlide = ({
               <div className="flex items-center gap-2">
                 Off
                 <div
-                  className="w-[45px] h-[20px] border-2 rounded-full flex items-center p-[2px] cursor-pointer border-blue-500"
+                  className="w-[45px] h-[20px] border-2 rounded-full flex items-center p-[2px] cursor-pointer border-[var(--primitive-colors-brand-primary-500-base)]"
                   onClick={onRepeatToggle}
                 >
                   <div
-                    className={`w-[10px] h-[10px] bg-blue-500 rounded-full transition-transform ${
+                    className={`w-[10px] h-[10px] bg-[var(--primitive-colors-brand-primary-500-base)] rounded-full transition-transform ${
                       repeat ? 'translate-x-[26px]' : ''
                     }`}
                   ></div>
@@ -169,7 +203,9 @@ export const EditExpenseSlide = ({
               </div>
             </div>
 
-            {repeat && (
+            <div
+              className={`${repeat ? 'max-h-20 opacity-100' : 'max-h-0 opacity-0'} transition-all`}
+            >
               <Select
                 label="Recurrence Type"
                 id="repeatExpenses"
@@ -179,24 +215,33 @@ export const EditExpenseSlide = ({
                   if (repeat) {
                     onRepeatOptionChange(value);
                     onRecurrenceChange({ ...recurrence, frequency: value.toLowerCase() });
+                    setErrors({ ...errors, recurrence: '' });
                   } else {
                     onRecurrenceChange({ ...recurrence, frequency: '' });
                   }
                 }}
                 color="bg-white"
                 width="100%"
-              />
-            )}
+              >
+                {errors.recurrence && <div style={{ color: 'red' }}>{errors.recurrence}</div>}
+              </Select>
+            </div>
           </div>
 
           <TextArea
+            required
             label="Notes"
             id="expenseNotes"
             color="bg-white"
             rows={3}
             value={transaction.notes}
-            onChange={(e) => onTransactionChange({ ...transaction, notes: e.target.value })}
-          />
+            onChange={(e) => {
+              onTransactionChange({ ...transaction, notes: e.target.value });
+              setErrors({ ...errors, notes: '' });
+            }}
+          >
+            {errors.notes && <div style={{ color: 'red' }}>{errors.notes}</div>}
+          </TextArea>
 
           {transaction.attachmentURL && (
             <div>
@@ -208,20 +253,10 @@ export const EditExpenseSlide = ({
                   className="text-[var(--primitive-colors-brand-primary-500-base)] underline hover:opacity-80 transition"
                 >
                   {transaction?.attachmentURL
-                    ? transaction.attachmentURL
-                        .split('/')
-                        .pop()
-                        ?.split('?')[0]
-                        .split('-')
-                        .slice(-2)
+                    ? transaction.attachmentURL.split('/').pop()?.split('?')[0].split('-').slice(-2)
                     : 'No attachment'}
                 </a>
               </InfoRow>
-              {/* <div className="flex gap-[.5rem] items-center justify-end mt-[.1rem] text-gray-400">
-                <FileChange className="cursor-pointer" onClick={handleBrowseClick} />
-                |
-                <Trash className="cursor-pointer" onClick={onFileRemove} />
-              </div> */}
             </div>
           )}
         </form>
