@@ -46,6 +46,6 @@ app.use("/api/recurrences", recurrencesRoutes);
 // Swagger
 setupSwagger(app);
 
-app.get("*path", (req, res) => {
+app.get("/*path", (req, res) => {
 	res.sendFile(path.join(__dirname, "public", "index.html"));
 });
