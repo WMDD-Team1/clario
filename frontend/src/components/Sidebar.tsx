@@ -44,7 +44,7 @@ const Sidebar = () => {
   const bottomMenu = [
     {
       route: '/faq',
-      activeIcon: <FaqActiveIcon />,
+      activeIcon: <FaqInactiveIcon />,
       inactiveIcon: <FaqInactiveIcon />,
       tooltip: 'Support & FAQ',
     },
