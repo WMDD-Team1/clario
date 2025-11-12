@@ -20,6 +20,7 @@ export const app = express();
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static("public"));
 
 // Enable CORS only if CORS_ENABLED=true
 if (process.env.CORS_ENABLED === "true") {
