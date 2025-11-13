@@ -1,16 +1,17 @@
-import { Search } from 'lucide-react';
-import Menu from './Menu';
 import {
   DashboardActiveIcon,
   DashboardInactiveIcon,
+  FaqActiveIcon,
   FaqInactiveIcon,
   LogOutIcon,
   MoneyActiveIcon,
   MoneyInactiveIcon,
+  SettingsActiveIcon,
   SettingsInactiveIcon,
   WorkActiveIcon,
   WorkInactiveIcon,
 } from '@/assets/icons';
+import Menu from './Menu';
 
 const Sidebar = () => {
   const topMenu = [
@@ -34,7 +35,7 @@ const Sidebar = () => {
     },
     {
       route: '/settings',
-      activeIcon: <SettingsInactiveIcon />,
+      activeIcon: <SettingsActiveIcon />,
       inactiveIcon: <SettingsInactiveIcon />,
       tooltip: 'Settings',
     },
@@ -42,7 +43,7 @@ const Sidebar = () => {
 
   const bottomMenu = [
     {
-      route: '/dashboard3',
+      route: '/faq',
       activeIcon: <FaqInactiveIcon />,
       inactiveIcon: <FaqInactiveIcon />,
       tooltip: 'Support & FAQ',

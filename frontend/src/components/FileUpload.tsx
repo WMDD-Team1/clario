@@ -1,29 +1,28 @@
 import React, { useState } from "react";
+import { CloudUpload, FileText, Trash2 } from "lucide-react";
 
 interface FileUploadProps {
     label?: string;
     onFilesSelected?: (files: FileList) => void;
 }
 
-const MAX_FILES = 1;
+const MAX_FILES = 5;
 const MAX_FILE_SIZE_MB = 5;
 
-const FileUpload: React.FC<FileUploadProps> = ({ label = "Upload File", onFilesSelected }) => {
+const FileUpload: React.FC<FileUploadProps> = ({
+    label = "Upload Files",
+    onFilesSelected,
+}) => {
     const [isDragging, setIsDragging] = useState(false);
     const [error, setError] = useState<string | null>(null);
-
-    const handleDragLeave = () => setIsDragging(false);
-    const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-        e.preventDefault();
-        setIsDragging(true);
-    };
-
+    const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
 
     const validateFiles = (files: FileList) => {
         const validFiles: File[] = [];
         setError(null);
 
-        if (files.length > MAX_FILES) {
+        const totalFiles = uploadedFiles.length + files.length;
+        if (totalFiles > MAX_FILES) {
             setError(`You can only upload up to ${MAX_FILES} files.`);
             return [];
         }
@@ -40,61 +39,107 @@ const FileUpload: React.FC<FileUploadProps> = ({ label = "Upload File", onFilesS
         return validFiles;
     };
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (!e.target.files) return;
-        const validFiles = validateFiles(e.target.files);
-        if (validFiles.length && onFilesSelected) {
-            // convert array back to FileList-like object
-            const dataTransfer = new DataTransfer();
-            validFiles.forEach((f) => dataTransfer.items.add(f));
-            onFilesSelected(dataTransfer.files);
+    const handleFileSelection = (files: FileList) => {
+        const validFiles = validateFiles(files);
+        if (!validFiles.length) return;
+
+        const newFiles = [...uploadedFiles, ...validFiles];
+        setUploadedFiles(newFiles);
+
+        if (onFilesSelected) {
+            const dt = new DataTransfer();
+            newFiles.forEach((f) => dt.items.add(f));
+            onFilesSelected(dt.files);
         }
+    };
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) handleFileSelection(e.target.files);
     };
 
     const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         setIsDragging(false);
-        if (!e.dataTransfer.files) return;
-        const validFiles = validateFiles(e.dataTransfer.files);
-        if (validFiles.length && onFilesSelected) {
-            const dataTransfer = new DataTransfer();
-            validFiles.forEach((f) => dataTransfer.items.add(f));
-            onFilesSelected(dataTransfer.files);
+        if (e.dataTransfer.files) handleFileSelection(e.dataTransfer.files);
+    };
+
+    const removeFile = (index: number) => {
+        const newFiles = uploadedFiles.filter((_, i) => i !== index);
+        setUploadedFiles(newFiles);
+
+        if (onFilesSelected) {
+            const dt = new DataTransfer();
+            newFiles.forEach((f) => dt.items.add(f));
+            onFilesSelected(dt.files);
         }
     };
 
     return (
-        <div className="relative flex flex-col gap-2">
-            <label
-                className={`bg-white absolute top-[-0.8rem] left-[1rem] px-[0.3rem] rounded-[1rem]`}
-            >
+        <div className="relative flex flex-col gap-3">
+            <label className="bg-white absolute top-[-0.8rem] left-[1rem] px-[0.3rem] rounded-[1rem]">
                 {label}
             </label>
 
+            {/* Drop zone */}
             <div
-                className={`border-2 rounded-[20px] text-center p-6 transition-all cursor-pointer ${isDragging ? "border-[var(--primitive-colors-brand-primary-100)] bg-blue-50" : "border-[var(--sublight)]"
-                    }`}
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
+                className={`border-2 rounded-[20px] text-center p-6 transition-all cursor-pointer
+          ${isDragging
+                        ? "border-[var(--primitive-colors-brand-primary-200)] bg-[var(--primitive-colors-brand-primary-50)]"
+                        : "border-[var(--sublight-2)]"}
+        `}
+                onDragOver={(e) => {
+                    e.preventDefault();
+                    setIsDragging(true);
+                }}
+                onDragLeave={() => setIsDragging(false)}
                 onDrop={handleDrop}
                 onClick={() => document.getElementById("fileInput")?.click()}
             >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="mx-auto h-8 w-8 text-[var(--primitive-colors-brand-primary-500-base)] mb-2"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5-5m0 0l5 5m-5-5v12" />
-                </svg>
-
-                <p className="text-[var(--primary-text)] font-medium">Choose a file or drag & drop it here</p>
+                <CloudUpload
+                    className="mx-auto h-10 w-10 text-[var(--primitive-colors-brand-primary-500-base)] mb-2"
+                    strokeWidth={1.5}
+                />
+                <p className="text-[var(--primary-text)] font-medium">
+                    Choose file(s) or drag & drop here
+                </p>
                 <p className="text-[var(--sub-text)] text-sm mt-1">
-                    You can upload up to 5 files (JPG, PNG, PDF) max 5 MB each.
+                    JPG, PNG, or PDF formats up to {MAX_FILE_SIZE_MB} MB each, max {MAX_FILES} files.
                 </p>
             </div>
 
+            {/* Uploaded list */}
+            {uploadedFiles.length > 0 && (
+                <ul className="flex flex-col gap-2 mt-2">
+                    {uploadedFiles.map((file, index) => (
+                        <li
+                            key={index}
+                            className="flex items-center justify-between bg-[var(--primitive-colors-brand-primary-75)] rounded-xl px-4 py-2"
+                        >
+                            <div className="flex items-center gap-2 truncate">
+                                <FileText
+                                    className="text-[var(--primitive-colors-brand-primary-500-base)] w-5 h-5"
+                                    strokeWidth={1.5}
+                                />
+                                <span className="truncate text-[var(--primary-text)] text-sm font-medium">
+                                    {file.name}
+                                </span>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    removeFile(index);
+                                }}
+                                className="text-[var(--sub-text)] hover:text-red-500 transition-colors"
+                            >
+                                <Trash2 size={16} />
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+            )}
+
+            {/* Error */}
             {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
             <input
