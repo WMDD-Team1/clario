@@ -81,7 +81,6 @@ const MoneyFlowChart: React.FC<MoneyFlowChartProps> = ({
               />
             </AreaChart>
           ) : (
-            // --- Original Line Chart Version (your existing code) ---
             <LineChart
               data={data}
               margin={{ top: 10, right: 20, bottom: 0, left: 0 }}

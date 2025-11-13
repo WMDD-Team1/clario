@@ -1,6 +1,6 @@
 import { ReminderResponse } from '@api/types/dashboardApi';
 import { formatDate } from '@utils/formatDate';
-import { CircleDot } from 'lucide-react';
+import { FaDotCircle } from "react-icons/fa";
 import React from 'react';
 
 const Reminder: React.FC<{ data: ReminderResponse }> = ({ data }) => {
@@ -22,8 +22,8 @@ const Reminder: React.FC<{ data: ReminderResponse }> = ({ data }) => {
     >
       {/* Top Row — Icon, Title, Client */}
       <div className="flex justify-between items-start">
-        <div className="flex items-center gap-2">
-          <CircleDot className="w-4 h-4 color-[#0665EC]" />
+        <div className="flex items-center gap-2 padding-2">
+          <FaDotCircle className="text-[#0665EC]" />
           <span className="text-[18px] font-semibold text-[#0665EC]">{deliverableName}</span>
         </div>
         <span className="text-[16px] text-sm text-[#182230] font-medium">{clientName}</span>

@@ -26,7 +26,7 @@ const Header = () => {
   };
 
   return (
-    <div className='flex m-0 px-4 py-4 justify-between items-center sticky top-0 md:bg-[#F5F9FF] bg-white mb-5 z-[1000] rounded-b-[20px] shadow-md md:rounded-none md:shadow-none'>
+    <div className='flex m-0 px-4 py-4 justify-between items-center sticky top-0 md:bg-[#F5F9FF] bg-white mb-5 z-[1000] rounded-b-[40px] shadow-md md:rounded-none md:shadow-none'>
       {/* Logo */}
       <div
         className={`logo transition-all duration-300 ${isSearchOpen ? 'hidden md:block' : 'block'}`}
