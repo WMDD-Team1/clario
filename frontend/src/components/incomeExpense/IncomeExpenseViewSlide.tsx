@@ -33,7 +33,7 @@ export const IncomeExpenseViewSlide = ({
     <Slide
       title={oneTransaction.type == 'income' ? 'Income' : 'Expense'}
       slide={transactionDetail}
-      confirmText={deleteSuccess ? 'Close' : 'Archive'}
+      confirmText={deleteSuccess ? 'Close' : 'Delete'}
       onConfirm={deleteSuccess ? cancelOperation : deleteTransaction}
       extralText={deleteSuccess ? 'Done' : 'Edit'}
       onExtra={
@@ -46,16 +46,13 @@ export const IncomeExpenseViewSlide = ({
           <Loader />
         </div>
       ) : deleteSuccess ? (
-        <Success title="Archived Successfully!" p1="All set!" p2={`The item's been archived.`}>
+        <Success title="Deleted Successfully!" p1="All set!" p2={`The item's been deleted.`}>
           <DeleteTransactionSuccess className="w-25 h-25" />
         </Success>
       ) : (
         <>
           <InfoRow label="Title" value={oneTransaction.title} />
-          <InfoRow
-            label="Date"
-            value={formatDate(oneTransaction.date,{stringMonth:true})}
-          />
+          <InfoRow label="Date" value={formatDate(oneTransaction.date, { stringMonth: true })} />
           <InfoRow
             label={`Type of ${oneTransaction.type == 'income' ? 'Income' : 'Expense'}`}
             value={oneTransaction.category || 'Unknown'}
@@ -72,14 +69,16 @@ export const IncomeExpenseViewSlide = ({
               value={`$ ${String(oneTransaction.baseAmount.toLocaleString())}`}
               hideBorder={true}
             />
+            {oneTransaction.type == 'income' && (
+              <InfoRow
+                label="Tax"
+                value={`$ ${String(oneTransaction.taxAmount?.toLocaleString())}`}
+                hideBorder={true}
+              />
+            )}
             <InfoRow
-              label="Tax(5%)"
-              value={`$ ${String(((Number(oneTransaction.baseAmount) * 5) / 100).toLocaleString())}`}
-              hideBorder={true}
-            />
-            <InfoRow
-              label="Total Income"
-              value={`$ ${String(((Number(oneTransaction.baseAmount) * 105) / 100).toLocaleString())}`}
+              label={`Total ${oneTransaction.type == 'income' ? 'Income' : 'Expense'}`}
+              value={`$ ${String(oneTransaction.totalAmount?.toLocaleString())}`}
               hideBorder={true}
             />
           </div>

@@ -218,6 +218,8 @@ export const IncomeExpenses = () => {
     isArchived: false,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
+    taxAmount: '',
+    totalAmount: '',
   });
 
   const resetForm = () => {
@@ -237,6 +239,8 @@ export const IncomeExpenses = () => {
       isArchived: false,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
+      taxAmount: '',
+      totalAmount: '',
     });
 
     setRepeatOption('');
@@ -721,8 +725,8 @@ export const IncomeExpenses = () => {
   const filteredExpenseData = getFilteredExpenseData();
 
   const expenseFilteredData = filteredExpenseData.slice(
-    (incomePage - 1) * PAGE_SIZE,
-    incomePage * PAGE_SIZE,
+    (expensePage - 1) * PAGE_SIZE,
+    expensePage * PAGE_SIZE,
   );
 
   // ----------------------------
@@ -837,6 +841,7 @@ export const IncomeExpenses = () => {
 
   return (
     <div>
+      <h2 className="mb-[1rem]">Money Flow</h2>
       <div>
         <div className="md:hidden flex justify-center mb-[1rem]">
           <ToggleButton options={options} option={selectedOption} onClick={handleToggle} />
