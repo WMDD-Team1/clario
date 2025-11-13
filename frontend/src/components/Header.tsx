@@ -70,7 +70,7 @@ const Header = () => {
               <>
                 {filteredResults.map((project, index) => (
                   <Link
-                    onClick={() => setSearchValue('')}
+                    onClick={() => {setSearchValue('');setIsSearchOpen(false)}}
                     to={`/projects/${project.id}`}
                     key={index}
                     className="flex flex-row justify-between mb-1 pb-0.5 cursor-pointer border-b-0 transition-all relative group"
