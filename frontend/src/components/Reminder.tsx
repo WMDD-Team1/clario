@@ -24,9 +24,9 @@ const Reminder: React.FC<{ data: ReminderResponse }> = ({ data }) => {
       <div className="flex justify-between items-start">
         <div className="flex items-center gap-2">
           <CircleDot className="w-4 h-4 color-[#0665EC]" />
-          <span className="font-semibold text-[#0665EC]">{deliverableName}</span>
+          <span className="text-[18px] font-semibold text-[#0665EC]">{deliverableName}</span>
         </div>
-        <span className="text-sm text-[#182230] font-medium">{clientName}</span>
+        <span className="text-[16px] text-sm text-[#182230] font-medium">{clientName}</span>
       </div>
 
       

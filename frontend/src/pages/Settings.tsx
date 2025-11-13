@@ -85,15 +85,15 @@ const Settings: React.FC = () => {
 
   // === General Section ===
   const renderGeneral = () => (
-    <div className="flex flex-col gap-8 mt-4">
+    <div className="flex flex-col gap-8 mt-4 font-['Montserrat']">
       {/* Profile */}
       <section>
-        <h3 className="font-semibold text-gray-900 text-lg mb-3">Profile</h3>
+        <h3 className=" text-gray-900 text-2xl mb-3">Profile</h3>
         <div className="md:divide-y">
           {/* Name */}
           <div className="flex flex-col gap-2 py-4 ">
             <div className="flex justify-between items-center md:hidden">
-              <span className="text-sm text-gray-600 font-semibold">Name</span>
+              <span className="text-base text-gray-600">Name</span>
               <Button
                 className="px-5 py-1"
                 buttonColor="regularButton"
@@ -105,10 +105,10 @@ const Settings: React.FC = () => {
                 Edit
               </Button>
             </div>
-            <span className="text-gray-800 font-bold md:hidden">{profile.name}</span>
+            <span className="text-lg text-gray-600 md:hidden">{profile.name}</span>
             <div className="hidden md:flex items-center justify-between gap-4">
-              <span className="text-sm text-gray-600 font-semibold w-1/5">Name</span>
-              <span className="text-gray-800 font-bold flex-1 whitespace-nowrap">
+              <span className="text-base text-gray-600 !font-normal w-1/5">Name</span>
+              <span className="text-lg text-gray-600 !font-normal flex-1 whitespace-nowrap">
                 {profile.name}
               </span>
               <Button
@@ -127,7 +127,7 @@ const Settings: React.FC = () => {
           {/* Email */}
           <div className="flex flex-col gap-2 py-4">
             <div className="flex justify-between items-center md:hidden">
-              <span className="text-sm text-gray-600 font-semibold">Email</span>
+              <span className="text-base text-gray-600 !font-normal">Email</span>
               <Button
                 className="px-5 py-1"
                 buttonColor="regularButton"
@@ -139,10 +139,10 @@ const Settings: React.FC = () => {
                 Edit
               </Button>
             </div>
-            <span className="text-gray-800 font-bold md:hidden">{profile.email}</span>
+            <span className="text-lg text-gray-600 !font-normal md:hidden">{profile.email}</span>
             <div className="hidden md:flex items-center justify-between gap-4">
-              <span className="text-sm text-gray-600 font-semibold w-1/5">Email</span>
-              <span className="text-gray-800 font-bold flex-1 whitespace-nowrap">
+              <span className="text-base text-gray-600 !font-normal w-1/5">Email</span>
+              <span className="text-lg text-gray-600 !font-normal flex-1 whitespace-nowrap">
                 {profile.email}
               </span>
               <Button
@@ -161,7 +161,7 @@ const Settings: React.FC = () => {
           {/* Address */}
           <div className="flex flex-col gap-2 py-4 ">
             <div className="flex justify-between items-center md:hidden">
-              <span className="text-sm text-gray-600 font-semibold">Address</span>
+              <span className="text-base text-gray-600 font-semibold">Address</span>
               <Button
                 className="px-5 py-1"
                 buttonColor="regularButton"
@@ -173,10 +173,10 @@ const Settings: React.FC = () => {
                 Edit
               </Button>
             </div>
-            <span className="text-gray-800 font-bold md:hidden">{profile.address}</span>
+            <span className="text-lg text-gray-600 font-normal md:hidden">{profile.address}</span>
             <div className="hidden md:flex items-center justify-between gap-4">
-              <span className="text-sm text-gray-600 font-semibold w-1/5">Address</span>
-              <span className="text-gray-800 font-bold flex-1 whitespace-nowrap">
+              <span className="text-base text-gray-600 font-normal w-1/5">Address</span>
+              <span className="text-lg text-gray-600 font-normal flex-1 whitespace-nowrap">
                 {profile.address}
               </span>
               <Button
@@ -195,7 +195,7 @@ const Settings: React.FC = () => {
           {/* Password */}
           <div className="flex flex-col gap-2 py-4 border-b">
             <div className="flex justify-between items-center md:hidden">
-              <span className="text-sm text-gray-600 font-semibold">Password</span>
+              <span className="text-base text-gray-600 font-normal">Password</span>
               <Button
                 className="px-5 py-1"
                 buttonColor="regularButton"
@@ -207,10 +207,10 @@ const Settings: React.FC = () => {
                 Change password
               </Button>
             </div>
-            <span className="text-gray-800 font-bold md:hidden">**********</span>
+            <span className="text-lg text-gray-600 font-normal md:hidden">**********</span>
             <div className="hidden md:flex items-center justify-between gap-4">
-              <span className="text-sm text-gray-600 font-semibold w-1/5">Password</span>
-              <span className="text-gray-800 font-bold flex-1 whitespace-nowrap">
+              <span className="text-base text-gray-600 font-normal w-1/5">Password</span>
+              <span className="text-lg text-gray-600 font-normal flex-1 whitespace-nowrap">
                 **********
               </span>
               <Button
@@ -230,12 +230,12 @@ const Settings: React.FC = () => {
 
       {/* Preferences */}
       <section>
-        <h3 className="font-semibold text-gray-900 text-lg mb-3">Preferences</h3>
+        <h3 className="text-gray-900 text-2xl mb-3">Preferences</h3>
         <div className="md:divide-y">
           {/* Language */}
           <div className="flex flex-col gap-2 py-4">
             <div className="flex justify-between items-center md:hidden">
-              <span className="text-sm text-gray-600 font-semibold">Language</span>
+              <span className="text-base text-gray-600">Language</span>
               <Button
                 className="bg-blue-600 text-white rounded-xl px-5 py-1"
                 buttonColor="regularButton"
@@ -247,10 +247,10 @@ const Settings: React.FC = () => {
                 Change
               </Button>
             </div>
-            <span className="text-gray-800 font-bold md:hidden">{preferences.language}</span>
+            <span className="text-lg text-gray-600 md:hidden">{preferences.language}</span>
             <div className="hidden md:flex items-center justify-between gap-4">
-              <span className="text-sm text-gray-600 font-semibold w-1/5">Language</span>
-              <span className="text-gray-800 font-bold flex-1 whitespace-nowrap">
+              <span className="text-base text-gray-600 w-1/5">Language</span>
+              <span className="text-lg text-gray-600 flex-1 whitespace-nowrap">
                 {preferences.language}
               </span>
               <Button
@@ -269,7 +269,7 @@ const Settings: React.FC = () => {
           {/* Mode */}
           <div className="flex flex-col gap-2 py-4 border-b">
             <div className="flex justify-between items-center md:hidden">
-              <span className="text-sm text-gray-600 font-semibold">Mode</span>
+              <span className="text-base text-gray-600">Mode</span>
               <Button
                 className="bg-blue-600 text-white rounded-xl px-5 py-1"
                 buttonColor="regularButton"
@@ -279,10 +279,10 @@ const Settings: React.FC = () => {
                 Change
               </Button>
             </div>
-            <span className="text-gray-800 font-bold md:hidden">{preferences.mode}</span>
+            <span className="text-lg text-gray-600 md:hidden">{preferences.mode}</span>
             <div className="hidden md:flex items-center justify-between gap-4">
-              <span className="text-sm text-gray-600 font-semibold w-1/5">Mode</span>
-              <span className="text-gray-800 font-bold flex-1 whitespace-nowrap">
+              <span className="text-base text-gray-600 w-1/5">Mode</span>
+              <span className="text-lg text-gray-600 flex-1 whitespace-nowrap">
                 {preferences.mode}
               </span>
               <Button
@@ -309,13 +309,13 @@ const Settings: React.FC = () => {
     };
 
     return (
-      <div className="flex flex-col gap-6 mt-4">
+      <div className="flex flex-col gap-6 mt-4 font-['Montserrat']">
         {/* ===== Expenses Categories ===== */}
         <section className="rounded-xl border border-gray-200 p-4 md:p-0 md:shadow-none md:border-none">
           {/* Mobile layout */}
           <div className="md:hidden flex flex-col gap-3">
             <div className="flex justify-between items-center">
-              <h3 className="font-semibold text-gray-900 text-base">
+              <h3 className="text-gray-900 text-base">
                 Expenses Categories
               </h3>
               <Button
@@ -342,7 +342,7 @@ const Settings: React.FC = () => {
               {finance.expenseCategories.map((cat) => (
                 <span
                   key={cat}
-                  className="px-3 py-1 text-sm rounded-full border border-gray-300 text-gray-700 whitespace-nowrap"
+                  className="px-3 py-1 text-base rounded-full border border-gray-700 text-gray-700 whitespace-nowrap"
                 >
                   {cat}
                 </span>
@@ -362,7 +362,7 @@ const Settings: React.FC = () => {
               {finance.expenseCategories.map((cat) => (
                 <span
                   key={cat}
-                  className="px-3 py-1 text-sm rounded-full border border-gray-300 text-gray-700 whitespace-nowrap"
+                  className="px-3 py-1 text-base font-semibold rounded-full border border-gray-700 text-gray-700 whitespace-nowrap"
                 >
                   {cat}
                 </span>
@@ -392,7 +392,7 @@ const Settings: React.FC = () => {
           {/* Mobile layout */}
           <div className="md:hidden flex flex-col gap-3">
             <div className="flex justify-between items-center">
-              <h3 className="font-semibold text-gray-900 text-base">
+              <h3 className="text-gray-900 text-base">
                 Income Categories
               </h3>
               <Button
@@ -419,7 +419,7 @@ const Settings: React.FC = () => {
               {finance.incomeCategories.map((cat) => (
                 <span
                   key={cat}
-                  className="px-3 py-1 text-sm rounded-full border border-gray-300 text-gray-700 whitespace-nowrap"
+                  className="px-3 py-1 text-base rounded-full border border-gray-700 text-gray-700 whitespace-nowrap"
                 >
                   {cat}
                 </span>
@@ -439,7 +439,7 @@ const Settings: React.FC = () => {
               {finance.incomeCategories.map((cat) => (
                 <span
                   key={cat}
-                  className="px-3 py-1 text-sm rounded-full border border-gray-300 text-gray-700 whitespace-nowrap"
+                  className="font-semibold px-3 py-1 text-base rounded-full border border-gray-700 text-gray-700 whitespace-nowrap"
                 >
                   {cat}
                 </span>
@@ -469,7 +469,7 @@ const Settings: React.FC = () => {
           {/* Mobile layout */}
           <div className="md:hidden flex flex-col gap-3">
             <div className="flex justify-between items-center">
-              <h3 className="font-semibold text-gray-900 text-base">Tax Regime</h3>
+              <h3 className="text-gray-700 text-base">Tax Regime</h3>
               <Button
                 className="bg-blue-600 text-white rounded-xl px-5 py-1"
                 buttonColor="regularButton"
@@ -484,13 +484,13 @@ const Settings: React.FC = () => {
                 Edit
               </Button>
             </div>
-            <p className="text-gray-600 text-sm">{finance.taxRegime}</p>
+            <p className="text-gray-700 text-base">{finance.taxRegime}</p>
           </div>
 
           {/* Desktop layout */}
           <div className="hidden md:flex items-center gap-4 pb-4 border-b border-gray-200">
-            <h3 className="text-gray-900 text-base flex-[0_0_200px]">Tax Regime</h3>
-            <p className="flex-1 px-3 py-2 text-gray-600 text-sm">{finance.taxRegime}</p>
+            <h3 className="text-gray-700 text-base flex-[0_0_200px]">Tax Regime</h3>
+            <p className="flex-1 px-3 py-2 text-gray-600 text-base">{finance.taxRegime}</p>
             <Button
               className="bg-blue-600 text-white rounded-xl px-5 py-1 flex-shrink-0"
               buttonColor="regularButton"
@@ -508,7 +508,7 @@ const Settings: React.FC = () => {
         </section>
 
         {/* ===== Export Data ===== */}
-        <section className="rounded-xl border border-gray-200 p-4 md:p-0 md:shadow-none md:border-none border-b border-gray-200">
+        <section className="rounded-xl border border-gray-200 p-4 md:p-0 md:shadow-none md:border-none border-b">
           <div className="flex justify-between items-center">
             <h3 className=" text-gray-900 text-base">Export Data</h3>
             <Button
@@ -535,7 +535,7 @@ const Settings: React.FC = () => {
         {drawerContent}
       </SettingsDrawer>
 
-      <h1 className="text-2xl md:text-3xl font-semibold text-gray-800">Settings</h1>
+      <h1 className="font-['Merriweather'] font-bold text-2xl md:text-[32px] text-gray-600">Settings</h1>
 
       <div className="max-w">
         <ToggleButton

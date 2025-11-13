@@ -19,7 +19,7 @@ const InsightCard: React.FC<StatCardProps> = ({ title, month, text }) => {
     >
       {/* Header Row */}
       <div className="flex justify-between items-center w-full">
-        <span className="text-xs --page-title font-redhat text-[18px] not-italic font-bold leading-normal">{month}</span>
+        <span className="text-xs --page-title font-['Red_Hat_Display'] text-[18px] not-italic font-bold leading-normal">{month}</span>
         <div className="flex items-center gap-2 text-blue-600 text-[16px] font-medium px-3 py-1 rounded-full">
           <Sparkles className="w-3 h-3 text-[16px] text-blue-600" />
           {title}
@@ -27,7 +27,7 @@ const InsightCard: React.FC<StatCardProps> = ({ title, month, text }) => {
       </div>
 
       {/* Text Content */}
-      <p className="text-[1rem] text-gray-700 leading-snug">{text}</p>
+      <p className="text-[18px] text-gray-700 leading-snug">{text}</p>
     </div>
   );
 };

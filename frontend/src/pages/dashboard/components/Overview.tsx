@@ -49,7 +49,7 @@ const Overview = () => {
     <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
       {stats.map(({ label, value }, idx) => {
         const isLast = idx === stats.length - 1;
-        const isOdd = stats.length % 2 !== 0; // adjust if your layout breaks on sm/md/lg
+        const isOdd = stats.length % 2 !== 0; 
         return (
           <InsightCard
             key={idx}
