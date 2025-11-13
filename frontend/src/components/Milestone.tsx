@@ -27,14 +27,12 @@ const Milestone = ({ milestone, projectId, onClickAdd, onEditMilestone, onEditDe
 
     const actions = milestone ? [
         { id: 'view', label: 'View', action: () => onEditMilestone(milestone!, "view") },
-        { id: 'archive', label: 'Archive', action: () => updateMilestoneMutation({ isArchived: true }) },
     ] : []
 
     if (milestone && !milestone?.isCompleted) {
         actions.push({ id: 'setCompleted', label: 'Mark Complete', action: () => updateMilestoneMutation({ isCompleted: true }) })
         actions.push({ id: 'edit', label: 'Edit', action: () => onEditMilestone(milestone!, "edit") })
-    } else if (milestone?.isCompleted) {
-        actions.push({ id: 'reopen', label: 'Reopen', action: () => updateMilestoneMutation({ isCompleted: false }) })
+        actions.push({ id: 'archive', label: 'Delete', action: () => updateMilestoneMutation({ isArchived: true }) })
     }
 
     return (

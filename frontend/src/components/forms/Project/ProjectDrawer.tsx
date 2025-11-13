@@ -17,9 +17,9 @@ const ProjectDrawer = ({ isOpen, onClose, mode, project }: Props) => {
     const [isPrefilled, setIsPrefilled] = useState<boolean>(false);
 
     const handleProjectDataReady = (data: any) => {
+        setIsPrefilled(true);
         if (data) {
             setPrefilledProject(data);
-            setIsPrefilled(true);
         } // data from backend parse
         else setPrefilledProject(null); // create from scratch
     };
@@ -46,7 +46,7 @@ const ProjectDrawer = ({ isOpen, onClose, mode, project }: Props) => {
 
     return (
         <FormDrawer title={title} isOpen={isOpen} onClose={onClose} divRef={divRef}>
-            {isUploadStep ? (
+            {isUploadStep && !isPrefilled ? (
                 <ProjectUploadStep onProjectDataReady={handleProjectDataReady} onCancel={onClose} />
             ) : (
                 <ProjectForm onCancel={onClose} project={prefilledProject} isPrefilled={isPrefilled} />
