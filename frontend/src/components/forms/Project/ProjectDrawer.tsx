@@ -1,7 +1,8 @@
 import { ProjectApiResponse } from "@api/index";
 import FormDrawer from "../FormDrawer";
 import ProjectForm from "./ProjectForm";
-import { useEffect, useRef } from "react";
+import { use, useEffect, useRef, useState } from "react";
+import ProjectUploadStep from "./ProjectUploadStep";
 
 interface Props {
     isOpen: boolean;
@@ -13,6 +14,18 @@ interface Props {
 
 const ProjectDrawer = ({ isOpen, onClose, mode, project, onOpenClientSlide }: Props) => {
     const divRef = useRef<HTMLDivElement>(null);
+    const [prefilledProject, setPrefilledProject] = useState<ProjectApiResponse | null>(project ?? null);
+    const [isPrefilled, setIsPrefilled] = useState<boolean>(false);
+
+    const handleProjectDataReady = (data: any) => {
+        if (data) {
+            setPrefilledProject(data);
+            setIsPrefilled(true);
+        } // data from backend parse
+        else setPrefilledProject(null); // create from scratch
+    };
+
+    const isUploadStep = !prefilledProject && mode === "create";
 
     // Close when clicking outside
     useEffect(() => {
@@ -25,12 +38,20 @@ const ProjectDrawer = ({ isOpen, onClose, mode, project, onOpenClientSlide }: Pr
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
+    useEffect(() => {
+        setPrefilledProject(null);
+    }, [isOpen]);
+
     let title = "Create Project";
     if (mode === "edit") title = "Edit Project";
 
     return (
         <FormDrawer title={title} isOpen={isOpen} onClose={onClose} divRef={divRef}>
-            <ProjectForm onCancel={onClose} project={project} onOpenClientSlide={onOpenClientSlide}/>
+            {isUploadStep ? (
+                <ProjectUploadStep onProjectDataReady={handleProjectDataReady} onCancel={onClose} />
+            ) : (
+                <ProjectForm onCancel={onClose} project={prefilledProject} isPrefilled={isPrefilled} onOpenClientSlide={onOpenClientSlide}/>
+            )}
         </FormDrawer>
     );
 };

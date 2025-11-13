@@ -1,5 +1,6 @@
 import api from "@api/api"
 import { DraftApiResponse } from "@api/types/contractApi";
+import { ProjectApiResponse } from "@api/types/projectApi";
 
 export const generateContractDraft = async (projectId: string): Promise<string> => {
     try {
@@ -8,6 +9,24 @@ export const generateContractDraft = async (projectId: string): Promise<string> 
     } catch (err) {
         console.error("Error generating the contract: " + err);
         return "";
+    }
+}
+
+export const extractContract = async (file: File): Promise<ProjectApiResponse | null> => {
+    try {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        const { data } = await api.post<{ message: string; projectInput: ProjectApiResponse | null }>("/contracts/upload", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+        if (!data.message.includes("successfully")) return null;
+        return data.projectInput!;
+    } catch (err) {
+        console.error("Error generating the contract: " + err);
+        return null;
     }
 }
 

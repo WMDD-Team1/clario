@@ -43,7 +43,7 @@ const Header = () => {
     const matchesSearch = name.includes(searchValue);
 
     return matchesSearch;
-  });
+  }).slice(0,5);
 
   return (
     <div className="flex m-0 p-[40px] justify-between items-center sticky top-0 bg-[#F5F9FF] mb-5 z-[1000]">
@@ -66,21 +66,26 @@ const Header = () => {
           <div
             className={`absolute bg-[var(--primitive-colors-brand-primary-025)] border border-[var(--primitive-colors-gray-light-mode-200)] shadow-md backdrop-blur-sm p-[1rem] rounded-xl top-[.5rem] w-full ${searchValue ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'} transition-all duration-300`}
           >
-            {(filteredResults.length != 0 && searchValue) ? <>
-            {filteredResults.map((project, index) => (
-              <Link
-                to={`/projects/${project.id}`}
-                key={index}
-                className="flex flex-row justify-between mb-1 pb-0.5 cursor-pointer border-b-0 transition-all relative group"
-              >
-                {project.name}
-                <span
-                  className="absolute bottom-0 left-0 w-0 h-[1px] bg-[var(--primitive-colors-brand-primary-400)] transition-all duration-300 ease-out group-hover:left-0 group-hover:w-full
+            {filteredResults.length != 0 && searchValue ? (
+              <>
+                {filteredResults.map((project, index) => (
+                  <Link
+                    onClick={() => setSearchValue('')}
+                    to={`/projects/${project.id}`}
+                    key={index}
+                    className="flex flex-row justify-between mb-1 pb-0.5 cursor-pointer border-b-0 transition-all relative group"
+                  >
+                    {project.name}
+                    <span
+                      className="absolute bottom-0 left-0 w-0 h-[1px] bg-[var(--primitive-colors-brand-primary-400)] transition-all duration-300 ease-out group-hover:left-0 group-hover:w-full
     "
-                />
-              </Link>
-            ))}
-            </> : <>{searchValue?'Not found':''}</>}
+                    />
+                  </Link>
+                ))}
+              </>
+            ) : (
+              <>{searchValue ? 'Not found' : ''}</>
+            )}
           </div>
         </SearchBar>
         {/* </div> */}
