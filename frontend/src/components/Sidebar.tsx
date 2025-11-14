@@ -17,26 +17,26 @@ const Sidebar = () => {
   const topMenu = [
     {
       route: '/dashboard',
-      activeIcon: <DashboardActiveIcon />,
-      inactiveIcon: <DashboardInactiveIcon />,
+      activeIcon: DashboardActiveIcon,
+      inactiveIcon: DashboardInactiveIcon,
       tooltip: 'Dashboard',
     },
     {
-      route: '/my-work',
-      activeIcon: <WorkActiveIcon />,
-      inactiveIcon: <WorkInactiveIcon />,
+      route: '/projects',
+      activeIcon: WorkActiveIcon,
+      inactiveIcon: WorkInactiveIcon,
       tooltip: 'My Work',
     },
     {
       route: '/transactions',
-      activeIcon: <MoneyActiveIcon />,
-      inactiveIcon: <MoneyInactiveIcon />,
+      activeIcon: MoneyActiveIcon,
+      inactiveIcon: MoneyInactiveIcon,
       tooltip: 'Transactions',
     },
     {
       route: '/settings',
-      activeIcon: <SettingsActiveIcon />,
-      inactiveIcon: <SettingsInactiveIcon />,
+      activeIcon: SettingsActiveIcon,
+      inactiveIcon: SettingsInactiveIcon,
       tooltip: 'Settings',
     },
   ];
@@ -44,14 +44,14 @@ const Sidebar = () => {
   const bottomMenu = [
     {
       route: '/faq',
-      activeIcon: <FaqInactiveIcon />,
-      inactiveIcon: <FaqInactiveIcon />,
+      activeIcon: FaqActiveIcon,
+      inactiveIcon: FaqInactiveIcon,
       tooltip: 'Support & FAQ',
     },
     {
       route: '/logout',
-      activeIcon: <LogOutIcon />,
-      inactiveIcon: <LogOutIcon />,
+      activeIcon: LogOutIcon,
+      inactiveIcon: LogOutIcon,
       tooltip: 'Log out',
     },
   ];
