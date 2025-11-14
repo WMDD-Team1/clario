@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '@/components/Button';
 import { updateUserPreferences } from '@api/services/settingService';
 import { updateUser } from '@store/userSlice';
@@ -13,10 +13,27 @@ interface Props {
 const ChangeMode: React.FC<Props> = ({ onClose }) => {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user.data);
-  const [mode, setMode] = useState<'light' | 'dark'>(user?.settings?.general.theme || 'light');
+  const [mode, setMode] = useState<'light' | 'dark'>('light');
   const [loading, setLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  /* 🌗 Load saved theme on mount */
+  useEffect(() => {
+    const savedTheme = (localStorage.getItem('theme') as 'light' | 'dark' | null)
+      || user?.settings?.general?.theme
+      || 'light';
+
+    setMode(savedTheme);
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  }, [user]);
+
+  /* 🌈 Apply theme changes & persist */
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', mode);
+    localStorage.setItem('theme', mode);
+  }, [mode]);
+
   const handleSave = async () => {
     if (!mode) {
       setError('Please select a display mode.');
@@ -29,6 +46,7 @@ const ChangeMode: React.FC<Props> = ({ onClose }) => {
     try {
       const res = await updateUserPreferences({ theme: mode });
       dispatch(updateUser(res.data));
+      localStorage.setItem('theme', mode);
       setIsSuccess(true);
     } catch (err: any) {
       const message = err.response?.data?.message || 'Failed to update mode.';
@@ -56,6 +74,7 @@ const ChangeMode: React.FC<Props> = ({ onClose }) => {
     }
     if (error) setError(null);
   };
+
   return (
     <form className="flex flex-col h-full">
       <div className="flex-1 flex flex-col justify-start">

@@ -122,8 +122,6 @@ export const Dashboard = () => {
 
       {/* MOBILE VIEW */}
       <div className="block sm:hidden">
-        {/* <div className="h-10"></div> */}
-
         <p className="text-[28px] font-semibold font-merriweather mt-4 mb-2">
           Hi {user?.name || 'User'}, Welcome Back
         </p>
@@ -137,7 +135,7 @@ export const Dashboard = () => {
                 onClick={() => setActiveTab(tab as any)}
                 className={`flex-1 py-2 rounded-xl text[#02357C] text-sm font-medium transition-all ${activeTab === tab
                     ? 'bg-[#0665EC] text-white shadow-md'
-                    : 'text-[#02357C] hover:text-white'
+                    : 'text-[#02357C]'
                   }`}
               >
                 {tab.charAt(0).toUpperCase() + tab.slice(1)}

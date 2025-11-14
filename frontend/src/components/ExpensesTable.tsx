@@ -50,7 +50,7 @@ export const ExpensesTable: React.FC = () => {
         });
       }}
     >
-      <h3 className="font-semibold text-[18px] text-gray-700 mb-3">Top Expenses</h3>
+      <h3 className="text-[18px] text-gray-700 mb-3">Top Expenses</h3>
 
       <div className="w-full flex flex-col justify-between gap-2 text-sm text-gray-700">
         {expenses.slice(0, 4).map((expense, idx) => (
@@ -59,10 +59,10 @@ export const ExpensesTable: React.FC = () => {
             className="flex justify-between items-center text-[13px] border-b border-gray-500 pb-2"
           >
             <div className="flex flex-col">
-              <span className="font-medium text-[16px]">{expense.title}</span>
+              <span className="text-[16px]">{expense.title}</span>
               <span className="text-gray-400 text-[16px]">{formatDate(expense.date)}</span>
             </div>
-            <span className="font-semibold text-[18px] text-gray-800">
+            <span className="text-[18px] text-gray-800">
               CAD {expense.amount.toLocaleString()}
             </span>
           </div>
