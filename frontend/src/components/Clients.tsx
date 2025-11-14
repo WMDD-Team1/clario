@@ -13,9 +13,21 @@ import EmptyState from './EmptyState';
 import Loader from '@components/Loader';
 import Success from '@components/Success';
 import { ClientUploadSuccess, ClientUpdateSuccess, ViewProject } from '@assets/icons';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 
 const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string) => void }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+
+  useEffect(() => {
+    const clientId = searchParams.get('clientId');
+    if (clientId) {
+      handleClientDetail(clientId).then(() => {
+        setSlideDetail('0px');
+        setSearchParams({});
+      });
+    }
+  }, [searchParams]);
   interface Project {
     id: string;
     name: string;

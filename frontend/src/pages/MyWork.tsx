@@ -5,9 +5,10 @@ import InsightCard from '@components/InsightCard';
 import Projects from '@components/Projects';
 import Clients from '@components/Clients';
 import ToggleButton from '@components/ToggleButton';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Loader from '@components/Loader';
+import { useSearchParams } from 'react-router-dom';
 
 const MY_WORK_VIEWS = [
   {
@@ -24,6 +25,7 @@ const MyWork = () => {
   const [view, setView] = useState(MY_WORK_VIEWS[0]);
   const [isOpen, setIsOpen] = useState(false);
   const [slide, setSlide] = useState('110%');
+  const [searchParams] = useSearchParams();
 
   // MY WORK INSIGHTS
   const { isLoading, error, data } = useQuery({
@@ -31,13 +33,19 @@ const MyWork = () => {
     queryFn: () => fetchProjectsOverview(),
   });
 
+  useEffect(() => {
+    if (searchParams.get('clientId')) {
+      setView(MY_WORK_VIEWS[1]);
+    }
+  }, [searchParams]);
+
   if (isLoading) return <Loader type="bar" />;
 
   const myWorkInsights = data ?? [];
 
   const handleOpenClientSlide = () => {
     setView(MY_WORK_VIEWS[1]);
-    setTimeout(()=>setSlide('0px'));
+    setTimeout(() => setSlide('0px'));
   };
 
   return (

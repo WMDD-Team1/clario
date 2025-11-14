@@ -1,50 +1,94 @@
 import { useAppSelector } from '@/store/hooks';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SearchBar from './SearchBar';
 import UserPicture from './UserPicture';
 import { useAuth0 } from '@auth0/auth0-react';
 import axios from 'axios';
 import { ProjectApiResponse } from '@api/types/projectApi';
+import { ClientApiResponse } from '@api/types/clientApi';
 import { Link } from 'react-router-dom';
 
+type SearchResultType = 'project' | 'client';
+
+interface SearchResult {
+  id: string;
+  name: string;
+  type: SearchResultType;
+}
 const Header = () => {
   const navigate = useNavigate();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { data } = useAppSelector((state) => state.user);
   const [searchValue, setSearchValue] = useState('');
-  const [searchResults, setSearchResults] = useState<ProjectApiResponse[]>([]);
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 
+  const searchContainerRef = useRef<HTMLDivElement>(null);
   const { getAccessTokenSilently } = useAuth0();
 
   useEffect(() => {
-    const fetchProjects = async () => {
+    const fetchData = async () => {
       const token = await getAccessTokenSilently({
         authorizationParams: {
           audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
         },
       });
 
-      const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/projects?limit=1000`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await response.data;
-      console.log(data.data);
-      setSearchResults(data.data);
+      // fetch projects and clients
+      const [projectsResponse, clientsResponse] = await Promise.all([
+        axios.get(`${import.meta.env.VITE_API_BASE_URL}/projects?limit=1000`, {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        axios.get(`${import.meta.env.VITE_API_BASE_URL}/clients?limit=1000`, {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+      ]);
+
+      // merge results
+      const projects: SearchResult[] = projectsResponse.data.data.map((p: ProjectApiResponse) => ({
+        id: p.id,
+        name: p.name,
+        type: 'project' as SearchResultType,
+      }));
+
+      const clients: SearchResult[] = clientsResponse.data.data.map((c: ClientApiResponse) => ({
+        id: c.id,
+        name: c.name,
+        type: 'client' as SearchResultType,
+      }));
+
+      setSearchResults([...projects, ...clients]);
     };
-    fetchProjects();
+
+    fetchData();
   }, [getAccessTokenSilently]);
 
-  const filteredResults = searchResults.filter((p) => {
-    const name = p.name?.toLowerCase();
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        searchContainerRef.current &&
+        !searchContainerRef.current.contains(event.target as Node)
+      ) {
+        setSearchValue('');
+        setIsSearchOpen(false);
+      }
+    };
 
-    const matchesSearch = name.includes(searchValue);
+    if (isSearchOpen || searchValue) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
 
-    return matchesSearch;
-  }).slice(0,5);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isSearchOpen, searchValue]);
 
+  const filteredResults = searchResults
+    .filter((item) => {
+      const name = item.name?.toLowerCase();
+      return name.includes(searchValue.toLowerCase());
+    })
+    .slice(0, 5);
   return (
     <div className="flex m-0 p-[40px] justify-between items-center sticky top-0 bg-[#F5F9FF] mb-5 z-[1000]">
       <div
@@ -55,6 +99,7 @@ const Header = () => {
       >
         <img src="/clario.svg" alt="Clario logo" />
       </div>
+      <div ref={searchContainerRef}>
       <div className="flex items-center justify-between gap-[20px]">
         {/* <div className="flex flex-col items-center"> */}
         <SearchBar
@@ -70,15 +115,22 @@ const Header = () => {
               <>
                 {filteredResults.map((project, index) => (
                   <Link
-                    onClick={() => {setSearchValue('');setIsSearchOpen(false)}}
-                    to={`/projects/${project.id}`}
+                    onClick={() => {
+                      setSearchValue('');
+                      setIsSearchOpen(false);
+                    }}
+                    to={
+                      project.type === 'project'
+                        ? `/projects/${project.id}`
+                        : `/projects?clientId=${project.id}`
+                    }
                     key={index}
-                    className="flex flex-row justify-between mb-1 pb-0.5 cursor-pointer border-b-0 transition-all relative group"
+                    className="flex flex-row justify-between items-center mb-1 pb-0.5 cursor-pointer border-b-0 transition-all relative group"
                   >
                     {project.name}
+                    <p className='text-[.8rem]'>{project.type}</p>
                     <span
-                      className="absolute bottom-0 left-0 w-0 h-[1px] bg-[var(--primitive-colors-brand-primary-400)] transition-all duration-300 ease-out group-hover:left-0 group-hover:w-full
-    "
+                      className="absolute bottom-0 left-0 w-0 h-[1px] bg-[var(--primitive-colors-brand-primary-400)] transition-all duration-300 ease-out group-hover:left-0 group-hover:w-full"
                     />
                   </Link>
                 ))}
@@ -94,6 +146,7 @@ const Header = () => {
         >
           <UserPicture imgURL={data?.picture} />
         </div>
+      </div>
       </div>
     </div>
   );
