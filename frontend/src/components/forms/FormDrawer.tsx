@@ -22,7 +22,7 @@ const FormDrawer = ({ title, isOpen, onClose, children, divRef }: FormDrawerProp
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        transition={{ duration: 0.2 }}
+                        transition={{ duration: 0.5 }}
                         onClick={onClose}
                         className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[1000]"
                     />
