@@ -1,6 +1,7 @@
 import { Transaction } from "../../models/index.js";
 import { uploadToFirebase } from "../../utils/fileHandler.js";
 import { extractImageText, extractPdfText, extractTransactionFields } from "../../utils/parser.js";
+import { getTaxRateByProvince } from "../../utils/tax.js";
 import { SettingsService } from "../index.js";
 
 // CRUD
@@ -42,8 +43,10 @@ export const create = async (data, userId) => {
     let totalAmount = data.baseAmount;
     if (type === 'income') {
         const settings = await SettingsService.getUserSettings(userId);
-        const province = settings.finance?.province || "British Columbia";
-        const taxRate = province === "British Columbia" ? 0.12 : 0.14975;
+        const { province } = settings.settings.finance;
+        const taxRate = getTaxRateByProvince(province);
+        console.log("Tax rate:", taxRate);
+        console.log("Province:", province);
 
         taxAmount = baseAmount * taxRate;
         totalAmount = baseAmount + taxAmount;
@@ -63,8 +66,8 @@ export const update = async (id, userId, data) => {
     data.totalAmount = baseAmount;
     if (baseAmount && transaction.type === 'income') {
         const settings = await SettingsService.getUserSettings(userId);
-        const province = settings.finance?.province || "British Columbia";
-        const taxRate = province === "British Columbia" ? 0.12 : 0.14975;
+        const { province } = settings.finance;
+        const taxRate = getTaxRateByProvince(province);
 
         const taxAmount = baseAmount * taxRate;
         const totalAmount = baseAmount + taxAmount;

@@ -25,15 +25,15 @@ const menuItems = [
   },
   {
     name: 'My Work',
-    path: '/my-work',
+    path: '/projects',
     activeIcon: WorkActiveIcon,
     inactiveIcon: WorkInactiveIcon,
   },
   {
     name: 'Settings',
     path: '/settings',
-    activeIcon: SettingsInactiveIcon,
-    inactiveIcon: SettingsActiveIcon,
+    activeIcon: SettingsActiveIcon,
+    inactiveIcon: SettingsInactiveIcon,
   },
 ];
 
@@ -54,7 +54,6 @@ const Navbar = () => {
         <NavLink
           key={path}
           to={path}
-          end
           className={({ isActive }) =>
             `flex flex-col items-center justify-center text-xs font-medium transition ${
               isActive

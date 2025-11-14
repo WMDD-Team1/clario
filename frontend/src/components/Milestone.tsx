@@ -27,18 +27,16 @@ const Milestone = ({ milestone, projectId, onClickAdd, onEditMilestone, onEditDe
 
     const actions = milestone ? [
         { id: 'view', label: 'View', action: () => onEditMilestone(milestone!, "view") },
-        { id: 'archive', label: 'Archive', action: () => updateMilestoneMutation({ isArchived: true }) },
     ] : []
 
     if (milestone && !milestone?.isCompleted) {
         actions.push({ id: 'setCompleted', label: 'Mark Complete', action: () => updateMilestoneMutation({ isCompleted: true }) })
         actions.push({ id: 'edit', label: 'Edit', action: () => onEditMilestone(milestone!, "edit") })
-    } else if (milestone?.isCompleted) {
-        actions.push({ id: 'reopen', label: 'Reopen', action: () => updateMilestoneMutation({ isCompleted: false }) })
+        actions.push({ id: 'archive', label: 'Delete', action: () => updateMilestoneMutation({ isArchived: true }) })
     }
 
     return (
-        <div className="w-[400px] bg-[var(--general-alpha)] rounded-2xl shadow-sm border border-[var(--primitive-colors-gray-light-mode-200)] overflow-hidden">
+        <div className="md:w-[400px] bg-[var(--general-alpha)] rounded-2xl shadow-sm border border-[var(--primitive-colors-gray-light-mode-200)] overflow-hidden">
             {/* Header */}
             <div className={`flex justify-between items-center
             ${milestone?.isCompleted ? 'bg-[var(--primitive-colors-success-100)]' : 'bg-[var(--primitive-colors-brand-primary-50)]'}
