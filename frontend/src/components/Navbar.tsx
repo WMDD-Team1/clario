@@ -18,16 +18,16 @@ const menuItems = [
     inactiveIcon: DashboardInactiveIcon,
   },
   {
-    name: 'Money flow',
-    path: '/transactions',
-    activeIcon: MoneyActiveIcon,
-    inactiveIcon: MoneyInactiveIcon,
-  },
-  {
     name: 'My Work',
     path: '/projects',
     activeIcon: WorkActiveIcon,
     inactiveIcon: WorkInactiveIcon,
+  },
+  {
+    name: 'Money flow',
+    path: '/transactions',
+    activeIcon: MoneyActiveIcon,
+    inactiveIcon: MoneyInactiveIcon,
   },
   {
     name: 'Settings',
