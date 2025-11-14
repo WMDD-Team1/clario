@@ -49,8 +49,8 @@ export const Dashboard = () => {
             className={`flex flex-col justify-center items-center py-3 bg-white backdrop-blur-sm rounded-2xl hover:shadow-lg border border-gray-100 
         ${index === arr.length - 1 ? 'col-span-2 sm:col-span-1' : ''}`}
           >
-            <p className="font-semibold text-gray-600 text-sm">{stat.label}</p>
-            <p className="text-lg font-bold text-gray-800">{stat.value}</p>
+            <p className="font-normal text-[var(--tertiary-text)] text-sm">{stat.label}</p>
+            <p className="text-lg font-bold text-[var(--brand-alpha)]">{stat.value}</p>
           </div>
         ))}
       </div>
@@ -113,7 +113,7 @@ export const Dashboard = () => {
 
             {/* RIGHT SECTION */}
             <div className="flex flex-col sm:min-w-[100%] md:min-w-[100%] xl:min-w-[25%] gap-4">
-              <h3 className="font-semibold text-[24px] text-gray-700">Reminders</h3>
+              <h3 className="font-semibold text-2xl text-[var(--primary-text)]">Reminders</h3>
               <RemindersList />
             </div>
           </div>
@@ -128,14 +128,14 @@ export const Dashboard = () => {
 
         {/* Toggle Buttons */}
         <div className="flex justify-center w-full mt-4 mb-6">
-          <div className="flex bg-white text-[#02357C] rounded-xl p-1 w-full max-w-md justify-between">
+          <div className="flex bg-[var(--general-alpha)] text-[var(--background-focus)] rounded-xl p-1 w-full max-w-md justify-between">
             {['insights', 'dashboard', 'reminders'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab as any)}
-                className={`flex-1 py-2 rounded-xl text[#02357C] text-sm font-medium transition-all ${activeTab === tab
-                    ? 'bg-[#0665EC] text-white shadow-md'
-                    : 'text-[#02357C]'
+                className={`flex-1 py-2 rounded-xl text-[var(--background-focus)] text-sm font-medium transition-all ${activeTab === tab
+                  ? 'bg-[var(--background-unfocused-toggle)] text-[var(--background-toggle2)] shadow-md'
+                  : 'text-[var(--background-focus)]'
                   }`}
               >
                 {tab.charAt(0).toUpperCase() + tab.slice(1)}
