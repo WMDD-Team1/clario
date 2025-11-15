@@ -593,7 +593,7 @@ export const IncomeExpenses = () => {
     { key: 'category', value: 'Category' },
     { key: 'date', value: 'Date' },
     { key: 'amount', value: 'Amount (CAD)' },
-    { key: 'details', value: 'Details' },
+    // { key: 'details', value: 'Details' },
   ];
 
   // console.log(allTransactions.data);
@@ -672,7 +672,7 @@ export const IncomeExpenses = () => {
         date: t.date,
         amount: Number(t.baseAmount),
         category: t.category || 'Unknown',
-        details: 'View',
+        // details: 'View',
       }));
   };
 
@@ -718,7 +718,7 @@ export const IncomeExpenses = () => {
         date: t.date,
         amount: Number(t.baseAmount),
         category: t.category || 'Unknown',
-        details: 'View',
+        // details: 'View',
       }));
   };
 
