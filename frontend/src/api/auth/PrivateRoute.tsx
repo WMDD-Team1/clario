@@ -6,10 +6,13 @@ import Loading from "@components/Loading";
 import Navbar from '@components/Navbar';
 import Sidebar from '@components/Sidebar';
 import { ReactNode } from "react";
+import { useMediaQuery } from "react-responsive";
 import { Navigate } from "react-router-dom";
 
 export const PrivateRoute = ({ children }: { children: ReactNode }) => {
   const { isAuthenticated, isLoading } = useAuth0();
+
+  const isDesktop = useMediaQuery({ minWidth: 768 });
   const { data: user, loading, error } = useAppSelector(
     (state) => state.user
   );
@@ -20,8 +23,8 @@ export const PrivateRoute = ({ children }: { children: ReactNode }) => {
 
   return isAuthenticated ? (<>
     <Header />
-    <Sidebar />
-    <Navbar />
+    {isDesktop && <Sidebar />}
+    {!isDesktop && <Navbar />}
     <div className='grow-1 md:ml-[170px] mx-[40px] mb-[160px] md:mb-[40px]'>
       {children}
     </div>
