@@ -713,6 +713,7 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
         }}
         extralText="Edit"
         onExtra={() => {
+          setSlideDetail('110%');
           setSlideEdit('0px');
           setSuccess(false);
         }}
