@@ -13,13 +13,6 @@ interface Props {
 }
 
 const Menu = ({ items }: Props) => {
-    const [activeRoute, setActiveRoute] = useState(items[0].route);
-    const navigate = useNavigate();
-
-    const handleClick = (route: string) => {
-        setActiveRoute(route);
-        navigate(route)
-    }
 
     return (
         <div className='flex flex-col items-center justify-between p-5 bg-[#F5F9FF] shadow-md rounded-[30px]'>

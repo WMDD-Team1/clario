@@ -26,12 +26,12 @@ const MyWork = () => {
     const [slide, setSlide] = useState('110%');
 
     // MY WORK INSIGHTS
-    const {isLoading, error, data} = useQuery({
+    const { isLoading, error, data } = useQuery({
         queryKey: ['projects', 'overview'],
         queryFn: () => fetchProjectsOverview(),
     });
 
-    if (isLoading) return  <Loader type="bar" />
+    if (isLoading) return <Loader type="bar" />
 
     const myWorkInsights = data ?? []
 
@@ -59,7 +59,7 @@ const MyWork = () => {
 
                 </section>
                 <section className='md:hidden transition'>
-                    <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center justify-between mb-8">
                         <h2 className="text-2xl font-semibold text-black">My Work</h2>
                         <Button
                             buttonColor="regularButton"
@@ -74,7 +74,9 @@ const MyWork = () => {
                             Add {view.key === 'projects' ? "Project" : "Client"}
                         </Button>
                     </div>
-                    <ToggleButton options={MY_WORK_VIEWS} option={view} onClick={setView} />
+                    <div className='flex flex-col items-center'>
+                        <ToggleButton options={MY_WORK_VIEWS} option={view} onClick={setView} />
+                    </div>
                 </section>
             </div>
 
@@ -93,7 +95,7 @@ const MyWork = () => {
             </div>
 
             {/* Projects or Clients */}
-            <div>{view.key === 'projects' ? <Projects onCreate={() => setIsOpen(true)} /> : <Clients slide={slide} setSlide = {setSlide}/>}</div>
+            <div>{view.key === 'projects' ? <Projects onCreate={() => setIsOpen(true)} /> : <Clients slide={slide} setSlide={setSlide} />}</div>
         </>
     )
 }
