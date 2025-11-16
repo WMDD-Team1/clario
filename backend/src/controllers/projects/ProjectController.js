@@ -39,8 +39,14 @@ export const getProjectById = async (req, res) => {
 export const createProject = async (req, res) => {
 	try {
 		const { id: userId } = req.user;
-		const parsed = projectSchema.parse(req.body);
-		const result = await createNewProject(parsed, userId);
+		const body = req.body;
+		const data = {
+			...body,
+			upfrontAmount: body.upfrontAmount ? Number(body.upfrontAmount) : 0,
+		};
+		const parsed = projectSchema.parse(data);
+		const file = req.file;
+		const result = await createNewProject(parsed, file, userId);
 
 		res.status(201).json(result);
 	} catch (err) {

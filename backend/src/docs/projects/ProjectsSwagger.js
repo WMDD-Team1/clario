@@ -41,7 +41,7 @@
  *         name: sortBy
  *         schema:
  *           type: string
- *           enum: [createdAt, startDate, dueDate, totalBudget, milestonesCount]
+ *           enum: [createdAt, startDate, dueDate, milestonesCount]
  *         description: Field to sort by (Date Started, Due Date, Amount, Milestones)
  *         example: dueDate
  *
@@ -78,15 +78,18 @@
  * @swagger
  * /api/projects:
  *   post:
- *     summary: Create a new project
- *     description: Creates a new project for the authenticated user. Each project must be linked to an existing client.
+ *     summary: Create a new project (optional contract file upload)
+ *     description: >
+ *       Creates a new project for the authenticated user.
+ *       If a contract file is included, the system uploads it to Firebase
+ *       and automatically creates a linked Contract record.
  *     tags: [Projects]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             required:
@@ -98,20 +101,16 @@
  *                 example: "Website Redesign"
  *               description:
  *                 type: string
- *                 example: "Redesigning the client's e-commerce platform with improved UX."
+ *                 example: "Redesigning the client's e-commerce platform."
  *               clientId:
  *                 type: string
  *                 example: "671a5b2345abcde98765f123"
  *               type:
  *                 type: string
  *                 example: "Web Development"
- *               totalBudget:
- *                 type: number
- *                 example: 8000
  *               upfrontAmount:
  *                 type: number
  *                 example: 1500
- *                 description: Initial upfront payment amount (if any)
  *               startDate:
  *                 type: string
  *                 format: date
@@ -124,17 +123,35 @@
  *                 type: string
  *                 enum: [Planning, In-Progress, Review, Done]
  *                 example: "Planning"
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *                 description: Optional contract file (PDF/JPG/PNG)
+ *
  *     responses:
  *       201:
- *         description: Project created successfully
+ *         description: Project created successfully (with optional contract)
  *         content:
  *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Project'
+ *             example:
+ *               project:
+ *                 id: "6906946206f472ca6c4e16db"
+ *                 name: "Website Redesign"
+ *                 clientId: "671a5b2345abcde98765f123"
+ *                 isActive: true
+ *               contract:
+ *                 id: "69069d2c5ee8f90ef4f85829"
+ *                 contractName: "contract.pdf"
+ *                 contractUrl: "https://storage.googleapis.com/.../contract.pdf"
+ *                 fileType: "pdf"
+ *                 size: 5651
+ *
  *       400:
- *         description: Invalid request body
+ *         description: Invalid input
  *       401:
  *         description: Unauthorized
+ *       500:
+ *         description: Internal Server Error
  */
 
 /**
@@ -187,9 +204,6 @@
  *                 type:
  *                   type: string
  *                   example: "Web Development"
- *                 totalBudget:
- *                   type: number
- *                   example: 8000
  *                 upfrontAmount:
  *                   type: number
  *                   example: 1500
@@ -352,9 +366,6 @@
  *               description:
  *                 type: string
  *                 example: "Added mobile-first approach and redefined deliverables."
- *               totalBudget:
- *                 type: number
- *                 example: 6000
  *               status:
  *                 type: string
  *                 enum: [Planning, In-Progress, Review, Done]
@@ -440,6 +451,5 @@
  *               inactiveProjects: 2
  *               archivedProjects: 1
  *               totalClients: 4
- *               totalBudget: 42000
  *               activeBudget: 33000
  */

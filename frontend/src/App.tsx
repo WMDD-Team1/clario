@@ -52,7 +52,7 @@ function App() {
         }
       />
       <Route
-        path="/my-work"
+        path="/projects"
         element={
           <PrivateRoute>
             <MyWork />

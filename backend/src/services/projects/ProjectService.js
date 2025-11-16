@@ -1,6 +1,7 @@
 import Project from "../../models/Project.js";
 import Client from "../../models/Client.js";
 import Contract from "../../models/Contract.js";
+import { uploadToFirebase } from "../../utils/fileHandler.js";
 
 // CRUD
 export const findAllProjects = async (userId, query = {}) => {
@@ -86,14 +87,33 @@ export const findByProjectId = async (id, userId) => {
 	return data;
 };
 
-export const createNewProject = async (data, userId) => {
-	return await Project.create({
+export const createNewProject = async (data, file, userId) => {
+	const project = await Project.create({
 		...data,
 		userId,
 		status: data.status || "Planning",
-		isArchived: data.isArchived ?? false,
 		milestones: data.milestones || [],
+		isArchived: data.isArchived ?? false,
+		isActive: true,
 	});
+
+	if (!file) return { project, contract: null };
+
+	const { fileName, fileUrl, fileType, size } = await uploadToFirebase(file, "contracts/original");
+
+	const contract = await Contract.create({
+		userId,
+		clientId: data.clientId,
+		projectId: project._id,
+		contractName: fileName,
+		contractUrl: fileUrl,
+		fileType,
+		size,
+		upfrontAmount: data.upfrontAmount,
+		milestones: data.milestones,
+	});
+
+	return { project, contract };
 };
 
 export const updateProjectById = async (id, userId, data) => {

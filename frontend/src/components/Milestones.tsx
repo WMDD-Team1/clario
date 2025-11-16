@@ -74,7 +74,7 @@ const Milestones = ({ milestones, projectId }: Props) => {
                 disableEdit={selectedMilestone?.isCompleted || selectedDeliverable?.status === "Completed"}
             />
 
-            <div className='flex gap-10 flex-nowrap mb-5'>
+            <div className='flex flex-col gap-5  flex-nowrap mb-5 md:flex-row md:gap-10'>
                 {milestones.map(milestone => ( !milestone.isArchived &&
                     <div key={milestone.id}>
                         <Milestone

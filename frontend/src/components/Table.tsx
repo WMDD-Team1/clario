@@ -202,7 +202,7 @@ const Table = ({
                                     key={displayPage}
                                     onClick={() => handlePageChange(displayPage)}
                                     className={`w-8 h-8 rounded-md text-sm font-medium transition ${page === displayPage
-                                        ? "bg-[var(--primitive-colors-brand-primary-500-base)] text-white"
+                                        ? "bg-[var(--background-alternate)] text-[var(--brand-subtext)]"
                                         : "text-[var(--sub-text)] hover:bg-blue-50 border-1 border-[var(--sublight-2)]"
                                         }`}
                                 >

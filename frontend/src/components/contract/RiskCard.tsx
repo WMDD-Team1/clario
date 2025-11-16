@@ -30,7 +30,8 @@ const RiskCard = ({ category, risks }: Props) => {
 
             <div className="flex flex-col gap-3">
                 {risks.map((risk, index) => (
-                    <div key={index} onClick={() => updateHash(risk.id)}>
+                    // <div key={index} onClick={() => updateHash(risk.id)}>
+                    <div key={index}>
                         <span
                             className={`px-2 py-0.5 rounded-full text-xs font-medium ${severityColors[risk.riskLevel]}`}
                         >

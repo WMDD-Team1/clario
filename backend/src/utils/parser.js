@@ -2,10 +2,16 @@ import { PDFExtract } from "pdf.js-extract";
 import Tesseract from "tesseract.js";
 import { openai } from "../config/openai.js";
 
-export const extractPdfText = async (fileUrl) => {
+export const extractPdfText = async (input) => {
 	const pdfExtract = new PDFExtract();
-	const res = await fetch(fileUrl);
-	const buffer = Buffer.from(await res.arrayBuffer());
+	let buffer;
+
+	if (typeof input == "string") {
+		const res = await fetch(input);
+		buffer = Buffer.from(await res.arrayBuffer());
+	} else {
+		buffer = input;
+	}
 
 	const data = await pdfExtract.extractBuffer(buffer);
 
@@ -15,8 +21,8 @@ export const extractPdfText = async (fileUrl) => {
 	}));
 };
 
-export const extractImageText = async (fileUrl) => {
-	const { data } = await Tesseract.recognize(fileUrl, "eng");
+export const extractImageText = async (input) => {
+	const { data } = await Tesseract.recognize(input, "eng");
 	return [
 		{
 			page: 1,
@@ -82,7 +88,7 @@ export const extractTransactionFields = async (text) => {
 	Respond with valid JSON only.
 	Transactions text:
 	${text.slice(0, 7000)}
-	`;;
+	`;
 
 	const res = await openai.chat.completions.create({
 		model: "gpt-4o-mini",

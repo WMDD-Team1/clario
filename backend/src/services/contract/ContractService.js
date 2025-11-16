@@ -9,8 +9,6 @@ import fs from "fs";
 export const uploadContractService = async (file, userId, clientId, projectId) => {
 	if (!file) throw new Error("No file uploaded");
 
-	const { fileName, fileUrl, fileType, size } = await uploadToFirebase(file, "contracts/original");
-
 	let projectInput = {};
 	let parsedText = [];
 
@@ -18,8 +16,8 @@ export const uploadContractService = async (file, userId, clientId, projectId) =
 	if (!projectId) {
 		// PDF or image parsing
 		try {
-			if (fileType === "pdf") parsedText = await extractPdfText(fileUrl);
-			else if (["png", "jpeg", "jpg"].includes(fileType)) parsedText = await extractImageText(fileUrl);
+			if (file.mimetype === "application/pdf") parsedText = await extractPdfText(file.buffer);
+			else if (file.mimetype.startsWith("image/")) parsedText = await extractImageText(file.buffer);
 		} catch (err) {
 			console.error("Parsing error:", err);
 			parsedText = [];
@@ -27,54 +25,41 @@ export const uploadContractService = async (file, userId, clientId, projectId) =
 
 		// send parsed text to AI
 		const fullText = parsedText.map((p) => p.content).join(" ");
-		if (fullText.trim().length > 50) {
+		if (fullText.trim().length > 30) {
 			try {
 				projectInput = await extractContractFields(fullText);
-
-				//  match by clientName first
-				if (projectInput.clientName) {
-					const normalizeName = (name) => name.replace(/\b(inc|inc\.|ltd|co|company|corp|corporation)\b/gi, "").trim();
-					const normalizedName = normalizeName(projectInput.clientName);
-
-					let client = await Client.findOne({
-						userId,
-						name: { $regex: new RegExp(normalizedName, "i") },
-					}).select("_id name");
-
-					//  if not found by name, try by clientId
-					if (!client && clientId) {
-						client = await Client.findOne({ _id: clientId, userId }).select("_id name");
-					}
-
-					if (client) {
-						projectInput.clientId = client._id.toString();
-						projectInput.clientName = client.name;
-						projectInput.clientExist = true;
-					} else {
-						projectInput.clientExist = false;
-					}
-				}
-
-				//  no clientName from AI but clientId provided
-				else if (clientId) {
-					const client = await Client.findOne({ _id: clientId, userId }).select("_id name");
-					if (client) {
-						projectInput.clientId = client._id.toString();
-						projectInput.clientName = client.name;
-						projectInput.clientExist = true;
-					} else {
-						projectInput.clientExist = false;
-					}
-				} else {
-					projectInput.clientExist = false;
-				}
 			} catch (err) {
 				console.error("AI field extraction error:", err);
 			}
 		}
 
+		let client = null;
+
+		if (clientId) {
+			client = await Client.findOne({ _id: clientId, userId }).select("_id name");
+		}
+
+		if (!client && projectInput.clientName) {
+			const normalizeName = (name) => name.replace(/\b(inc|inc\.|ltd|co|company|corp|corporation)\b/gi, "").trim();
+			const normalizedName = normalizeName(projectInput.clientName);
+
+			client = await Client.findOne({
+				userId,
+				name: { $regex: new RegExp(normalizedName, "i") },
+			}).select("_id name");
+		}
+
+		if (client) {
+			projectInput.clientId = client._id.toString();
+			projectInput.clientName = client.name;
+			projectInput.clientExist = true;
+		} else {
+			projectInput.clientExist = false;
+		}
+
 		return { projectInput };
 	}
+	const { fileName, fileUrl, fileType, size } = await uploadToFirebase(file, "contracts/original");
 
 	// with project (replace or new upload)
 	let existingContract = await Contract.findOne({ userId, projectId });

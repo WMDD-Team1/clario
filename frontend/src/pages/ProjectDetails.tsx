@@ -5,6 +5,7 @@ import Loader from '@components/Loader';
 import Milestones from '@components/Milestones';
 import ProjectBanner from '@components/ProjectBanner';
 import StatusPill from '@components/StatusPill';
+import TabsButton from '@components/TabsButton';
 import ToggleButton from '@components/ToggleButton';
 import { useQuery } from '@tanstack/react-query';
 import { ChevronLeft } from 'lucide-react';
@@ -17,6 +18,7 @@ const ProjectDetails = () => {
         key: "milestones",
         label: "Milestones",
     });
+    const [mobileView, setMobileView] = useState<string>("overview");
     const [isFormOpen, setIsFormOpen] = useState(false)
     const navigate = useNavigate();
     const { data: project, isLoading, error } = useQuery({
@@ -49,11 +51,11 @@ const ProjectDetails = () => {
             <div className='flex justify-start items-center gap-2 mb-7'>
                 <ChevronLeft size={30} onClick={(e) => navigate(-1)} className='cursor-pointer' />
                 <h2>{project.name}</h2>
-                <StatusPill status={project.isArchived ? "Archived" : project.isActive ? "Active" : "Inactive"}/>
+                <StatusPill status={project.isArchived ? "Archived" : project.isActive ? "Active" : "Inactive"} />
             </div>
-            <div className='flex gap-5'>
+            <div className='hidden md:flex gap-5'>
                 <ProjectBanner project={project} onEdit={() => setIsFormOpen(true)} />
-                <ProjectDrawer isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} mode="edit" project={project}/>
+                <ProjectDrawer isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} mode="edit" project={project} />
                 <div className='overflow-x-auto overflow-y-hidden'>
                     <div className='sticky left-0'>
                         <ToggleButton options={views} option={view} onClick={setView} />
@@ -62,6 +64,12 @@ const ProjectDetails = () => {
                         {view.key == 'milestones' ? <Milestones milestones={project.milestones ?? []} projectId={project.id} /> : <Invoices projectId={project.id} />}
                     </div>
                 </div>
+            </div>
+            <div className='md:hidden mt-5'>
+                <TabsButton tabs={["overview", "milestones", "invoices"]} activeTab={mobileView} onTabChange={setMobileView} />
+                {mobileView === "overview" && <ProjectBanner project={project} onEdit={() => setIsFormOpen(true)} />}
+                {mobileView === "milestones" && <Milestones milestones={project.milestones ?? []} projectId={project.id} />}
+                {mobileView === "invoices" && <Invoices projectId={project.id} />}
             </div>
 
         </>
