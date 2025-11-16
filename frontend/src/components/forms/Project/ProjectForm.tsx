@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { file, z } from "zod";
 import Spinner from "../../Spinner";
 import FormFooter from "../FormFooter";
 import SuccessForm from "../SuccessForm";
@@ -22,6 +22,7 @@ const projectSchema = z.object({
     startDate: z.string().nonempty("Start date required"),
     dueDate: z.string().nonempty("Due date required"),
     totalBudget: z.number().positive("Budget must be greater than 0"),
+    file: file().optional(),
 }).refine(
     (data) => new Date(data.dueDate) >= new Date(data.startDate),
     {
@@ -41,11 +42,12 @@ type ProjectFormData = z.infer<typeof projectSchema>;
 interface ProjectFormProps {
     onCancel: () => void;
     project?: ProjectApiResponse | null;
+    contractFile: File | null;
     onOpenClientSlide?:() => void;
     isPrefilled: boolean;
 }
 
-export default function ProjectForm({ onCancel, project, isPrefilled, onOpenClientSlide }: ProjectFormProps) {
+export default function ProjectForm({ onCancel, project, contractFile, isPrefilled, onOpenClientSlide }: ProjectFormProps) {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
     const [isSuccess, setIsSuccess] = useState(false);
@@ -81,9 +83,21 @@ export default function ProjectForm({ onCancel, project, isPrefilled, onOpenClie
     // Submit mutation
     const mutation = useMutation({
         mutationFn: (values: ProjectFormData) => {
-            return (isEditMode && !isPrefilled) ? updateProject(project.id, values) : createProject(values);
+            const formData = new FormData();
+            formData.append("name", values.name);
+            formData.append("clientId", values.clientId);
+            formData.append("description", values.description ?? "");
+            formData.append("upfrontAmount", String(values.upfrontAmount ?? 0));
+            formData.append("startDate", values.startDate);
+            formData.append("dueDate", values.dueDate);
+            formData.append("totalBudget", String(values.totalBudget));
+            if (isPrefilled && contractFile) {
+                formData.append("file", contractFile);
+            }
+            return (isEditMode && !isPrefilled) ? updateProject(project.id, formData) : createProject(formData);
         },
         onSuccess: (project) => {
+            console.log("Project saved:", project);
             if (project) queryClient.invalidateQueries({ queryKey: ["projects", project.id] });
             if (!project) queryClient.invalidateQueries({ queryKey: ["projects"] });
             setIsSuccess(true);
@@ -110,7 +124,7 @@ export default function ProjectForm({ onCancel, project, isPrefilled, onOpenClie
 
     if (clientsLoading) return <Spinner message="Loading clients..." />;
     if (mutation.isPending) return (
-        <div className="absolute inset-0 bg-white/70 flex items-center justify-center z-10">
+        <div className="absolute inset-0 bg-white/70 flex items-center justify-center z-10 rounded-l-[50px]">
             <Loader />
         </div>
     );

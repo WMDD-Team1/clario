@@ -18,7 +18,7 @@ const Menu = ({ items }: Props) => {
         <div className='flex flex-col items-center justify-between p-5 bg-[#F5F9FF] shadow-md rounded-[30px]'>
             <nav className='flex flex-col gap-5'>
                 {items.map(({ tooltip, route, activeIcon: ActiveIcon, inactiveIcon: InactiveIcon }) => (
-                    <Tooltip title={tooltip} arrow placement="right" slotProps={{
+                    <Tooltip key={route} title={tooltip} arrow placement="right" slotProps={{
                         tooltip: {
                             sx: {
                                 backgroundColor: "var(--primitive-colors-brand-primary-925)",
