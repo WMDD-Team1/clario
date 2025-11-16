@@ -154,7 +154,7 @@ export default function ProjectForm({ onCancel, project, isPrefilled, onOpenClie
                 </select>
                 <Plus
                 className="absolute right-[1rem] top-6 cursor-pointer"
-                onClick={() => {onCancel();onOpenClientSlide?.()}}
+                onClick={() => {onOpenClientSlide?.()}}
                 />
                 {errors.clientId && <p className="text-sm text-red-500">{errors.clientId.message}</p>}
             </div>
