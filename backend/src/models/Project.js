@@ -105,6 +105,10 @@ const ProjectSchema = new mongoose.Schema(
 			type: String,
 		},
 		upfrontAmount: { type: Number, default: 0 },
+		amountTotal: {
+			type: Number,
+			default: 0,
+		},
 
 		status: {
 			type: String,
