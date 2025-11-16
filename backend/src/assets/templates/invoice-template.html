@@ -1,278 +1,201 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 	<head>
-		<meta charset="utf-8" />
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Invoice {{invoiceNumber}}</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<style>
-			:root {
-				--black: #0f172a;
-				--gray: #475569;
-				--muted: #94a3b8;
-				--border: #e2e8f0;
-				--bg: #ffffff;
-				--chip-pending: #fef3c7; /* amber-100 */
-				--chip-paid: #dcfce7; /* green-100 */
-				--chip-overdue: #fee2e2; /* red-100 */
-			}
-			* {
-				box-sizing: border-box;
-			}
 			body {
-				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji",
-					"Segoe UI Emoji";
-				color: var(--black);
-				background: var(--bg);
+				font-family: Arial, sans-serif;
+				line-height: 1.6;
+				color: #333;
 				margin: 0;
-				padding: 32px;
+				padding: 0;
 			}
-			.invoice {
-				max-width: 820px;
-				margin: 0 auto;
-				background: #fff;
+			.invoice-box {
+				max-width: 800px;
+				margin: 20px auto;
+				padding: 30px;
+				border: 1px solid #eee;
+				box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 			}
-			header {
+
+			.header {
 				display: flex;
-				align-items: center;
 				justify-content: space-between;
-				gap: 24px;
-				margin-bottom: 24px;
-				border-bottom: 1px solid var(--border);
-				padding-bottom: 16px;
+				align-items: flex-start;
+				margin-bottom: 20px;
 			}
-			.brand {
-				display: flex;
-				align-items: center;
-				gap: 16px;
+			.logo img {
+				width: 120px;
+				height: auto;
 			}
-			.brand img {
-				height: 40px;
-				width: auto;
-				display: block;
-			}
-			.title {
-				line-height: 1.1;
-			}
-			.title h1 {
-				margin: 0;
-				font-size: 24px;
-			}
-			.meta {
+			.invoice-details {
 				text-align: right;
-				font-size: 14px;
-				color: var(--gray);
 			}
-			.badge {
-				display: inline-block;
-				padding: 4px 10px;
-				border-radius: 999px;
-				font-size: 12px;
-				font-weight: 600;
-				margin-top: 6px;
-			}
-			.badge--Pending {
-				background: var(--chip-pending);
-			}
-			.badge--Paid {
-				background: var(--chip-paid);
-			}
-			.badge--Overdue {
-				background: var(--chip-overdue);
+			.invoice-details h2 {
+				margin: 0 0 5px 0;
+				font-size: 28px;
+				color: #000;
 			}
 
-			.grid {
-				display: grid;
-				grid-template-columns: 1fr 1fr;
-				gap: 16px;
-				margin: 24px 0;
+			.contact-section {
+				margin-bottom: 40px;
 			}
-			.card {
-				border: 1px solid var(--border);
-				border-radius: 12px;
-				padding: 16px;
+			.bill-to h3 {
+				margin-top: 0;
+				margin-bottom: 5px;
+				padding-bottom: 5px;
 			}
-			.card h3 {
-				margin: 0 0 8px 0;
-				font-size: 14px;
-				text-transform: uppercase;
-				letter-spacing: 0.04em;
-				color: var(--muted);
-			}
-			.card p {
-				margin: 4px 0;
-				font-size: 14px;
+			.bill-to p {
+				margin: 0;
+				line-height: 1.8;
 			}
 
-			table {
+			.items-table {
 				width: 100%;
 				border-collapse: collapse;
-				margin-top: 8px;
-				font-size: 14px;
-				border: 1px solid var(--border);
-				border-radius: 12px;
-				overflow: hidden;
+				margin-bottom: 20px;
+				table-layout: fixed;
 			}
-			thead th {
+			.items-table th,
+			.items-table td {
+				border: 1px solid #ddd;
+				padding: 10px;
+				text-align: center;
+			}
+			.items-table th {
+				background-color: #f9f9f9;
+			}
+			.items-table ul {
+				margin: 0;
+				padding-left: 20px;
 				text-align: left;
-				background: #f8fafc;
-				padding: 12px;
-				border-bottom: 1px solid var(--border);
-				font-weight: 600;
-			}
-			tbody td {
-				padding: 12px;
-				border-bottom: 1px solid var(--border);
-				vertical-align: top;
-			}
-			tbody tr:last-child td {
-				border-bottom: none;
+				display: inline-block;
 			}
 
-			.numbers {
-				text-align: right;
-				white-space: nowrap;
+			.bottom-section {
+				display: flex;
+				justify-content: space-between;
+				align-items: flex-end;
+				margin-top: 40px;
 			}
-			.totals {
-				display: grid;
-				grid-template-columns: 1fr auto;
-				gap: 8px;
-				margin-top: 16px;
+			.bottom-contact-info h3 {
+				margin-top: 0;
+				margin-bottom: 5px;
+				padding-bottom: 5px;
 			}
-			.totals .label {
-				text-align: right;
-				color: var(--gray);
-			}
-			.totals .value {
-				text-align: right;
-				font-weight: 600;
+			.bottom-contact-info p {
+				margin: 0;
+				line-height: 1.8;
 			}
 
-			.notes {
-				margin-top: 20px;
-				font-size: 13px;
-				color: var(--gray);
+			.totals-table {
+				width: 300px;
+				border-collapse: collapse;
 			}
-			.foot {
-				margin-top: 28px;
-				font-size: 13px;
-				border-top: 1px solid var(--border);
-				padding-top: 16px;
-				color: var(--gray);
+			.totals-table td {
+				padding: 8px;
 			}
-
-			/* Print */
-			@media print {
-				body {
-					padding: 0;
-				}
-				.invoice {
-					box-shadow: none;
-				}
+			.totals-table tr td:last-child {
+				text-align: right;
+				font-weight: bold;
+			}
+			.totals-table tr.total {
+				font-size: 1.1em;
+				font-weight: bold;
+				border-top: 2px solid #dedede;
 			}
 		</style>
 	</head>
+
 	<body>
-		<div class="invoice">
-			<header>
-				<div class="brand">
-					{{#if logoUrl}}
-					<img src="{{logoUrl}}" alt="Logo" />
-					{{/if}}
-					<div class="title">
-						<h1>Invoice {{invoiceNumber}}</h1>
-						<div style="color: var(--gray); font-size: 14px">
-							Issued: {{issueDate}} &nbsp;&middot;&nbsp; Due: {{dueDate}}
-						</div>
-					</div>
-				</div>
-				<div class="meta">
-					<div>Status</div>
-					<span class="badge badge--{{status}}">{{status}}</span>
-				</div>
-			</header>
-
-			<section class="grid">
-				<div class="card">
-					<h3>Bill From</h3>
-					<p><strong>{{billFrom.company}}</strong></p>
-					{{#if billFrom.name}}
-					<p>{{billFrom.name}}</p>
-					{{/if}} {{#if billFrom.addressLine1}}
-					<p>{{billFrom.addressLine1}}</p>
-					{{/if}} {{#if billFrom.addressLine2}}
-					<p>{{billFrom.addressLine2}}</p>
-					{{/if}} {{#if billFrom.country}}
-					<p>{{billFrom.country}}</p>
-					{{/if}} {{#if billFrom.email}}
-					<p>{{billFrom.email}}</p>
-					{{/if}} {{#if billFrom.phone}}
-					<p>{{billFrom.phone}}</p>
-					{{/if}} {{#if billFrom.taxId}}
-					<p>{{billFrom.taxId}}</p>
-					{{/if}}
+		<div class="invoice-box">
+			<!-- Header -->
+			<div class="header">
+				<div class="logo">
+					<img src="{{logo}}" alt="Company Logo" />
 				</div>
 
-				<div class="card">
-					<h3>Bill To</h3>
-					<p><strong>{{billTo.company}}</strong></p>
-					{{#if billTo.name}}
-					<p>{{billTo.name}}</p>
-					{{/if}} {{#if billTo.addressLine1}}
-					<p>{{billTo.addressLine1}}</p>
-					{{/if}} {{#if billTo.addressLine2}}
-					<p>{{billTo.addressLine2}}</p>
-					{{/if}} {{#if billTo.country}}
-					<p>{{billTo.country}}</p>
-					{{/if}} {{#if billTo.email}}
-					<p>{{billTo.email}}</p>
-					{{/if}} {{#if billTo.phone}}
-					<p>{{billTo.phone}}</p>
-					{{/if}}
+				<div class="invoice-details">
+					<h2>Invoice</h2>
+					Invoice #{{invoiceNumber}}
+					<br />
+					Issue Date: {{issueDate}}
+					<br />
+					Due Date: {{dueDate}}
 				</div>
-			</section>
+			</div>
 
-			<section class="card">
-				<h3>Items</h3>
-				<table>
-					<thead>
-						<tr>
-							<th style="width: 40%">Item</th>
-							<th style="width: 30%">Description</th>
-						</tr>
-					</thead>
-					<tbody>
-						{{#each items}}
-						<tr>
-							<td><strong>{{name}}</strong></td>
-							<td>{{description}}</td>
-						</tr>
-						{{/each}}
-					</tbody>
+			<!-- Bill To -->
+			<div class="contact-section">
+				<div class="bill-to">
+					<h3>Bill To:</h3>
+					<p>
+						{{billTo.clientName}}
+						<br />
+						{{billTo.phone}}
+						<br />
+						{{billTo.email}}
+					</p>
+				</div>
+			</div>
+
+			<!-- Items Table -->
+			<table class="items-table">
+				<thead>
+					<tr>
+						<th>MILESTONE NAME</th>
+						<th>DELIVERABLES</th>
+						<th>Price</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr>
+						<td>{{milestoneName}}</td>
+
+						<td>
+							<ul>
+								{{#each deliverables}}
+								<li>{{name}}</li>
+								{{/each}}
+							</ul>
+						</td>
+
+						<td>{{price}}</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<!-- Bottom Section -->
+			<div class="bottom-section">
+				<div class="bottom-contact-info">
+					<h3>Contact:</h3>
+					<p>
+						{{billFrom.name}} {% comment %}
+						<br />
+						Ph.No: {{billFrom.phone}} {% endcomment %}
+						<br />
+						Email: {{billFrom.email}}
+					</p>
+				</div>
+
+				<table class="totals-table">
+					<tr>
+						<td>Sub Total</td>
+						<td>{{subTotal}}</td>
+					</tr>
+					<tr>
+						<td>Tax</td>
+						<td>{{taxAmount}}</td>
+					</tr>
+					<tr class="total">
+						<td>Grand Total</td>
+						<td>{{totalAmount}}</td>
+					</tr>
 				</table>
-
-				<div class="totals">
-					<div class="label">Subtotal</div>
-					<div class="value">{{subTotal}}</div>
-
-					<div class="label">{{taxLabel}}</div>
-					<div class="value">{{taxAmount}}</div>
-
-					<div class="label"><strong>Total</strong></div>
-					<div class="value"><strong>{{totalAmount}}</strong></div>
-				</div>
-			</section>
-
-			{{#if notes}}
-			<section class="notes">
-				<strong>Notes:</strong>
-				{{notes}}
-			</section>
-			{{/if}} {{#if paymentInstructions}}
-			<section class="foot">
-				<strong>Payment Instructions:</strong>
-				{{paymentInstructions}}
-			</section>
-			{{/if}}
+			</div>
 		</div>
 	</body>
 </html>
