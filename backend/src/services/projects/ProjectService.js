@@ -97,7 +97,12 @@ export const createNewProject = async (data, file, userId) => {
 		isActive: true,
 	});
 
-	if (!file) return { project, contract: null };
+	let projectJSON = project.toJSON();
+
+	if (!file) {
+		projectJSON.contract = null;
+		return projectJSON;
+	}
 
 	const { fileName, fileUrl, fileType, size } = await uploadToFirebase(file, "contracts/original");
 
@@ -113,7 +118,6 @@ export const createNewProject = async (data, file, userId) => {
 		milestones: data.milestones,
 	});
 
-	const projectJSON = project.toJSON();
 	projectJSON.contract = contract.toJSON();
 
 	return projectJSON;
