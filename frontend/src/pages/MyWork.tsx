@@ -26,6 +26,7 @@ const MyWork = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [slide, setSlide] = useState('110%');
   const [searchParams] = useSearchParams();
+  const [isClientOpen, setIsClientOpen] = useState(false);
 
   // MY WORK INSIGHTS
   const { isLoading, error, data } = useQuery({
@@ -43,20 +44,19 @@ const MyWork = () => {
 
   const myWorkInsights = data ?? [];
 
-  const handleOpenClientSlide = () => {
-    setView(MY_WORK_VIEWS[1]);
-    setTimeout(() => setSlide('0px'));
-  };
+
 
   return (
     <>
       <div className="header mb-8">
         {view.key === 'projects' ? (
           <ProjectDrawer
+            isClientOpen={isClientOpen}
+            onClientClose={() => setIsClientOpen(false)}
             isOpen={isOpen}
             onClose={() => setIsOpen(false)}
             mode="create"
-            onOpenClientSlide={handleOpenClientSlide}
+            onOpenClientSlide={() => setIsClientOpen(true)}
           />
         ) : null}
         <section className=" md:flex justify-between items-center hidden transition">
