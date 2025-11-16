@@ -15,7 +15,7 @@ const FormDrawer = ({ title, isOpen, onClose, children, divRef, disableClickOuts
 
     const handleOverlayClick = () => {
         if (!disableClickOutside) {
-            onClose();
+            // onClose();
         }
     };
     return (

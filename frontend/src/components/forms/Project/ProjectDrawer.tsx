@@ -71,7 +71,7 @@ const ProjectDrawer = ({
         isOpen={isOpen}
         onClose={onClose}
         divRef={projectDivRef}
-        disableClickOutside={isClientOpen}
+        // disableClickOutside={isClientOpen}
       >
         {isUploadStep && !isPrefilled ? (
           <ProjectUploadStep onProjectDataReady={handleProjectDataReady} onCancel={onClose} />
@@ -84,7 +84,7 @@ const ProjectDrawer = ({
           />
         )}
       </FormDrawer>
-      <FormDrawer title={clientTitle} isOpen={isClientOpen} onClose={onClientClose} divRef={clientDivRef} disableClickOutside={false}>
+      <FormDrawer title={clientTitle} isOpen={isClientOpen} onClose={onClientClose} divRef={clientDivRef} >
         <ClientForm onCancel={onClientClose} onSuccess={onClientSuccess} />
       </FormDrawer>
     </>
