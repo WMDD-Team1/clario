@@ -97,7 +97,6 @@ export default function ProjectForm({ onCancel, project, contractFile, isPrefill
             return (isEditMode && !isPrefilled) ? updateProject(project.id, formData) : createProject(formData);
         },
         onSuccess: (project) => {
-            console.log("Project saved:", project);
             if (project) queryClient.invalidateQueries({ queryKey: ["projects", project.id] });
             if (!project) queryClient.invalidateQueries({ queryKey: ["projects"] });
             setIsSuccess(true);

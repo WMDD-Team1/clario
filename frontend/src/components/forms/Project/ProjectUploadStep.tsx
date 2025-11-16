@@ -46,7 +46,7 @@ export default function ProjectUploadStep({ onProjectDataReady, onCancel }: Proj
 
     return (
         <div className="flex flex-col justify-between h-full pb-150">
-            <div className="flex flex-col items-center mt-8 text-center">
+            <div className="flex flex-col items-center text-center">
                 <p className="mb-6">Choose how you want to start.</p>
 
                 {/* Upload Box */}
