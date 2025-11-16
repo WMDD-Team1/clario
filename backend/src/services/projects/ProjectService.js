@@ -94,7 +94,7 @@ export const createNewProject = async (data, file, userId) => {
 		status: data.status || "Planning",
 		milestones: data.milestones || [],
 		isArchived: data.isArchived ?? false,
-		isActive: true,
+		isActive: !!file,
 	});
 
 	let projectJSON = project.toJSON();
