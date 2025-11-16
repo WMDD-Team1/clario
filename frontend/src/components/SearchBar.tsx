@@ -19,7 +19,7 @@ export default function SearchBar({ needCollapse = true, isSearchOpen, placehold
             {/* Search icon (mobile) */}
             <button
                 onClick={() => onSearchOpen(!isSearchOpen)}
-                className={`block  text-blue-500 ${needCollapse ? 'md:hidden' : 'hidden'}`}
+                className={`block  text-[var(--brand-alpha)] ${needCollapse ? 'md:hidden' : 'hidden'}`}
             >
                 <Search size={22} />
             </button>
@@ -31,7 +31,7 @@ export default function SearchBar({ needCollapse = true, isSearchOpen, placehold
                     : "hidden md:flex items-center bg-[#F8FBFF] border border-gray-200 rounded-full px-4 py-2"
                     }`}
             >
-                <Search className="text-blue-500 w-5 h-5 mr-3" strokeWidth={2} />
+                <Search className="text-[var(--brand-alpha)] w-5 h-5 mr-3" strokeWidth={2} />
                 <input
                     type="text"
                     placeholder={placeholder}

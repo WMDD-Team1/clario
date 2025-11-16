@@ -80,35 +80,35 @@ const ChangeEmail: React.FC<Props> = ({ onClose }) => {
   };
 
   return (
-    <form className="flex flex-col h-full">
-      <div className="flex-1 flex flex-col justify-top">
+    <form className="flex flex-col h-full bg-[var(--general-alpha)]">
+      <div className="flex-1 flex flex-col justify-top bg-[var(--general-alpha)]">
         {!isSaved ? (
           <>
             <div className="relative mb-6">
-              <label className="absolute -top-2 left-4 bg-[var(--general-alpha)] px-1 text-sm text-gray-500">
+              <label className="absolute -top-2 left-4 bg-[var(--general-alpha)] px-1 text-sm text-[var(--border)]">
                 New Email
               </label>
               <input
                 type="text"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="border border-[var(--sublight)] text-[var(--page-title)] rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-[var(--brand-alpha)]"
               />
             </div>
 
             <div className="relative">
-              <label className="absolute -top-2 left-4 bg-[var(--general-alpha)] px-1 text-sm text-gray-500">
+              <label className="absolute -top-2 left-4 bg-[var(--general-alpha)] px-1 text-sm text-[var(--border)]">
                 Confirm Email
               </label>
               <input
                 type="text"
                 value={confirmEmail}
                 onChange={(e) => setConfirmEmail(e.target.value)}
-                className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="border border-[var(--sublight)] text-[var(--page-title)] rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-[var(--brand-alpha)]"
               />
             </div>
              {error && (
-          <p className="text-red-500 text-sm mt-1 break-words whitespace-pre-wrap">{error}</p>
+          <p className="text-[var(--error-accent1)] text-sm mt-1 break-words whitespace-pre-wrap">{error}</p>
         )}
           </>
         ) : (

@@ -84,8 +84,8 @@ const IncomeCategories: React.FC<Props> = ({ onClose, incCategories }) => {
             label="Edit Categories"
             value={categories}
             onChange={(e) => setCategories(e.target.value)}
-            className="p-5 rounded-lg border-2 border-gray-300 w-full resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-            color="text-gray-500 bg-white"
+            className="p-5 rounded-lg border-2 border-[var(--sublight)] text-[var(--page-title)] w-full resize-none focus:outline-none focus:ring-2 focus:ring-[var(--brand-alpha)]"
+            color="text-[var(--border)] bg-white"
           />
           <span>Separate the categories with “,”</span>
         </div>

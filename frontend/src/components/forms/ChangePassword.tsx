@@ -70,7 +70,7 @@ const ChangePassword: React.FC<Props> = ({ onClose }) => {
     <form className="flex flex-col h-full">
       <div className="flex-1 flex flex-col justify-top">
         <div className="relative mb-6">
-          <label className="absolute -top-2 left-4 bg-[var(--general-alpha)] px-1 text-sm text-gray-500">
+          <label className="absolute -top-2 left-4 bg-[var(--general-alpha)] px-1 text-sm text-[var(--border)]">
             Current Password
           </label>
           <input
@@ -78,10 +78,10 @@ const ChangePassword: React.FC<Props> = ({ onClose }) => {
             placeholder="Enter Current Password"
             value={currentPassword}
             onChange={(e) => setCurrentPassword(e.target.value)}
-            className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full border border-[var(--sublight)] text-[var(--page-title)] rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[var(--brand-alpha)]"
           />
           <span
-            className="absolute right-4 top-3.5 text-blue-500 cursor-pointer text-lg"
+            className="absolute right-4 top-3.5 text-[var(--brand-alpha)] cursor-pointer text-lg"
             onClick={() => setShowCurrent(!showCurrent)}
           >
             {showCurrent ? <FaRegEye /> : <FaRegEyeSlash />}
@@ -89,7 +89,7 @@ const ChangePassword: React.FC<Props> = ({ onClose }) => {
         </div>
 
         <div className="relative mb-6">
-          <label className="absolute -top-2 left-4 bg-[var(--general-alpha)] px-1 text-sm text-gray-500">
+          <label className="absolute -top-2 left-4 bg-[var(--general-alpha)] px-1 text-sm text-[var(--border)]">
             New Password
           </label>
           <input
@@ -97,10 +97,10 @@ const ChangePassword: React.FC<Props> = ({ onClose }) => {
             placeholder="Enter New Password"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
-            className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full border border-[var(--sublight)] text-[var(--page-title)] rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[var(--brand-alpha)]"
           />
           <span
-            className="absolute right-4 top-3.5 text-blue-500 cursor-pointer text-lg"
+            className="absolute right-4 top-3.5 text-[var(--brand-alpha)] cursor-pointer text-lg"
             onClick={() => setShowNew(!showNew)}
           >
             {showNew ? <FaRegEye /> : <FaRegEyeSlash />}
@@ -108,7 +108,7 @@ const ChangePassword: React.FC<Props> = ({ onClose }) => {
         </div>
 
         <div className="relative">
-          <label className="absolute -top-2 left-4 bg-[var(--general-alpha)] px-1 text-sm text-gray-500">
+          <label className="absolute -top-2 left-4 bg-[var(--general-alpha)] px-1 text-sm text-[var(--border)]">
             Confirm New Password
           </label>
           <input
@@ -116,16 +116,16 @@ const ChangePassword: React.FC<Props> = ({ onClose }) => {
             placeholder="Re-enter New Password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full border border-[var(--sublight)] text-[var(--page-title)] rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[var(--brand-alpha)]"
           />
           <span
-            className="absolute right-4 top-3.5 text-blue-500 cursor-pointer text-lg"
+            className="absolute right-4 top-3.5 text-[var(--brand-alpha)] cursor-pointer text-lg"
             onClick={() => setShowConfirm(!showConfirm)}
           >
             {showConfirm ? <FaRegEye /> : <FaRegEyeSlash />}
           </span>
         </div>
-        {error && <p className="text-red-500 text-sm mt-4">{error}</p>}
+        {error && <p className="text-[var(--error-accent1)] text-sm mt-4">{error}</p>}
       </div>
       <div className="flex justify-between gap-2 absolute bottom-0 right-0 left-0 p-[30px] bg-[var(--primitive-colors-brand-primary-75)] rounded-bl-[50px]">
         <Button

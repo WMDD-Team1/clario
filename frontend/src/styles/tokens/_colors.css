@@ -132,4 +132,7 @@
   --error-background1: #f04438;
   --error-contrast1: #fee4e2;
   --error-accent1: #d92d20;
+
+  --primitive-colors-brand-primary-500-base: #2284ff;
+  --primitive-colors-gray-light-mode-25: #182230;
 }
