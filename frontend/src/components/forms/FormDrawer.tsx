@@ -8,10 +8,16 @@ interface FormDrawerProps {
     onClose: () => void;
     children: React.ReactNode;
     divRef: Ref<HTMLDivElement> | null;
+    disableClickOutside?: boolean;
 }
 
-const FormDrawer = ({ title, isOpen, onClose, children, divRef }: FormDrawerProps) => {
+const FormDrawer = ({ title, isOpen, onClose, children, divRef, disableClickOutside = false }: FormDrawerProps) => {
 
+    const handleOverlayClick = () => {
+        if (!disableClickOutside) {
+            onClose();
+        }
+    };
     return (
         <AnimatePresence>
             {isOpen && (
@@ -23,7 +29,7 @@ const FormDrawer = ({ title, isOpen, onClose, children, divRef }: FormDrawerProp
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.5 }}
-                        onClick={onClose}
+                        onClick={handleOverlayClick}
                         className="fixed inset-0 bg-[var(--blur-background)]/80 backdrop-blur-sm z-[1000]"
                     />
 

@@ -6,7 +6,7 @@ import Projects from '@components/Projects';
 import Clients from '@components/Clients';
 import ToggleButton from '@components/ToggleButton';
 import { useState, useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Loader from '@components/Loader';
 import { useSearchParams } from 'react-router-dom';
 
@@ -26,6 +26,9 @@ const MyWork = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [slide, setSlide] = useState('110%');
   const [searchParams] = useSearchParams();
+  const [isClientOpen, setIsClientOpen] = useState(false);
+
+  const queryClient = useQueryClient();
 
   // MY WORK INSIGHTS
   const { isLoading, error, data } = useQuery({
@@ -43,9 +46,9 @@ const MyWork = () => {
 
   const myWorkInsights = data ?? [];
 
-  const handleOpenClientSlide = () => {
-    setView(MY_WORK_VIEWS[1]);
-    setTimeout(() => setSlide('0px'));
+  const handleClientSuccess = () => {
+    queryClient.invalidateQueries({ queryKey: ['clients'] });
+    queryClient.invalidateQueries({ queryKey: ['projects', 'overview'] });
   };
 
   return (
@@ -54,9 +57,12 @@ const MyWork = () => {
         {view.key === 'projects' ? (
           <ProjectDrawer
             isOpen={isOpen}
+            isClientOpen={isClientOpen}
+            onClientClose={()=>setIsClientOpen(false)}
+            onClientSuccess={handleClientSuccess}
             onClose={() => setIsOpen(false)}
             mode="create"
-            onOpenClientSlide={handleOpenClientSlide}
+            onOpenClientSlide={()=>setIsClientOpen(true)}
           />
         ) : null}
         <section className=" md:flex justify-between items-center hidden transition">
