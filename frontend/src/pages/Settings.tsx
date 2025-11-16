@@ -362,7 +362,7 @@ const Settings: React.FC = () => {
               {finance.expenseCategories.map((cat) => (
                 <span
                   key={cat}
-                  className="px-3 py-1 text-base font-semibold rounded-full border border-gray-700 text-[var(--page-title)]whitespace-nowrap"
+                  className="px-3 py-1 text-base font-semibold rounded-full border border-[var(--secondary-text)] text-[var(--page-title)] whitespace-nowrap"
                 >
                   {cat}
                 </span>
@@ -419,7 +419,7 @@ const Settings: React.FC = () => {
               {finance.incomeCategories.map((cat) => (
                 <span
                   key={cat}
-                  className="px-3 py-1 text-base rounded-full border border-gray-700 text-[var(--page-title)]whitespace-nowrap"
+                  className="px-3 py-1 text-base rounded-full border border-[var(--secondary-text)] text-[var(--page-title)]whitespace-nowrap"
                 >
                   {cat}
                 </span>
@@ -439,7 +439,7 @@ const Settings: React.FC = () => {
               {finance.incomeCategories.map((cat) => (
                 <span
                   key={cat}
-                  className="font-semibold px-3 py-1 text-base rounded-full border border-gray-700 text-[var(--page-title)]whitespace-nowrap"
+                  className="font-semibold px-3 py-1 text-base rounded-full border border-[var(--secondary-text)] text-[var(--page-title)] whitespace-nowrap"
                 >
                   {cat}
                 </span>
@@ -469,7 +469,7 @@ const Settings: React.FC = () => {
           {/* Mobile layout */}
           <div className="md:hidden flex flex-col gap-3">
             <div className="flex justify-between items-center">
-              <h3 className="text-[var(--page-title)]text-base">Tax Regime</h3>
+              <h3 className="text-[var(--page-title)] text-base">Tax Regime</h3>
               <Button
                 className=" text-white rounded-xl px-5 py-1"
                 buttonColor="regularButton"
@@ -489,7 +489,7 @@ const Settings: React.FC = () => {
 
           {/* Desktop layout */}
           <div className="hidden md:flex items-center gap-4 pb-4 border-b border-gray-200">
-            <h3 className="text-[var(--page-title)]text-base flex-[0_0_200px]">Tax Regime</h3>
+            <h3 className="text-[var(--page-title)] text-base flex-[0_0_200px]">Tax Regime</h3>
             <p className="flex-1 px-3 py-2 text-[var(--tertiary-text)] text-base">{finance.taxRegime}</p>
             <Button
               className="text-[var(--general-alpha)] rounded-xl px-5 py-1 flex-shrink-0"
