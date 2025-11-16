@@ -56,6 +56,7 @@ const ProjectDrawer = ({
 
   useEffect(() => {
     setPrefilledProject(null);
+    setIsPrefilled(false);
   }, [isOpen]);
 
   let title = 'Create Project';
