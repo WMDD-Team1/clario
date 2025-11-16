@@ -41,27 +41,25 @@ const ProjectBanner = ({ project, onEdit }: Props) => {
                 </div>
             </div>
 
-            <div className="bg-[var(--background-alternate)] rounded-[20px] p-5">
+            <div className="bg-[var(--background)] rounded-[20px] p-5 border-1 border-[var(--background-alternate)]">
                 <h3 className="text-[var(--primitive-colors-gray-light-mode-800)] font-semibold text-base mb-3">
                     Payment Terms
                 </h3>
 
                 <div className="space-y-[13px] text-sm text-[var(--sub-text)]">
-                    <div className="flex justify-between border-b-1 border-[var(--border)] pb-[7px]">
+                    <div className="flex justify-between border-b-1 border-[var(--background-alternate)] pb-[7px]">
                         <span>Upfront </span>
                         <span className="text-[var(--secondary-text)]">${formatCurrency(project.upfrontAmount ?? 0)}</span>
                     </div>
                     {project.milestones?.map(milestone => (
-                        <div key={milestone.id} className="flex justify-between border-b-1 border-[var(--border)] pb-[7px]">
+                        <div key={milestone.id} className="flex justify-between border-b-1 border-[var(--background-alternate)] pb-[7px]">
                             <span>{milestone.name}</span>
                             <span className="text-[var(--secondary-text)]">${formatCurrency(milestone.amount)}</span>
                         </div>
                     ))}
 
-                    <hr className="border-[var(--primitive-colors-gray-light-mode-200)] my-3" />
-
                     <div className="flex justify-between font-semibold text-[var(--primitive-colors-gray-light-mode-900)]">
-                        <span>Total Budget</span>
+                        <span>Total Amount</span>
                         <span>${formatCurrency(project.totalBudget)}</span>
                     </div>
                 </div>

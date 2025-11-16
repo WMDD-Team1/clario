@@ -36,7 +36,7 @@ const Milestone = ({ milestone, projectId, onClickAdd, onEditMilestone, onEditDe
     }
 
     return (
-        <div className="w-[400px] bg-[var(--general-alpha)] rounded-2xl shadow-sm border border-[var(--primitive-colors-gray-light-mode-200)] overflow-hidden">
+        <div className="md:w-[400px] bg-[var(--general-alpha)] rounded-2xl shadow-sm border border-[var(--primitive-colors-gray-light-mode-200)] overflow-hidden">
             {/* Header */}
             <div className={`flex justify-between items-center
             ${milestone?.isCompleted ? 'bg-[var(--primitive-colors-success-100)]' : 'bg-[var(--primitive-colors-brand-primary-50)]'}
