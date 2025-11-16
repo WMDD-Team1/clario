@@ -78,14 +78,14 @@ const ChangeTaxRegime: React.FC<Props> = ({ onClose, tax }) => {
     <form className="flex flex-col h-full">
       <div className="flex-1 flex flex-col justify-top">
         <div className="relative mb-6">
-          <label className="absolute -top-2.5 left-4 bg-white px-1 text-sm text-gray-500">
+          <label className="absolute -top-2.5 left-4 bg-[var(--general-alpha)] px-1 text-sm text-gray-500">
             Tax Regime
           </label>
 
           <select
             value={taxRegime}
             onChange={(e) => setTaxRegime(e.target.value as 'British Columbia' | 'Quebec')}
-            className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+            className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[var(--general-alpha)]"
           >
             <option value="" disabled>
               Select your Tax Regime

@@ -97,7 +97,7 @@ const ChangeAddress: React.FC<Props> = ({ onClose }) => {
       {!isSaved && (
         <div className="flex-1 flex flex-col justify-top z-10">
           <div className="relative mb-6">
-            <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">
+            <label className="absolute -top-2 left-4 bg-[var(--general-alpha)] px-1 text-sm text-gray-500">
               Address Line
             </label>
             <input
@@ -113,7 +113,7 @@ const ChangeAddress: React.FC<Props> = ({ onClose }) => {
           </div>
 
           <div className="relative mb-6">
-            <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">
+            <label className="absolute -top-2 left-4 bg-[var(--general-alpha)] px-1 text-sm text-gray-500">
               City
             </label>
             <input
@@ -129,7 +129,7 @@ const ChangeAddress: React.FC<Props> = ({ onClose }) => {
           </div>
 
           <div className="relative mb-6">
-            <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">
+            <label className="absolute -top-2 left-4 bg-[var(--general-alpha)] px-1 text-sm text-gray-500">
               Postal Code
             </label>
             <input
@@ -145,7 +145,7 @@ const ChangeAddress: React.FC<Props> = ({ onClose }) => {
           </div>
 
           <div className="relative mb-6">
-          <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">
+          <label className="absolute -top-2 left-4 bg-[var(--general-alpha)] px-1 text-sm text-gray-500">
             Country
           </label>
           <input

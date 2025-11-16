@@ -319,7 +319,7 @@ const Settings: React.FC = () => {
                 Expenses Categories
               </h3>
               <Button
-                className=" text-white rounded-xl px-5 py-1"
+                className="text-[var(--general-alpha)] rounded-xl px-5 py-1"
                 buttonColor="regularButton"
                 textColor="var(--general-alpha)"
                 onClick={() =>
@@ -369,7 +369,7 @@ const Settings: React.FC = () => {
               ))}
             </div>
             <Button
-              className="bg-[--brand-equivalence] text-white rounded-xl px-5 py-1 flex-shrink-0"
+              className="bg-[--brand-equivalence] text-[var(--general-alpha)] rounded-xl px-5 py-1 flex-shrink-0"
               buttonColor="regularButton"
               textColor="var(--general-alpha)"
               onClick={() =>
@@ -446,7 +446,7 @@ const Settings: React.FC = () => {
               ))}
             </div>
             <Button
-              className="bg-[--brand-equivalence] text-white rounded-xl px-5 py-1 flex-shrink-0"
+              className="bg-[--brand-equivalence] text-[var(--general-alpha)] rounded-xl px-5 py-1 flex-shrink-0"
               buttonColor="regularButton"
               textColor="var(--general-alpha)"
               onClick={() =>
@@ -492,7 +492,7 @@ const Settings: React.FC = () => {
             <h3 className="text-[var(--page-title)]text-base flex-[0_0_200px]">Tax Regime</h3>
             <p className="flex-1 px-3 py-2 text-[var(--tertiary-text)] text-base">{finance.taxRegime}</p>
             <Button
-              className=" text-white rounded-xl px-5 py-1 flex-shrink-0"
+              className="text-[var(--general-alpha)] rounded-xl px-5 py-1 flex-shrink-0"
               buttonColor="regularButton"
               textColor="var(--general-alpha)"
               onClick={() =>
@@ -512,7 +512,7 @@ const Settings: React.FC = () => {
           <div className="flex justify-between items-center">
             <h3 className=" text-[var(--page-title)] text-base">Export Data</h3>
             <Button
-              className=" text-white rounded-xl px-5 py-1"
+              className="text-[var(--general-alpha)] rounded-xl px-5 py-1"
               buttonColor="regularButton"
               textColor="var(--general-alpha)"
               onClick={handleExportData}

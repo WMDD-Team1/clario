@@ -85,7 +85,7 @@ const ChangeEmail: React.FC<Props> = ({ onClose }) => {
         {!isSaved ? (
           <>
             <div className="relative mb-6">
-              <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">
+              <label className="absolute -top-2 left-4 bg-[var(--general-alpha)] px-1 text-sm text-gray-500">
                 New Email
               </label>
               <input
@@ -97,7 +97,7 @@ const ChangeEmail: React.FC<Props> = ({ onClose }) => {
             </div>
 
             <div className="relative">
-              <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">
+              <label className="absolute -top-2 left-4 bg-[var(--general-alpha)] px-1 text-sm text-gray-500">
                 Confirm Email
               </label>
               <input
