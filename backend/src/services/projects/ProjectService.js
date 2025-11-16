@@ -113,7 +113,10 @@ export const createNewProject = async (data, file, userId) => {
 		milestones: data.milestones,
 	});
 
-	return { project, contract };
+	const projectJSON = project.toJSON();
+	projectJSON.contract = contract.toJSON();
+
+	return projectJSON;
 };
 
 export const updateProjectById = async (id, userId, data) => {
