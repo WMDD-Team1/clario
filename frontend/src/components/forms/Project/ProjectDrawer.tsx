@@ -9,9 +9,10 @@ interface Props {
     onClose: () => void;
     mode: "create" | "edit";
     project?: ProjectApiResponse | null;
+    onOpenClientSlide?:() => void;
 }
 
-const ProjectDrawer = ({ isOpen, onClose, mode, project }: Props) => {
+const ProjectDrawer = ({ isOpen, onClose, mode, project, onOpenClientSlide }: Props) => {
     const divRef = useRef<HTMLDivElement>(null);
     const [prefilledProject, setPrefilledProject] = useState<ProjectApiResponse | null>(project ?? null);
     const [isPrefilled, setIsPrefilled] = useState<boolean>(false);
@@ -49,7 +50,7 @@ const ProjectDrawer = ({ isOpen, onClose, mode, project }: Props) => {
             {isUploadStep && !isPrefilled ? (
                 <ProjectUploadStep onProjectDataReady={handleProjectDataReady} onCancel={onClose} />
             ) : (
-                <ProjectForm onCancel={onClose} project={prefilledProject} isPrefilled={isPrefilled} />
+                <ProjectForm onCancel={onClose} project={prefilledProject} isPrefilled={isPrefilled} onOpenClientSlide={onOpenClientSlide}/>
             )}
         </FormDrawer>
     );
