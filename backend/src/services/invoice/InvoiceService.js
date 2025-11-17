@@ -19,6 +19,7 @@ export const createInvoiceService = async (user, projectId, milestoneId) => {
 
 	let invoiceAmount = 0;
 	let milestoneName = "Upfront Payment";
+	let milestoneAmount = 0;
 	let deliverables = [];
 
 	if (milestoneId) {
@@ -26,6 +27,7 @@ export const createInvoiceService = async (user, projectId, milestoneId) => {
 		if (!milestone) throw new Error("Milestone not found");
 		invoiceAmount = milestone.amount;
 		milestoneName = milestone.name;
+		milestoneAmount = milestone.amount;
 		deliverables = milestone.deliverables.map((d) => ({ name: d.name, description: d.description || "" }));
 	} else {
 		if (project.upfrontAmount > 0) {
@@ -53,6 +55,7 @@ export const createInvoiceService = async (user, projectId, milestoneId) => {
 		userId,
 		clientName: client.name,
 		milestoneName,
+		milestoneAmount,
 		dueDate,
 		deliverables,
 		amount: invoiceAmount,
@@ -86,6 +89,7 @@ export const createInvoiceService = async (user, projectId, milestoneId) => {
 		},
 
 		milestoneName,
+		milestoneAmount,
 		deliverables: deliverables.length
 			? deliverables.map((d) => ({
 					name: d.name,
