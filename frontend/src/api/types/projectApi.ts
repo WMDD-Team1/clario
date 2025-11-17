@@ -49,8 +49,8 @@ export interface OverviewItem {
 export interface ProjectOverview {
     total: number;
     active: number;
-    inactive: number;
-    archived: number;
+    draft: number;
+    archive: number;
     clients: number;
 }
 

@@ -69,7 +69,7 @@ export const fetchProjectsOverview = async (): Promise<OverviewItem[]> => {
     const overview: OverviewItem[] = [
         { key: "totalBudget", title: "Total", value: "0" },
         { key: "activeBudget", title: "Active", value: "0" },
-        { key: "inactiveProjects", title: "Inactive", value: "0" },
+        { key: "inactiveProjects", title: "Draft", value: "0" },
         { key: "archivedProjects", title: "Archived", value: "0" },
         { key: "totalClients", title: "Clients", value: "0" },
     ];
@@ -81,8 +81,8 @@ export const fetchProjectsOverview = async (): Promise<OverviewItem[]> => {
             switch (item.key) {
                 case "totalBudget": return { ...item, value: `${data.total}` };
                 case "activeBudget": return { ...item, value: `${data.active}` };
-                case "inactiveProjects": return { ...item, value: String(data.inactive ?? 0) };
-                case "archivedProjects": return { ...item, value: String(data.archived ?? 0) };
+                case "inactiveProjects": return { ...item, value: String(data.draft ?? 0) };
+                case "archivedProjects": return { ...item, value: String(data.archive ?? 0) };
                 case "totalClients": return { ...item, value: String(data.clients ?? 0) };
                 default: return item;
             }
