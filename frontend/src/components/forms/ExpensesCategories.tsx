@@ -77,18 +77,18 @@ const ExpensesCategories: React.FC<Props> = ({ onClose, expenseCategories }) => 
   return (
     <form className="flex flex-col h-full">
       <div className="flex-1 flex flex-col justify-top">
-        <div className="relative mb-6">
+        <div className="relative mb-6 text-[var(--page-title)]">
           <TextArea
             id="categories"
             label="Edit Categories"
             value={categories}
             onChange={(e) => setCategories(e.target.value)}
-            className="p-5 rounded-lg border-2 border-gray-300 w-full resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-            color="text-gray-500 bg-white"
+            className="p-5 rounded-lg border-2 border-[var(--sublight)] text-[var(--page-title)] w-full resize-none focus:outline-none focus:ring-2 focus:ring-[var(--brand-alpha)]"
+            color="text-[var(--border)] bg-white"
           />
-          <span>Separate the categories with “,”</span>
+          <span className="text-[var(--page-title)]">Separate the categories with “,”</span>
         </div>
-                {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+                {error && <p className="text-[var(--error-accent1)] text-sm mt-2">{error}</p>}
       </div>
 
       <>

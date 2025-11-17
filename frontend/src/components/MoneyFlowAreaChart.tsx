@@ -41,8 +41,8 @@ const MoneyFlowAreaChart: React.FC = () => {
   }, []);
 
   return (
-    <div className="h-[320px] w-full p-5 rounded-[20px] bg-white hover:shadow-md shadow-sm">
-      <p className="text-[18px] font-semibold mb-4">Money Flow</p>
+    <div className="h-[320px] w-full p-5 rounded-[20px] bg-[var(--general-alpha)] hover:shadow-md shadow-sm">
+      <p className="text-lg mb-4 text-[var(--primary-text)]">Money Flow</p>
       <ResponsiveContainer width="100%" height={250}>
         <AreaChart data={data}>
           <XAxis dataKey="month" />

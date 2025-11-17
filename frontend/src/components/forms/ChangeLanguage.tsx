@@ -60,14 +60,14 @@ const ChangeLanguage: React.FC<Props> = ({ onClose }) => {
     <form className="flex flex-col h-full">
       <div className="flex-1 flex flex-col justify-top">
         <div className="relative mb-6">
-          <label className="absolute -top-2.5 left-4 bg-white px-1 text-sm text-gray-500">
+          <label className="absolute -top-2.5 left-4 bg-[var(--general-alpha)] px-1 text-sm text-[var(--border)]">
             Language
           </label>
 
           <select
             value={language}
             onChange={(e) => setLanguage('en')}
-            className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+            className="border border-[var(--sublight)] text-[var(--page-title)] rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-[var(--brand-alpha)] bg-white"
           >
             <option value="" disabled>
               Select a language

@@ -15,7 +15,7 @@ interface Props {
 const Menu = ({ items }: Props) => {
 
     return (
-        <div className='flex flex-col items-center justify-between p-5 bg-[#F5F9FF] shadow-md rounded-[30px]'>
+        <div className='flex flex-col items-center justify-between p-5 bg-[var(--primitive-colors-gray-light-mode-25)] shadow-md rounded-[30px]'>
             <nav className='flex flex-col gap-5'>
                 {items.map(({ tooltip, route, activeIcon: ActiveIcon, inactiveIcon: InactiveIcon }) => (
                     <Tooltip key={route} title={tooltip} arrow placement="right" slotProps={{
@@ -33,7 +33,7 @@ const Menu = ({ items }: Props) => {
                             className={({ isActive }) =>
                                 `flex flex-col items-center justify-center text-xs font-medium transition ${isActive
                                     ? 'text-[var(--primitive-colors-brand-primary-925)]'
-                                    : 'text-[var(--primitive-colors-brand-primary-500-base)] hover:text-blue-500'
+                                    : 'text-[var(--primitive-colors-brand-primary-500-base)] hover:text-[var(--brand-alpha)]'
                                 }`
                             }
                         >

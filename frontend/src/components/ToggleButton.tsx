@@ -9,12 +9,12 @@ interface Props {
 const ToggleButton = ({ options, option, onClick }: Props) => {
     const [firstOption, secondOption] = options;
     return (
-        <div className="relative toggle-view flex rounded-[20px] p-[10px] h-[60px] w-[400px] border-[2px] border-[#E4E7EC] justify-evenly bg-white">
-            <button className={`z-2 grow px-4 py-1 text-sm font-medium transition rounded-[15px] ${option.key === firstOption.key
+        <div className="relative toggle-view flex rounded-[20px] p-[10px] h-[60px] w-[100%] sm:w-[400px] border-[2px] border-[#E4E7EC] justify-evenly bg-white">
+            <button className={`'Red_Hat_Display'] text-[18px] z-2 grow px-4 py-1 transition rounded-[15px] ${option.key === firstOption.key
                 ? " text-[var(--text-alpha)]"
                 : "text-[var(--primitive-colors-gray-light-mode-400)]"
                 }`} onClick={() => onClick(firstOption)}>{firstOption.label}</button>
-            <button className={`z-2 grow px-4 py-1 text-sm font-medium transition rounded-[15px] ${option.key === secondOption.key
+            <button className={`font-['Red_Hat_Display'] text-[18px] z-2 grow px-4 py-1 transition rounded-[15px] ${option.key === secondOption.key
                 ? "text-[var(--text-alpha)]"
                 : "text-[var(--primitive-colors-gray-light-mode-400)]"
                 }`} onClick={() => onClick(secondOption)}>{secondOption.label}</button>

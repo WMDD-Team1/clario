@@ -97,7 +97,7 @@ const ChangeAddress: React.FC<Props> = ({ onClose }) => {
       {!isSaved && (
         <div className="flex-1 flex flex-col justify-top z-10">
           <div className="relative mb-6">
-            <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">
+            <label className="absolute -top-2 left-4 bg-[var(--general-alpha)] px-1 text-sm text-[var(--border)]">
               Address Line
             </label>
             <input
@@ -108,12 +108,12 @@ const ChangeAddress: React.FC<Props> = ({ onClose }) => {
               clearErrorOnInput();
             }}
             placeholder="1645 SW Marine Drive"
-              className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="border border-[var(--sublight)] text-[var(--page-title)] rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-[var(--brand-alpha)]"
             />
           </div>
 
           <div className="relative mb-6">
-            <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">
+            <label className="absolute -top-2 left-4 bg-[var(--general-alpha)] px-1 text-sm text-[var(--border)]">
               City
             </label>
             <input
@@ -124,12 +124,12 @@ const ChangeAddress: React.FC<Props> = ({ onClose }) => {
               clearErrorOnInput();
             }}
             placeholder="Vancouver"
-              className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="border border-[var(--sublight)] text-[var(--page-title)] rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-[var(--brand-alpha)]"
             />
           </div>
 
           <div className="relative mb-6">
-            <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">
+            <label className="absolute -top-2 left-4 bg-[var(--general-alpha)] px-1 text-sm text-[var(--border)]">
               Postal Code
             </label>
             <input
@@ -140,12 +140,12 @@ const ChangeAddress: React.FC<Props> = ({ onClose }) => {
               clearErrorOnInput();
             }}
             placeholder="V5K 0A1"
-              className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="border border-[var(--sublight)] text-[var(--page-title)] rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-[var(--brand-alpha)]"
             />
           </div>
 
           <div className="relative mb-6">
-          <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">
+          <label className="absolute -top-2 left-4 bg-[var(--general-alpha)] px-1 text-sm text-[var(--border)]">
             Country
           </label>
           <input
@@ -156,11 +156,11 @@ const ChangeAddress: React.FC<Props> = ({ onClose }) => {
               clearErrorOnInput();
             }}
             placeholder="Canada"
-            className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border border-[var(--sublight)] text-[var(--page-title)] rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-[var(--brand-alpha)]"
           />
         </div>
         
-        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+        {error && <p className="text-[var(--error-accent1)] text-sm mb-4">{error}</p>}
         </div>
       )}
 

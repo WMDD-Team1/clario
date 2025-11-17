@@ -61,11 +61,11 @@ const ChangeName: React.FC<Props> = ({ onClose }) => {
     };
 
     return (
-        <form className="flex flex-col h-full">
-            <div className="flex-1 flex flex-col justify-top">
+        <form className="flex flex-col h-full bg-[var(--general-alpha)]">
+            <div className="flex-1 flex flex-col justify-top bg-[var(--general-alpha)] font-['Red_Hat_Display'] ">
                 {!isSaved ? (
                         <div className="relative mb-6">
-                            <label className="absolute -top-2 left-4 bg-white px-1 text-sm text-gray-500">
+                            <label className="absolute -top-2 left-4 bg-[var(--general-alpha)]  px-1 text-sm text-[var(--border)]">
                                 Name
                             </label>
                             <input
@@ -74,9 +74,9 @@ const ChangeName: React.FC<Props> = ({ onClose }) => {
                                 name="name"
                                 placeholder="Rosa Larruborosa"
                                 onChange={(e) => setName(e.target.value)}
-                                className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="border border-[var(--sublight)] text-[var(--page-title)] text-[var(--page-title)] rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-[var(--brand-alpha)]"
                             />
-                            {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+                            {error && <p className="text-[var(--error-accent1)] text-sm mt-2">{error}</p>}
                         </div>
                 ) : (
 

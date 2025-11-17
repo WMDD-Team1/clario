@@ -66,7 +66,7 @@ const FinancialDashboard: React.FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
               <Card style="card1">
                 <div className="flex flex-col md:items-center">
-                  <span className="text-gray-500">Total Income</span>
+                  <span className="text-[var(--border)]">Total Income</span>
                   <span className="text-3xl font-semibold">
                     ${formatCurrency(totalIncome)}
                   </span>
@@ -75,7 +75,7 @@ const FinancialDashboard: React.FC = () => {
 
               <Card style="card1">
                 <div className="flex flex-col md:items-center">
-                  <span className="text-gray-500">Total Expense</span>
+                  <span className="text-[var(--border)]">Total Expense</span>
                   <span className="text-3xl font-semibold">
                     ${formatCurrency(totalExpense)}
                   </span>
@@ -84,7 +84,7 @@ const FinancialDashboard: React.FC = () => {
 
               <Card style="card1">
                 <div className="flex flex-col md:items-center">
-                  <span className="text-gray-500">Net Balance</span>
+                  <span className="text-[var(--border)]">Net Balance</span>
                   <span className="text-3xl font-semibold">
                     ${formatCurrency(netBalance)}
                   </span>
@@ -93,7 +93,7 @@ const FinancialDashboard: React.FC = () => {
 
               <Card style="card1">
                 <div className="flex flex-col md:items-center">
-                  <span className="text-gray-500">Recurring</span>
+                  <span className="text-[var(--border)]">Recurring</span>
                   <span className="text-3xl font-semibold">
                     {recurringActive} Active
                   </span>
