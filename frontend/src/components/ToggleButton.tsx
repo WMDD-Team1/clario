@@ -26,7 +26,7 @@ const ToggleButton = ({ options, option, onClick }: Props) => {
             />
 
             <button
-                className={`relative z-10 grow text-[18px] py-1 transition rounded-[15px]
+                className={`relative z-10 grow text-[18px] md:pl-[10px] py-1 transition rounded-[15px]
                 ${option.key === firstOption.key
                         ? "text-[var(--text-alpha)]"
                         : "text-[var(--primitive-colors-gray-light-mode-400)]"}`}
@@ -36,7 +36,7 @@ const ToggleButton = ({ options, option, onClick }: Props) => {
             </button>
 
             <button
-                className={`relative z-10 grow text-[18px] py-1 transition rounded-[15px] 
+                className={`relative z-10 grow text-[18px] md:pr-[10px] py-1 transition rounded-[15px] 
       ${option.key === secondOption.key
                         ? "text-[var(--text-alpha)]"
                         : "text-[var(--primitive-colors-gray-light-mode-400)]"}`}
