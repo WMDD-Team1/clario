@@ -155,19 +155,19 @@ export const archiveProjectById = async (id, userId, isArchived) => {
 export const getOverviewService = async (userId) => {
 	const [projects, clients] = await Promise.all([Project.find({ userId }), Client.find({ userId })]);
 
-	const totalAmount = projects.reduce((sum, p) => sum + (p.totalAmount || 0), 0);
-	const activeProjects = projects.filter((p) => p.isActive && !p.isArchived);
-	const activeAmount = activeProjects.reduce((sum, p) => sum + (p.totalAmount || 0), 0);
+	const total = projects.length;
+	const active = projects.filter((p) => p.isActive === true && p.isArchived === false).length;
+	const draft = projects.filter((p) => p.isActive === false && p.isArchived === false).length;
+	const archive = projects.filter((p) => p.isArchived === true).length;
 
-	const inactiveProjects = projects.filter((p) => !p.isActive && !p.isArchived);
-	const archivedProjects = projects.filter((p) => p.isArchived);
+	const clientCount = clients.length;
 
 	return {
-		total: totalAmount,
-		active: activeAmount,
-		inactive: inactiveProjects.length,
-		archived: archivedProjects.length,
-		clients: clients.length,
+		total,
+		active,
+		draft,
+		archive,
+		clients: clientCount,
 	};
 };
 
