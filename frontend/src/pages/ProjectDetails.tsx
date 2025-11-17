@@ -55,7 +55,7 @@ const ProjectDetails = () => {
             </div>
             <div className='hidden md:flex gap-5'>
                 <ProjectBanner project={project} onEdit={() => setIsFormOpen(true)} />
-                <ProjectDrawer isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} mode="edit" project={project} />
+                <ProjectDrawer isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} mode="edit" project={project} isClientOpen={false} onClientClose={()=>{}}/>
                 <div className='overflow-x-auto overflow-y-hidden flex-1 min-w-0'>
                     <div className='sticky left-0'>
                         <ToggleButton options={views} option={view} onClick={setView} />
