@@ -18,7 +18,6 @@ import { Link, useSearchParams } from 'react-router-dom';
 const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string) => void }) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-
   useEffect(() => {
     const clientId = searchParams.get('clientId');
     if (clientId) {
@@ -466,7 +465,7 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
     actions: (
       <div className="relative hidden md:block">
         <DotsButton
-          className="h-[1rem] cursor-pointer"
+          className="h-[1rem] cursor-pointer w-[1.5rem]"
           onClick={(e) => {
             e.stopPropagation();
             setOpenDotsId(openDotsId === client.id ? null : client.id);
@@ -568,6 +567,7 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
               data={tableData}
               total={filteredClients.length}
               page={currentPage}
+              maxHeight="29vh"
               pageSize={CLIENTS_PER_PAGE}
               onPageChange={setCurrentPage}
             />
@@ -615,6 +615,14 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
             <Input
               color="bg-[var(--general-alpha)]"
               label="Phone"
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              onKeyDown={(e) => {
+                if (!/[0-9]/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete') {
+                  e.preventDefault();
+                }
+              }}
               value={oneClient.phone}
               onChange={(e) => {
                 setOneClient({ ...oneClient, phone: e.target.value });
@@ -801,6 +809,14 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
             <Input
               color="bg-[var(--general-alpha)]"
               label="Phone"
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              onKeyDown={(e) => {
+                if (!/[0-9]/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete') {
+                  e.preventDefault();
+                }
+              }}
               value={oneClient.phone}
               onChange={(e) => {
                 setOneClient({ ...oneClient, phone: e.target.value });

@@ -62,7 +62,7 @@ const ProjectBanner = ({ project, onEdit }: Props) => {
 
                     <div className="flex justify-between font-semibold text-[var(--primitive-colors-gray-light-mode-900)]">
                         <span>Total Amount</span>
-                        <span>${formatCurrency(project.totalBudget)}</span>
+                        <span>${formatCurrency(project.totalAmount)}</span>
                     </div>
                 </div>
             </div>
