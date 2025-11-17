@@ -26,6 +26,7 @@
 		"mongoose": "^8.18.3",
 		"multer": "^2.0.2",
 		"node-cron": "^4.2.1",
+		"nodemailer": "^7.0.10",
 		"openai": "^6.5.0",
 		"pdf.js-extract": "^0.2.1",
 		"puppeteer": "^24.25.0",
