@@ -96,7 +96,7 @@ export default function ProjectForm({
 
   // Filter clients based on search
   const filteredClients = clients.filter((client: any) =>
-    client.name.toLowerCase().includes(searchValue.toLowerCase())
+    client.name.toLowerCase().includes(searchValue.toLowerCase()),
   );
 
   // Close dropdown when clicking outside
@@ -130,8 +130,11 @@ export default function ProjectForm({
         : createProject(formData);
     },
     onSuccess: (project) => {
-      if (project) queryClient.invalidateQueries({ queryKey: ['projects', project.id] });
-      if (!project) queryClient.invalidateQueries({ queryKey: ['projects'] });
+      queryClient.invalidateQueries({ queryKey: ['projects'] });
+
+      if (project?.id) {
+        queryClient.invalidateQueries({ queryKey: ['projects', project.id] });
+      }
       setIsSuccess(true);
       setNewProjectId(project?.id ?? null);
     },
@@ -200,7 +203,7 @@ export default function ProjectForm({
 
       {/* Client */}
       {/* <div className="relative" ref={dropdownRef}> */}
-        {/* <label className="block text-sm text-gray-500">Client</label>
+      {/* <label className="block text-sm text-gray-500">Client</label>
                 <select
                     {...register("clientId")}
                     className="w-full border-b border-gray-300 focus:border-blue-500 outline-none py-1 bg-transparent"
@@ -212,16 +215,16 @@ export default function ProjectForm({
                         </option>
                     ))}
                 </select> */}
-        <Controller
+      <Controller
         name="clientId"
         control={control}
         render={({ field }) => (
           <div className="relative" ref={dropdownRef}>
-            <Input 
-              label="Client" 
-              placeholder="Client Name..." 
+            <Input
+              label="Client"
+              placeholder="Client Name..."
               value={
-                field.value 
+                field.value
                   ? clients.find((c: any) => c.id === field.value)?.name || searchValue
                   : searchValue
               }
@@ -232,32 +235,30 @@ export default function ProjectForm({
                 field.onChange('');
               }}
             />
-            
-            
-              <div className={`absolute bg-[var(--primitive-colors-brand-primary-025)] border border-[var(--primitive-colors-gray-light-mode-200)] shadow-md backdrop-blur-sm p-[1rem] rounded-xl top-[5rem] w-full ${clientOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5 pointer-events-none'} transition-all duration-300 z-30 max-h-[300px] overflow-y-scroll`}>
-                {filteredClients.length > 0 ? (
-                  filteredClients.map((client: any) => (
-                    <p
-                      onClick={() => {
-                        field.onChange(client.id);
-                        setSearchValue(client.name);
-                        setClientOpen(false);
-                      }}
-                      key={client.id}
-                      className="flex flex-row justify-between items-center mb-1 pb-2 cursor-pointer px-2 py-1 rounded transition-all relative group"
-                    >
-                      {client.name}
-                      <span
-                      className="absolute bottom-0 left-0 w-0 h-[1px] bg-[var(--primitive-colors-brand-primary-400)] transition-all duration-300 ease-out group-hover:left-0 group-hover:w-full"
-                    />
-                    </p>
-                  ))
-                ) : (
-                  <p className="text-gray-500 text-sm text-center py-2">No clients found</p>
-                )}
-              </div>
 
-            
+            <div
+              className={`absolute bg-[var(--primitive-colors-brand-primary-025)] border border-[var(--primitive-colors-gray-light-mode-200)] shadow-md backdrop-blur-sm p-[1rem] rounded-xl top-[5rem] w-full ${clientOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5 pointer-events-none'} transition-all duration-300 z-30 max-h-[300px] overflow-y-scroll`}
+            >
+              {filteredClients.length > 0 ? (
+                filteredClients.map((client: any) => (
+                  <p
+                    onClick={() => {
+                      field.onChange(client.id);
+                      setSearchValue(client.name);
+                      setClientOpen(false);
+                    }}
+                    key={client.id}
+                    className="flex flex-row justify-between items-center mb-1 pb-2 cursor-pointer px-2 py-1 rounded transition-all relative group"
+                  >
+                    {client.name}
+                    <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-[var(--primitive-colors-brand-primary-400)] transition-all duration-300 ease-out group-hover:left-0 group-hover:w-full" />
+                  </p>
+                ))
+              ) : (
+                <p className="text-gray-500 text-sm text-center py-2">No clients found</p>
+              )}
+            </div>
+
             <Plus
               className="absolute right-[1rem] top-5 cursor-pointer hover:opacity-70 transition-opacity"
               onClick={() => {
@@ -265,8 +266,10 @@ export default function ProjectForm({
                 setClientOpen(false);
               }}
             />
-            
-            {errors.clientId && <p className="text-sm text-red-500 mt-1">{errors.clientId.message}</p>}
+
+            {errors.clientId && (
+              <p className="text-sm text-red-500 mt-1">{errors.clientId.message}</p>
+            )}
           </div>
         )}
       />

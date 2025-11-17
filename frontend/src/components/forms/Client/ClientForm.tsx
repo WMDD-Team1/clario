@@ -88,13 +88,14 @@ export const ClientForm = ({ onCancel, onSuccess }: Props) => {
       setSuccess(true);
 
       onSuccess?.();
-      setTimeout(()=>{onCancel()},500)
+      setTimeout(() => {
+        onCancel();
+      }, 500);
     } catch (error) {
       setLoader(false);
       console.error('Error saving client:', error);
     }
   };
-
 
   if (loader) {
     return (
@@ -104,7 +105,6 @@ export const ClientForm = ({ onCancel, onSuccess }: Props) => {
     );
   }
 
-
   if (success) {
     return (
       <Success title="Client Added successfully." p1="The details have been added to your records.">
@@ -113,9 +113,8 @@ export const ClientForm = ({ onCancel, onSuccess }: Props) => {
     );
   }
 
-
   return (
-    <form className="flex flex-col gap-[1.5rem]">
+    <form className="flex flex-col gap-[1.5rem] mb-[8rem]">
       {/* Client Name */}
       <Controller
         name="name"
@@ -138,6 +137,13 @@ export const ClientForm = ({ onCancel, onSuccess }: Props) => {
         control={control}
         render={({ field }) => (
           <Input
+            inputMode="numeric"
+            pattern="[0-9]*"
+            onKeyDown={(e) => {
+              if (!/[0-9]/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete') {
+                e.preventDefault();
+              }
+            }}
             color="bg-[var(--general-alpha)]"
             label="Phone"
             value={field.value}
