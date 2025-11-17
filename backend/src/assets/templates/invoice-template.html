@@ -16,8 +16,6 @@
 				max-width: 800px;
 				margin: 20px auto;
 				padding: 30px;
-				border: 1px solid #eee;
-				box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 			}
 
 			.header {
@@ -163,7 +161,7 @@
 							</ul>
 						</td>
 
-						<td>{{price}}</td>
+						<td>{{milestoneAmount}}</td>
 					</tr>
 				</tbody>
 			</table>
@@ -173,9 +171,7 @@
 				<div class="bottom-contact-info">
 					<h3>Contact:</h3>
 					<p>
-						{{billFrom.name}} {% comment %}
-						<br />
-						Ph.No: {{billFrom.phone}} {% endcomment %}
+						{{billFrom.name}}
 						<br />
 						Email: {{billFrom.email}}
 					</p>
