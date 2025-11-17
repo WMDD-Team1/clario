@@ -161,7 +161,7 @@
 							</ul>
 						</td>
 
-						<td>{{milestoneAmount}}</td>
+						<td>${{formatNumber milestoneAmount}}</td>
 					</tr>
 				</tbody>
 			</table>
@@ -180,15 +180,15 @@
 				<table class="totals-table">
 					<tr>
 						<td>Sub Total</td>
-						<td>{{subTotal}}</td>
+						<td>${{formatNumber subTotal}}</td>
 					</tr>
 					<tr>
 						<td>Tax</td>
-						<td>{{taxAmount}}</td>
+						<td>${{formatNumber taxAmount}}</td>
 					</tr>
 					<tr class="total">
 						<td>Grand Total</td>
-						<td>{{totalAmount}}</td>
+						<td>${{formatNumber totalAmount}}</td>
 					</tr>
 				</table>
 			</div>

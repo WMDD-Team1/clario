@@ -64,7 +64,7 @@ export const createInvoiceService = async (user, projectId, milestoneId) => {
 	});
 
 	const invoiceData = {
-		logo: "https://firebasestorage.googleapis.com/v0/b/clario-6bfca.firebasestorage.app/o/public%2Flogo.svg?alt=media&token=78ce897b-b81b-47c6-bbe4-33748d9e9f5c",
+		logo: "https://firebasestorage.googleapis.com/v0/b/clario-6bfca.firebasestorage.app/o/public%2Flogo.png?alt=media&token=97a516bc-af35-4b0b-b163-7b709c778ae8",
 		invoiceNumber: newInvoice.invoiceNumber,
 		issueDate: new Date(newInvoice.createdAt).toLocaleDateString("en-CA"),
 		dueDate: newInvoice.dueDate.toLocaleDateString("en-CA"),
@@ -146,7 +146,6 @@ export const getInvoicesService = async (userId, projectId, page = 1, limit = 10
 };
 
 export const getInvoiceByIdService = async (invoiceId, userId) => {
-	console.log("====", await Invoice.findOne({ _id: invoiceId, userId }));
 	return await Invoice.findOne({ _id: invoiceId, userId });
 };
 
