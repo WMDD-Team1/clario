@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
@@ -11,8 +11,6 @@
 				max-width: 800px;
 				margin: 40px auto;
 				padding: 40px;
-				border: 1px solid #e5e7eb;
-				border-radius: 12px;
 			}
 			h1,
 			h2,
@@ -58,9 +56,11 @@
 		<p>The Contractor agrees to perform the following services for the Client:</p>
 		<ul>
 			<li>{{projectName}}</li>
-			<li>{{milestoneName}}</li>
 			<ul>
-				<li>{{deliverableName}}</li>
+				<li>{{milestoneName}}</li>
+				<ul>
+					<li>{{deliverableName}}</li>
+				</ul>
 			</ul>
 		</ul>
 		<p>Any changes to the scope must be agreed upon in writing by both parties.</p>

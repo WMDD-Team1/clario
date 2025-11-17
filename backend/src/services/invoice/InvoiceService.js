@@ -19,6 +19,7 @@ export const createInvoiceService = async (user, projectId, milestoneId) => {
 
 	let invoiceAmount = 0;
 	let milestoneName = "Upfront Payment";
+	let milestoneAmount = 0;
 	let deliverables = [];
 
 	if (milestoneId) {
@@ -26,9 +27,14 @@ export const createInvoiceService = async (user, projectId, milestoneId) => {
 		if (!milestone) throw new Error("Milestone not found");
 		invoiceAmount = milestone.amount;
 		milestoneName = milestone.name;
+		milestoneAmount = milestone.amount;
 		deliverables = milestone.deliverables.map((d) => ({ name: d.name, description: d.description || "" }));
-	} else if (project.upfrontAmount > 0) {
-		invoiceAmount = project.upfrontAmount;
+	} else {
+		if (project.upfrontAmount > 0) {
+			invoiceAmount = project.upfrontAmount;
+		} else {
+			throw new Error("No milestone or upfront amount found");
+		}
 	}
 
 	const lastInvoice = await Invoice.findOne().sort({ createdAt: -1 });
@@ -49,6 +55,7 @@ export const createInvoiceService = async (user, projectId, milestoneId) => {
 		userId,
 		clientName: client.name,
 		milestoneName,
+		milestoneAmount,
 		dueDate,
 		deliverables,
 		amount: invoiceAmount,
@@ -57,13 +64,13 @@ export const createInvoiceService = async (user, projectId, milestoneId) => {
 	});
 
 	const invoiceData = {
+		logo: "https://firebasestorage.googleapis.com/v0/b/clario-6bfca.firebasestorage.app/o/public%2Flogo.svg?alt=media&token=78ce897b-b81b-47c6-bbe4-33748d9e9f5c",
 		invoiceNumber: newInvoice.invoiceNumber,
-		status: newInvoice.status || "Pending",
-		issueDate: new Date(newInvoice.createdAt).toISOString().split("T")[0],
-		dueDate: newInvoice.dueDate.toISOString().split("T")[0],
+		issueDate: new Date(newInvoice.createdAt).toLocaleDateString("en-CA"),
+		dueDate: newInvoice.dueDate.toLocaleDateString("en-CA"),
 
 		billFrom: {
-			name: name || "User",
+			name: name || "",
 			email: email || "",
 			phone: phone || "",
 			// addressLine1: address?.street || "",
@@ -73,7 +80,7 @@ export const createInvoiceService = async (user, projectId, milestoneId) => {
 		},
 
 		billTo: {
-			company: client?.name || "Client",
+			clientName: client?.name || "Client",
 			email: client?.email || "",
 			phone: client?.phone || "",
 			addressLine1: client?.address?.street || "",
@@ -81,34 +88,23 @@ export const createInvoiceService = async (user, projectId, milestoneId) => {
 			country: client?.address?.country || "",
 		},
 
-		items: deliverables.length
+		milestoneName,
+		milestoneAmount,
+		deliverables: deliverables.length
 			? deliverables.map((d) => ({
 					name: d.name,
-					description: d.description || "",
-			  }))
+				}))
 			: [
 					{
 						name: milestoneName,
-						description: "Milestone payment",
-						qty: "1",
-						price: `$${invoiceAmount.toFixed(2)}`,
-						amount: `$${invoiceAmount.toFixed(2)}`,
 					},
-			  ],
+				],
 
 		subTotal: `$${invoiceAmount.toFixed(2)}`,
-		taxLabel: `Tax (${(taxRate * 100).toFixed(0)}%)`,
 		taxAmount: `$${taxAmount.toFixed(2)}`,
 		totalAmount: `$${totalAmount.toFixed(2)}`,
-
-		// notes: "Thank you for your business!",
-		// paymentInstructions: "Please send payment via e-Transfer to pay@clario.app",
-		// logoUrl: "",
 	};
-	// const invoiceData = newInvoice.toObject();
-
-	invoiceData.issueDate = new Date(invoiceData.issueDate).toLocaleDateString("en-CA");
-	invoiceData.dueDate = new Date(invoiceData.dueDate).toLocaleDateString("en-CA");
+	console.log(invoiceData);
 
 	const pdfPath = await generateInvoicePDF(invoiceData);
 

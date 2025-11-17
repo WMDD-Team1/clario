@@ -20,7 +20,7 @@ export const projectSchema = z.object({
 	name: z.string().min(1, "Project name is required"),
 	description: z.string().optional().nullable(),
 	type: z.string().optional().nullable(),
-	upfrontAmount: z.number().min(0).default(0),
+	upfrontAmount: z.number().min(0).optional(),
 	status: z.enum(["Planning", "In-Progress", "Done"]).default("Planning"),
 	isActive: z.boolean().optional().default(false),
 	isArchived: z.boolean().optional().default(false),

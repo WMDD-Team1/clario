@@ -13,9 +13,21 @@ import EmptyState from './EmptyState';
 import Loader from '@components/Loader';
 import Success from '@components/Success';
 import { ClientUploadSuccess, ClientUpdateSuccess, ViewProject } from '@assets/icons';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 
 const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string) => void }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+
+  useEffect(() => {
+    const clientId = searchParams.get('clientId');
+    if (clientId) {
+      handleClientDetail(clientId).then(() => {
+        setSlideDetail('0px');
+        setSearchParams({});
+      });
+    }
+  }, [searchParams]);
   interface Project {
     id: string;
     name: string;
@@ -87,6 +99,53 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
     updatedAt: '',
   });
 
+  interface ClientError {
+    name: string;
+    phone: string;
+    email: string;
+    notes?: string;
+    streetAddress: string;
+    postalCode: string;
+    city: string;
+    country: string;
+  }
+
+  const [errors, setErrors] = useState<ClientError>({
+    name: '',
+    phone: '',
+    email: '',
+    notes: '',
+    streetAddress: '',
+    postalCode: '',
+    city: '',
+    country: '',
+  });
+
+  const handleClientError = () => {
+    const newError = {
+      name: '',
+      phone: '',
+      email: '',
+      notes: '',
+      streetAddress: '',
+      postalCode: '',
+      city: '',
+      country: '',
+    };
+    if (!oneClient.name) newError.name = 'Name is required';
+    if (!oneClient.phone) newError.phone = 'Phone is required';
+    if (!oneClient.email) newError.email = 'Email is required';
+    // if (!oneClient.notes) newError.notes = 'Notes are required';
+    if (!oneClient.address.street) newError.streetAddress = 'Street Address is required';
+    if (!oneClient.address.postalCode) newError.postalCode = 'Postal Code is required';
+    if (!oneClient.address.city) newError.city = 'City is required';
+    if (!oneClient.address.country) newError.country = 'Country is required';
+
+    setErrors(newError);
+    const hasError = Object.values(newError).some((error) => error != '');
+    return hasError;
+  };
+
   // const [slide, setSlide] = useState('100%');
   const [slideDetail, setSlideDetail] = useState('110%');
   const [slideEdit, setSlideEdit] = useState('110%');
@@ -135,6 +194,16 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
     setLoader(false);
     setSuccess(false);
     resetFormData();
+    setErrors({
+      name: '',
+      phone: '',
+      email: '',
+      notes: '',
+      streetAddress: '',
+      postalCode: '',
+      city: '',
+      country: '',
+    });
   };
 
   const handleClientDetail = async (id: string) => {
@@ -208,6 +277,10 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
   };
 
   const updateClient = async () => {
+    const hasError = handleClientError();
+    if (hasError) {
+      return;
+    }
     setLoader(true);
     setSuccess(false);
     const token = await getAccessTokenSilently({
@@ -269,6 +342,10 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
   }
 
   const onSubmit = async () => {
+    const hasError = handleClientError();
+    if (hasError) {
+      return;
+    }
     setLoader(true);
     setSuccess(false);
     const payload = {
@@ -407,12 +484,12 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
               }}
             ></div>
             <div
-              className={`absolute right-0 w-48 bg-white shadow-lg z-20 p-[1rem] rounded-[1rem] hidden md:block cursor-pointer ${
+              className={`absolute right-0 w-48 bg-[var(--general-alpha)] shadow-lg z-20 p-[1rem] rounded-[1rem] hidden md:block cursor-pointer ${
                 index >= pagedClients.length - 2 ? 'bottom-full mb-2' : 'mt-2'
               }`}
             >
               <div
-                className="cursor-pointer px-4 py-2 hover:bg-blue-100 rounded-[.5rem]"
+                className="cursor-pointer px-4 py-2 hover:bg-[var(--primitive-colors-brand-primary-75)] rounded-[.5rem]"
                 onClick={(e) => {
                   // handleClientDetail(client.id);
                   e.stopPropagation();
@@ -423,7 +500,7 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
                 View
               </div>
               <div
-                className="cursor-pointer px-4 py-2 hover:bg-blue-100 rounded-[.5rem]"
+                className="cursor-pointer px-4 py-2 hover:bg-[var(--primitive-colors-brand-primary-75)] rounded-[.5rem]"
                 onClick={(e) => {
                   // handleClientDetail(client.id);
                   e.stopPropagation();
@@ -434,7 +511,7 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
                 Edit
               </div>
               <div
-                className="cursor-pointer px-4 py-2 hover:bg-red-100 rounded-[.5rem]"
+                className="cursor-pointer px-4 py-2 hover:bg-[var(--error-background1)] rounded-[.5rem]"
                 onClick={(e) => {
                   // handleClientDetail(client.id);
                   e.stopPropagation();
@@ -525,76 +602,103 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
         ) : (
           <div className="flex flex-col gap-[1.5rem]">
             <Input
-              color="bg-white"
+              color="bg-[var(--general-alpha)]"
               label="Client Name"
               value={oneClient.name}
-              onChange={(e) => setOneClient({ ...oneClient, name: e.target.value })}
-            />
+              onChange={(e) => {
+                setOneClient({ ...oneClient, name: e.target.value });
+                setErrors((prev) => ({ ...prev, name: '' }));
+              }}
+            >
+              {errors.name && <p style={{ color: 'red' }}>{errors.name}</p>}
+            </Input>
             <Input
-              color="bg-white"
+              color="bg-[var(--general-alpha)]"
               label="Phone"
               value={oneClient.phone}
-              onChange={(e) => setOneClient({ ...oneClient, phone: e.target.value })}
-            />
+              onChange={(e) => {
+                setOneClient({ ...oneClient, phone: e.target.value });
+                setErrors((prev) => ({ ...prev, phone: '' }));
+              }}
+            >
+              {errors.phone && <p style={{ color: 'red' }}>{errors.phone}</p>}
+            </Input>
             <Input
-              color="bg-white"
+              color="bg-[var(--general-alpha)]"
               label="Email"
               type="email"
               value={oneClient.email}
-              onChange={(e) => setOneClient({ ...oneClient, email: e.target.value })}
-            />
+              onChange={(e) => {
+                setOneClient({ ...oneClient, email: e.target.value });
+                setErrors((prev) => ({ ...prev, email: '' }));
+              }}
+            >
+              {errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
+            </Input>
             <TextArea
               label="Notes"
-              color="bg-white"
+              color="bg-[var(--general-alpha)]"
               value={oneClient.notes}
               onChange={(e) => setOneClient({ ...oneClient, notes: e.target.value })}
             />
 
             <p>Client's Address</p>
             <Input
-              color="bg-white"
+              color="bg-[var(--general-alpha)]"
               label="Street Address"
               value={oneClient.address?.street}
-              onChange={(e) =>
+              onChange={(e) => {
                 setOneClient({
                   ...oneClient,
                   address: { ...oneClient.address, street: e.target.value },
-                })
-              }
-            />
+                });
+                setErrors((prev) => ({ ...prev, streetAddress: '' }));
+              }}
+            >
+              {errors.streetAddress && <p style={{ color: 'red' }}>{errors.streetAddress}</p>}
+            </Input>
             <Input
-              color="bg-white"
+              color="bg-[var(--general-alpha)]"
               label="Postal Code"
               value={oneClient.address?.postalCode}
-              onChange={(e) =>
+              onChange={(e) => {
                 setOneClient({
                   ...oneClient,
                   address: { ...oneClient.address, postalCode: e.target.value },
-                })
-              }
-            />
+                });
+                setErrors((prev) => ({ ...prev, postalCode: '' }));
+              }}
+            >
+              {errors.postalCode && <p style={{ color: 'red' }}>{errors.postalCode}</p>}
+            </Input>
             <Input
-              color="bg-white"
+              color="bg-[var(--general-alpha)]"
               label="City"
               value={oneClient.address?.city}
-              onChange={(e) =>
+              onChange={(e) => {
                 setOneClient({
                   ...oneClient,
                   address: { ...oneClient.address, city: e.target.value },
-                })
-              }
-            />
+                });
+                setErrors((prev) => ({ ...prev, city: '' }));
+              }}
+            >
+              {errors.city && <p style={{ color: 'red' }}>{errors.city}</p>}
+            </Input>
             <Input
-              color="bg-white"
+              color="bg-[var(--general-alpha)]"
               label="Country"
               value={oneClient.address?.country}
-              onChange={(e) =>
+              onChange={(e) => {
                 setOneClient({
                   ...oneClient,
                   address: { ...oneClient.address, country: e.target.value },
-                })
-              }
-            />
+                });
+                setErrors((prev) => ({ ...prev, country: '' }));
+              }}
+            >
+              {errors.country && <p style={{ color: 'red' }}>{errors.country}</p>}
+            </Input>
           </div>
         )}
       </Slide>
@@ -605,10 +709,11 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
         onClose={cancelOperation}
         confirmText={!oneClient.isArchived ? 'Archive' : 'Unarchive'}
         onConfirm={() => {
-            !oneClient.isArchived ? deleteClient() : unarchiveClient();
-          }}
+          !oneClient.isArchived ? deleteClient() : unarchiveClient();
+        }}
         extralText="Edit"
         onExtra={() => {
+          setSlideDetail('110%');
           setSlideEdit('0px');
           setSuccess(false);
         }}
@@ -622,10 +727,10 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
         <InfoRow label="City" value={oneClient.address?.city} />
         <InfoRow label="Country" value={oneClient.address?.country} />
 
-        <div className="flex flex-col items-start p-[1rem] border-gray-200 bg-blue-50 rounded-[1rem] my-[1rem] gap-[1rem]">
+        <div className="flex flex-col items-start p-[1rem] border-[var(--primitive-colors-gray-light-mode-200)] border bg-[var(--primitive-colors-brand-primary-50)] rounded-[1rem] my-[1rem] gap-[1rem]">
           <p className="font-bold">Projects</p>
-          {(oneClient.projects?.length == 0 || !oneClient.projects) ? (
-            <p className='text-gray-400'>No projects added.</p>
+          {oneClient.projects?.length == 0 || !oneClient.projects ? (
+            <p className="text-[var(--primitive-colors-gray-light-mode-400)]">No projects added.</p>
           ) : (
             <>
               {oneClient.projects?.slice(0, 3).map((project) => (
@@ -665,7 +770,7 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
                 setSlideEdit('110%');
                 setSlideDetail('0px');
               }
-            : ()=>updateClient()
+            : () => updateClient()
         }
       >
         {loader ? (
@@ -680,79 +785,113 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
             <ClientUpdateSuccess className="w-25 h-25" />
           </Success>
         ) : (
-          <>
+          <div className="flex flex-col gap-[1.5rem]">
             <Input
-              color="bg-white"
+              color="bg-[var(--general-alpha)]"
               label="Client Name"
               value={oneClient.name}
-              onChange={(e) => setOneClient({ ...oneClient, name: e.target.value })}
-            />
+              onChange={(e) => {
+                setOneClient({ ...oneClient, name: e.target.value });
+                setErrors((prev) => ({ ...prev, name: '' }));
+              }}
+            >
+              {errors.name && <p style={{ color: 'red' }}>{errors.name}</p>}
+            </Input>
+
             <Input
-              color="bg-white"
+              color="bg-[var(--general-alpha)]"
               label="Phone"
               value={oneClient.phone}
-              onChange={(e) => setOneClient({ ...oneClient, phone: e.target.value })}
-            />
+              onChange={(e) => {
+                setOneClient({ ...oneClient, phone: e.target.value });
+                setErrors((prev) => ({ ...prev, phone: '' }));
+              }}
+            >
+              {errors.phone && <p style={{ color: 'red' }}>{errors.phone}</p>}
+            </Input>
+
             <Input
-              color="bg-white"
+              color="bg-[var(--general-alpha)]"
               label="Email"
               type="email"
               value={oneClient.email}
-              onChange={(e) => setOneClient({ ...oneClient, email: e.target.value })}
-            />
+              onChange={(e) => {
+                setOneClient({ ...oneClient, email: e.target.value });
+                setErrors((prev) => ({ ...prev, email: '' }));
+              }}
+            >
+              {errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
+            </Input>
+
             <TextArea
               label="Notes"
-              color="bg-white"
+              color="bg-[var(--general-alpha)]"
               value={oneClient.notes}
               onChange={(e) => setOneClient({ ...oneClient, notes: e.target.value })}
             />
 
-            <p className='font-bold text-center'>Client's Address</p>
+            <p className="font-bold text-center">Client's Address</p>
+
             <Input
-              color="bg-white"
+              color="bg-[var(--general-alpha)]"
               label="Street Address"
               value={oneClient.address?.street}
-              onChange={(e) =>
+              onChange={(e) => {
                 setOneClient({
                   ...oneClient,
                   address: { ...oneClient.address, street: e.target.value },
-                })
-              }
-            />
+                });
+                setErrors((prev) => ({ ...prev, streetAddress: '' }));
+              }}
+            >
+              {errors.streetAddress && <p style={{ color: 'red' }}>{errors.streetAddress}</p>}
+            </Input>
+
             <Input
-              color="bg-white"
+              color="bg-[var(--general-alpha)]"
               label="Postal Code"
               value={oneClient.address?.postalCode}
-              onChange={(e) =>
+              onChange={(e) => {
                 setOneClient({
                   ...oneClient,
                   address: { ...oneClient.address, postalCode: e.target.value },
-                })
-              }
-            />
+                });
+                setErrors((prev) => ({ ...prev, postalCode: '' }));
+              }}
+            >
+              {errors.postalCode && <p style={{ color: 'red' }}>{errors.postalCode}</p>}
+            </Input>
+
             <Input
-              color="bg-white"
+              color="bg-[var(--general-alpha)]"
               label="City"
               value={oneClient.address?.city}
-              onChange={(e) =>
+              onChange={(e) => {
                 setOneClient({
                   ...oneClient,
                   address: { ...oneClient.address, city: e.target.value },
-                })
-              }
-            />
+                });
+                setErrors((prev) => ({ ...prev, city: '' }));
+              }}
+            >
+              {errors.city && <p style={{ color: 'red' }}>{errors.city}</p>}
+            </Input>
+
             <Input
-              color="bg-white"
+              color="bg-[var(--general-alpha)]"
               label="Country"
               value={oneClient.address?.country}
-              onChange={(e) =>
+              onChange={(e) => {
                 setOneClient({
                   ...oneClient,
                   address: { ...oneClient.address, country: e.target.value },
-                })
-              }
-            />
-          </>
+                });
+                setErrors((prev) => ({ ...prev, country: '' }));
+              }}
+            >
+              {errors.country && <p style={{ color: 'red' }}>{errors.country}</p>}
+            </Input>
+          </div>
         )}
       </Slide>
     </div>

@@ -48,7 +48,7 @@ const ProjectDetails = () => {
 
     return (
         <>
-            <div className='flex justify-start items-center gap-2 mb-7'>
+            <div className='flex justify-start items-center gap-2 mb-7 sticky top-35 z-100 bg-[var(--background)]'>
                 <ChevronLeft size={30} onClick={(e) => navigate(-1)} className='cursor-pointer' />
                 <h2>{project.name}</h2>
                 <StatusPill status={project.isArchived ? "Archived" : project.isActive ? "Active" : "Inactive"} />
@@ -56,7 +56,7 @@ const ProjectDetails = () => {
             <div className='hidden md:flex gap-5'>
                 <ProjectBanner project={project} onEdit={() => setIsFormOpen(true)} />
                 <ProjectDrawer isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} mode="edit" project={project} />
-                <div className='overflow-x-auto overflow-y-hidden'>
+                <div className='overflow-x-auto overflow-y-hidden flex-1 min-w-0'>
                     <div className='sticky left-0'>
                         <ToggleButton options={views} option={view} onClick={setView} />
                     </div>

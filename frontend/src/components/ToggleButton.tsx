@@ -19,7 +19,7 @@ const ToggleButton = ({ options, option, onClick }: Props) => {
                 : "text-[var(--primitive-colors-gray-light-mode-400)]"
                 }`} onClick={() => onClick(secondOption)}>{secondOption.label}</button>
 
-                <div className={`transition-all w-[45%] h-[35px] bg-[#73A9F2]  absolute z-1 rounded-[15px] left-[3%] ${option.key === firstOption.key ? '' : "translate-x-[109%]"}`}></div>
+                <div className={`transition-all w-[45%] h-[35px] bg-[var(--tab-background)]  absolute z-1 rounded-[15px] left-[3%] ${option.key === firstOption.key ? '' : "translate-x-[109%]"}`}></div>
         </div>
     )
 }

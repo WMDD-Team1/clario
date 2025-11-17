@@ -55,7 +55,7 @@ const Milestone = ({ milestone, projectId, onClickAdd, onEditMilestone, onEditDe
 
             {/* Content */}
             <div className='relative flex flex-col items-center my-5 gap-5'>
-                <div className="px-6 flex justify-center items-center w-full">
+                {(!milestone || !milestone.isCompleted) && <div className="px-6 flex justify-center items-center w-full">
                     <button className="rounded-xl border-2  py-4 w-full self-stretch
                     border-dashed border-[var(--primitive-colors-gray-light-mode-400)]
                     text-[var(--primitive-colors-brand-primary-500-base)] font-medium
@@ -63,7 +63,7 @@ const Milestone = ({ milestone, projectId, onClickAdd, onEditMilestone, onEditDe
                     transition flex justify-center" onClick={onClickAdd}>
                         {milestone ? "Add Deliverable" : "Add Your Milestone"}
                     </button>
-                </div>
+                </div>}
                 <div className="px-6 flex flex-col justify-center items-center w-full gap-5">
                     {milestone?.deliverables.map(deliverable => (
                         <DeliverableCard key={deliverable.id} deliverable={deliverable} onEdit={onEditDeliverable} milestone={milestone} onDelete={(id) => deleteDeliverableMutation(id)} />
