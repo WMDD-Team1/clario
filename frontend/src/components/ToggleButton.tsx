@@ -9,7 +9,7 @@ interface Props {
 const ToggleButton = ({ options, option, onClick }: Props) => {
     const [firstOption, secondOption] = options;
     return (
-        <div className="relative toggle-view flex rounded-[20px] md:min-w-[400px] h-[60px] w-full border-[2px] border-[#E4E7EC] bg-white">
+        <div className="relative toggle-view flex rounded-[20px] md:w-[400px] h-[60px] w-full border-[2px] border-[#E4E7EC] bg-white">
 
             {/* highlight */}
             <div
