@@ -21,12 +21,12 @@ const MoneyFlowAreaChart: React.FC = () => {
         console.log("Money Flow API response:", res);
 
         if (res?.data?.length) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const formatted = res.data.map((item: any) => ({
             month: formatDate(item.month, { shortMonth: true }) ?? item.month,
-            income: item.income ?? 0,
-            expense: item.expense ?? 0,
+            income: Number((item.income ?? 0).toFixed(2)),
+            expense: Number((item.expense ?? 0).toFixed(2)),
           }));
+
           setData(formatted);
         } else {
           setData([]); // no dummy fallback

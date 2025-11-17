@@ -12,7 +12,7 @@ const InsightCard: React.FC<StatCardProps> = ({ title, month, text }) => {
     <div
       className="
       flex flex-col items-start gap-5
-      w-full lg:max-w-[426px] p-5 rounded-[20px]
+      w-full lg:max-w-[100%] p-5 rounded-[20px]
       bg-[var(--general-alpha)]
       shadow-sm hover:shadow-md flex-1
       "

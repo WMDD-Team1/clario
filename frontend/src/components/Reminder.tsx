@@ -2,8 +2,10 @@ import { ReminderResponse } from '@api/types/dashboardApi';
 import { formatDate } from '@utils/formatDate';
 import { FaDotCircle } from "react-icons/fa";
 import React from 'react';
+import { useNavigate } from "react-router-dom";
 
 const Reminder: React.FC<{ data: ReminderResponse }> = ({ data }) => {
+  const navigate = useNavigate();
   const {
     projectId,
     milestoneId,
@@ -18,7 +20,8 @@ const Reminder: React.FC<{ data: ReminderResponse }> = ({ data }) => {
   return (
     <div
       key={deliverableId}
-      className="flex flex-col justify-between gap-4 p-5 rounded-2xl bg-[var(--background-alternate)] text-[var(--general-alpha)] shadow-md hover:shadow-lg transition-all duration-300 mb-5 md:mb-0"
+      className="flex flex-col justify-between gap-4 p-5 rounded-2xl bg-[var(--background-alternate)] text-[var(--general-alpha)] shadow-md hover:shadow-lg transition-all duration-300 mb-5 md:mb-0 cursor-pointer"
+      onClick={() => navigate(`/projects/${deliverableId}`)}
     >
       {/* Top Row — Icon, Title, Client */}
       <div className="flex justify-between items-start">
