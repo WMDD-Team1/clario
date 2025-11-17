@@ -118,7 +118,7 @@ export default function ProjectForm({
         formData.append('file', contractFile);
       }
       return isEditMode && !isPrefilled
-        ? updateProject(project.id, formData)
+        ? updateProject(project.id, values)
         : createProject(formData);
     },
     onSuccess: (project) => {
