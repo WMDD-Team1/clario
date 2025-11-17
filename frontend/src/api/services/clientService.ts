@@ -17,7 +17,7 @@ export const fetchAllClients = async (params?: {
         }
     };
     try {
-        const res = await api.get<ListApi<ClientApiResponse[]>>("/clients?limit=1000", {params});
+        const res = await api.get<ListApi<ClientApiResponse[]>>("/clients", {params});
         data = res.data;
     } catch (err) {
         console.log('Error fetching clients: ' + err);

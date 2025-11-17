@@ -56,7 +56,7 @@ const ProjectDrawer = ({
   //   }, []);
 
   useEffect(() => {
-    setPrefilledProject(project ?? null);
+    setPrefilledProject(null);
   }, [isOpen]);
   const queryClient = useQueryClient();
   const handleClientSuccess = () => {
