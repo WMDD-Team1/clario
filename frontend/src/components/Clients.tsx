@@ -567,6 +567,7 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
               data={tableData}
               total={filteredClients.length}
               page={currentPage}
+              maxHeight="29vh"
               pageSize={CLIENTS_PER_PAGE}
               onPageChange={setCurrentPage}
             />

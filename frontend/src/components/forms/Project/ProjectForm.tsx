@@ -22,16 +22,11 @@ const projectSchema = z
     upfrontAmount: z.number().optional(),
     startDate: z.string().nonempty('Start date required'),
     dueDate: z.string().nonempty('Due date required'),
-    totalBudget: z.number().positive('Budget must be greater than 0'),
     file: file().optional(),
   })
   .refine((data) => new Date(data.dueDate) >= new Date(data.startDate), {
     error: 'Due Date must be after Start Sate',
     path: ['dueDate'],
-  })
-  .refine((data) => data.upfrontAmount === undefined || data.upfrontAmount <= data.totalBudget, {
-    message: 'Upfront amount cannot exceed total budget',
-    path: ['upfrontAmount'],
   });
 
 type ProjectFormData = z.infer<typeof projectSchema>;
@@ -80,7 +75,6 @@ export default function ProjectForm({
         upfrontAmount: project.upfrontAmount ?? 0,
         startDate: project.startDate.split('T')[0],
         dueDate: project.dueDate.split('T')[0],
-        totalBudget: project.totalBudget,
       }
     : {
         name: '',
@@ -88,7 +82,6 @@ export default function ProjectForm({
         clientId: '',
         startDate: '',
         dueDate: '',
-        totalBudget: 0,
         upfrontAmount: 0,
       };
 
@@ -121,12 +114,11 @@ export default function ProjectForm({
       formData.append('upfrontAmount', String(values.upfrontAmount ?? 0));
       formData.append('startDate', values.startDate);
       formData.append('dueDate', values.dueDate);
-      formData.append('totalBudget', String(values.totalBudget));
       if (isPrefilled && contractFile) {
         formData.append('file', contractFile);
       }
       return isEditMode && !isPrefilled
-        ? updateProject(project.id, formData)
+        ? updateProject(project.id, values)
         : createProject(formData);
     },
     onSuccess: (project) => {
@@ -318,20 +310,6 @@ export default function ProjectForm({
         {errors.upfrontAmount && (
           <p className="text-sm text-red-500">{errors.upfrontAmount.message}</p>
         )}
-      </div>
-
-      {/* Budget */}
-      <div>
-        <Input
-          color="bg-white"
-          label="Total Budget"
-          placeholder="3000"
-          type="number"
-          min={0}
-          register={register('totalBudget', { valueAsNumber: true })}
-          endAdornment={<span>CAD</span>}
-        />
-        {errors.totalBudget && <p className="text-sm text-red-500">{errors.totalBudget.message}</p>}
       </div>
 
       <FormFooter

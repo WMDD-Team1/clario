@@ -36,7 +36,7 @@ const Slide: React.FC<SlideProps> = ({
   return (
     <>
       <div
-        className={`fixed inset-0 transition-opacity duration-300 z-1010 ${
+        className={`fixed inset-0 transition-all bg-[var(--blur-background)]/80 backdrop-blur-sm duration-300 z-1010 ${
           slide === '0px' ? 'opacity-100 visible' : 'opacity-0 invisible'
         }`}
         onClick={onClose}
