@@ -8,6 +8,8 @@ import axios from 'axios';
 import { ProjectApiResponse } from '@api/types/projectApi';
 import { ClientApiResponse } from '@api/types/clientApi';
 import { Link } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { fetchAllClients,fetchAllProjects } from '@/api';
 
 type SearchResultType = 'project' | 'client';
 
@@ -21,47 +23,31 @@ const Header = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { data } = useAppSelector((state) => state.user);
   const [searchValue, setSearchValue] = useState('');
-  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+  // const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 
   const searchContainerRef = useRef<HTMLDivElement>(null);
-  const { getAccessTokenSilently } = useAuth0();
+  const { data: projectsData } = useQuery({
+    queryKey: ['projects'],
+    queryFn: () => fetchAllProjects(),
+  });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const token = await getAccessTokenSilently({
-        authorizationParams: {
-          audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
-        },
-      });
+  const { data: clientsData } = useQuery({
+    queryKey: ['clients'],
+    queryFn: () => fetchAllClients(),
+  });
 
-      // fetch projects and clients
-      const [projectsResponse, clientsResponse] = await Promise.all([
-        axios.get(`${import.meta.env.VITE_API_BASE_URL}/projects?limit=1000`, {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
-        axios.get(`${import.meta.env.VITE_API_BASE_URL}/clients?limit=1000`, {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
-      ]);
-
-      // merge results
-      const projects: SearchResult[] = projectsResponse.data.data.map((p: ProjectApiResponse) => ({
-        id: p.id,
-        name: p.name,
-        type: 'project' as SearchResultType,
-      }));
-
-      const clients: SearchResult[] = clientsResponse.data.data.map((c: ClientApiResponse) => ({
-        id: c.id,
-        name: c.name,
-        type: 'client' as SearchResultType,
-      }));
-
-      setSearchResults([...projects, ...clients]);
-    };
-
-    fetchData();
-  }, [getAccessTokenSilently]);
+  const searchResults: SearchResult[] = [
+    ...(projectsData?.data || []).map((p: ProjectApiResponse) => ({
+      id: p.id,
+      name: p.name,
+      type: 'project' as SearchResultType,
+    })),
+    ...(clientsData?.data || []).map((c: ClientApiResponse) => ({
+      id: c.id,
+      name: c.name,
+      type: 'client' as SearchResultType,
+    })),
+  ];
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -87,8 +73,8 @@ const Header = () => {
     .filter((item) => {
       const name = item.name?.toLowerCase();
       return name.includes(searchValue.toLowerCase());
-    })
-    .slice(0, 5);
+    }).sort((a,b)=>a.name.localeCompare(b.name));
+
   return (
     <div className="flex m-0 p-[40px] justify-between items-center sticky top-0 bg-[var(--background)] mb-5 z-[1000]">
       <div
@@ -109,7 +95,7 @@ const Header = () => {
           onChange={setSearchValue}
         >
           <div
-            className={`absolute bg-[var(--primitive-colors-brand-primary-025)] border border-[var(--primitive-colors-gray-light-mode-200)] shadow-md backdrop-blur-sm p-[1rem] rounded-xl top-[.5rem] w-full ${searchValue ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'} transition-all duration-300`}
+            className={`absolute bg-[var(--primitive-colors-brand-primary-025)] border border-[var(--primitive-colors-gray-light-mode-200)] shadow-md backdrop-blur-sm p-[1rem] rounded-xl top-[.5rem] w-full ${searchValue ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'} transition-all duration-300 max-h-[200px] overflow-y-scroll`}
           >
             {filteredResults.length != 0 && searchValue ? (
               <>
