@@ -18,7 +18,6 @@ import { Link, useSearchParams } from 'react-router-dom';
 const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string) => void }) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-
   useEffect(() => {
     const clientId = searchParams.get('clientId');
     if (clientId) {
@@ -615,6 +614,8 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
             <Input
               color="bg-[var(--general-alpha)]"
               label="Phone"
+              type="number"
+              onKeyDown={(e) => ['e', 'E', '+', '-'].includes(e.key) && e.preventDefault()}
               value={oneClient.phone}
               onChange={(e) => {
                 setOneClient({ ...oneClient, phone: e.target.value });
@@ -801,6 +802,8 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
             <Input
               color="bg-[var(--general-alpha)]"
               label="Phone"
+              type="number"
+              onKeyDown={(e) => ['e', 'E', '+', '-'].includes(e.key) && e.preventDefault()}
               value={oneClient.phone}
               onChange={(e) => {
                 setOneClient({ ...oneClient, phone: e.target.value });
