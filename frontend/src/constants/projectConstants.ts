@@ -34,7 +34,7 @@ export const SORT_OPTIONS = [
         label: 'Due Date'
     },
     {
-        id: 'totalBudget',
+        id: 'totalAmount',
         label: 'Amount'
     },
 ]
@@ -64,7 +64,7 @@ export const PROJECT_HEADERS = [
         value: "Milestones",
     },
     {
-        key: "totalBudget",
+        key: "totalAmount",
         value: "Total Amount",
     }
 ];
