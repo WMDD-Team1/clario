@@ -24,7 +24,7 @@ const FormDrawer = ({ title, isOpen, onClose, children, divRef }: FormDrawerProp
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.5 }}
                         onClick={onClose}
-                        className="fixed inset-0 z-[1000]"
+                        className="fixed inset-0 z-[1000] backdrop-blur-sm bg-[var(--primitive-colors-brand-primary-500-base)]/40"
                     />
 
                     {/* Drawer */}
