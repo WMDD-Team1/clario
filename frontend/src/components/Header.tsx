@@ -1,6 +1,6 @@
 import { useAppSelector } from '@/store/hooks';
 import { useEffect, useState, useRef } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 import SearchBar from './SearchBar';
 import UserPicture from './UserPicture';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -52,7 +52,6 @@ const Header = () => {
     })),
   ];
 
-  /** ---------------- CLOSE ON OUTSIDE CLICK ---------------- **/
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -61,7 +60,7 @@ const Header = () => {
       ) {
         setSearchValue('');
         setIsSearchOpen(false);
-        setMobileMenuOpen(false); // CLOSE MOBILE DROPDOWN
+        setMobileMenuOpen(false);
       }
     };
 
@@ -104,7 +103,7 @@ const Header = () => {
         >
           <div
             className={`absolute bg-[var(--primitive-colors-brand-primary-025)] border border-[var(--primitive-colors-gray-light-mode-200)] shadow-md backdrop-blur-sm p-[1rem] rounded-xl top-[.5rem] w-full ${searchValue ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'} transition-all duration-300 max-h-[200px] overflow-y-scroll`}
-          >
+           >
             <div
               className={`absolute bg-[var(--primitive-colors-brand-primary-025)] border border-[var(--primitive-colors-gray-light-mode-200)] shadow-md backdrop-blur-sm p-[1rem] rounded-xl top-[.5rem] w-full ${
                 searchValue ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'
@@ -136,6 +135,7 @@ const Header = () => {
                 <>{searchValue ? 'Not found' : ''}</>
               )}
             </div>
+          </div>
           </SearchBar>
 
           {/* ---------------- USER ICON SECTION ---------------- */}
