@@ -11,16 +11,11 @@ export const ExpensesTable: React.FC = () => {
   const navigate = useNavigate();
 
   const DUMMY_DATA: ExpenseItem[] = [
-    { title: 'Office Rent Office Rent Office Rent ', date: '2025-10-20', amount: 800, category: 'Rent' },
+    { title: 'Office Rent', date: '2025-10-20', amount: 800, category: 'Rent' },
     { title: 'Other', date: '2025-10-17', amount: 4000, category: 'Misc' },
     { title: 'Internet', date: '2025-10-21', amount: 140, category: 'Utilities' },
     { title: 'Usability Test', date: '2025-10-25', amount: 130, category: 'Research' },
   ];
-
-  const truncateTitle = (title: string) => {
-    const words = title.trim().split(/\s+/); 
-    return words.length > 2 ? `${words[0]} ${words[1]} ...` : title;
-  };
 
   useEffect(() => {
     const loadExpenses = async () => {
@@ -63,7 +58,7 @@ export const ExpensesTable: React.FC = () => {
             className="flex justify-between items-center border-b !border-[--sublight-2] pb-2"
           >
             <div className="flex flex-col">
-              <span className="text-[var(--secondary-text)] text-base">{truncateTitle(expense.title)}</span>
+              <span className="text-[var(--secondary-text)] text-base">{expense.title}</span>
               <span className="text-[var(--sub-text)] text-base">{formatDate(expense.date)}</span>
             </div>
             <span className="text-[var(--secondary-text)] text-lg">

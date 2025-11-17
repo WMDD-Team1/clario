@@ -2,36 +2,20 @@ import fs from "fs";
 import path from "path";
 import Handlebars from "handlebars";
 import puppeteer from "puppeteer";
+import { Resend } from "resend";
 import axios from "axios";
-import nodemailer from "nodemailer";
 
-// if (!process.env.RESEND_API_KEY) {
-// 	throw new Error("Missing RESEND_API_KEY in environment variables");
-// }
+if (!process.env.RESEND_API_KEY) {
+	throw new Error("Missing RESEND_API_KEY in environment variables");
+}
 
-// const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const __dirname = import.meta.dirname;
 
 export const generateInvoicePDF = async (invoice) => {
 	const templatePATH = path.join(__dirname, "../assets/templates/invoice-template.html");
 	const templateHTML = fs.readFileSync(templatePATH, "utf8");
-
-	Handlebars.registerHelper("formatNumber", function (value) {
-		if (value === null || value === undefined || value === "") return "";
-
-		if (typeof value === "string") {
-			value = value.replace(/[$,]/g, "");
-		}
-
-		const number = Number(value);
-
-		if (isNaN(number)) {
-			return value;
-		}
-
-		return number.toLocaleString("en-CA");
-	});
 
 	const template = Handlebars.compile(templateHTML);
 	const html = template(invoice);
@@ -103,15 +87,8 @@ export const generateEmail = async ({ invoice, client, project, user }) => {
 	const response = await axios.get(invoice.fileUrl, { responseType: "arraybuffer" });
 	const base64File = Buffer.from(response.data).toString("base64");
 
-	const transporter = nodemailer.createTransport({
-		service: "gmail",
-		auth: {
-			user: process.env.GMAIL_USER,
-			pass: process.env.GMAIL_PASS,
-		},
-	});
-	await transporter.sendMail({
-		from: "Clario Invoices <wmdd.clario@gmail.com>",
+	await resend.emails.send({
+		from: "Clario Invoices <onboarding@resend.dev>",
 		to: client.email,
 		reply_to: user.email,
 		subject: `Invoice #${invoice.invoiceNumber} for ${project.name}`,
@@ -120,11 +97,8 @@ export const generateEmail = async ({ invoice, client, project, user }) => {
 			{
 				filename: `invoice_${invoice.invoiceNumber}.pdf`,
 				content: base64File,
-				encoding: "base64",
-				contentType: "application/pdf",
 			},
 		],
 	});
-
 	return { success: true, to: client.email };
 };

@@ -41,11 +41,10 @@ const FormDrawer = ({ title, isOpen, onClose, children, divRef }: FormDrawerProp
                             <h3 className="text-lg font-semibold text-[var(--primitive-colors-gray-light-mode-950)] text-[28px]">{title}</h3>
                         </div>
 
-                        <div className=" absolute w-12 h-12 top-24 cursor-pointer left-[30px] md:left-[-20px] rounded-[1rem] bg-[var(--primitive-colors-brand-primary-95)] flex items-center justify-center"
-                        onClick={onClose}
-                        >
+                        <div className=" absolute w-[40px] h-[40px] top-[100px] left-[30px] md:left-[-20px] rounded bg-[var(--primitive-colors-brand-primary-95)] flex items-center justify-center">
                             <button
-                                className="text-[var(--primitive-colors-gray-light-mode-600)] hover:text-gray-700 transition-colors rounded-2xl cursor-pointer"
+                                onClick={onClose}
+                                className="text-[var(--primitive-colors-gray-light-mode-600)] hover:text-gray-700 transition-colors rounded-2xl"
                             >
                                 <ChevronRight size={30} />
                             </button>

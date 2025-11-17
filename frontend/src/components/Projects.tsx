@@ -96,7 +96,6 @@ const Projects = ({onCreate}: Props) => {
                     actions={[{ id: 'archive', label: (project) => project.isArchived ? 'Unarchive' : 'Archive', action: (project) => handleArchiveProject(project) }]}
                     total={meta.total}
                     page={meta.page}
-                    maxHeight="29vh"
                     pageSize={meta.limit}
                     onPageChange={setCurrentPage}
                     onClickChildren={handleProjectOnClick} />

@@ -66,7 +66,7 @@ export const update = async (id, userId, data) => {
     data.totalAmount = baseAmount;
     if (baseAmount && transaction.type === 'income') {
         const settings = await SettingsService.getUserSettings(userId);
-        const { province } = settings.settings.finance;
+        const { province } = settings.finance;
         const taxRate = getTaxRateByProvince(province);
 
         const taxAmount = baseAmount * taxRate;
