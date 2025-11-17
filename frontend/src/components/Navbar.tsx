@@ -42,7 +42,7 @@ const Navbar = () => {
     <nav
       className="
         fixed bottom-[40px] left-0 mx-[30px] w-[90%]
-        bg-white border-t border-gray-200
+        bg-[var(--general-alpha)] border-t border-[var(--primitive-colors-gray-light-mode-200)]
         flex items-center justify-around
         py-[10px]
         md:hidden
@@ -58,7 +58,7 @@ const Navbar = () => {
             `flex flex-col items-center justify-center text-xs font-medium transition ${
               isActive
                 ? 'text-[var(--primitive-colors-brand-primary-925)]'
-                : 'text-[var(--primitive-colors-brand-primary-500-base)] hover:text-blue-500'
+                : 'text-[var(--primitive-colors-brand-primary-500-base)] hover:text-[var(--brand-alpha)]'
             }`
           }
         >

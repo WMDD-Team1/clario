@@ -27,15 +27,17 @@ const ProjectDrawer = ({
 }: Props) => {
   const divRef = useRef<HTMLDivElement>(null);
   const clientDivRef = useRef<HTMLDivElement>(null);
+  const [contractFile, setContractFile] = useState<File | null>(null);
   const [prefilledProject, setPrefilledProject] = useState<ProjectApiResponse | null>(
     project ?? null,
   );
   const [isPrefilled, setIsPrefilled] = useState<boolean>(false);
 
-  const handleProjectDataReady = (data: any) => {
+  const handleProjectDataReady = (data: any, file: File | null) => {
     setIsPrefilled(true);
     if (data) {
       setPrefilledProject(data);
+      setContractFile(file);
     } // data from backend parse
     else setPrefilledProject(null); // create from scratch
   };
@@ -59,8 +61,8 @@ const ProjectDrawer = ({
   const queryClient = useQueryClient();
   const handleClientSuccess = () => {
     queryClient.invalidateQueries({ queryKey: ['clients'] });
-    
-    setTimeout(()=>onClientClose(),200);
+
+    setTimeout(() => onClientClose(), 200);
   };
 
   let title = 'Create Project';
@@ -77,6 +79,7 @@ const ProjectDrawer = ({
           <ProjectForm
             onCancel={onClose}
             project={prefilledProject}
+            contractFile={contractFile}
             isPrefilled={isPrefilled}
             onOpenClientSlide={onOpenClientSlide}
           />

@@ -130,15 +130,18 @@
  *
  *     responses:
  *       201:
- *         description: Project created successfully (with optional contract)
+ *         description: Project created successfully (contract embedded inside project)
  *         content:
  *           application/json:
  *             example:
- *               project:
- *                 id: "6906946206f472ca6c4e16db"
- *                 name: "Website Redesign"
- *                 clientId: "671a5b2345abcde98765f123"
- *                 isActive: true
+ *               id: "6906946206f472ca6c4e16db"
+ *               name: "Website Redesign"
+ *               description: "Redesigning the client's e-commerce platform."
+ *               clientId: "671a5b2345abcde98765f123"
+ *               status: "Planning"
+ *               isActive: true
+ *               isArchived: false
+ *               totalAmount: 0
  *               contract:
  *                 id: "69069d2c5ee8f90ef4f85829"
  *                 contractName: "contract.pdf"

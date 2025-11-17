@@ -98,7 +98,7 @@ const Table = ({
             <div className="overflow-x-auto">
                 <table
                     role="table"
-                    className="w-full min-w-max text-left border-collapse"
+                    className="w-full min-w-max text-center border-collapse"
                 >
                     <thead
                         role="rowgroup"

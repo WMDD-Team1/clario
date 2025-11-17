@@ -4,7 +4,7 @@ import Button from "@components/Button";
 import { extractContract } from "@/api"; // backend service that parses the file
 
 interface ProjectUploadStepProps {
-    onProjectDataReady: (data: any) => void;
+    onProjectDataReady: (data: any, file: File | null) => void;
     onCancel: () => void;
 }
 
@@ -23,7 +23,7 @@ export default function ProjectUploadStep({ onProjectDataReady, onCancel }: Proj
         try {
 
             const response = await extractContract(file); // returns project data
-            onProjectDataReady(response); // pass to ProjectForm
+            onProjectDataReady(response, file); // pass to ProjectForm
         } catch (err) {
             console.error("Upload failed:", err);
             alert("Failed to analyze contract. Try again.");
@@ -46,7 +46,7 @@ export default function ProjectUploadStep({ onProjectDataReady, onCancel }: Proj
 
     return (
         <div className="flex flex-col justify-between h-full pb-150">
-            <div className="flex flex-col items-center mt-8 text-center">
+            <div className="flex flex-col items-center text-center">
                 <p className="mb-6">Choose how you want to start.</p>
 
                 {/* Upload Box */}
@@ -77,7 +77,7 @@ export default function ProjectUploadStep({ onProjectDataReady, onCancel }: Proj
 
                 {/* Or create manually */}
                 <button
-                    onClick={() => onProjectDataReady(null)}
+                    onClick={() => onProjectDataReady(null, null)}
                     disabled={isUploading}
                     className={`h-[160px] mt-6 w-full max-w-sm border-2 border-dashed border-[var(--primitive-colors-brand-primary-95)] 
                     rounded-2xl py-3 bg-[var(--background-alternate)] hover:opacity-80

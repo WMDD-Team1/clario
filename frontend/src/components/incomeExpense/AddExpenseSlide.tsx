@@ -161,6 +161,8 @@ export const AddExpenseSlide = ({
             label="Amount"
             id="expenseAmount"
             type="number"
+            inputMode="decimal"
+            onKeyDown={(e) => ['e', 'E', '+', '-'].includes(e.key) && e.preventDefault()}
             padding="pr-[3.5rem]"
             color="bg-white"
             value={transaction.baseAmount}

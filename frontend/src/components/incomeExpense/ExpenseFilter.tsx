@@ -89,7 +89,7 @@ export const ExpenseFilterSlide = ({
               color="bg-white"
               padding='pr-[3.5rem]'
               min={0}
-              value={filterConditions.amountStart}
+              value={filterConditions.amountStart || ''}
               onChange={(e) =>
                 setFilterConditions({ ...filterConditions, amountStart: Number(e.target.value) })
               }
@@ -104,7 +104,7 @@ export const ExpenseFilterSlide = ({
               color="bg-white"
               padding='pr-[3.5rem]'
               min={0}
-              value={filterConditions.amountEnd}
+              value={filterConditions.amountEnd || ''}
               onChange={(e) =>
                 setFilterConditions({ ...filterConditions, amountEnd: Number(e.target.value) })
               }

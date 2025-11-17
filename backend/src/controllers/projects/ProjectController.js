@@ -63,8 +63,7 @@ export const updateProject = async (req, res) => {
 		const { id: projectId } = req.params;
 		const { id: userId } = req.user;
 
-		const parsed = projectSchema.partial().parse(req.body);
-		const result = await updateProjectById(projectId, userId, parsed);
+		const result = await updateProjectById(projectId, userId, req.body);
 
 		if (!result) return res.status(404).json({ message: "Project not found." });
 

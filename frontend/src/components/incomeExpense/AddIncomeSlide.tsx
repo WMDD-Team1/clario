@@ -135,6 +135,8 @@ export const AddIncomeSlide = ({
             label="Amount"
             id="incomeAmount"
             type="number"
+            inputMode="decimal"
+            onKeyDown={(e) => ['e', 'E', '+', '-'].includes(e.key) && e.preventDefault()}
             padding="pr-[3.5rem]"
             // min={0}
             color="bg-white"
@@ -146,11 +148,13 @@ export const AddIncomeSlide = ({
                   ...transaction,
                   baseAmount: val === '' ? '' : Number(val),
                 });
-              };
+              }
               setErrors({ ...errors, baseAmount: '' });
             }}
           >
-            <p className="absolute right-[1rem] top-4.5 text-[var(--primitive-colors-brand-primary-500-base)]">CAD</p>
+            <p className="absolute right-[1rem] top-4.5 text-[var(--primitive-colors-brand-primary-500-base)]">
+              CAD
+            </p>
             {errors.baseAmount && <div style={{ color: 'red' }}>{errors.baseAmount}</div>}
           </Input>
           <TextArea

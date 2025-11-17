@@ -105,7 +105,7 @@ const ProjectSchema = new mongoose.Schema(
 			type: String,
 		},
 		upfrontAmount: { type: Number, default: 0 },
-		totalBudget: {
+		totalAmount: {
 			type: Number,
 			default: 0,
 		},

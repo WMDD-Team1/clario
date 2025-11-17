@@ -35,6 +35,10 @@ export const fetchProjectById = async (id: string): Promise<ProjectApiResponse> 
 export const createProject = async (data: any): Promise<ProjectApiResponse> => {
     try {
         const res = await api.post<ProjectApiResponse>("/projects", data);
+        // Analyze contract file if present
+        if (data instanceof FormData && data.has("file")) {
+            await api.post(`/contracts/analyze/${res.data.id}`);
+        }
         data = res.data;
     } catch (err) {
         console.log('Error creating project: ' + err);

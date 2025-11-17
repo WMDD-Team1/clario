@@ -10,7 +10,7 @@ interface Props {
 
 const SuccessForm = ({ iconPath, title, message, label="Done", onCancel }: Props) => {
     return (
-        <div className="flex flex-col items-center justify-center text-center px-6">
+        <div className="h-[calc(100vh-280px)] flex flex-col items-center justify-center text-center px-6">
             <img
                 src={iconPath}
                 alt="Success"

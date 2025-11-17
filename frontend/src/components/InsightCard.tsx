@@ -10,10 +10,10 @@ const InsightCard = ({ title, value, className }: Props) => {
   return (
     <div
       key={title}
-      className={`bg-linear-to-t bg-white rounded-xl text-center py-6 hover:shadow-md transition ${className}`}
+      className={`bg-linear-to-t bg-[var(--general-alpha)] rounded-xl text-center py-6 hover:shadow-md transition ${className}`}
     >
-      <p className="text-[16px] text-[#344054]">{title}</p>
-      <p className="text-[24px] font-semibold mt-1 text-[#0665EC]">{value}</p>
+      <p className="text-base font-normal text-[var(--tertiary-text)]">{title}</p>
+      <p className="text-2xl font-medium mt-1 text-[var(--brand-alpha)]">{value}</p>
     </div>
   );
 };

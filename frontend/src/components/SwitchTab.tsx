@@ -6,7 +6,7 @@ interface Props {
 
 const SwitchTab = ({ currentFilter, filters, onFilter }: Props) => {
     return (
-        <div className="flex bg-white rounded-[20px] p-1 justify-between w-full md:w-[520px]">
+        <div className="flex bg-white rounded-[15px] p-1 justify-between w-full md:w-[520px]">
             {filters.map((label) => (
                 <button
                     key={label}

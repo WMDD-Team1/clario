@@ -23,6 +23,7 @@
   --brand-equivalence: #050609;
   --background-button: #a7c8f7;
   --background-toggle2: #ffffff;
+  --background-unfocused-toggle: #73A9F2;
 
   /* --- general colors - light --- */
   --full-bg: #f5f9ff;
@@ -131,4 +132,7 @@
   --error-background1: #f04438;
   --error-contrast1: #fee4e2;
   --error-accent1: #d92d20;
+
+  --primitive-colors-brand-primary-500-base: #2284ff;
+  --primitive-colors-gray-light-mode-25: #182230;
 }

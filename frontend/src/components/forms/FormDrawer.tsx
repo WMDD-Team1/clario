@@ -30,11 +30,11 @@ const FormDrawer = ({ title, isOpen, onClose, children, divRef }: FormDrawerProp
                     {/* Drawer */}
                     <motion.div
                         ref={divRef}
-                        initial={{ x: "100%" }}
+                        initial={{ x: "110%" }}
                         animate={{ x: 0 }}
-                        exit={{ x: "100%" }}
+                        exit={{ x: "110%" }}
                         transition={{ type: "spring", stiffness: 100, damping: 25 }}
-                        className="fixed right-0 top-0 h-full w-full md:max-w-md bg-white shadow-xl z-1010 flex flex-col rounded-l-[50px]"
+                        className="fixed right-0 top-0 h-full w-full md:max-w-md bg-[var(--general-alpha)] shadow-xl z-1010 flex flex-col rounded-l-[50px]"
                     >
                         {/* Header */}
                         <div className="relative p-5 bg-[var(--primitive-colors-brand-primary-75)] h-[120px] flex items-center justify-center rounded-tl-[50px]">

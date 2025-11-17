@@ -9,6 +9,7 @@ type ChartItem = {
   value: number;
   color: string;
 };
+
 type PieSectorData = {
   percent?: number;
   name?: string | number;
@@ -27,6 +28,7 @@ type PieSectorData = {
 };
 
 const COLORS = ['#F04438', '#17B26A'];
+
 const DUMMY_DATA: ChartItem[] = [
   { name: 'Income', value: 12000, color: COLORS[1] },
   { name: 'Expense', value: 8000, color: COLORS[0] },
@@ -55,7 +57,7 @@ const renderActiveShape = ({
         outerRadius={(outerRadius ?? 0) + 3}
         startAngle={startAngle}
         endAngle={endAngle}
-        fill={fill}
+        fill={itemColor}
       />
       <text x={cx} y={(cy ?? 0) - 8} textAnchor="middle" className="text-sm" fill={itemColor}>
         {payload?.name}
@@ -107,8 +109,8 @@ const BalanceChart: React.FC = () => {
   if (loading) return <p>Loading balance...</p>;
 
   return (
-    <div className="flex flex-col justify-center items-center w-full max-w-full sm:max-w-[100%] h-auto sm:h-[313px] p-5 hover:shadow-md rounded-2xl bg-white shadow-sm relative">
-      <h3 className="font-semibold self-start text-[18px]">This Month Balance</h3>
+    <div className="flex flex-col justify-center items-center w-full max-w-full sm:max-w-[100%] h-auto sm:h-[313px] p-5 hover:shadow-md rounded-2xl bg-[var(--general-alpha)] shadow-sm relative">
+      <h3 className="self-start text-lg text-[var(--secondary-text)]">This Month Balance</h3>
       <div className="w-full h-[250px] flex justify-center items-center relative z-[60]">
         <ResponsiveContainer width="100%" height={250}>
           <PieChart>
@@ -122,7 +124,7 @@ const BalanceChart: React.FC = () => {
               onMouseEnter={onPieEnter}
             >
               {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.color || '#4B5563'} />
+                <Cell key={`cell-${index}`} fill={entry.color} />
               ))}
             </Pie>
           </PieChart>

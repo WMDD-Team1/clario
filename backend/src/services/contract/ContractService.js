@@ -138,7 +138,8 @@ export const generateContractService = async (user, projectId) => {
 
 	const { id: userId } = user;
 	const today = new Date().toLocaleDateString("en-CA");
-	const { milestones = [], upfrontAmount = 0 } = project;
+	const activeMilestones = (project.milestones || []).filter((m) => !m.isArchived);
+	const upfrontAmount = project.upfrontAmount || 0;
 
 	const data = {
 		userType: project.type || "Contractor",
@@ -155,10 +156,10 @@ export const generateContractService = async (user, projectId) => {
 			"User Address",
 		userProvince: user?.settings?.general?.province || "British Columbia",
 		projectName: project.name || "Untitled Project",
-		milestoneName: project.milestones?.[0]?.name || "",
-		deliverableName: project.milestones?.[0]?.deliverables?.[0]?.name || "",
-		totalAmount: project.totalBudget?.toLocaleString() || "0",
-		upfront: project.upfrontAmount ? ((project.upfrontAmount / project.totalBudget) * 100).toFixed(0) : "0",
+		milestoneName: activeMilestones?.[0]?.name || "",
+		deliverableName: activeMilestones?.[0]?.deliverables?.[0]?.name || "",
+		totalAmount: project.totalAmount?.toLocaleString() || 0,
+		upfront: project.upfrontAmount ? ((project.upfrontAmount / project.totalAmount) * 100).toFixed(0) : 0,
 		startDate: project.startDate ? new Date(project.startDate).toLocaleDateString("en-CA") : "Start Date",
 		endDate: project.dueDate ? new Date(project.dueDate).toLocaleDateString("en-CA") : "End Date",
 		today,
@@ -192,7 +193,7 @@ export const generateContractService = async (user, projectId) => {
 			size: pdfFile.size,
 			displayName,
 			upfrontAmount,
-			milestones,
+			activeMilestones,
 			updatedAt: new Date(),
 		});
 		await contract.save();
@@ -207,7 +208,7 @@ export const generateContractService = async (user, projectId) => {
 			size: pdfFile.size,
 			displayName,
 			upfrontAmount,
-			milestones,
+			activeMilestones,
 			createdAt: new Date(),
 		});
 	}

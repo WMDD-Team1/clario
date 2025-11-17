@@ -1,5 +1,5 @@
-import React, { ReactNode } from "react";
-import { UseFormRegisterReturn } from "react-hook-form";
+import React, { ReactNode } from 'react';
+import { UseFormRegisterReturn } from 'react-hook-form';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -7,8 +7,8 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   borderColor?: string;
   register?: UseFormRegisterReturn;
   hidden?: boolean;
-  children?: React.ReactNode
-  padding?: string
+  children?: React.ReactNode;
+  padding?: string;
   endAdornment?: ReactNode;
 }
 
@@ -35,12 +35,12 @@ const Input: React.FC<InputProps> = ({
         </label>
       )}
 
-      <div className={`flex justify-between rounded-[1rem] border-2 ${color} ${padding} ${borderColor || "border-[var(--primitive-colors-gray-light-mode-200)]"}`}>
+      <div className={`flex justify-between rounded-[1rem] ${color} ${padding}`}>
         <input
           id={id}
           {...register}
           {...props}
-          className="w-full p-[1rem] rounded-[1rem]"
+          className={`w-full p-[1rem] rounded-[1rem] border-2 ${borderColor || 'border-[var(--primitive-colors-gray-light-mode-200)]'}`}
         />
         {endAdornment && (
           <div className="m-2 flex items-center text-[var(--primitive-colors-brand-primary-500-base)]">

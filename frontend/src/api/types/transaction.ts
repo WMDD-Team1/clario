@@ -14,6 +14,8 @@ export interface TransactionFormat {
   isArchived?: boolean;
   createdAt?: string;
   updatedAt?: string;
+  taxAmount?:string
+  totalAmount?:string
 };
 
 

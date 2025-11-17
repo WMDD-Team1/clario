@@ -38,7 +38,7 @@ export const findAllProjects = async (userId, query = {}) => {
 	}
 
 	const sortOptions = {};
-	const validSortFields = ["createdAt", "startDate", "dueDate", "totalBudget"];
+	const validSortFields = ["createdAt", "startDate", "dueDate", "totalAmount"];
 
 	if (validSortFields.includes(sortBy)) {
 		sortOptions[sortBy] = sortOrder === "asc" ? 1 : -1;
@@ -81,7 +81,13 @@ export const findByProjectId = async (id, userId) => {
 	if (!project) return null;
 
 	const contract = await Contract.findOne({ projectId: id, userId });
+
 	const data = project.toJSON();
+
+	if (data.milestones && Array.isArray(data.milestones)) {
+		data.milestones = data.milestones.filter((m) => !m.isArchived);
+	}
+
 	data.contract = contract ? contract.toJSON() : null;
 
 	return data;
@@ -92,12 +98,18 @@ export const createNewProject = async (data, file, userId) => {
 		...data,
 		userId,
 		status: data.status || "Planning",
-		milestones: data.milestones || [],
+		milestones: [],
 		isArchived: data.isArchived ?? false,
-		isActive: true,
+		isActive: !!file,
+		totalAmount: data.upfrontAmount || 0,
 	});
 
-	if (!file) return { project, contract: null };
+	let projectJSON = project.toJSON();
+
+	if (!file) {
+		projectJSON.contract = null;
+		return projectJSON;
+	}
 
 	const { fileName, fileUrl, fileType, size } = await uploadToFirebase(file, "contracts/original");
 
@@ -109,22 +121,24 @@ export const createNewProject = async (data, file, userId) => {
 		contractUrl: fileUrl,
 		fileType,
 		size,
-		upfrontAmount: data.upfrontAmount,
-		milestones: data.milestones,
 	});
 
-	return { project, contract };
+	projectJSON.contract = contract.toJSON();
+
+	return projectJSON;
 };
 
 export const updateProjectById = async (id, userId, data) => {
-	return await Project.findOneAndUpdate(
-		{
-			_id: id,
-			userId,
-		},
-		data,
-		{ new: true }
-	);
+	const project = await Project.findOne({ _id: id, userId });
+	if (!project) throw new Error("Project not found");
+
+	Object.assign(project, data);
+
+	recalcTotalAmount(project);
+
+	await project.save();
+
+	return project;
 };
 
 export const archiveProjectById = async (id, userId, isArchived) => {
@@ -141,18 +155,28 @@ export const archiveProjectById = async (id, userId, isArchived) => {
 export const getOverviewService = async (userId) => {
 	const [projects, clients] = await Promise.all([Project.find({ userId }), Client.find({ userId })]);
 
-	const totalBudget = projects.reduce((sum, p) => sum + (p.totalBudget || 0), 0);
+	const totalAmount = projects.reduce((sum, p) => sum + (p.totalAmount || 0), 0);
 	const activeProjects = projects.filter((p) => p.isActive && !p.isArchived);
-	const activeBudget = activeProjects.reduce((sum, p) => sum + (p.totalBudget || 0), 0);
+	const activeAmount = activeProjects.reduce((sum, p) => sum + (p.totalAmount || 0), 0);
 
 	const inactiveProjects = projects.filter((p) => !p.isActive && !p.isArchived);
 	const archivedProjects = projects.filter((p) => p.isArchived);
 
 	return {
-		total: totalBudget,
-		active: activeBudget,
+		total: totalAmount,
+		active: activeAmount,
 		inactive: inactiveProjects.length,
 		archived: archivedProjects.length,
 		clients: clients.length,
 	};
+};
+
+export const recalcTotalAmount = (project) => {
+	const upfront = Number(project.upfrontAmount ?? 0);
+
+	const milestonesTotal = project.milestones
+		.filter((m) => !m.isArchived)
+		.reduce((sum, m) => sum + Number(m.amount || 0), 0);
+
+	project.totalAmount = upfront + milestonesTotal;
 };
