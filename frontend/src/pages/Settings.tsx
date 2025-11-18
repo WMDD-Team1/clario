@@ -90,7 +90,7 @@ const Settings: React.FC = () => {
       <section>
         <h3 className="!text-[var(--page-title)] text-[clamp(1.75rem,calc(1.536rem+1.071vw),2.5rem)] mb-3">Profile</h3>
 
-        <div className="md:divide-y divide-gray-200">
+        <div className="md:divide-y divide-[var(--border)]">
           {/* Name */}
           <div className="flex flex-col gap-2 py-4 ">
             <div className="flex justify-between items-top md:hidden text-base font-['Red_Hat_Display']">
