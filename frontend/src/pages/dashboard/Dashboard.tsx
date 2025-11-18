@@ -82,12 +82,15 @@ export const Dashboard = () => {
   /** ---------------- DESKTOP DASHBOARD ---------------- **/
   return (
     <>
-      {/* DESKTOP VIEW */}
-      <div className="hidden sm:block">
-        <div className="flex flex-col w-full gap-4 overflow-hidden">
+      <div className="sticky top-35 z-99 bg-[color-mix(in_srgb,var(--background),transparent_10%)] hidden sm:block">
+        <div className="w-full max-w-[1440px] mx-auto">
           <WelcomeBanner userName={appUser?.name || 'User'} />
+        </div>
+      </div>
 
-          <div className="flex flex-col xl:flex-row gap-4 w-full items-start">
+      <div className="hidden sm:block w-full max-w-[1440px] mx-auto">
+        <div className="flex flex-col w-full gap-4 overflow-hidden">
+          <div className="flex flex-col xl:flex-row gap-4 w-full items-start font-['Red_Hat_Display']">
             {/* LEFT SECTION */}
             <div className={`flex flex-col flex-1 gap-4 xl:min-w-0 lg:min-w-[100%] sm:min-w-[100%]`}>
               <Overview />
@@ -121,9 +124,9 @@ export const Dashboard = () => {
       </div>
 
       {/* MOBILE VIEW */}
-      <div className="block sm:hidden">
-        <p className="text-[28px] font-semibold font-merriweather mt-4 mb-2">
-          Hi {user?.name || 'User'}, Welcome Back
+      <div className="block sm:hidden w-full max-w-[1440px] mx-auto">
+        <p className="text-[28px] font-semibold mt-4 mb-2">
+          <WelcomeBanner userName={appUser?.name || 'User'} />
         </p>
 
         {/* Toggle Buttons */}

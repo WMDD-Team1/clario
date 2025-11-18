@@ -110,7 +110,7 @@ const BalanceChart: React.FC = () => {
 
   return (
     <div className="flex flex-col justify-center items-center w-full max-w-full sm:max-w-[100%] h-auto sm:h-[313px] p-5 hover:shadow-md rounded-2xl bg-[var(--general-alpha)] shadow-sm relative">
-      <h3 className="self-start text-lg text-[var(--secondary-text)]">This Month Balance</h3>
+      <h3 className="self-start text-[1.125rem] text-[var(--secondary-text)]">This Month Balance</h3>
       <div className="w-full h-[250px] flex justify-center items-center relative z-[60]">
         <ResponsiveContainer width="100%" height={250}>
           <PieChart>

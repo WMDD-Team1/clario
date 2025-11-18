@@ -42,10 +42,10 @@ export default function SearchBar({
       <div
         className={`${
           !needCollapse
-            ? 'flex items-center bg-[#F8FBFF] border border-gray-200 rounded-[15px] px-4 py-2 relative'
+            ? 'flex items-center bg-[#F8FBFF] border border-gray-200 rounded-[20px] px-4 py-2 relative'
             : isSearchOpen
               ? 'flex absolute left-0 right-0 mx-6 bg-[#F8FBFF] border border-gray-200 rounded-[15px] px-4 py-2 items-center z-10 md:relative md:left-auto md:right-auto md:mx-0'
-              : 'hidden md:flex items-center bg-[#F8FBFF] border border-gray-200 rounded-[15px] px-4 py-2 relative'
+              : 'hidden md:flex items-center bg-[#F8FBFF] border border-gray-200 rounded-[20px] px-4 py-2 relative'
         }`}
       >
         <Search className="text-blue-500 w-5 h-5 mr-3" strokeWidth={2} />

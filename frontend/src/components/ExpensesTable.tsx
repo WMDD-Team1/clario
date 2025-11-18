@@ -38,30 +38,21 @@ export const ExpensesTable: React.FC = () => {
       className="
         flex flex-col justify-start items-start 
         w-full max-w-full sm:max-w-[100%] h-auto sm:h-[313px] shrink-0 
-        rounded-[20px] bg-[var(--general-alpha)] hover:shadow-md p-4 cursor-pointer
+        rounded-[20px] bg-[var(--general-alpha)] hover:shadow-md p-4
       "
-      onClick={() => {
-        console.log("Clicked!");
-        navigate("/transactions", {
-          state: {
-            name: "Money flow",
-            path: "/transactions"
-          },
-        });
-      }}
     >
-      <h3 className="text-lg text-[var(--primary-text)] mb-3">Top Expenses</h3>
+      <h3 className="text-[1.125rem] text-[var(--primary-text)] mb-3">Top Expenses</h3>
       <div className="w-full flex flex-col justify-between gap-2">
         {expenses.slice(0, 4).map((expense, idx) => (
           <div
             key={idx}
-            className="flex justify-between items-center border-b !border-[--sublight-2] pb-2"
+            className="flex justify-between items-center border-b !border-gray-400 pb-2 last:border-none"
           >
             <div className="flex flex-col">
-              <span className="text-[var(--secondary-text)] text-base">{expense.title}</span>
+              <span className="text-[var(--secondary-text)] text-[1rem]">{expense.title}</span>
               <span className="text-[var(--sub-text)] text-base">{formatDate(expense.date)}</span>
             </div>
-            <span className="text-[var(--secondary-text)] text-lg">
+            <span className="text-[var(--secondary-text)] text-[1.125rem]">
               CAD {expense.amount.toLocaleString()}
             </span>
           </div>

@@ -2,8 +2,11 @@ import { ReminderResponse } from '@api/types/dashboardApi';
 import { formatDate } from '@utils/formatDate';
 import { FaDotCircle } from "react-icons/fa";
 import React from 'react';
+import { useNavigate } from "react-router-dom"; // 1. Import useNavigate
 
 const Reminder: React.FC<{ data: ReminderResponse }> = ({ data }) => {
+  const navigate = useNavigate(); // 2. Initialize the hook
+
   const {
     projectId,
     milestoneId,
@@ -14,27 +17,27 @@ const Reminder: React.FC<{ data: ReminderResponse }> = ({ data }) => {
     dueDate,
   } = data;
 
-
   return (
     <div
-      key={deliverableId}
-      className="flex flex-col justify-between gap-4 p-5 rounded-2xl bg-[var(--background-alternate)] text-[var(--general-alpha)] shadow-md hover:shadow-lg transition-all duration-300 mb-5 md:mb-0"
+      // 3. Add the click handler to navigate to the project page
+      onClick={() => navigate(`/projects/${projectId}`)}
+      
+      // 4. Added 'cursor-pointer' so it feels like a link
+      className="cursor-pointer flex flex-col justify-between gap-4 p-5 rounded-2xl bg-[var(--background-alternate)] text-[var(--general-alpha)] shadow-md hover:shadow-lg transition-all duration-300 mb-5 md:mb-0"
     >
       {/* Top Row — Icon, Title, Client */}
       <div className="flex justify-between items-start">
         <div className="flex items-center gap-2 padding-2">
           <FaDotCircle className="!text-[var(--brand-alpha)]" />
-          <span className="text-lg font-semibold !text-[var(--brand-alpha)]">{deliverableName}</span>
+          <span className="text-[1rem] font-semibold !text-[var(--brand-alpha)]">{deliverableName}</span>
         </div>
-        <span className="text-base text-[var(--secondary-text)] font-medium">{clientName}</span>
+        <span className="text-[1rem] text-[var(--secondary-text)] font-medium">{clientName}</span>
       </div>
-
-
 
       {/* Date */}
       <div className='flex flex-row justify-between align-bottom'>
-        <span className="text-lg font-small text-[var(--secondary-text)]">{milestoneName}</span>
-        <span className="text-lg font-semibold text-[var(--primary-text)]">{formatDate(dueDate)}</span>
+        <span className="text-[1.125rem] font-small text-[var(--secondary-text)]">{milestoneName}</span>
+        <span className="text-[1.125rem] font-semibold text-[var(--primary-text)]">{formatDate(dueDate)}</span>
       </div>
     </div>
   );

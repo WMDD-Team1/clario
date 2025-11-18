@@ -85,11 +85,12 @@ const Settings: React.FC = () => {
 
   // === General Section ===
   const renderGeneral = () => (
-    <div className="flex flex-col gap-8 mt-4 font-['Montserrat']">
+    <div className="flex flex-col gap-8 mt-4 font-['Red_Hat_Display']">
       {/* Profile */}
       <section>
-        <h3 className="!text-[var(--page-title)] text-2xl mb-3">Profile</h3>
-        <div className="md:divide-y">
+        <h3 className="!text-[var(--page-title)] text-[clamp(1.75rem,calc(1.536rem+1.071vw),2.5rem)] mb-3">Profile</h3>
+
+        <div className="md:divide-y divide-gray-200">
           {/* Name */}
           <div className="flex flex-col gap-2 py-4 ">
             <div className="flex justify-between items-top md:hidden text-base font-['Red_Hat_Display']">
@@ -193,7 +194,7 @@ const Settings: React.FC = () => {
           </div>
 
           {/* Password */}
-          <div className="flex flex-col gap-2 py-4 border-b">
+          <div className="flex flex-col gap-2 py-4">
             <div className="flex justify-between items-top md:hidden">
               <span className="text-base text-[var(--tertiary-text)] font-normal">Password</span>
               <Button
@@ -230,8 +231,8 @@ const Settings: React.FC = () => {
 
       {/* Preferences */}
       <section>
-        <h3 className="!text-[var(--page-title)] text-2xl mb-3">Preferences</h3>
-        <div className="md:divide-y">
+        <h3 className="!text-[var(--page-title)] text-[clamp(1.75rem,calc(1.536rem+1.071vw),2.5rem)] mb-3">Preferences</h3>
+        <div className="md:divide-y divide-gray-300">
           {/* Language */}
           <div className="flex flex-col gap-2 py-4">
             <div className="flex justify-between items-top md:hidden">
@@ -267,7 +268,7 @@ const Settings: React.FC = () => {
           </div>
 
           {/* Mode */}
-          <div className="flex flex-col gap-2 py-4 border-b">
+          <div className="flex flex-col gap-2 py-4">
             <div className="flex justify-between items-top md:hidden">
               <span className="text-base text-[var(--tertiary-text)]">Mode</span>
               <Button
@@ -531,11 +532,18 @@ const Settings: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-8 w-full">
+      
       <SettingsDrawer isOpen={isOpen} onClose={() => setIsOpen(false)} title={drawerTitle}>
         {drawerContent}
       </SettingsDrawer>
-
-      <h1 className="font-['Merriweather'] font-bold text-2xl md:text-[32px] text-[var(--page-title)]">Settings</h1>
+      <h1 className="block sm:hidden font-['Merriweather'] font-bold text-[clamp(1.75rem,calc(1.536rem+1.071vw),2.5rem)] text-[var(--page-title)]">
+        Settings
+      </h1>
+      <div className="sticky top-35 z-99 bg-[color-mix(in_srgb,var(--background),transparent_10%)]">
+        <h1 className="font-['Merriweather'] font-bold text-[clamp(1.75rem,calc(1.536rem+1.071vw),2.5rem)] text-[var(--page-title)] hidden sm:block">
+  Settings
+</h1>
+      </div>
 
       <div className="max-w">
         <ToggleButton
