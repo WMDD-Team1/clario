@@ -1086,6 +1086,7 @@
 
     .brand-logo-large .brand-logo-image {
       display: block;
+      min-width: 100%;
     }
 
     .brand-overlay-content {
