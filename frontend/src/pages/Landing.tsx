@@ -7,17 +7,11 @@ export const Landing = () => {
   const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // Smooth Scroll (React 방식)
   const handleSmoothScroll = (e, id) => {
     e.preventDefault();
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth' });
     setMenuOpen(false);
-  };
-
-  // Login / Signup
-  const handleAuthAction = (type) => {
-    window.parent.postMessage({ action: type }, '*');
   };
 
   // Contact Form Submit
@@ -41,7 +35,7 @@ export const Landing = () => {
   };
 
   return (
-    <div className='landing'>
+    <div className="landing">
       {/* HEADER */}
       <header className="header">
         <div className="header-container">
@@ -122,10 +116,19 @@ export const Landing = () => {
           </a>
 
           <div className="mobile-auth-buttons">
-            <button className="btn btn-login" onClick={() => handleAuthAction('login')}>
+            <button className="btn btn-login" onClick={() => loginWithRedirect()}>
               Login
             </button>
-            <button className="btn btn-signup" onClick={() => handleAuthAction('signup')}>
+            <button
+              className="btn btn-signup"
+              onClick={() =>
+                loginWithRedirect({
+                  authorizationParams: {
+                    screen_hint: 'signup',
+                  },
+                })
+              }
+            >
               Sign Up
             </button>
           </div>
