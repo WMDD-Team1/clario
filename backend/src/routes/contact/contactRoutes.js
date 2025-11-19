@@ -18,7 +18,7 @@ router.post("/", async (req, res) => {
 			},
 		});
 		await transporter.sendMail({
-			from: `"Clario Contact Form" <${process.env.GMAIL_USER}>`,
+			from: "Clario Contact Form",
 			to: process.env.GMAIL_USER,
 			subject: `New Contact Message from ${name}`,
 			html: `
