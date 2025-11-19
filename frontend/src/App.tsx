@@ -6,7 +6,6 @@ import { IncomeExpenses } from '@pages/IncomeExpenses';
 import { Faq } from '@pages/Faq';
 import MyWork from '@pages/MyWork';
 import Logout from '@pages/Logout';
-import FinancialDashboard from '@pages/FinancialDashboard';
 import Settings from '@pages/Settings';
 import ProjectDetails from '@pages/ProjectDetails';
 import Contract from '@pages/Contract';
@@ -90,7 +89,7 @@ function App() {
         path="/faq"
         element={
           <PrivateRoute>
-            <Faq/>
+            <Faq />
           </PrivateRoute>
         }
       />
