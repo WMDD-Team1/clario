@@ -5,6 +5,7 @@ import './Landing.css';
 
 export const Landing = () => {
   const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
+
   const [menuOpen, setMenuOpen] = useState(false);
 
   const handleSmoothScroll = (e, id) => {
