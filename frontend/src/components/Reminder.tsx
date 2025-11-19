@@ -23,7 +23,7 @@ const Reminder: React.FC<{ data: ReminderResponse }> = ({ data }) => {
       onClick={() => navigate(`/projects/${projectId}`)}
       
       // 4. Added 'cursor-pointer' so it feels like a link
-      className="cursor-pointer flex flex-col justify-between gap-4 p-5 rounded-2xl bg-[var(--background-alternate)] text-[var(--general-alpha)] shadow-md hover:shadow-lg transition-all duration-300 mb-5 md:mb-0"
+      className="cursor-pointer flex flex-col justify-between gap-4 p-5 rounded-2xl bg-[var(--background-alternate)] text-[var(--general-alpha)] border border-[var(--sublight-2)]  hover:shadow-md transition-all duration-300 mb-5 md:mb-0"
     >
       {/* Top Row — Icon, Title, Client */}
       <div className="flex justify-between items-start">
@@ -36,7 +36,7 @@ const Reminder: React.FC<{ data: ReminderResponse }> = ({ data }) => {
 
       {/* Date */}
       <div className='flex flex-row justify-between align-bottom'>
-        <span className="text-[1.125rem] font-small text-[var(--secondary-text)]">{milestoneName}</span>
+        <span className="text-[1.125rem] font-regular text-[var(--secondary-text)]">{milestoneName}</span>
         <span className="text-[1.125rem] font-semibold text-[var(--primary-text)]">{formatDate(dueDate)}</span>
       </div>
     </div>

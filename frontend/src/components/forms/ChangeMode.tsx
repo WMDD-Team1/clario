@@ -18,7 +18,7 @@ const ChangeMode: React.FC<Props> = ({ onClose }) => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  /* 🌗 Load saved theme on mount */
+  
   useEffect(() => {
     const savedTheme = (localStorage.getItem('theme') as 'light' | 'dark' | null)
       || user?.settings?.general?.theme
@@ -28,7 +28,7 @@ const ChangeMode: React.FC<Props> = ({ onClose }) => {
     document.documentElement.setAttribute('data-theme', savedTheme);
   }, [user]);
 
-  /* 🌈 Apply theme changes & persist */
+  
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', mode);
     localStorage.setItem('theme', mode);

@@ -90,9 +90,9 @@ const Settings: React.FC = () => {
       <section>
         <h3 className="!text-[var(--page-title)] text-[clamp(1.75rem,calc(1.536rem+1.071vw),2.5rem)] mb-3">Profile</h3>
 
-        <div className="md:divide-y divide-[var(--border)]">
+        <div className="md:divide-y divide-[var(--sublight-2)]">
           {/* Name */}
-          <div className="flex flex-col gap-2 py-4 ">
+          <div className="flex flex-col gap-2 px-4 py-4 ">
             <div className="flex justify-between items-top md:hidden text-base font-['Red_Hat_Display']">
               <span className="text-[var(--primary-text)]">Name</span>
               <Button
@@ -126,7 +126,7 @@ const Settings: React.FC = () => {
           </div>
 
           {/* Email */}
-          <div className="flex flex-col gap-2 py-4">
+          <div className="flex flex-col gap-2 px-4 py-4">
             <div className="flex justify-between items-top md:hidden text-base font-['Red_Hat_Display']">
               <span className="text-[var(--primary-text)]">Email</span>
               <Button
@@ -160,7 +160,7 @@ const Settings: React.FC = () => {
           </div>
 
           {/* Address */}
-          <div className="flex flex-col gap-2 py-4 pb-8">
+          <div className="flex flex-col gap-2 px-4 py-4">
             <div className="flex justify-between items-top md:hidden">
               <span className="text-base text-[var(--tertiary-text)]">Address</span>
               <Button
@@ -194,7 +194,7 @@ const Settings: React.FC = () => {
           </div>
 
           {/* Password */}
-          <div className="flex flex-col gap-2 py-4">
+          <div className="flex flex-col gap-2 px-4 py-4">
             <div className="flex justify-between items-top md:hidden">
               <span className="text-base text-[var(--tertiary-text)] font-normal">Password</span>
               <Button
@@ -231,10 +231,10 @@ const Settings: React.FC = () => {
 
       {/* Preferences */}
       <section>
-        <h3 className="!text-[var(--page-title)] text-[clamp(1.75rem,calc(1.536rem+1.071vw),2.5rem)] mb-3">Preferences</h3>
-        <div className="md:divide-y divide-gray-300">
+        <h3 className="!text-[var(--tertiary-text)] text-[clamp(1.75rem,calc(1.536rem+1.071vw),2.5rem)] mb-3">Preferences</h3>
+        <div className="md:divide-y divide-[var(--sublight-2)]">
           {/* Language */}
-          <div className="flex flex-col gap-2 py-4">
+          <div className="flex flex-col gap-2 px-4 py-4">
             <div className="flex justify-between items-top md:hidden">
               <span className="text-base text-[var(--tertiary-text)] font-normal">Language</span>
               <Button
@@ -268,7 +268,7 @@ const Settings: React.FC = () => {
           </div>
 
           {/* Mode */}
-          <div className="flex flex-col gap-2 py-4">
+          <div className="flex flex-col gap-2 px-4 py-4">
             <div className="flex justify-between items-top md:hidden">
               <span className="text-base text-[var(--tertiary-text)]">Mode</span>
               <Button
@@ -316,7 +316,7 @@ const Settings: React.FC = () => {
           {/* Mobile layout */}
           <div className="md:hidden flex flex-col gap-3">
             <div className="flex justify-between items-center">
-              <h3 className="text-[var(--page-title)] text-base">
+              <h3 className="text-[var(--tertiary-text)] text-base">
                 Expenses Categories
               </h3>
               <Button
@@ -343,7 +343,7 @@ const Settings: React.FC = () => {
               {finance.expenseCategories.map((cat) => (
                 <span
                   key={cat}
-                  className="px-3 py-1 text-base rounded-full border border-gray-700 text-[var(--page-title)]whitespace-nowrap"
+                  className="px-3 py-1 text-base rounded-full border border-[var(--sublight-2)] text-[var(--tertiary-text)]whitespace-nowrap"
                 >
                   {cat}
                 </span>
@@ -352,8 +352,8 @@ const Settings: React.FC = () => {
           </div>
 
           {/* Desktop layout */}
-          <div className="hidden md:flex items-center gap-4 pb-4 border-b border-gray-200">
-            <h3 className=" text-[var(--page-title)] text-base flex-[0_0_200px]">
+          <div className="hidden md:flex items-center gap-4 px-4 py-4 border-b border-[var(--sublight-2)]">
+            <h3 className=" text-[var(--tertiary-text)] text-base flex-[0_0_200px]">
               Expense Categories
             </h3>
             <div
@@ -363,7 +363,7 @@ const Settings: React.FC = () => {
               {finance.expenseCategories.map((cat) => (
                 <span
                   key={cat}
-                  className="px-3 py-1 text-base font-semibold rounded-full border border-[var(--secondary-text)] text-[var(--page-title)] whitespace-nowrap"
+                  className="px-3 py-1 text-base font-semibold rounded-full border border-[var(--secondary-text)] text-[var(--tertiary-text)] whitespace-nowrap"
                 >
                   {cat}
                 </span>
@@ -393,7 +393,7 @@ const Settings: React.FC = () => {
           {/* Mobile layout */}
           <div className="md:hidden flex flex-col gap-3">
             <div className="flex justify-between items-center">
-              <h3 className="text-[var(--page-title)] text-base">
+              <h3 className="text-[var(--tertiary-text)] text-base">
                 Income Categories
               </h3>
               <Button
@@ -420,7 +420,7 @@ const Settings: React.FC = () => {
               {finance.incomeCategories.map((cat) => (
                 <span
                   key={cat}
-                  className="px-3 py-1 text-base rounded-full border border-[var(--secondary-text)] text-[var(--page-title)]whitespace-nowrap"
+                  className="px-3 py-1 text-base rounded-full border border-[var(--sublight-2)] text-[var(----tertiary-text)]whitespace-nowrap"
                 >
                   {cat}
                 </span>
@@ -429,8 +429,8 @@ const Settings: React.FC = () => {
           </div>
 
           {/* Desktop layout */}
-          <div className="hidden md:flex items-center gap-4 pb-4 border-b border-gray-200">
-            <h3 className=" text-[var(--page-title)] text-base flex-[0_0_200px]">
+          <div className="hidden md:flex items-center gap-4 px-4 py-4 border-b border-[var(--sublight-2)]">
+            <h3 className=" text-[var(--tertiary-text)] text-base flex-[0_0_200px]">
               Income Categories
             </h3>
             <div
@@ -440,7 +440,7 @@ const Settings: React.FC = () => {
               {finance.incomeCategories.map((cat) => (
                 <span
                   key={cat}
-                  className="font-semibold px-3 py-1 text-base rounded-full border border-[var(--secondary-text)] text-[var(--page-title)] whitespace-nowrap"
+                  className="font-semibold px-3 py-1 text-base rounded-full border border-[var(--secondary-text)] text-[var(--tertiary-text)] whitespace-nowrap"
                 >
                   {cat}
                 </span>
@@ -470,7 +470,7 @@ const Settings: React.FC = () => {
           {/* Mobile layout */}
           <div className="md:hidden flex flex-col gap-3">
             <div className="flex justify-between items-center">
-              <h3 className="text-[var(--page-title)] text-base">Tax Regime</h3>
+              <h3 className="text-[var(--tertiary-text)] text-base">Tax Regime</h3>
               <Button
                 className=" text-white rounded-xl px-5 py-1"
                 buttonColor="regularButton"
@@ -485,12 +485,12 @@ const Settings: React.FC = () => {
                 Edit
               </Button>
             </div>
-            <p className="text-[var(--page-title)]text-base">{finance.taxRegime}</p>
+            <p className="text-[var(--tertiary-text)]text-base">{finance.taxRegime}</p>
           </div>
 
           {/* Desktop layout */}
-          <div className="hidden md:flex items-center gap-4 pb-4 border-b border-gray-200">
-            <h3 className="text-[var(--page-title)] text-base flex-[0_0_200px]">Tax Regime</h3>
+          <div className="hidden md:flex items-center gap-4 px-4 py-4 border-b border-[var(--sublight-2)]">
+            <h3 className="text-[var(--tertiary-text)] text-base flex-[0_0_200px]">Tax Regime</h3>
             <p className="flex-1 px-3 py-2 text-[var(--tertiary-text)] text-base">{finance.taxRegime}</p>
             <Button
               className="text-[var(--general-alpha)] rounded-xl px-5 py-1 flex-shrink-0"
@@ -510,8 +510,8 @@ const Settings: React.FC = () => {
 
         {/* ===== Export Data ===== */}
         <section className="rounded-xl border border-[var(--sublight-2)] p-4 md:p-0 md:shadow-none md:border-none border-b">
-          <div className="flex justify-between items-center">
-            <h3 className=" text-[var(--page-title)] text-base">Export Data</h3>
+          <div className="flex justify-between items-center px-4 py-4">
+            <h3 className=" text-[var(--tertiary-text)] text-base">Export Data</h3>
             <Button
               className="text-[var(--general-alpha)] rounded-xl px-5 py-1"
               buttonColor="regularButton"
@@ -536,11 +536,11 @@ const Settings: React.FC = () => {
       <SettingsDrawer isOpen={isOpen} onClose={() => setIsOpen(false)} title={drawerTitle}>
         {drawerContent}
       </SettingsDrawer>
-      <h1 className="block sm:hidden font-['Merriweather'] font-bold text-[clamp(1.75rem,calc(1.536rem+1.071vw),2.5rem)] text-[var(--page-title)]">
+      <h1 className="block sm:hidden font-['Merriweather'] font-bold text-[clamp(1.75rem,calc(1.536rem+1.071vw),2.5rem)] text-[var(--page-subtitle)]">
         Settings
       </h1>
-      <div className="sticky top-35 z-99 bg-[color-mix(in_srgb,var(--background),transparent_10%)]">
-        <h1 className="font-['Merriweather'] font-bold text-[clamp(1.75rem,calc(1.536rem+1.071vw),2.5rem)] text-[var(--page-title)] hidden sm:block">
+      <div className="sticky top-36 z-99 bg-[color-mix(in_srgb,var(--full-bg),transparent_10%)] backdrop-blur-sm">
+        <h1 className="font-['Merriweather'] font-bold text-[clamp(1.75rem,calc(1.536rem+1.071vw),2.5rem)] text-[var(--page-subtitle)] hidden sm:block">
   Settings
 </h1>
       </div>

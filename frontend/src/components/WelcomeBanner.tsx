@@ -22,7 +22,7 @@ export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({ userName }) => {
   }, [userName]);
 
   return (
-    <div className="mb-6">
+    <div className="mb-6 pb-4 shadow-bottom">
       <h2 className="!font-['Libre_Baskerville'] text-[clamp(1.75rem,calc(1.536rem+1.071vw),2.5rem)] text-[var(--primary-text)] leading-[40px]">
         {isFirstTime ? (
           <>Welcome, {userName}</>
@@ -30,7 +30,8 @@ export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({ userName }) => {
           <>Hi {userName} Welcome Back,</>
         )}
       </h2>
-      <p className="font-['Montserrat'] text-[var(--page-subtitle)] text-[1.25rem]">
+      {/* Added 'hidden md:block' to hide on mobile and show on desktop */}
+      <p className="hidden md:block font-['Montserrat'] text-[var(--page-subtitle)] text-[1.25rem]">
         Here’s your business overview and latest insights.
       </p>
     </div>

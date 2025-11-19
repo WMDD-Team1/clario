@@ -38,7 +38,7 @@ export const ExpensesTable: React.FC = () => {
       className="
         flex flex-col justify-start items-start 
         w-full max-w-full sm:max-w-[100%] h-auto sm:h-[313px] shrink-0 
-        rounded-[20px] bg-[var(--general-alpha)] hover:shadow-md p-4
+        rounded-[20px] bg-[var(--general-alpha)] border border-[var(--sublight-2)] hover:shadow-md p-4
       "
     >
       <h3 className="text-[1.125rem] text-[var(--primary-text)] mb-3">Top Expenses</h3>
@@ -46,7 +46,7 @@ export const ExpensesTable: React.FC = () => {
         {expenses.slice(0, 4).map((expense, idx) => (
           <div
             key={idx}
-            className="flex justify-between items-center border-b !border-gray-400 pb-2 last:border-none"
+            className="flex justify-between items-center border-b !border-[var(--sublight-2)] pb-2 last:border-none"
           >
             <div className="flex flex-col">
               <span className="text-[var(--secondary-text)] text-[1rem]">{expense.title}</span>

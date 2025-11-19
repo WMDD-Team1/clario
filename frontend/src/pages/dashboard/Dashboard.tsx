@@ -82,7 +82,7 @@ export const Dashboard = () => {
   /** ---------------- DESKTOP DASHBOARD ---------------- **/
   return (
     <>
-      <div className="sticky top-35 z-99 bg-[color-mix(in_srgb,var(--background),transparent_10%)] hidden sm:block">
+      <div className="sticky top-37 z-99 bg-[color-mix(in_srgb,var(--full-bg),transparent_10%)] backdrop-blur-sm hidden sm:block">
         <div className="w-full max-w-[1440px] mx-auto">
           <WelcomeBanner userName={appUser?.name || 'User'} />
         </div>
@@ -131,13 +131,13 @@ export const Dashboard = () => {
 
         {/* Toggle Buttons */}
         <div className="flex justify-center w-full mt-4 mb-6">
-          <div className="flex bg-[var(--general-alpha)] text-[var(--background-focus)] rounded-xl p-1 w-full max-w-md justify-between">
+          <div className="flex bg-[var(--general-alpha)] text-[var(--background-focus)] hover:shadow-sm rounded-xl p-1 w-full max-w-md justify-between">
             {['insights', 'dashboard', 'reminders'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab as any)}
                 className={`flex-1 py-2 rounded-xl text-[var(--background-focus)] text-sm font-medium transition-all ${activeTab === tab
-                  ? 'bg-[var(--background-unfocused-toggle)] text-[var(--background-toggle2)] shadow-md'
+                  ? 'bg-[var(--background-toggle-active)] text-[var(--general-alpha)]'
                   : 'text-[var(--background-focus)]'
                   }`}
               >

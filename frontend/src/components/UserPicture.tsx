@@ -1,15 +1,26 @@
 interface Props {
-    imgURL?: string;
+  imgURL?: string;
+  variant?: 'desktop' | 'mobile';
 }
 
-const UserPicture = ({ imgURL }: Props) => {
-    return (
-        <>
-            {imgURL && (<div>
-                <img src={imgURL} alt="Profile Picture" className='w-[60px] h-[60px] rounded-full bg-amber-100 object-cover' />
-            </div>)}
-        </>
-    )
-}
+const UserPicture = ({ imgURL, variant = 'desktop' }: Props) => {
+  const sizeClasses = variant === 'mobile' 
+    ? 'w-[50px] h-[50px]' 
+    : 'w-[60px] h-[60px]';
 
-export default UserPicture
+  return (
+    <>
+      {imgURL && (
+        <div>
+          <img
+            src={imgURL}
+            alt="Profile Picture"
+            className={`${sizeClasses} rounded-full bg-amber-100 object-cover transition-all`}
+          />
+        </div>
+      )}
+    </>
+  );
+};
+
+export default UserPicture;

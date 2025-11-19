@@ -22,8 +22,7 @@
   --background-focus: #02357c;
   --brand-equivalence: #050609;
   --background-button: #a7c8f7;
-  --background-toggle2: #ffffff;
-  --background-unfocused-toggle: #73A9F2;
+  --background-toggle-active: #73A9F2;
 
   /* --- general colors - light --- */
   --full-bg: #f5f9ff;

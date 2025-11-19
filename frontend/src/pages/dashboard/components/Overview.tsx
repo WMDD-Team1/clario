@@ -55,7 +55,7 @@ const Overview = () => {
             key={idx}
             title={label}
             value={value}
-            className={`flex flex-col justify-center items-center h-[96px] p-4 rounded-2xl shadow-sm border border-[var(--sublight-2)] bg-[var(--general-alpha) transition-all duration-200 ${
+            className={`flex flex-col justify-center items-center h-[96px] p-4 rounded-2xl hover:shadow-md border border-[var(--sublight-2)] bg-[var(--general-alpha) transition-all duration-200 ${
               isLast && isOdd ? 'sm:col-span-2 md:col-span-2 lg:col-span-4 xl:col-span-1' : ''
             }`}
           />

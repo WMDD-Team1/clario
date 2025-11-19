@@ -27,13 +27,14 @@ const MoneyFlowAreaChart: React.FC = () => {
             income: item.income ?? 0,
             expense: item.expense ?? 0,
           }));
+          console.log("DL")
           setData(formatted);
         } else {
-          setData([]); // no dummy fallback
+          setData([]); 
         }
       } catch (err) {
         console.error("Failed to fetch money flow:", err);
-        setData([]); // no dummy fallback
+        setData([]); 
       }
     };
 
@@ -41,12 +42,17 @@ const MoneyFlowAreaChart: React.FC = () => {
   }, []);
 
   return (
-    <div className="h-[320px] w-full p-5 rounded-[20px] bg-[var(--general-alpha)] hover:shadow-md shadow-sm">
+    <div className="h-[320px] w-full p-5 rounded-[20px] bg-[var(--general-alpha)] border border-[var(--sublight-2)] hover:shadow-md">
       <p className="text-[1.125rem] mb-4 text-[var(--primary-text)]">Money Flow</p>
       <ResponsiveContainer width="100%" height={250}>
-        <AreaChart data={data}>
+        <AreaChart 
+          data={data}
+          // 1. Adjusted margins (negative left pulls it back)
+          margin={{ top: 10, right: 0, left: -20, bottom: 0 }}
+        >
           <XAxis dataKey="month" />
-          <YAxis />
+          {/* 2. Reduced width (default is ~60, making it 40 tightens the gap) */}
+          <YAxis width={40} />
           <Tooltip />
           <Area
             type="monotone"

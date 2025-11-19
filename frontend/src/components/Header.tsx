@@ -3,10 +3,10 @@ import { useEffect, useState, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import SearchBar from './SearchBar';
 import UserPicture from './UserPicture';
-import { useAuth0 } from '@auth0/auth0-react';
-import axios from 'axios';
 import { ProjectApiResponse } from '@api/types/projectApi';
 import { ClientApiResponse } from '@api/types/clientApi';
+import { useQuery } from '@tanstack/react-query';
+import { fetchAllClients, fetchAllProjects } from '@/api';
 
 type SearchResultType = 'project' | 'client';
 
@@ -18,58 +18,45 @@ interface SearchResult {
 
 const Header = () => {
   const navigate = useNavigate();
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { data } = useAppSelector((state) => state.user);
+  
+  // --- State ---
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
-  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Added Dropdown state
 
+  // --- Refs ---
   const searchContainerRef = useRef<HTMLDivElement>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const { getAccessTokenSilently } = useAuth0();
+  const dropdownRef = useRef<HTMLDivElement>(null); // Added Dropdown ref
 
-  /** ---------------- FETCH PROJECTS + CLIENTS ---------------- **/
-  useEffect(() => {
-    const fetchData = async () => {
-      const token = await getAccessTokenSilently({
-        authorizationParams: {
-          audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
-        },
-      });
+  // --- Data Fetching (Preserved from your original code) ---
+  const { data: projectsData } = useQuery({
+    queryKey: ['projects'],
+    queryFn: () => fetchAllProjects(),
+  });
+  
+  const { data: clientsData } = useQuery({
+    queryKey: ['clients'],
+    queryFn: () => fetchAllClients(),
+  });
 
-      const [projectsResponse, clientsResponse] = await Promise.all([
-        axios.get(`${import.meta.env.VITE_API_BASE_URL}/projects?limit=1000`, {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
-        axios.get(`${import.meta.env.VITE_API_BASE_URL}/clients?limit=1000`, {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
-      ]);
+  const searchResults: SearchResult[] = [
+    ...(projectsData?.data || []).map((p: ProjectApiResponse) => ({
+      id: p.id,
+      name: p.name,
+      type: 'project' as SearchResultType,
+    })),
+    ...(clientsData?.data || []).map((c: ClientApiResponse) => ({
+      id: c.id,
+      name: c.name,
+      type: 'client' as SearchResultType,
+    })),
+  ];
 
-      const projects: SearchResult[] = projectsResponse.data.data.map(
-        (p: ProjectApiResponse) => ({
-          id: p.id,
-          name: p.name,
-          type: 'project',
-        })
-      );
-
-      const clients: SearchResult[] = clientsResponse.data.data.map(
-        (c: ClientApiResponse) => ({
-          id: c.id,
-          name: c.name,
-          type: 'client',
-        })
-      );
-
-      setSearchResults([...projects, ...clients]);
-    };
-
-    fetchData();
-  }, [getAccessTokenSilently]);
-
+  // --- Event Listeners ---
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
+      // Search Logic
       if (
         searchContainerRef.current &&
         !searchContainerRef.current.contains(event.target as Node)
@@ -77,6 +64,7 @@ const Header = () => {
         setSearchValue('');
         setIsSearchOpen(false);
       }
+      // Dropdown Logic (Added)
       if (
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
@@ -88,18 +76,25 @@ const Header = () => {
     if (isSearchOpen || searchValue || isDropdownOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     }
-
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isSearchOpen, searchValue, isDropdownOpen]);
 
   const filteredResults = searchResults
-    .filter((item) => item.name.toLowerCase().includes(searchValue.toLowerCase()))
-    .slice(0, 5);
+    .filter((item) => {
+      const name = item.name?.toLowerCase();
+      return name.includes(searchValue.toLowerCase());
+    })
+    .sort((a, b) => a.name.localeCompare(b.name));
 
+  // --- Helper: Extracted Search Result JSX to reuse in Mobile & Desktop ---
   const searchResultsContent = (
-    <>
+    <div
+      className={`absolute bg-[var(--primitive-colors-brand-primary-025)] border border-[var(--primitive-colors-gray-light-mode-200)] shadow-md backdrop-blur-sm p-[1rem] rounded-xl top-[.5rem] w-full ${
+        searchValue ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'
+      } transition-all duration-300 max-h-[200px] overflow-y-scroll`}
+    >
       {filteredResults.length != 0 && searchValue ? (
         <>
           {filteredResults.map((project, index) => (
@@ -117,23 +112,48 @@ const Header = () => {
               className="flex flex-row justify-between items-center mb-1 pb-0.5 cursor-pointer border-b-0 transition-all relative group"
             >
               {project.name}
-              <p className='text-[.8rem]'>{project.type}</p>
-              <span
-                className="absolute bottom-0 left-0 w-0 h-[1px] bg-[var(--primitive-colors-brand-primary-400)] transition-all duration-300 ease-out group-hover:left-0 group-hover:w-full"
-              />
+              <p className="text-[.8rem]">{project.type}</p>
+              <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-[var(--primitive-colors-brand-primary-400)] transition-all duration-300 ease-out group-hover:left-0 group-hover:w-full" />
             </Link>
           ))}
         </>
       ) : (
         <>{searchValue ? 'Not found' : ''}</>
       )}
-    </>
+    </div>
+  );
+
+  // --- Dropdown Menu JSX ---
+  const dropdownMenu = (
+    <div className="absolute right-0 mt-2 w-48 bg-white rounded-[10px] shadow-lg z-50 border border-gray-200">
+      <Link
+        to="/settings"
+        onClick={() => setIsDropdownOpen(false)}
+        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700  hover:bg-gray-100 transition-colors"
+      >
+        Profile
+      </Link>
+      <Link
+        to="/faq"
+        onClick={() => setIsDropdownOpen(false)}
+        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 rounded-t-[10px] hover:bg-gray-100 transition-colors"
+      >
+        Support & FAQ
+      </Link>
+      <Link
+        to="/logout"
+        onClick={() => setIsDropdownOpen(false)}
+        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 rounded-b-[10px] hover:bg-gray-100 transition-colors"
+      >
+        Logout
+      </Link>
+    </div>
   );
 
   return (
     <>
       {/* DESKTOP HEADER */}
-      <div className="hidden md:flex m-0 p-[40px] justify-between items-center sticky top-0 bg-[var(--background)] mb-5 z-[1000]">
+      <div className="hidden md:flex m-0 p-[40px] justify-between items-center sticky top-0 bg-[color-mix(in_srgb,var(--full-bg),transparent_10%)] backdrop-blur-sm mb-5 z-[1000]">
         <div
           className={`logo transition-all duration-3000 ${
             isSearchOpen ? 'hidden md:block' : 'block'
@@ -142,9 +162,9 @@ const Header = () => {
         >
           <img src="/clario.svg" alt="Clario logo" />
         </div>
-        <div ref={searchContainerRef}>
-          <div className="flex items-center justify-between gap-[20px]">
-            {/* SEARCH BAR */}
+        
+        <div className="flex items-center justify-between gap-[20px]">
+          <div ref={searchContainerRef}>
             <SearchBar
               isSearchOpen={isSearchOpen}
               onSearchOpen={setIsSearchOpen}
@@ -153,15 +173,22 @@ const Header = () => {
             >
               {searchResultsContent}
             </SearchBar>
+          </div>
+
+          {/* Desktop User Dropdown */}
+          <div
+            ref={dropdownRef}
+            className={`relative transition-all duration-3000 ${
+              isSearchOpen ? 'hidden md:block' : 'block'
+            }`}
+          >
             <div
-              ref={dropdownRef}
-              className={`relative transition-all duration-3000 ${isSearchOpen ? 'hidden md:block' : 'block'}`}
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="cursor-pointer"
             >
-              <div onClick={() => setIsDropdownOpen(!isDropdownOpen)} className="cursor-pointer">
-                <UserPicture imgURL={data?.picture} />
-              </div>
-              
+              <UserPicture imgURL={data?.picture} />
             </div>
+            {isDropdownOpen && dropdownMenu}
           </div>
         </div>
       </div>
@@ -172,9 +199,9 @@ const Header = () => {
           className="logo cursor-pointer"
           onClick={() => navigate('/')}
         >
-          <img src="/clario.svg" alt="Clario logo" className="h-8" />
+          <img src="/clario.svg" alt="Clario logo" className="w-[115.73px] h-[37px]" />
         </div>
-        
+
         <div className="flex items-center gap-[15px]">
           {/* Mobile Search */}
           <div ref={searchContainerRef}>
@@ -190,35 +217,13 @@ const Header = () => {
 
           {/* Mobile User Menu */}
           <div ref={dropdownRef} className="relative">
-            <div onClick={() => setIsDropdownOpen(!isDropdownOpen)} className="cursor-pointer">
-              <UserPicture imgURL={data?.picture} />
+            <div
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="cursor-pointer"
+            >
+              <UserPicture imgURL={data?.picture} variant="mobile" />
             </div>
-            
-            {isDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-[10px] shadow-lg z-50 border border-gray-200">
-                <Link
-                  to="/faq"
-                  onClick={() => setIsDropdownOpen(false)}
-                  className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 rounded-t-[10px] hover:bg-gray-100 transition-colors"
-                >
-                  FAQ
-                </Link>
-                <Link
-                  to="/settings"
-                  onClick={() => setIsDropdownOpen(false)}
-                  className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700  hover:bg-gray-100 transition-colors"
-                >
-                  Settings
-                </Link>
-                <Link
-                  to="/logout"
-                  onClick={() => setIsDropdownOpen(false)}
-                  className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 rounded-b-[10px] hover:bg-gray-100 transition-colors"
-                >
-                  Logout
-                </Link>
-              </div>
-            )}
+            {isDropdownOpen && dropdownMenu}
           </div>
         </div>
       </div>
