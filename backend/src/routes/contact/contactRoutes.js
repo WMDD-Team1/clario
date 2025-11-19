@@ -9,9 +9,10 @@ router.post("/", async (req, res) => {
 		if (!name || !email || !message) {
 			return res.status(400).json({ error: "All fields are required" });
 		}
+		sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 		const msg = {
-			to: process.env.CONTACT_RECEIVER_EMAIL,
+			to: process.env.SENDGRID_RECEIVER_EMAIL,
 			from: process.env.SENDGRID_SENDER_EMAIL,
 			subject: `New Contact Message from ${name}`,
 			html: `
@@ -21,6 +22,8 @@ router.post("/", async (req, res) => {
 				<p><strong>Message:</strong> ${message}</p>
 			`,
 		};
+
+		console.log("====", msg);
 
 		await sgMail.send(msg);
 

@@ -94,8 +94,14 @@ export const generateEmail = async ({ invoice, client, project, user }) => {
 		your_name: user.name,
 	});
 
+	if (!invoice.fileUrl) {
+		throw new Error("Invoice PDF is not generated yet.");
+	}
+
 	const response = await axios.get(invoice.fileUrl, { responseType: "arraybuffer" });
+
 	const base64File = Buffer.from(response.data).toString("base64");
+	sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 	const msg = {
 		to: client.email,
@@ -112,6 +118,7 @@ export const generateEmail = async ({ invoice, client, project, user }) => {
 			},
 		],
 	};
+	console.log("=====", msg);
 
 	await sgMail.send(msg);
 
