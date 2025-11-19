@@ -29,7 +29,7 @@ app.use(express.static(path.join(__dirname, "..", "public")));
 
 // Enable CORS only if CORS_ENABLED=true
 if (process.env.CORS_ENABLED === "true") {
-	app.use(cors({ origin: "http://localhost:5173" })); // for frontend in dev
+	app.use(cors({ origin: "*" })); // for frontend in dev
 }
 
 app.use("/api/auth", authRoutes);
