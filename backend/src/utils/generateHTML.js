@@ -3,13 +3,7 @@ import path from "path";
 import Handlebars from "handlebars";
 import puppeteer from "puppeteer";
 import axios from "axios";
-import nodemailer from "nodemailer";
-
-// if (!process.env.RESEND_API_KEY) {
-// 	throw new Error("Missing RESEND_API_KEY in environment variables");
-// }
-
-// const resend = new Resend(process.env.RESEND_API_KEY);
+import sgMail from "@sendgrid/mail";
 
 const __dirname = import.meta.dirname;
 
@@ -100,31 +94,33 @@ export const generateEmail = async ({ invoice, client, project, user }) => {
 		your_name: user.name,
 	});
 
-	const response = await axios.get(invoice.fileUrl, { responseType: "arraybuffer" });
-	const base64File = Buffer.from(response.data).toString("base64");
+	if (!invoice.fileUrl) {
+		throw new Error("Invoice PDF is not generated yet.");
+	}
 
-	const transporter = nodemailer.createTransport({
-		service: "gmail",
-		auth: {
-			user: process.env.GMAIL_USER,
-			pass: process.env.GMAIL_PASS,
-		},
-	});
-	await transporter.sendMail({
-		from: "Clario Invoices <wmdd.clario@gmail.com>",
+	const response = await axios.get(invoice.fileUrl, { responseType: "arraybuffer" });
+
+	const base64File = Buffer.from(response.data).toString("base64");
+	sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+	const msg = {
 		to: client.email,
+		from: process.env.SENDGRID_SENDER_EMAIL,
 		reply_to: user.email,
 		subject: `Invoice #${invoice.invoiceNumber} for ${project.name}`,
 		html,
 		attachments: [
 			{
-				filename: `invoice_${invoice.invoiceNumber}.pdf`,
 				content: base64File,
-				encoding: "base64",
-				contentType: "application/pdf",
+				filename: `invoice_${invoice.invoiceNumber}.pdf`,
+				type: "application/pdf",
+				disposition: "attachment",
 			},
 		],
-	});
+	};
+	console.log("=====", msg);
+
+	await sgMail.send(msg);
 
 	return { success: true, to: client.email };
 };
