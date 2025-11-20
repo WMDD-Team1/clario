@@ -164,12 +164,49 @@ export default function ProjectForm({ onCancel, project, contractFile, isPrefill
                             {client.name}
                         </option>
                     ))}
-                </select>
-                <Plus
-                className="absolute right-[1rem] top-6 cursor-pointer"
-                onClick={() => {onOpenClientSlide?.()}}
-                />
-                {errors.clientId && <p className="text-sm text-red-500">{errors.clientId.message}</p>}
+                </select> */}
+      <Controller
+        name="clientId"
+        control={control}
+        render={({ field }) => (
+          <div className="relative" ref={dropdownRef}>
+            <Input
+              label="Client"
+              placeholder="Client Name..."
+              value={
+                field.value
+                  ? clients.find((c: any) => c.id === field.value)?.name || searchValue
+                  : searchValue
+              }
+              onFocus={() => setClientOpen(true)}
+              onChange={(e) => {
+                setSearchValue(e.target.value);
+                setClientOpen(true);
+                field.onChange('');
+              }}
+            />
+
+            <div
+              className={`absolute bg-[var(--primitive-colors-brand-primary-025)] border border-[var(--primitive-colors-gray-light-mode-200)] shadow-md backdrop-blur-sm p-[1rem] rounded-xl top-[4rem] w-full ${clientOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5 pointer-events-none'} transition-all duration-300 z-30 max-h-[300px] overflow-y-scroll`}
+            >
+              {filteredClients.length > 0 ? (
+                filteredClients.map((client: any) => (
+                  <p
+                    onClick={() => {
+                      field.onChange(client.id);
+                      setSearchValue(client.name);
+                      setClientOpen(false);
+                    }}
+                    key={client.id}
+                    className="flex flex-row justify-between items-center mb-1 pb-2 cursor-pointer px-2 py-1 rounded transition-all relative group"
+                  >
+                    {client.name}
+                    <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-[var(--primitive-colors-brand-primary-400)] transition-all duration-300 ease-out group-hover:left-0 group-hover:w-full" />
+                  </p>
+                ))
+              ) : (
+                <p className="text-gray-500 text-sm text-center py-2">No clients found</p>
+              )}
             </div>
 
             {/* Description */}

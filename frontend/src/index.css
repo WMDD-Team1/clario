@@ -8,12 +8,17 @@
 body {
   background-color: var(--full-bg);
   font-family: 'Red Hat Display', sans-serif;
-  max-width: 1920px;
   margin: 0 auto;
 }
 
+.layout {
+  max-width: 1920px;
+  margin: auto;
+}
+.layout:has(.landing) {
+  max-width: 100%;
+}
 h2 {
   font-family: 'Merriweather';
   font-size: 32px;
 }
- 

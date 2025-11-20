@@ -88,7 +88,6 @@ const Header = () => {
     })
     .sort((a, b) => a.name.localeCompare(b.name));
 
-  // --- Helper: Extracted Search Result JSX to reuse in Mobile & Desktop ---
   const searchResultsContent = (
     <div
       className={`absolute bg-[var(--primitive-colors-brand-primary-025)] border border-[var(--primitive-colors-gray-light-mode-200)] shadow-md backdrop-blur-sm p-[1rem] rounded-xl top-[.5rem] w-full ${
