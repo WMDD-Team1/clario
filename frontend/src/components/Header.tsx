@@ -131,6 +131,7 @@ const Header = () => {
           className={`transition-all duration-3000 ${isSearchOpen ? 'hidden md:block' : 'block'}`}
         >
           <UserPicture imgURL={data?.picture} />
+          
         </div>
       </div>
       </div>
