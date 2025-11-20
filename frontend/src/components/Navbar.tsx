@@ -41,7 +41,7 @@ const Navbar = () => {
   return (
     <nav
       className="
-        fixed bottom-[40px] left-0 mx-[30px] w-[90%]
+        fixed bottom-[40px] left-0 right-0 mx-[30px] w-[90%]
         bg-[var(--general-alpha)] border-t border-[var(--primitive-colors-gray-light-mode-200)]
         flex items-center justify-around
         py-[10px]
