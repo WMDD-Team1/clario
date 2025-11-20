@@ -125,19 +125,19 @@ export const Dashboard = () => {
 
       {/* MOBILE VIEW */}
       <div className="block sm:hidden w-full max-w-[1440px] mx-auto">
-        <p className="text-[28px] font-semibold mt-4 mb-2">
+        <p className="text-[28px] mt-4">
           <WelcomeBanner userName={appUser?.name || 'User'} />
         </p>
 
         {/* Toggle Buttons */}
         <div className="flex justify-center w-full mt-4 mb-6">
-          <div className="flex bg-[var(--general-alpha)] text-[var(--background-focus)] hover:shadow-sm rounded-xl p-1 w-full max-w-md justify-between">
+          <div className="flex bg-[var(--general-alpha)] text-[var(--background-focus)] broder broder-[var(--sublight-2)] h-[50px] hover:shadow-sm rounded-xl p-1 w-full max-w-full justify-between">
             {['insights', 'dashboard', 'reminders'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab as any)}
                 className={`flex-1 py-2 rounded-xl text-[var(--background-focus)] text-sm font-medium transition-all ${activeTab === tab
-                  ? 'bg-[var(--background-toggle-active)] text-[var(--general-alpha)]'
+                  ? 'bg-[var(--background-toggle-active)] text-[var(--general-alpha)] h-[40px]'
                   : 'text-[var(--background-focus)]'
                   }`}
               >

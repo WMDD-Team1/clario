@@ -25,7 +25,7 @@ export const PrivateRoute = ({ children }: { children: ReactNode }) => {
     <Header />
     {isDesktop && <Sidebar />}
     {!isDesktop && <Navbar />}
-    <div className='grow-1 md:ml-[170px] mx-[20px] mb-[160px] md:mb-[40px]'>
+    <div className='grow-1 md:ml-[170px] mx-[30px] mb-[160px] md:mb-[40px]'>
       {children}
     </div>
   </>) : <Navigate to="/" />;
