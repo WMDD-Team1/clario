@@ -28,7 +28,7 @@ const Select: React.FC<SelectProps> = ({id, label, options, value, onChange,colo
             ))}
 
         </select>
-        <ChevronDown className="w-[30px] h-[30px] absolute right-[1rem] top-4"/>
+        <ChevronDown className="w-[30px] h-[30px] absolute right-[1rem] top-4 pointer-events-none"/>
         {children}
         </div>
         </>
