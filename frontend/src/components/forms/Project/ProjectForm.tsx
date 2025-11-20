@@ -229,7 +229,7 @@ export default function ProjectForm({
             />
 
             <div
-              className={`absolute bg-[var(--primitive-colors-brand-primary-025)] border border-[var(--primitive-colors-gray-light-mode-200)] shadow-md backdrop-blur-sm p-[1rem] rounded-xl top-[5rem] w-full ${clientOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5 pointer-events-none'} transition-all duration-300 z-30 max-h-[300px] overflow-y-scroll`}
+              className={`absolute bg-[var(--primitive-colors-brand-primary-025)] border border-[var(--primitive-colors-gray-light-mode-200)] shadow-md backdrop-blur-sm p-[1rem] rounded-xl top-[4rem] w-full ${clientOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5 pointer-events-none'} transition-all duration-300 z-30 max-h-[300px] overflow-y-scroll`}
             >
               {filteredClients.length > 0 ? (
                 filteredClients.map((client: any) => (
