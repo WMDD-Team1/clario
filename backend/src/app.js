@@ -11,6 +11,7 @@ import { router as dashboardRoutes } from "./routes/dashboard/dashboardRoutes.js
 import { router as milestoneRoutes } from "./routes/projects/milestoneRoutes.js";
 import { router as projectRoutes } from "./routes/projects/projectsRoutes.js";
 import { router as settingRoutes } from "./routes/settings/settingRoutes.js";
+import { router as contactRoutes } from "./routes/contact/contactRoutes.js";
 import { setupSwagger } from "./swagger.js";
 import "./utils/triggerInvoice.js";
 
@@ -37,6 +38,7 @@ app.use("/api/transactions", transactionRoutes);
 app.use("/api/ai", openaiRoutes);
 app.use("/api/settings", settingRoutes);
 app.use("/api/recurrences", recurrencesRoutes);
+app.use("/api/contact", contactRoutes);
 
 // Swagger
 setupSwagger(app);
