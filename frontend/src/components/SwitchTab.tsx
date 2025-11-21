@@ -6,16 +6,27 @@ interface Props {
 
 const SwitchTab = ({ currentFilter, filters, onFilter }: Props) => {
     return (
-        <div className="flex bg-white rounded-[15px] p-1 justify-between w-full md:w-[520px]">
-            {filters.map((label) => (
-                <button
-                    key={label}
-                    className={`grow px-4 py-2 rounded-[20px] text-sm transition ${label === currentFilter ? "bg-[#A7C8F7] text-[#023DCA]" : "text-[#5B5B5B]"
-                        }`}
-                    onClick={() => onFilter(label)}>
-                    {label}
-                </button>
-            ))}
+        <div className="flex bg-white rounded-[20px] justify-between w-full md:w-[520px] h-[60px]">
+            {filters.map((label, idx) => {
+                const isActive = label === currentFilter;
+                const isFirst = idx === 0;
+                const isLast = idx === filters.length - 1;
+
+                return (
+                    <button
+                        key={label}
+                        className={`
+                            overflow-hidden grow px-4 py-2 transition
+                            ${isActive ? "bg-[var(--background-alternate)] text-[var(--brand-subtext)]" : "text-[var(--sub-text)]"}
+                            ${isActive && isFirst ? "rounded-l-[15px]" : ""}
+                            ${isActive && isLast ? "rounded-r-[15px]" : ""}
+                            `}
+                        onClick={() => onFilter(label)}
+                    >
+                        {label}
+                    </button>
+                );
+            })}
         </div>
     )
 }
