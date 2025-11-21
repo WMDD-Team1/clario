@@ -82,7 +82,7 @@ export default function ProjectForm({ onCancel, milestone, projectId }: Props) {
     };
 
     if (mutation.isPending) return (
-        <div className="absolute inset-0 bg-white/70 flex items-center justify-center z-10">
+        <div className="absolute inset-0 bg-[var(--background)]/70 flex items-center justify-center z-10">
             <Loader />
         </div>
     );
@@ -101,7 +101,7 @@ export default function ProjectForm({ onCancel, milestone, projectId }: Props) {
             {/* Project Name */}
             <div>
                 <Input
-                    color="bg-white"
+                    color="bg-[var(--background)]"
                     label="Milestone Name"
                     placeholder="Milestone Name..."
                     register={register("name")}
@@ -114,7 +114,7 @@ export default function ProjectForm({ onCancel, milestone, projectId }: Props) {
                 <TextArea
                     label="Milestone Description"
                     placeholder="Description..."
-                    color="bg-white"
+                    color="bg-[var(--background)]"
                     register={register("description")}
                 />
             </div>
@@ -122,7 +122,7 @@ export default function ProjectForm({ onCancel, milestone, projectId }: Props) {
             {/* Amount */}
             <div>
                 <Input
-                    color="bg-white"
+                    color="bg-[var(--background)]"
                     label="Amount"
                     placeholder="3000"
                     type="number"
@@ -138,7 +138,7 @@ export default function ProjectForm({ onCancel, milestone, projectId }: Props) {
             {/* Dates */}
             <div>
                 <Input
-                    color="bg-white"
+                    color="bg-[var(--background)]"
                     label="Due Date"
                     type="date"
                     min={0}
