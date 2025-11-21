@@ -16,31 +16,15 @@ export const Dashboard = () => {
   const { data: appUser } = useAppSelector((state: RootState) => state.user);
   const [activeTab, setActiveTab] = useState<'reminders' | 'dashboard' | 'insights'>('dashboard');
 
-  const balanceData = [
-    { name: 'Expense', value: 2000, color: '#9CA3AF' },
-    { name: 'Balance', value: 3250, color: '#4B5563' },
-  ];
-
-  const flowData = [
-    { name: 'Jan', income: 4000, expense: 2400 },
-    { name: 'Feb', income: 3000, expense: 1398 },
-    { name: 'Mar', income: 2000, expense: 9800 },
-  ];
-
-  const expenses = [
-    { id: 1, category: 'Rent', amount: 1200 },
-    { id: 2, category: 'Groceries', amount: 300 },
-  ];
-
   /** ---------------- MOBILE DASHBOARD ---------------- **/
   const renderDashboard = () => (
     <div className="flex flex-col w-full gap-4">
       {/* Stats Section */}
       <div className="grid grid-cols-2 gap-4 sm:gap-4">
         {[
-          { label: 'Income', value: '$12,000' },
-          { label: 'Expense', value: '$8,000' },
-          { label: 'Completed', value: '10' },
+          { label: 'YTD Income', value: '$12,000' },
+          { label: 'YTD Expense', value: '$8,000' },
+          { label: 'YTD Taxes', value: '10' },
           { label: 'Active Projects', value: '5' },
           { label: 'Clients', value: '30' },
         ].map((stat, index, arr) => (

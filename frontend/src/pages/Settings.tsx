@@ -93,7 +93,7 @@ const Settings: React.FC = () => {
         <div className='md:grid md:grid-cols-2 gap-4'>
           {/* Name */}
           <div className="flex flex-col gap-2 px-4 py-4 md:rounded-xl md:border md:border-[var(--sublight-2)]">
-            <div className="flex justify-between items-top text-base font-['Red_Hat_Display']">
+            <div className="flex justify-between items-top text-base font-['Red_Hat_Display'] pt-2">
               <span className="text-[var(--primary-text)]">Name</span>
               <Button
                 className="px-5 py-1"
@@ -127,7 +127,7 @@ const Settings: React.FC = () => {
 
           {/* Email */}
           <div className="flex flex-col gap-2 px-4 py-4 md:rounded-xl md:border md:border-[var(--sublight-2)]">
-            <div className="flex justify-between items-top text-base font-['Red_Hat_Display']">
+            <div className="flex justify-between items-top text-base font-['Red_Hat_Display'] pt-2">
               <span className="text-[var(--primary-text)]">Email</span>
               <Button
                 className="px-5 py-1"
@@ -161,7 +161,7 @@ const Settings: React.FC = () => {
 
           {/* Address */}
           <div className="flex flex-col gap-2 px-4 py-4 md:rounded-xl md:border md:border-[var(--sublight-2)]">
-            <div className="flex justify-between items-top">
+            <div className="flex justify-between items-top pt-2">
               <span className="text-base text-[var(--tertiary-text)]">Address</span>
               <Button
                 className="px-5 py-1"
@@ -195,7 +195,7 @@ const Settings: React.FC = () => {
 
           {/* Password */}
           <div className="flex flex-col gap-2 px-4 py-4 md:rounded-xl md:border md:border-[var(--sublight-2)]">
-            <div className="flex justify-between items-top">
+            <div className="flex justify-between items-top pt-2">
               <span className="text-base text-[var(--tertiary-text)] font-normal">Password</span>
               <Button
                 className="px-5 py-1"
@@ -235,7 +235,7 @@ const Settings: React.FC = () => {
         <div className="md:grid md:grid-cols-2  gap-4 divide-[var(--sublight-2)]">
           {/* Language */}
           <div className="flex flex-col gap-2 px-4 py-4 md:rounded-xl md:border md:border-[var(--sublight-2)]">
-            <div className="flex justify-between items-top">
+            <div className="flex justify-between items-top pt-2">
               <span className="text-base text-[var(--tertiary-text)] font-normal">Language</span>
               <Button
                 className="px-5 py-1"
@@ -269,7 +269,7 @@ const Settings: React.FC = () => {
 
           {/* Mode */}
           <div className="flex flex-col gap-2 px-4 py-4 md:rounded-xl md:border md:border-[var(--sublight-2)]">
-            <div className="flex justify-between items-top">
+            <div className="flex justify-between items-top pt-2">
               <span className="text-base text-[var(--tertiary-text)]">Mode</span>
               <Button
                 className="px-5 py-1"
@@ -342,7 +342,9 @@ const Settings: React.FC = () => {
               {finance.expenseCategories.map((cat) => (
                 <span
                   key={cat}
-                  className="px-3 py-1 text-base font-semibold rounded-full border border-[var(--sublight-2)] text-[var(--tertiary-text)] whitespace-nowrap"
+                  className="px-3 py-1 text-base font-semibold rounded-full border border-[var(--sublight-2)] md:border-[var(--tertiary-text)] text-[var(--tertiary-text)] whitespace-nowrap
+
+"
                 >
                   {cat}
                 </span>
@@ -383,7 +385,7 @@ const Settings: React.FC = () => {
               {finance.incomeCategories.map((cat) => (
                 <span
                   key={cat}
-                  className="px-3 py-1 text-base font-semibold rounded-full border border-[var(--sublight-2)] text-[var(--tertiary-text)] whitespace-nowrap"
+                  className="px-3 py-1 text-base font-semibold rounded-full border border-[var(--sublight-2)] md:border-[var(--tertiary-text)] text-[var(--tertiary-text)] whitespace-nowrap"
                 >
                   {cat}
                 </span>
