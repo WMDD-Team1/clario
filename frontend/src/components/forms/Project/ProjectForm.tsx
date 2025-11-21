@@ -161,7 +161,7 @@ export default function ProjectForm({
   if (isSuccess) {
     return (
       <SuccessForm
-        iconPath={isEditMode && !isPrefilled ? '/update-success.svg' : '/create-success.svg'}
+        iconPath={isEditMode && !isPrefilled ? '/project-update.svg' : '/project-create.svg'}
         title={isEditMode && !isPrefilled ? 'Project updated successfully' : 'All Set!'}
         label={!(isEditMode && !isPrefilled) ? 'View' : undefined}
         message={
