@@ -76,7 +76,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
 
     return (
         <div className="relative flex flex-col gap-3">
-            <label className="bg-white absolute top-[-0.8rem] left-[1rem] px-[0.3rem] rounded-[1rem]">
+            <label className="bg-[var(--background)] absolute top-[-0.8rem] left-[1rem] px-[0.3rem] rounded-[1rem]">
                 {label}
             </label>
 

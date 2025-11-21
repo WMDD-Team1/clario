@@ -19,7 +19,39 @@ const ToggleButton = ({ options, option, onClick }: Props) => {
                 : "text-[var(--primitive-colors-gray-light-mode-400)]"
                 }`} onClick={() => onClick(secondOption)}>{secondOption.label}</button>
 
-                <div className={`transition-all w-[45%] h-[35px] bg-[var(--tab-background)]  absolute z-1 rounded-[15px] left-[3%] ${option.key === firstOption.key ? '' : "translate-x-[109%]"}`}></div>
+            {/* highlight */}
+            <div
+                className={`
+                absolute 
+                inset-y-0
+                top-[5px] bottom-[5px] left-[5px] w-[calc(50%-5px)]
+                md:top-[10px] md:bottom-[10px] md:left-[10px] md:w-[calc(50%-10px)]
+                rounded-[15px]
+                bg-[var(--tab-background)]
+                transition-all duration-300
+                ${option.key === secondOption.key ? "translate-x-[100%]" : "translate-x-0"}
+            `}
+            />
+
+            <button
+                className={`relative z-10 grow text-[18px] md:pl-[10px] py-1 transition rounded-[10px]
+                ${option.key === firstOption.key
+                        ? "text-[var(--text-alpha)]"
+                        : "text-[var(--primitive-colors-gray-light-mode-400)]"}`}
+                onClick={() => onClick(firstOption)}
+            >
+                {firstOption.label}
+            </button>
+
+            <button
+                className={`relative z-10 grow text-[18px] md:pr-[10px] py-1 transition rounded-[15px] 
+      ${option.key === secondOption.key
+                        ? "text-[var(--text-alpha)]"
+                        : "text-[var(--primitive-colors-gray-light-mode-400)]"}`}
+                onClick={() => onClick(secondOption)}
+            >
+                {secondOption.label}
+            </button>
         </div>
     )
 }
