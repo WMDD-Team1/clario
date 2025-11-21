@@ -28,8 +28,8 @@ const Reminder: React.FC<{ data: ReminderResponse }> = ({ data }) => {
       {/* Top Row — Icon, Title, Client */}
       <div className="flex justify-between items-start">
         <div className="flex items-center gap-2 padding-2">
-          <FaDotCircle className="!text-[var(--brand-alpha)]" />
-          <span className="text-[1rem] font-semibold !text-[var(--brand-alpha)]">{deliverableName}</span>
+          <FaDotCircle className="!text-[var(--primitive-colors-brand-primary-500-base)]" />
+          <span className="text-[1rem] font-semibold !text-[var(--primitive-colors-brand-primary-500-base)]">{deliverableName}</span>
         </div>
         <span className="text-[1rem] text-[var(--secondary-text)] font-medium">{clientName}</span>
       </div>

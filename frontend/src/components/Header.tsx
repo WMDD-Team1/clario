@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import SearchBar from './SearchBar';
 import UserPicture from './UserPicture';
+import ToggleSwitch from './ToggleSwitch';
 import { ProjectApiResponse } from '@api/types/projectApi';
 import { ClientApiResponse } from '@api/types/clientApi';
 import { useQuery } from '@tanstack/react-query';
@@ -23,13 +24,14 @@ const Header = () => {
   // --- State ---
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Added Dropdown state
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false); // Added Dark Mode state
 
   // --- Refs ---
   const searchContainerRef = useRef<HTMLDivElement>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null); // Added Dropdown ref
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // --- Data Fetching (Preserved from your original code) ---
+  // --- Data Fetching ---
   const { data: projectsData } = useQuery({
     queryKey: ['projects'],
     queryFn: () => fetchAllProjects(),
@@ -64,7 +66,7 @@ const Header = () => {
         setSearchValue('');
         setIsSearchOpen(false);
       }
-      // Dropdown Logic (Added)
+      // Dropdown Logic
       if (
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
@@ -122,7 +124,6 @@ const Header = () => {
     </div>
   );
 
-  // --- Dropdown Menu JSX ---
   const dropdownMenu = (
     <div className="absolute right-0 mt-2 w-48 bg-white rounded-[10px] shadow-lg z-50 border border-gray-200">
       <Link
@@ -161,8 +162,17 @@ const Header = () => {
         >
           <img src="/clario.svg" alt="Clario logo" />
         </div>
-        
+
         <div className="flex items-center justify-between gap-[20px]">
+          
+          {/* Toggle Switch - Container wrapper removed as the component handles it */}
+          <div className="hidden md:block">
+            <ToggleSwitch
+              checked={isDarkMode}
+              onChange={setIsDarkMode}
+            />
+          </div>
+
           <div ref={searchContainerRef}>
             <SearchBar
               isSearchOpen={isSearchOpen}
@@ -183,7 +193,7 @@ const Header = () => {
           >
             <div
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="cursor-pointer"
+              
             >
               <UserPicture imgURL={data?.picture} />
             </div>
