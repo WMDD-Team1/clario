@@ -90,10 +90,10 @@ const Settings: React.FC = () => {
       <section>
         <h3 className="!text-[var(--page-title)] text-[clamp(1.75rem,calc(1.536rem+1.071vw),2.5rem)] mb-3">Profile</h3>
 
-        <div className='gap-4'>
+        <div className='md:grid md:grid-cols-2 gap-4'>
           {/* Name */}
-          <div className="flex flex-col gap-2 px-4 py-4 rounded-xl border border-[var(--sublight-2)]">
-            <div className="flex justify-between items-top md:hidden text-base font-['Red_Hat_Display']">
+          <div className="flex flex-col gap-2 px-4 py-4 md:rounded-xl md:border md:border-[var(--sublight-2)]">
+            <div className="flex justify-between items-top text-base font-['Red_Hat_Display']">
               <span className="text-[var(--primary-text)]">Name</span>
               <Button
                 className="px-5 py-1"
@@ -106,8 +106,8 @@ const Settings: React.FC = () => {
                 Edit
               </Button>
             </div>
-            <span className="text-base text-[var(--tertiary-text)] md:hidden font-['Red_Hat_Display'] font-bold mt-[-30px]">{profile.name}</span>
-            <div className="hidden md:flex items-center justify-between gap-4">
+            <span className="text-base text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold mt-[-30px]">{profile.name}</span>
+            {/* <div className="hidden md:flex items-center justify-between gap-4">
               <span className="text-base text-[var(--tertiary-text)] !font-normal w-1/5">Name</span>
               <span className="text-lg text-[var(--tertiary-text)] !font-normal flex-1 whitespace-nowrap">
                 {profile.name}
@@ -122,12 +122,12 @@ const Settings: React.FC = () => {
               >
                 Edit
               </Button>
-            </div>
+            </div> */}
           </div>
 
           {/* Email */}
-          <div className="flex flex-col gap-2 px-4 py-4 rounded-xl border border-[var(--sublight-2)]">
-            <div className="flex justify-between items-top md:hidden text-base font-['Red_Hat_Display']">
+          <div className="flex flex-col gap-2 px-4 py-4 md:rounded-xl md:border md:border-[var(--sublight-2)]">
+            <div className="flex justify-between items-top text-base font-['Red_Hat_Display']">
               <span className="text-[var(--primary-text)]">Email</span>
               <Button
                 className="px-5 py-1"
@@ -140,8 +140,8 @@ const Settings: React.FC = () => {
                 Edit
               </Button>
             </div>
-            <span className="text-lg text-[var(--tertiary-text)] md:hidden font-['Red_Hat_Display'] font-bold mt-[-30px]">{profile.email}</span>
-            <div className="hidden md:flex items-center justify-between gap-4">
+            <span className="text-lg text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold mt-[-30px]">{profile.email}</span>
+            {/* <div className="hidden md:flex items-center justify-between gap-4">
               <span className="text-base text-[var(--tertiary-text)] !font-normal w-1/5">Email</span>
               <span className="text-lg text-[var(--tertiary-text)] !font-normal flex-1 whitespace-nowrap">
                 {profile.email}
@@ -156,12 +156,12 @@ const Settings: React.FC = () => {
               >
                 Edit
               </Button>
-            </div>
+            </div> */}
           </div>
 
           {/* Address */}
-          <div className="flex flex-col gap-2 px-4 py-4">
-            <div className="flex justify-between items-top md:hidden">
+          <div className="flex flex-col gap-2 px-4 py-4 md:rounded-xl md:border md:border-[var(--sublight-2)]">
+            <div className="flex justify-between items-top">
               <span className="text-base text-[var(--tertiary-text)]">Address</span>
               <Button
                 className="px-5 py-1"
@@ -174,8 +174,8 @@ const Settings: React.FC = () => {
                 Edit
               </Button>
             </div>
-            <span className="text-lg text-[var(--tertiary-text)] md:hidden font-['Red_Hat_Display'] font-bold mt-[-30px]">{profile.address}</span>
-            <div className="hidden md:flex items-center justify-between gap-4">
+            <span className="text-lg text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold mt-[-30px]">{profile.address}</span>
+            {/* <div className="hidden md:flex items-center justify-between gap-4">
               <span className="text-base text-[var(--tertiary-text)] font-normal w-1/5">Address</span>
               <span className="text-lg text-[var(--tertiary-text)] font-normal flex-1 whitespace-nowrap">
                 {profile.address}
@@ -190,12 +190,12 @@ const Settings: React.FC = () => {
               >
                 Edit
               </Button>
-            </div>
+            </div> */}
           </div>
 
           {/* Password */}
-          <div className="flex flex-col gap-2 px-4 py-4">
-            <div className="flex justify-between items-top md:hidden">
+          <div className="flex flex-col gap-2 px-4 py-4 md:rounded-xl md:border md:border-[var(--sublight-2)]">
+            <div className="flex justify-between items-top">
               <span className="text-base text-[var(--tertiary-text)] font-normal">Password</span>
               <Button
                 className="px-5 py-1"
@@ -208,8 +208,8 @@ const Settings: React.FC = () => {
                 Change password
               </Button>
             </div>
-            <span className="text-lg text-[var(--tertiary-text)] md:hidden font-['Red_Hat_Display'] font-bold mt-[-30px]">**********</span>
-            <div className="hidden md:flex items-center justify-between gap-4">
+            <span className="text-lg text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold mt-[-30px]">**********</span>
+            {/* <div className="hidden md:flex items-center justify-between gap-4">
               <span className="text-base text-[var(--tertiary-text)] font-normal w-1/5">Password</span>
               <span className="text-lg text-[var(--tertiary-text)] font-normal flex-1 whitespace-nowrap">
                 **********
@@ -224,7 +224,7 @@ const Settings: React.FC = () => {
               >
                 Change password
               </Button>
-            </div>
+            </div> */}
           </div>
         </div>
       </section>
@@ -232,10 +232,10 @@ const Settings: React.FC = () => {
       {/* Preferences */}
       <section>
         <h3 className="!text-[var(--tertiary-text)] text-[clamp(1.75rem,calc(1.536rem+1.071vw),2.5rem)] mb-3">Preferences</h3>
-        <div className="md:divide-y divide-[var(--sublight-2)]">
+        <div className="md:grid md:grid-cols-2  gap-4 divide-[var(--sublight-2)]">
           {/* Language */}
-          <div className="flex flex-col gap-2 px-4 py-4">
-            <div className="flex justify-between items-top md:hidden">
+          <div className="flex flex-col gap-2 px-4 py-4 md:rounded-xl md:border md:border-[var(--sublight-2)]">
+            <div className="flex justify-between items-top">
               <span className="text-base text-[var(--tertiary-text)] font-normal">Language</span>
               <Button
                 className="px-5 py-1"
@@ -248,8 +248,8 @@ const Settings: React.FC = () => {
                 Change
               </Button>
             </div>
-            <span className="text-lg text-[var(--tertiary-text)] md:hidden font-['Red_Hat_Display'] font-bold mt-[-30px]">{preferences.language}</span>
-            <div className="hidden md:flex items-center justify-between gap-4">
+            <span className="text-lg text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold mt-[-30px]">{preferences.language}</span>
+            {/* <div className="hidden md:flex items-center justify-between gap-4">
               <span className="text-base text-[var(--tertiary-text)] w-1/5">Language</span>
               <span className="text-lg text-[var(--tertiary-text)] flex-1 whitespace-nowrap">
                 {preferences.language}
@@ -264,12 +264,12 @@ const Settings: React.FC = () => {
               >
                 Change
               </Button>
-            </div>
+            </div> */}
           </div>
 
           {/* Mode */}
-          <div className="flex flex-col gap-2 px-4 py-4">
-            <div className="flex justify-between items-top md:hidden">
+          <div className="flex flex-col gap-2 px-4 py-4 md:rounded-xl md:border md:border-[var(--sublight-2)]">
+            <div className="flex justify-between items-top">
               <span className="text-base text-[var(--tertiary-text)]">Mode</span>
               <Button
                 className="px-5 py-1"
@@ -280,8 +280,8 @@ const Settings: React.FC = () => {
                 Change
               </Button>
             </div>
-            <span className="text-lg text-[var(--tertiary-text)] md:hidden font-['Red_Hat_Display'] font-bold mt-[-30px]">{preferences.mode}</span>
-            <div className="hidden md:flex items-center justify-between gap-4">
+            <span className="text-lg text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold mt-[-30px]">{preferences.mode}</span>
+            {/* <div className="hidden md:flex items-center justify-between gap-4">
               <span className="text-base text-[var(--tertiary-text)] w-1/5">Mode</span>
               <span className="text-lg text-[var(--tertiary-text)] flex-1 whitespace-nowrap">
                 {preferences.mode}
@@ -294,7 +294,7 @@ const Settings: React.FC = () => {
               >
                 Change
               </Button>
-            </div>
+            </div> */}
           </div>
         </div>
       </section>
@@ -309,17 +309,17 @@ const Settings: React.FC = () => {
     };
 
     return (
-      <div className="flex flex-col gap-6 mt-4 font-['Montserrat']">
+      <div className="flex flex-col md:grid md:grid-cols-2 gap-6 mt-4 font-['Montserrat']">
         {/* ===== Expenses Categories ===== */}
-        <section className="rounded-xl border border-[var(--sublight-2)] p-4 md:p-0 md:shadow-none md:border-none">
+        <section className="rounded-xl border border-[var(--sublight-2)] p-4">
           {/* Mobile layout */}
-          <div className="md:hidden flex flex-col gap-3">
+          <div className="flex flex-col gap-3">
             <div className="flex justify-between items-center">
               <h3 className="text-[var(--tertiary-text)] text-base">
                 Expenses Categories
               </h3>
               <Button
-                className="text-[var(--general-alpha)] rounded-xl px-5 py-1"
+                className="rounded-xl px-5 py-1"
                 buttonColor="regularButton"
                 textColor="var(--general-alpha)"
                 onClick={() =>
@@ -342,61 +342,25 @@ const Settings: React.FC = () => {
               {finance.expenseCategories.map((cat) => (
                 <span
                   key={cat}
-                  className="px-3 py-1 text-base rounded-full border border-[var(--sublight-2)] text-[var(--tertiary-text)]whitespace-nowrap"
+                  className="px-3 py-1 text-base font-semibold rounded-full border border-[var(--sublight-2)] text-[var(--tertiary-text)] whitespace-nowrap"
                 >
                   {cat}
                 </span>
               ))}
             </div>
-          </div>
-
-          {/* Desktop layout */}
-          <div className="hidden md:flex rounded-xl border border-[var(--sublight-2)] items-center gap-4 px-4 py-4">
-            <h3 className=" text-[var(--tertiary-text)] text-base flex-[0_0_200px]">
-              Expense Categories
-            </h3>
-            <div
-              className="flex flex-wrap gap-2 flex-1 overflow-x-auto md:overflow-visible"
-              style={hideScrollbar}
-            >
-              {finance.expenseCategories.map((cat) => (
-                <span
-                  key={cat}
-                  className="px-3 py-1 text-base font-semibold rounded-full border border-[var(--secondary-text)] text-[var(--tertiary-text)] whitespace-nowrap"
-                >
-                  {cat}
-                </span>
-              ))}
-            </div>
-            <Button
-              className="bg-[--brand-equivalence] text-[var(--general-alpha)] rounded-xl px-5 py-1 flex-shrink-0"
-              buttonColor="regularButton"
-              textColor="var(--general-alpha)"
-              onClick={() =>
-                openDrawer(
-                  'Expenses Categories',
-                  <ExpensesCategories
-                    expenseCategories={finance.expenseCategories}
-                    onClose={() => setIsOpen(false)}
-                  />,
-                )
-              }
-            >
-              Add/Edit
-            </Button>
           </div>
         </section>
 
         {/* ===== Income Categories ===== */}
-        <section className="rounded-xl border border-[var(--sublight-2)] p-4 md:p-0 md:shadow-none md:border-none">
+        <section className="rounded-xl border border-[var(--sublight-2)] p-4">
           {/* Mobile layout */}
-          <div className="md:hidden flex flex-col gap-3">
+          <div className="flex flex-col gap-3">
             <div className="flex justify-between items-center">
               <h3 className="text-[var(--tertiary-text)] text-base">
                 Income Categories
               </h3>
               <Button
-                className=" text-white rounded-xl px-5 py-1"
+                className="px-5 py-1"
                 buttonColor="regularButton"
                 textColor="var(--general-alpha)"
                 onClick={() =>
@@ -419,59 +383,23 @@ const Settings: React.FC = () => {
               {finance.incomeCategories.map((cat) => (
                 <span
                   key={cat}
-                  className="px-3 py-1 text-base rounded-full border border-[var(--sublight-2)] text-[var(----tertiary-text)]whitespace-nowrap"
+                  className="px-3 py-1 text-base font-semibold rounded-full border border-[var(--sublight-2)] text-[var(--tertiary-text)] whitespace-nowrap"
                 >
                   {cat}
                 </span>
               ))}
             </div>
-          </div>
-
-          {/* Desktop layout */}
-          <div className="hidden md:flex items-center gap-4 px-4 py-4 rounded-xl border border-[var(--sublight-2)]">
-            <h3 className=" text-[var(--tertiary-text)] text-base flex-[0_0_200px]">
-              Income Categories
-            </h3>
-            <div
-              className="flex flex-wrap gap-2 flex-1 overflow-x-auto md:overflow-visible"
-              style={hideScrollbar}
-            >
-              {finance.incomeCategories.map((cat) => (
-                <span
-                  key={cat}
-                  className="font-semibold px-3 py-1 text-base rounded-full border border-[var(--secondary-text)] text-[var(--tertiary-text)] whitespace-nowrap"
-                >
-                  {cat}
-                </span>
-              ))}
-            </div>
-            <Button
-              className="bg-[--brand-equivalence] text-[var(--general-alpha)] rounded-xl px-5 py-1 flex-shrink-0"
-              buttonColor="regularButton"
-              textColor="var(--general-alpha)"
-              onClick={() =>
-                openDrawer(
-                  'Income Categories',
-                  <IncomeCategories
-                    incCategories={finance.incomeCategories}
-                    onClose={() => setIsOpen(false)}
-                  />,
-                )
-              }
-            >
-              Add/Edit
-            </Button>
           </div>
         </section>
 
         {/* ===== Tax Regime ===== */}
-        <section className="rounded-xl border border-[var(--sublight-2)] p-4 md:p-0 md:shadow-none md:border-none">
+        <section className="rounded-xl border border-[var(--sublight-2)] p-4">
           {/* Mobile layout */}
-          <div className="md:hidden flex flex-col gap-3">
+          <div className="flex flex-col gap-3">
             <div className="flex justify-between items-center">
               <h3 className="text-[var(--tertiary-text)] text-base">Tax Regime</h3>
               <Button
-                className=" text-white rounded-xl px-5 py-1"
+                className="px-5 py-1"
                 buttonColor="regularButton"
                 textColor="var(--general-alpha)"
                 onClick={() =>
@@ -484,32 +412,13 @@ const Settings: React.FC = () => {
                 Edit
               </Button>
             </div>
-            <p className="text-[var(--tertiary-text)]text-base">{finance.taxRegime}</p>
-          </div>
-
-          {/* Desktop layout */}
-          <div className="hidden md:flex items-center gap-4 px-4 py-4 rounded-xl border border-[var(--sublight-2)]">
-            <h3 className="text-[var(--tertiary-text)] text-base flex-[0_0_200px]">Tax Regime</h3>
-            <p className="flex-1 px-3 py-2 text-[var(--tertiary-text)] text-base">{finance.taxRegime}</p>
-            <Button
-              className="text-[var(--general-alpha)] rounded-xl px-5 py-1 flex-shrink-0"
-              buttonColor="regularButton"
-              textColor="var(--general-alpha)"
-              onClick={() =>
-                openDrawer(
-                  'Update Tax Regime',
-                  <ChangeTaxRegime tax={finance.taxRegime} onClose={() => setIsOpen(false)} />,
-                )
-              }
-            >
-              Edit
-            </Button>
+            <p className="text-[var(--tertiary-text)] font-semibold text-base">{finance.taxRegime}</p>
           </div>
         </section>
 
         {/* ===== Export Data ===== */}
-        <section className="rounded-xl border border-[var(--sublight-2)] p-4 md:p-0 md:shadow-none md:border-none border-b">
-          <div className="flex justify-between items-center px-4 py-4 rounded-xl border border-[var(--sublight-2)]">
+        <section className="rounded-xl border border-[var(--sublight-2)] p-4">
+          <div className="flex justify-between items-center px-4 py-4">
             <h3 className=" text-[var(--tertiary-text)] text-base">Export Data</h3>
             <Button
               className="text-[var(--general-alpha)] rounded-xl px-5 py-1"
