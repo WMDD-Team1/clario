@@ -82,14 +82,14 @@ export default function ProjectForm({ onCancel, milestone, projectId }: Props) {
     };
 
     if (mutation.isPending) return (
-        <div className="absolute inset-0 bg-white/70 flex items-center justify-center z-10">
+        <div className="absolute inset-0 bg-[var(--background)]/70 flex items-center justify-center z-10 md:rounded-l-[50px]">
             <Loader />
         </div>
     );
 
     if (isSuccess) {
         return <SuccessForm
-            iconPath={isEditMode ? "/update-success.svg" : "/create-success.svg"}
+            iconPath={isEditMode ? "/milestone-update.svg" : "/milestone-create.svg"}
             title={isEditMode ? "Milestone updated successfully" : "Milestone created successfully"}
             message={isEditMode ? "The milestone details were updated. You can view the latest updates in your project overview." : "Your milestone has been saved successfully."}
             onCancel={onCancel}
@@ -101,7 +101,7 @@ export default function ProjectForm({ onCancel, milestone, projectId }: Props) {
             {/* Project Name */}
             <div>
                 <Input
-                    color="bg-white"
+                    color="bg-[var(--background)]"
                     label="Milestone Name"
                     placeholder="Milestone Name..."
                     register={register("name")}
@@ -114,7 +114,7 @@ export default function ProjectForm({ onCancel, milestone, projectId }: Props) {
                 <TextArea
                     label="Milestone Description"
                     placeholder="Description..."
-                    color="bg-white"
+                    color="bg-[var(--background)]"
                     register={register("description")}
                 />
             </div>
@@ -122,7 +122,7 @@ export default function ProjectForm({ onCancel, milestone, projectId }: Props) {
             {/* Amount */}
             <div>
                 <Input
-                    color="bg-white"
+                    color="bg-[var(--background)]"
                     label="Amount"
                     placeholder="3000"
                     type="number"
@@ -138,7 +138,7 @@ export default function ProjectForm({ onCancel, milestone, projectId }: Props) {
             {/* Dates */}
             <div>
                 <Input
-                    color="bg-white"
+                    color="bg-[var(--background)]"
                     label="Due Date"
                     type="date"
                     min={0}
