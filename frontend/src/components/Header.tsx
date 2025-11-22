@@ -206,7 +206,7 @@ const Header = () => {
           }`}
           onClick={() => navigate('/')}
         >
-          <img src="/clario.svg" alt="Clario logo" />
+          <img src="/clario.svg" alt="Clario logo" className="w-[160px]"/>
         </div>
 
         <div className="flex items-center justify-between gap-[20px]">
