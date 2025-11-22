@@ -32,10 +32,10 @@ const Overview = () => {
     { label: 'Recurring Expense', value: '30' },
   ];
   const mapOverviewToStats = (data: OverviewResponse) => [
-    { label: 'Income', value: `$${data.income.toLocaleString()}` },
-    { label: 'Expense', value: `$${data.expense.toLocaleString()}` },
-    { label: 'Taxes', value: `$${data.taxes.toLocaleString()}` },
-    { label: 'Recurring Income', value: `$${data.recurringIncome.toLocaleString()}` },
+    { label: 'YTD Income', value: `$${data.income.toLocaleString()}` },
+    { label: 'YTD Expense', value: `$${data.expense.toLocaleString()}` },
+    { label: 'YTD Taxes', value: `$${data.taxes.toLocaleString()}` },
+    { label: 'This Month Taxes', value: `$${data.recurringIncome.toLocaleString()}` },
     { label: 'Recurring Expense', value: `$${data.recurringExpense.toLocaleString()}` },
   ];
   const isAllZero = (data: OverviewResponse | null) => {

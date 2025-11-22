@@ -35,7 +35,6 @@ const ProjectBanner = ({ project, onEdit }: Props) => {
                     <p className="flex justify-between"><span className="font-medium">Due Date:</span> <span>{
                         formatDate(project.dueDate,{stringMonth:true})
                     }</span></p>
-                    <p className="flex justify-between"><span className="font-medium">Stage:</span> <span>{project.status}</span></p>
                     <div>
                         <p className="font-medium">Description</p>
                         <p className="mt-2 text-gray-600 text-sm"><span>{project.description}</span></p>
