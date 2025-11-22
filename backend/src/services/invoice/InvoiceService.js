@@ -64,7 +64,7 @@ export const createInvoiceService = async (user, projectId, milestoneId) => {
 	});
 
 	const invoiceData = {
-		logo: "https://firebasestorage.googleapis.com/v0/b/clario-6bfca.firebasestorage.app/o/public%2Flogo.png?alt=media&token=97a516bc-af35-4b0b-b163-7b709c778ae8",
+		logo: "https://firebasestorage.googleapis.com/v0/b/clario-6bfca.firebasestorage.app/o/public%2Flogo.svg?alt=media&token=233ce12a-9ead-4ee3-b0bb-1f54877e80e0",
 		invoiceNumber: newInvoice.invoiceNumber,
 		issueDate: new Date(newInvoice.createdAt).toLocaleDateString("en-CA"),
 		dueDate: newInvoice.dueDate.toLocaleDateString("en-CA"),
@@ -73,10 +73,7 @@ export const createInvoiceService = async (user, projectId, milestoneId) => {
 			name: name || "",
 			email: email || "",
 			phone: phone || "",
-			// addressLine1: address?.street || "",
-			// addressLine2: `${address?.city || ""}, ${address?.postalCode || ""}`,
 			country: address?.country || "Canada",
-			// taxId: `Tax (${province})`,
 		},
 
 		billTo: {
@@ -104,7 +101,6 @@ export const createInvoiceService = async (user, projectId, milestoneId) => {
 		taxAmount: `$${taxAmount.toFixed(2)}`,
 		totalAmount: `$${totalAmount.toFixed(2)}`,
 	};
-	console.log(invoiceData);
 
 	const pdfPath = await generateInvoicePDF(invoiceData);
 
@@ -163,6 +159,7 @@ export const updateInvoiceStatusService = async (invoiceId, userId, status) => {
 			totalAmount: updated.totalAmount,
 			date: new Date(),
 			origin: "invoice",
+			category: "Project Income",
 		});
 	}
 	return updated;

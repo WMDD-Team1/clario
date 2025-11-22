@@ -32,7 +32,11 @@ export const generateInvoicePDF = async (invoice) => {
 	const template = Handlebars.compile(templateHTML);
 	const html = template(invoice);
 
-	const browser = await puppeteer.launch({ headless: true });
+	const browser = await puppeteer.launch({
+		headless: true,
+		args: ["--no-sandbox", "--disable-setuid-sandbox"],
+	});
+
 	const page = await browser.newPage();
 	await page.setContent(html, { waitUntil: "networkidle0" });
 
@@ -61,7 +65,10 @@ export const generateContractPDF = async (data) => {
 	const template = Handlebars.compile(templateHTML);
 	const html = template(data);
 
-	const browser = await puppeteer.launch({ headless: true });
+	const browser = await puppeteer.launch({
+		headless: true,
+		args: ["--no-sandbox", "--disable-setuid-sandbox"],
+	});
 	const page = await browser.newPage();
 	await page.setContent(html, { waitUntil: "networkidle0" });
 
