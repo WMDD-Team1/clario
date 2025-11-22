@@ -5,8 +5,10 @@ import puppeteer from "puppeteer";
 import { Resend } from "resend";
 import axios from "axios";
 import sgMail from "@sendgrid/mail";
+import { fileURLToPath } from "url";
 
-const __dirname = import.meta.dirname;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export const generateInvoicePDF = async (invoice) => {
 	const templatePATH = path.join(__dirname, "../assets/templates/invoice-template.html");
@@ -15,7 +17,11 @@ export const generateInvoicePDF = async (invoice) => {
 	const template = Handlebars.compile(templateHTML);
 	const html = template(invoice);
 
-	const browser = await puppeteer.launch({ headless: true });
+	const browser = await puppeteer.launch({
+		headless: true,
+		args: ["--no-sandbox", "--disable-setuid-sandbox"],
+	});
+
 	const page = await browser.newPage();
 	await page.setContent(html, { waitUntil: "networkidle0" });
 
@@ -44,7 +50,10 @@ export const generateContractPDF = async (data) => {
 	const template = Handlebars.compile(templateHTML);
 	const html = template(data);
 
-	const browser = await puppeteer.launch({ headless: true });
+	const browser = await puppeteer.launch({
+		headless: true,
+		args: ["--no-sandbox", "--disable-setuid-sandbox"],
+	});
 	const page = await browser.newPage();
 	await page.setContent(html, { waitUntil: "networkidle0" });
 
