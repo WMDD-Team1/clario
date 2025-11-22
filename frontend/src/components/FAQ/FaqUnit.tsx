@@ -23,11 +23,11 @@ export const FaqUnit = ({ title, data }: FaqUnitFormat) => {
       <h3 className="text-[var(--primitive-colors-brand-primary-500-base)] text-3xl mb-[.5rem] mt-[2rem] font-extralight">
         {title}
       </h3>
-      <div className="flex flex-row flex-wrap gap-[1rem]">
+      <div className="flex flex-row flex-wrap gap-[1rem] w-full">
         {data.map((question, index) => (
           <div
             key={question.question}
-            className="relative overflow-hidden md:basis-[45%] basis-[100%] cursor-pointer"
+            className="relative overflow-hidden md:basis-[calc(50%-0.5rem)] basis-[100%] cursor-pointer"
             onClick={() => toggleIndex(index)}
           >
             <p className="p-[1rem] text-[var(--tertiary-text)] rounded-2xl border-2 border-[var(--primitive-colors-brand-primary-75)] text-left">

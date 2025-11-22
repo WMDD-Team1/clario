@@ -83,14 +83,14 @@ export default function DeliverableForm({ onCancel, deliverable, milestoneId, pr
     };
 
     if (mutation.isPending) return (
-        <div className="absolute inset-0 bg-white/70 flex items-center justify-center z-10">
+        <div className="absolute inset-0 bg-[var(--background)]/70 flex items-center justify-center z-10 md:rounded-l-[50px]">
             <Loader />
         </div>
     );
 
     if (isSuccess) {
         return <SuccessForm
-            iconPath={isEditMode ? "/update-success.svg" : "/create-success.svg"}
+            iconPath={isEditMode ? "/deliverable-update.svg" : "/deliverable-create.svg"}
             title={isEditMode ? "Deliverable updated successfully" : "Deliverable created successfully"}
             message={isEditMode ? "The deliverable details were updated. You can view the latest updates in your project overview." : "Your deliverable has been saved successfully."}
             onCancel={onCancel}
@@ -102,7 +102,7 @@ export default function DeliverableForm({ onCancel, deliverable, milestoneId, pr
             {/* Project Name */}
             <div>
                 <Input
-                    color="bg-white"
+                    color="bg-[var(--background)]"
                     label="Deliverable Name"
                     placeholder="Deliverable Name..."
                     register={register("name")}
@@ -114,7 +114,7 @@ export default function DeliverableForm({ onCancel, deliverable, milestoneId, pr
             <div>
                 <TextArea
                     label="Deliverable Description"
-                    color="bg-white"
+                    color="bg-[var(--background)]"
                     register={register("description")}
                 />
             </div>
@@ -130,7 +130,7 @@ export default function DeliverableForm({ onCancel, deliverable, milestoneId, pr
             {/* Dates */}
             <div>
                 <Input
-                    color="bg-white"
+                    color="bg-[var(--background)]"
                     label="Due Date"
                     type="date"
                     min={0}

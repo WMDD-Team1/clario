@@ -161,7 +161,7 @@ export default function ProjectForm({
   if (isSuccess) {
     return (
       <SuccessForm
-        iconPath={isEditMode && !isPrefilled ? '/update-success.svg' : '/create-success.svg'}
+        iconPath={isEditMode && !isPrefilled ? '/project-update.svg' : '/project-create.svg'}
         title={isEditMode && !isPrefilled ? 'Project updated successfully' : 'All Set!'}
         label={!(isEditMode && !isPrefilled) ? 'View' : undefined}
         message={
@@ -185,7 +185,7 @@ export default function ProjectForm({
       {/* Project Name */}
       <div>
         <Input
-          color="bg-white"
+          color="bg-[var(--background)]"
           label="Project Name"
           placeholder="Project Name..."
           register={register('name')}
@@ -268,14 +268,14 @@ export default function ProjectForm({
 
       {/* Description */}
       <div>
-        <TextArea label="Project Description" color="bg-white" register={register('description')} />
+        <TextArea label="Project Description" color="bg-[var(--background)]" register={register('description')} />
       </div>
 
       {/* Dates */}
       <div className="grid grid-cols-2 gap-3">
         <div>
           <Input
-            color="bg-white"
+            color="bg-[var(--background)]"
             label="Start Date"
             type="date"
             min={0}
@@ -286,7 +286,7 @@ export default function ProjectForm({
 
         <div>
           <Input
-            color="bg-white"
+            color="bg-[var(--background)]"
             label="Due Date"
             type="date"
             min={0}
@@ -299,7 +299,7 @@ export default function ProjectForm({
       {/* Upfront */}
       <div>
         <Input
-          color="bg-white"
+          color="bg-[var(--background)]"
           label="Upfront Amount"
           placeholder="120"
           type="number"

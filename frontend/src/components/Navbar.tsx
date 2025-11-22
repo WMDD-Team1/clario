@@ -41,10 +41,10 @@ const Navbar = () => {
   return (
     <nav
       className="
-        fixed bottom-[40px] left-0 mx-[30px] w-[90%]
+        fixed bottom-[40px] right-[30px] left-[30px]
         bg-[var(--general-alpha)] border-t border-[var(--primitive-colors-gray-light-mode-200)]
         flex items-center justify-around
-        py-[10px]
+        py-[20px]
         md:hidden
         rounded-[30px] shadow-sm
         z-1000
@@ -57,8 +57,8 @@ const Navbar = () => {
           className={({ isActive }) =>
             `flex flex-col items-center justify-center text-xs font-medium transition ${
               isActive
-                ? 'text-[var(--primitive-colors-brand-primary-925)]'
-                : 'text-[var(--primitive-colors-brand-primary-500-base)] hover:text-[var(--brand-alpha)]'
+                ? 'text-[var(--brand-subtext)]'
+                : 'text-[var(--sub-text)] hover:text-[var(--brand-alpha)]'
             }`
           }
         >

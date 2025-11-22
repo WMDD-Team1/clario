@@ -4,8 +4,10 @@ import Handlebars from "handlebars";
 import puppeteer from "puppeteer";
 import axios from "axios";
 import sgMail from "@sendgrid/mail";
+import { fileURLToPath } from "url";
 
-const __dirname = import.meta.dirname;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export const generateInvoicePDF = async (invoice) => {
 	const templatePATH = path.join(__dirname, "../assets/templates/invoice-template.html");

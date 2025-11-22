@@ -15,18 +15,18 @@ const ToggleButton = ({ options, option, onClick }: Props) => {
             <div
                 className={`
                 absolute 
-                inset-y-0 w-1/2
+                inset-y-0
+                top-[5px] bottom-[5px] left-[5px] w-[calc(50%-5px)]
                 md:top-[10px] md:bottom-[10px] md:left-[10px] md:w-[calc(50%-10px)]
                 rounded-[15px]
-                bg-[var(--brand-alpha)]
-                md:bg-[var(--tab-background)]
+                bg-[var(--tab-background)]
                 transition-all duration-300
                 ${option.key === secondOption.key ? "translate-x-[100%]" : "translate-x-0"}
             `}
             />
 
             <button
-                className={`relative z-10 grow text-[18px] md:pl-[10px] py-1 transition rounded-[15px]
+                className={`relative z-10 grow text-[18px] md:pl-[10px] py-1 transition rounded-[10px]
                 ${option.key === firstOption.key
                         ? "text-[var(--text-alpha)]"
                         : "text-[var(--primitive-colors-gray-light-mode-400)]"}`}

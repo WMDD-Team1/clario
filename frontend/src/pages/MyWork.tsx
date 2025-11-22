@@ -77,7 +77,7 @@ const MyWork = () => {
         </section>
         <section className="md:hidden transition">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-semibold text-black">My Work</h2>
+            <h2 className="text-[28px] font-semibold text-black">My Work</h2>
             <Button
               buttonColor="regularButton"
               onClick={() => {

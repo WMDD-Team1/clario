@@ -73,7 +73,7 @@ const Projects = ({onCreate}: Props) => {
                 onFilter={setCurrentFilter}
                 sortOptions={SORT_OPTIONS}
                 onSortChange={setSelectedSort}
-                stageOptions={STAGES}
+                // stageOptions={STAGES}
                 onStageChange={setSelectedStage}
                 onSearchChange={setSearch}
                 selectedStage={selectedStage}

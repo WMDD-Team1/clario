@@ -6,6 +6,7 @@ import { analyzeContractText } from "../../utils/analyze.js";
 import Client from "../../models/Client.js";
 import { generateContractPDF } from "../../utils/generateHTML.js";
 import fs from "fs";
+
 export const uploadContractService = async (file, userId, clientId, projectId) => {
 	if (!file) throw new Error("No file uploaded");
 
