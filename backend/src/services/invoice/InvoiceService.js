@@ -38,7 +38,17 @@ export const createInvoiceService = async (user, projectId, milestoneId) => {
 	}
 
 	const lastInvoice = await Invoice.findOne().sort({ createdAt: -1 });
-	const invoiceNumber = lastInvoice ? lastInvoice.invoiceNumber + 1 : 1;
+
+	let nextNumber = 1;
+
+	if (lastInvoice) {
+		const match = lastInvoice.invoiceNumber.match(/INV-(\d+)/);
+		if (match) {
+			nextNumber = parseInt(match[1], 10) + 1;
+		}
+	}
+
+	const invoiceNumber = `INV-${String(nextNumber).padStart(5, "0")}`;
 
 	const taxRate = getTaxRateByProvince(province);
 	const taxAmount = invoiceAmount * taxRate;
@@ -64,7 +74,7 @@ export const createInvoiceService = async (user, projectId, milestoneId) => {
 	});
 
 	const invoiceData = {
-		logo: "https://firebasestorage.googleapis.com/v0/b/clario-6bfca.firebasestorage.app/o/public%2Flogo.svg?alt=media&token=233ce12a-9ead-4ee3-b0bb-1f54877e80e0",
+		logo: "https://firebasestorage.googleapis.com/v0/b/clario-6bfca.firebasestorage.app/o/public%2Flogo.png?alt=media&token=45aeb3b1-b23b-4029-a313-eec42e7d48b0",
 		invoiceNumber: newInvoice.invoiceNumber,
 		issueDate: new Date(newInvoice.createdAt).toLocaleDateString("en-CA"),
 		dueDate: newInvoice.dueDate.toLocaleDateString("en-CA"),
@@ -158,7 +168,7 @@ export const updateInvoiceStatusService = async (invoiceId, userId, status) => {
 			taxAmount: updated.taxAmount,
 			totalAmount: updated.totalAmount,
 			date: new Date(),
-			origin: "invoice",
+			origin: updated.invoiceNumber,
 			category: "Project Income",
 		});
 	}

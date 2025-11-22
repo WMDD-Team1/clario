@@ -9,7 +9,7 @@ const DeliverableSchema = new mongoose.Schema(
 const InvoiceSchema = new mongoose.Schema(
 	{
 		invoiceNumber: {
-			type: Number,
+			type: String,
 			required: true,
 			unique: true,
 		},
@@ -21,7 +21,6 @@ const InvoiceSchema = new mongoose.Schema(
 		milestoneId: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "Project.milestones",
-			required: true,
 		},
 		clientId: {
 			type: mongoose.Schema.Types.ObjectId,
@@ -34,7 +33,6 @@ const InvoiceSchema = new mongoose.Schema(
 
 		milestoneName: String,
 		dueDate: Date,
-		amount: Number,
 		deliverables: [DeliverableSchema],
 
 		amount: Number,
