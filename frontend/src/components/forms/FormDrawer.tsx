@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
-import { Ref } from "react";
+import { Ref, useEffect } from "react";
 
 interface FormDrawerProps {
     title: string;
@@ -11,6 +11,21 @@ interface FormDrawerProps {
 }
 
 const FormDrawer = ({ title, isOpen, onClose, children, divRef }: FormDrawerProps) => {
+    useEffect(() => {
+        if (!isOpen) return;
+
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "Escape") {
+                onClose();
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [isOpen, onClose]);
 
     return (
         <AnimatePresence>
@@ -42,7 +57,7 @@ const FormDrawer = ({ title, isOpen, onClose, children, divRef }: FormDrawerProp
                         </div>
 
                         <div className="absolute w-12 h-12 top-24 cursor-pointer left-[30px] md:left-[-20px] rounded-[10px] bg-[var(--general-alpha)] flex items-center justify-center"
-                        onClick={onClose}
+                            onClick={onClose}
                         >
                             <button
                                 className="text-[var(--page-title)] hover:text-gray-700 transition-colors rounded-2xl cursor-pointer"

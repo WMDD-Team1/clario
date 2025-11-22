@@ -53,8 +53,8 @@ const Table = ({
             return value ? formatDate(value, { stringMonth: true }) : "-";
         }
 
-        if (lowerKey.includes("amount") || lowerKey.includes("price")) {
-            return value ? `$ ${formatCurrency(value)}` : "-";
+        if (lowerKey.includes("amount") || lowerKey.includes("price") || lowerKey.includes("budget")) {
+            return value ? `$ ${formatCurrency(value)}` : `$ ${formatCurrency(0)}`;
         }
 
         if (lowerKey.includes(".")) {

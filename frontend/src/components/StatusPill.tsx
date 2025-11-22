@@ -1,13 +1,13 @@
 import React from "react";
 
 interface StatusPillProps {
-    status: "Active" | "Inactive" | "Archived";
+    status: "Active" | "Draft" | "Archived";
 }
 
 const StatusPill: React.FC<StatusPillProps> = ({ status }) => {
     const styles = {
         Active: "bg-[#DBFAE6] text-[var(--success-contrast1)]",
-        Inactive: "bg-[#FEEFC7] text-[var(--warning-contrast1)]",
+        Draft: "bg-[#FEEFC7] text-[var(--warning-contrast1)]",
         Archived: "bg-[#4C4C4C26] text-[#575757]",
     }[status];
 
