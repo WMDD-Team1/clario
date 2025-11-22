@@ -8,6 +8,9 @@ import { ProjectApiResponse } from '@api/types/projectApi';
 import { ClientApiResponse } from '@api/types/clientApi';
 import { useQuery } from '@tanstack/react-query';
 import { fetchAllClients, fetchAllProjects } from '@/api';
+import { updateUserPreferences } from '@api/services/settingService';
+import { updateUser } from '@store/userSlice';
+import { useDispatch } from 'react-redux';
 
 type SearchResultType = 'project' | 'client';
 
@@ -25,7 +28,12 @@ const Header = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false); // Added Dark Mode state
+  
+  // ---- Dark Mode Logic
+  const dispatch = useDispatch();
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isSavingTheme, setIsSavingTheme] = useState(false);
+  const [themeError, setThemeError] = useState<string | null>(null);
 
   // --- Refs ---
   const searchContainerRef = useRef<HTMLDivElement>(null);
@@ -55,6 +63,24 @@ const Header = () => {
     })),
   ];
 
+  useEffect(() => {
+    const savedTheme =
+      (localStorage.getItem('theme') as 'light' | 'dark' | null) ||
+      data?.settings?.general?.theme ||
+      'light';
+
+    const isDark = savedTheme === 'dark';
+    setIsDarkMode(isDark);
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  }, [data]);
+
+  // Save to DOM + localStorage on toggle
+  useEffect(() => {
+    const theme = isDarkMode ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }, [isDarkMode]);
+
   // --- Event Listeners ---
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -82,6 +108,26 @@ const Header = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isSearchOpen, searchValue, isDropdownOpen]);
+
+  // Click handler for toggle switch
+  const handleThemeToggle = async () => {
+    const newMode = isDarkMode ? 'light' : 'dark';
+    setIsDarkMode(!isDarkMode);
+    setThemeError(null);
+    setIsSavingTheme(true);
+
+    try {
+      const res = await updateUserPreferences({ theme: newMode });
+      dispatch(updateUser(res.data));
+      localStorage.setItem('theme', newMode);
+    } catch (err: any) {
+      const message = err.response?.data?.message || 'Failed to update mode.';
+      setThemeError(message);
+      console.error(err);
+    } finally {
+      setIsSavingTheme(false);
+    }
+  };
 
   const filteredResults = searchResults
     .filter((item) => {
