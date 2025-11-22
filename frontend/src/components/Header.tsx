@@ -229,7 +229,7 @@ const Header = () => {
             </SearchBar>
           </div>
 
-          {/* Desktop User Picture (NO DROPDOWN) */}
+          {/* Desktop User Picture */}
           <div
             className={`relative transition-all duration-3000 ${
               isSearchOpen ? 'hidden md:block' : 'block'
