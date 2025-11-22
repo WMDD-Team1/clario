@@ -22,8 +22,8 @@ export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({ userName }) => {
   }, [userName]);
 
   return (
-    <div className="pb-4">
-      <h2 className="!font-['Libre_Baskerville'] text-[clamp(1.75rem,calc(1.536rem+1.071vw),2.5rem)] text-[var(--primary-text)] leading-[40px]">
+    <div className="pb-1 mb-3">
+      <h2 className="!font-['merriweather'] font-bold text-[clamp(1.75rem,calc(1.536rem+1.071vw),2.5rem)] text-[var(--primary-text)] leading-[40px]">
         {isFirstTime ? (
           <>Welcome, {userName}</>
         ) : (

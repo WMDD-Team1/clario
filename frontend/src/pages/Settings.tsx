@@ -449,7 +449,7 @@ const Settings: React.FC = () => {
       <h1 className="block sm:hidden font-['Merriweather'] font-bold text-[clamp(1.75rem,calc(1.536rem+1.071vw),2.5rem)] text-[var(--page-subtitle)]">
         Settings
       </h1>
-      <div className="sticky top-36 z-99 bg-[color-mix(in_srgb,var(--full-bg),transparent_10%)] backdrop-blur-sm">
+      <div className="sticky top-33 z-99 bg-[var(--full-bg)] backdrop-blur-sm">
         <h1 className="font-['Merriweather'] font-bold text-[clamp(1.75rem,calc(1.536rem+1.071vw),2.5rem)] text-[var(--page-subtitle)] hidden sm:block">
           Settings
         </h1>

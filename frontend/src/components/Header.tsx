@@ -171,25 +171,25 @@ const Header = () => {
   );
 
   const dropdownMenu = (
-    <div className="absolute right-0 mt-2 w-48 bg-white rounded-[10px] shadow-lg z-50 border border-gray-200">
+    <div className="absolute right-0 mt-2 w-48 bg-[var(--general-alpha)] rounded-[10px] shadow-lg z-50">
       <Link
         to="/settings"
         onClick={() => setIsDropdownOpen(false)}
-        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700  hover:bg-gray-100 transition-colors"
+        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 rounded-t-[10px]  hover:bg-[var(--sublight)] transition-colors"
       >
         Profile
       </Link>
       <Link
         to="/faq"
         onClick={() => setIsDropdownOpen(false)}
-        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 rounded-t-[10px] hover:bg-gray-100 transition-colors"
+        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-[var(--sublight)] transition-colors"
       >
         Support & FAQ
       </Link>
       <Link
         to="/logout"
         onClick={() => setIsDropdownOpen(false)}
-        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 rounded-b-[10px] hover:bg-gray-100 transition-colors"
+        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 rounded-b-[10px] hover:bg-[var(--sublight)] transition-colors"
       >
         Logout
       </Link>
@@ -199,14 +199,14 @@ const Header = () => {
   return (
     <>
       {/* DESKTOP HEADER */}
-      <div className="hidden md:flex m-0 p-[40px] justify-between items-center sticky top-0 bg-[color-mix(in_srgb,var(--full-bg),transparent_10%)] backdrop-blur-sm mb-5 z-[1000]">
+      <div className="hidden md:flex m-0 p-[40px] justify-between items-center sticky top-0 bg-[var(--full-bg)] mb-5 z-[1000]">
         <div
           className={`logo transition-all duration-3000 ${
             isSearchOpen ? 'hidden md:block' : 'block'
           }`}
           onClick={() => navigate('/')}
         >
-          <img src="/clario.svg" alt="Clario logo" />
+          <img src="/clario.svg" className='w-[160px] h-[46px]' alt="Clario logo" />
         </div>
 
         <div className="flex items-center justify-between gap-[20px]">
@@ -246,7 +246,7 @@ const Header = () => {
           className="logo cursor-pointer"
           onClick={() => navigate('/')}
         >
-          <img src="/clario.svg" alt="Clario logo" className="w-[115.73px] h-[37px]" />
+          <img src="/clario.svg" alt="Clario logo" className="w-[100px] h-[37px]" />
         </div>
 
         <div className="flex items-center gap-[15px]">

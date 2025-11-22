@@ -66,7 +66,7 @@ export const Dashboard = () => {
   /** ---------------- DESKTOP DASHBOARD ---------------- **/
   return (
     <>
-      <div className="sticky top-37 z-99 bg-[color-mix(in_srgb,var(--full-bg),transparent_10%)] backdrop-blur-sm hidden sm:block">
+      <div className="sticky top-33 z-99 bg-[var(--full-bg)] backdrop-blur-sm hidden sm:block shadow-[0_10px_10px_-10px_rgba(0,0,0,0.1)]">
         <div className="w-full max-w-[1440px] mx-auto">
           <WelcomeBanner userName={appUser?.name || 'User'} />
         </div>
