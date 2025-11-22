@@ -23,12 +23,12 @@ interface SearchResult {
 const Header = () => {
   const navigate = useNavigate();
   const { data } = useAppSelector((state) => state.user);
-  
+
   // --- State ---
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  
+
   // ---- Dark Mode Logic
   const dispatch = useDispatch();
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -44,7 +44,7 @@ const Header = () => {
     queryKey: ['projects'],
     queryFn: () => fetchAllProjects(),
   });
-  
+
   const { data: clientsData } = useQuery({
     queryKey: ['clients'],
     queryFn: () => fetchAllClients(),
@@ -92,7 +92,7 @@ const Header = () => {
         setSearchValue('');
         setIsSearchOpen(false);
       }
-      // Dropdown Logic
+      // Dropdown Logic (Only affects Mobile now as Desktop has no dropdown)
       if (
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
@@ -206,16 +206,15 @@ const Header = () => {
           }`}
           onClick={() => navigate('/')}
         >
-          <img src="/clario.svg" alt="Clario logo" />
+          <img src="/clario.svg" alt="Clario logo" className="w-[160px]"/>
         </div>
 
         <div className="flex items-center justify-between gap-[20px]">
-          
-          {/* Toggle Switch - Container wrapper removed as the component handles it */}
+          {/* Toggle Switch */}
           <div className="hidden md:block">
             <ToggleSwitch
               checked={isDarkMode}
-              onChange={setIsDarkMode}
+              onChange={handleThemeToggle}
             />
           </div>
 
@@ -230,19 +229,13 @@ const Header = () => {
             </SearchBar>
           </div>
 
-          {/* Desktop User Dropdown */}
+          {/* Desktop User Picture */}
           <div
-            ref={dropdownRef}
             className={`relative transition-all duration-3000 ${
               isSearchOpen ? 'hidden md:block' : 'block'
             }`}
           >
-            <div
-              className={`absolute bg-[var(--primitive-colors-brand-primary-025)] border border-[var(--primitive-colors-gray-light-mode-200)] shadow-md backdrop-blur-sm p-[1rem] rounded-xl top-[.1rem] w-full ${searchValue ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'} transition-all duration-300 max-h-[200px] overflow-y-scroll`}
-            >
-              <UserPicture imgURL={data?.picture} />
-            </div>
-            {isDropdownOpen && dropdownMenu}
+            <UserPicture imgURL={data?.picture} />
           </div>
         </div>
       </div>
@@ -269,7 +262,7 @@ const Header = () => {
             </SearchBar>
           </div>
 
-          {/* Mobile User Menu */}
+          {/* Mobile User Menu (HAS DROPDOWN) */}
           <div ref={dropdownRef} className="relative">
             <div
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
