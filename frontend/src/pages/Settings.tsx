@@ -90,9 +90,9 @@ const Settings: React.FC = () => {
       <section>
         <h3 className="!text-[var(--page-title)] text-[clamp(1.75rem,calc(1.536rem+1.071vw),2.5rem)] mb-3">Profile</h3>
 
-        <div className='md:grid md:grid-cols-2 gap-4'>
+        <div className='grid md:grid-cols-2 gap-4'>
           {/* Name */}
-          <div className="flex flex-col gap-2 px-4 py-4 md:rounded-xl md:border md:border-[var(--sublight-2)]">
+          <div className="flex flex-col gap-2 px-4 py-4 rounded-xl border border-[var(--sublight-2)]">
             <div className="flex justify-between items-top text-base font-['Red_Hat_Display'] pt-2">
               <span className="text-[var(--primary-text)]">Name</span>
               <Button
@@ -126,7 +126,7 @@ const Settings: React.FC = () => {
           </div>
 
           {/* Email */}
-          <div className="flex flex-col gap-2 px-4 py-4 md:rounded-xl md:border md:border-[var(--sublight-2)]">
+          <div className="flex flex-col gap-2 px-4 py-4 rounded-xl border border-[var(--sublight-2)]">
             <div className="flex justify-between items-top text-base font-['Red_Hat_Display'] pt-2">
               <span className="text-[var(--primary-text)]">Email</span>
               <Button
@@ -160,7 +160,7 @@ const Settings: React.FC = () => {
           </div>
 
           {/* Address */}
-          <div className="flex flex-col gap-2 px-4 py-4 md:rounded-xl md:border md:border-[var(--sublight-2)]">
+          <div className="flex flex-col gap-2 px-4 py-4 rounded-xl border border-[var(--sublight-2)]">
             <div className="flex justify-between items-top pt-2">
               <span className="text-base text-[var(--tertiary-text)]">Address</span>
               <Button
@@ -194,7 +194,7 @@ const Settings: React.FC = () => {
           </div>
 
           {/* Password */}
-          <div className="flex flex-col gap-2 px-4 py-4 md:rounded-xl md:border md:border-[var(--sublight-2)]">
+          <div className="flex flex-col gap-2 px-4 py-4 rounded-xl border border-[var(--sublight-2)]">
             <div className="flex justify-between items-top pt-2">
               <span className="text-base text-[var(--tertiary-text)] font-normal">Password</span>
               <Button
@@ -232,9 +232,9 @@ const Settings: React.FC = () => {
       {/* Preferences */}
       <section>
         <h3 className="!text-[var(--tertiary-text)] text-[clamp(1.75rem,calc(1.536rem+1.071vw),2.5rem)] mb-3">Preferences</h3>
-        <div className="md:grid md:grid-cols-2  gap-4 divide-[var(--sublight-2)]">
+        <div className="grid md:grid-cols-2 gap-4 divide-[var(--sublight-2)]">
           {/* Language */}
-          <div className="flex flex-col gap-2 px-4 py-4 md:rounded-xl md:border md:border-[var(--sublight-2)]">
+          <div className="flex flex-col gap-2 px-4 py-4 rounded-xl border border-[var(--sublight-2)]">
             <div className="flex justify-between items-top pt-2">
               <span className="text-base text-[var(--tertiary-text)] font-normal">Language</span>
               <Button
@@ -268,7 +268,7 @@ const Settings: React.FC = () => {
           </div>
 
           {/* Mode */}
-          <div className="flex flex-col gap-2 px-4 py-4 md:rounded-xl md:border md:border-[var(--sublight-2)]">
+          <div className="flex flex-col gap-2 px-4 py-4 rounded-xl border border-[var(--sublight-2)]">
             <div className="flex justify-between items-top pt-2">
               <span className="text-base text-[var(--tertiary-text)]">Mode</span>
               <Button
