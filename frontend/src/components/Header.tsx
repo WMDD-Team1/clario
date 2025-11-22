@@ -101,7 +101,7 @@ const Header = () => {
         className={`logo transition-all duration-3000 ${
           isSearchOpen ? 'hidden md:block' : 'block'
         }`}
-        onClick={() => navigate('/')}
+        onClick={() => navigate('/dashboard')}
       >
         <img src="/clario.svg" alt="Clario logo" />
       </div>
@@ -115,42 +115,43 @@ const Header = () => {
             searchValue={searchValue}
             onChange={setSearchValue}
           >
-            {filteredResults.length != 0 && searchValue ? (
-              <>
-                {filteredResults.map((project, index) => (
-                  <Link
-                    onClick={() => {
-                      setSearchValue('');
-                      setIsSearchOpen(false);
-                    }}
-                    to={
-                      project.type === 'project'
-                        ? `/projects/${project.id}`
-                        : `/projects?clientId=${project.id}`
-                    }
-                    key={index}
-                    className="flex flex-row justify-between items-center mb-1 pb-0.5 cursor-pointer border-b-0 transition-all relative group"
-                  >
-                    {project.name}
-                    <p className='text-[.8rem]'>{project.type}</p>
-                    <span
-                      className="absolute bottom-0 left-0 w-0 h-[1px] bg-[var(--primitive-colors-brand-primary-400)] transition-all duration-300 ease-out group-hover:left-0 group-hover:w-full"
-                    />
-                  </Link>
-                ))}
-              </>
-            ) : (
-              <>{searchValue ? 'Not found' : ''}</>
-            )}
+            <div
+              className={`absolute bg-[var(--primitive-colors-brand-primary-025)] border border-[var(--primitive-colors-gray-light-mode-200)] shadow-md backdrop-blur-sm p-[1rem] rounded-xl top-[.1rem] w-full ${searchValue ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'} transition-all duration-300 max-h-[200px] overflow-y-scroll`}
+            >
+              {filteredResults.length != 0 && searchValue ? (
+                <>
+                  {filteredResults.map((project, index) => (
+                    <Link
+                      onClick={() => {
+                        setSearchValue('');
+                        setIsSearchOpen(false);
+                      }}
+                      to={
+                        project.type === 'project'
+                          ? `/projects/${project.id}`
+                          : `/projects?clientId=${project.id}`
+                      }
+                      key={index}
+                      className="flex flex-row justify-between items-center mb-1 pb-0.5 cursor-pointer border-b-0 transition-all relative group"
+                    >
+                      {project.name}
+                      <p className="text-[.8rem]">{project.type}</p>
+                      <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-[var(--primitive-colors-brand-primary-400)] transition-all duration-300 ease-out group-hover:left-0 group-hover:w-full" />
+                    </Link>
+                  ))}
+                </>
+              ) : (
+                <>{searchValue ? 'Not found' : ''}</>
+              )}
+            </div>
+          </SearchBar>
+          {/* </div> */}
+          <div
+            className={`transition-all duration-3000 ${isSearchOpen ? 'hidden md:block' : 'block'}`}
+          >
+            <UserPicture imgURL={data?.picture} />
           </div>
-        </SearchBar>
-        {/* </div> */}
-        <div
-          className={`transition-all duration-3000 ${isSearchOpen ? 'hidden md:block' : 'block'}`}
-        >
-          <UserPicture imgURL={data?.picture} />
         </div>
-      </div>
       </div>
     </div>
   );

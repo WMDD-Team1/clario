@@ -1,0 +1,1115 @@
+.landing {
+  font-family: 'Red Hat Display', sans-serif;
+  background-color: #f5f9ff;
+  overflow-x: hidden;
+
+  h1,
+  h2,
+  h3 {
+    font-family: 'Merriweather', serif;
+    font-weight: 700;
+  }
+
+  .header {
+    background-color: #0665ec;
+    padding: 20px 16px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    max-width: 1302px;
+    margin: 0 auto;
+  }
+
+  .logo-container {
+    padding: 0;
+    flex-shrink: 0;
+  }
+
+  .logo {
+    height: 40px;
+    width: auto;
+  }
+
+  .nav-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 20px;
+    flex: 1;
+  }
+
+  .desktop-nav {
+    display: none;
+    gap: 30px;
+    align-items: center;
+  }
+
+  .desktop-nav a {
+    color: #f5f9ff;
+    text-decoration: none;
+    font-size: 16px;
+    white-space: nowrap;
+    transition: opacity 0.3s ease;
+    font-weight: 500;
+  }
+
+  .desktop-nav a:hover {
+    opacity: 0.8;
+  }
+
+  .auth-buttons {
+    display: none;
+    gap: 15px;
+    align-items: center;
+  }
+
+  .btn {
+    padding: 12px 24px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-family: 'Red Hat Display', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .btn-login {
+    background-color: white;
+    color: #0665ec;
+  }
+
+  .btn-login:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-2px);
+  }
+
+  .btn-signup {
+    background-color: #023dca;
+    color: white;
+    padding: 12px 28px;
+  }
+
+  .btn-signup:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-2px);
+  }
+
+  .mobile-menu-toggle {
+    display: flex;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 8px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mobile-menu-toggle svg {
+    width: 24px;
+    height: 24px;
+    stroke: white;
+  }
+
+  .mobile-menu-toggle .close-icon {
+    display: none;
+  }
+
+  .mobile-menu-toggle.active .menu-icon {
+    display: none;
+  }
+
+  .mobile-menu-toggle.active .close-icon {
+    display: block;
+  }
+
+  .mobile-menu {
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px 16px;
+    background-color: #0665ec;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    animation: slideDown 0.3s ease;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .mobile-menu.active {
+    display: flex;
+  }
+
+  .mobile-menu a {
+    color: #f5f9ff;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 12px 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .mobile-menu a:hover {
+    opacity: 0.8;
+  }
+
+  .mobile-auth-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .mobile-auth-buttons .btn {
+    flex: 1;
+    padding: 12px 16px;
+  }
+
+  .hero-section {
+    position: relative;
+    width: 100%;
+    background-color: #f5f9ff;
+  }
+
+  .hero-container {
+    max-width: 1302px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+    padding: 60px 0 0;
+    gap: 20px;
+    min-height: 400px;
+  }
+
+  .hero-content {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .hero-title {
+    font-size: 28px;
+    color: #1a1a1a;
+    max-width: 100%;
+    line-height: 1.3;
+    font-weight: 700;
+  }
+
+  .hero-description {
+    font-size: 16px;
+    color: #667085;
+    max-width: 100%;
+    line-height: 1.6;
+  }
+
+  .hero-image-container {
+    width: 100%;
+    position: relative;
+  }
+
+  .hero-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .features-section {
+    background: linear-gradient(180deg, #0665ec 0%, #033986 100%);
+    width: 100%;
+    padding: 60px 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .features-container {
+    max-width: 1302px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 80px;
+  }
+
+  .features-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+    align-items: center;
+  }
+
+  .features-text {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    width: 100%;
+  }
+
+  .section-header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .section-title {
+    font-size: 28px;
+    color: #1a1a1a;
+    line-height: 1.3;
+  }
+
+  .section-title.white {
+    color: white;
+    font-size: 28px;
+  }
+
+  .section-title.blue {
+    color: #0665ec;
+  }
+
+  .section-subtitle {
+    font-size: 14px;
+    color: #667085;
+    font-weight: 600;
+  }
+
+  .section-subtitle.uppercase {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #0665ec;
+    font-weight: 700;
+  }
+
+  .section-subtitle.white {
+    color: #f5f9ff;
+  }
+
+  .section-description {
+    font-size: 16px;
+    color: #667085;
+    line-height: 1.6;
+  }
+
+  .section-description.white {
+    color: #f5f9ff;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .features-list {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .features-row {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .feature-card {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    align-items: center;
+    text-align: center;
+  }
+
+  .feature-icon {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .feature-icon img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .feature-title {
+    font-size: 18px;
+    color: white;
+    font-weight: 700;
+    font-family: 'Red Hat Display', sans-serif;
+  }
+
+  .feature-description {
+    font-size: 14px;
+    color: #e8ecf1;
+    line-height: 1.6;
+  }
+
+  .features-image-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .features-image {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    object-fit: contain;
+    border-radius: 12px;
+  }
+
+  .feature-highlight {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    align-items: center;
+    width: 100%;
+  }
+
+  .feature-highlight.reverse {
+    flex-direction: column;
+  }
+
+  .feature-highlight-image {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .feature-highlight-image img {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    object-fit: contain;
+    border-radius: 12px;
+  }
+
+  .feature-highlight-text {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    align-items: center;
+    text-align: center;
+  }
+
+  .mode-section {
+    width: 100%;
+    padding: 0;
+    background-color: #f5f9ff;
+    overflow: hidden;
+  }
+
+  .mode-container {
+    width: 100%;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mode-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    max-width: 100%;
+  }
+
+  .pricing-section {
+    min-height: 600px;
+    width: 100%;
+    padding: 60px 16px;
+    background-color: #f5f9ff;
+  }
+
+  .pricing-container {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    align-items: center;
+    max-width: 1302px;
+    margin: 0 auto;
+  }
+
+  .pricing-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    width: 100%;
+    align-items: stretch;
+  }
+
+  ul {
+    list-style-type: none;
+  }
+
+  .pricing-card {
+    list-style: none;
+    background-color: white;
+    border: 2px solid #e4e7ec;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: auto;
+    transition: all 0.3s ease;
+    overflow: hidden;
+  }
+
+  .pricing-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  }
+
+  .pricing-card.featured {
+    border-width: 3px;
+    transform: scale(1.02);
+  }
+
+  .pricing-card.featured:hover {
+    transform: scale(1.02) translateY(-5px);
+  }
+
+  .pricing-header {
+    padding: 40px 30px 20px;
+    text-align: center;
+    background: linear-gradient(135deg, rgba(6, 101, 236, 0.05) 0%, rgba(3, 57, 134, 0.05) 100%);
+  }
+
+  .pricing-price {
+    font-size: 36px;
+    font-family: 'Merriweather', serif;
+    font-weight: 700;
+    color: #0665ec;
+    margin-bottom: 8px;
+  }
+
+  .pricing-plan {
+    font-size: 20px;
+    color: #1a1a1a;
+    font-weight: 600;
+  }
+
+  .pricing-features {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1;
+  }
+
+  .pricing-features ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .pricing-features ul li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    color: #667085;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .pricing-feature {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .check-icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    color: #0665ec;
+    stroke: currentColor;
+    stroke-width: 2;
+  }
+
+  .pricing-feature p {
+    font-size: 14px;
+    color: #667085;
+    flex: 1;
+    line-height: 1.5;
+  }
+
+  .pricing-btn {
+    margin: 0 30px 30px;
+    background: linear-gradient(180deg, #0665ec 0%, #0555cc 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 24px;
+    font-family: 'Red Hat Display', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .pricing-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(6, 101, 236, 0.3);
+  }
+
+  .team-section {
+    min-height: 600px;
+    width: 100%;
+    padding: 5rem 16px;
+    background-color: #f5f9ff;
+  }
+
+  .team-container {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+    align-items: center;
+    max-width: 1302px;
+    margin: 0 auto;
+  }
+
+  .team-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    margin: 0 auto;
+    align-items: flex-start;
+    flex-flow: row-reverse wrap;
+  }
+
+  .team-member {
+    flex: 0 0 calc(50% - 14px);
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .team-photo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .team-role-container {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .contact-section {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: auto;
+    background-color: #02357c;
+  }
+
+  .contact-form-wrapper {
+    background: #02357c;
+    padding: 40px 16px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    min-height: auto;
+  }
+
+  .contact-form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    max-width: 500px;
+    width: 100%;
+    padding: 20px 0;
+    max-height: none;
+  }
+
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .form-group {
+    position: relative;
+    height: 56px;
+  }
+
+  .form-group:has(textarea) {
+    height: 140px;
+  }
+
+  .form-group label {
+    position: absolute;
+    top: -12px;
+    left: 16px;
+    background: #02357c 0%;
+    padding: 0 8px;
+    font-size: 13px;
+    color: #e8ecf1;
+    z-index: 1;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    height: 100%;
+    background-color: rgb(255 255 255 / 0%);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    padding: 16px 16px;
+    font-family: 'Red Hat Display', sans-serif;
+    font-size: 14px;
+    color: white;
+    outline: none;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus {
+    border-color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(255, 255, 255, 0.15);
+  }
+
+  .form-group textarea {
+    padding: 16px;
+    resize: none;
+    font-size: 14px;
+  }
+
+  .form-group input::placeholder,
+  .form-group textarea::placeholder {
+    color: rgba(232, 236, 241, 0.7);
+  }
+
+  .contact-submit-btn {
+    background: linear-gradient(180deg, #2284ff 0%, #0665ec 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 16px 24px;
+    font-family: 'Red Hat Display', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+  }
+
+  .contact-submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(34, 132, 255, 0.4);
+  }
+
+  .contact-brand-wrapper {
+    display: flex;
+    position: relative;
+    width: 100%;
+    min-height: 400px;
+    flex: 1;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    overflow: hidden;
+  }
+
+  .contact-brand-wrapper img,
+  .contact-brand-wrapper picture,
+  .brand-logo-large img,
+  .brand-logo-large svg {
+    max-width: none;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  .brand-logo-large .brand-logo-image {
+    display: none;
+  }
+
+  .brand-logo-large,
+  .contact-brand-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+  }
+  /* --- New Styles for Contact Overlay --- */
+  .brand-overlay-content {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    color: white;
+    padding: 40px 20px;
+    box-sizing: border-box;
+  }
+
+  .overlay-logo {
+    max-width: 60px;
+    height: auto;
+    margin-bottom: 0;
+  }
+
+  .overlay-top-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .overlay-text-top {
+    font-family: 'Merriweather', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 0;
+    line-height: 1.3;
+  }
+
+  .overlay-text-bottom {
+    font-family: 'Red Hat Display', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 400;
+    text-align: center;
+    margin: 0;
+  }
+  /* --- End of New Styles --- */
+
+  @media (min-width: 768px) {
+    .header {
+      padding: 20px 40px;
+    }
+
+    .desktop-nav {
+      display: flex;
+    }
+    .auth-buttons {
+      display: flex;
+    }
+    .mobile-menu-toggle {
+      display: none;
+    }
+    .mobile-menu.active {
+      display: none;
+    }
+
+    .hero-container {
+      padding: 60px 0 0;
+    }
+    .hero-title {
+      font-size: 40px;
+    }
+    .hero-description {
+      font-size: 18px;
+      max-width: 600px;
+    }
+
+    .features-section {
+      padding: 80px 40px;
+    }
+    .features-row {
+      flex-direction: row;
+    }
+    .feature-card {
+      width: calc(50% - 15px);
+    }
+
+    .pricing-cards {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+    }
+    .pricing-card {
+      width: calc(50% - 15px);
+      max-width: 380px;
+    }
+
+    .team-grid {
+      gap: 24px;
+    }
+    .team-member {
+      flex: 0 0 calc(33.333% - 16px);
+      max-width: 240px;
+    }
+
+    .contact-form-wrapper {
+      padding: 60px 40px;
+    }
+
+    .contact-form-container {
+      padding: 30px 16px;
+      max-height: 528px;
+    }
+
+    .overlay-logo {
+      max-width: 70px;
+    }
+    .overlay-text-top {
+      font-size: 1.3rem;
+    }
+    .overlay-text-bottom {
+      font-size: 0.85rem;
+    }
+  }
+
+  /* Desktop Styles (1024px and up) */
+  @media (min-width: 1024px) {
+    .header {
+      padding: 20px 100px;
+    }
+
+    .logo {
+      height: 50px;
+    }
+
+    .desktop-nav {
+      display: flex;
+    }
+
+    .mobile-menu-toggle {
+      display: none;
+    }
+
+    .mobile-auth-buttons {
+      display: none;
+    }
+
+    .auth-buttons {
+      display: flex;
+    }
+
+    .btn {
+      padding: 14px 32px;
+      font-size: 15px;
+    }
+
+    .nav-wrapper {
+      gap: 40px;
+    }
+
+    .hero-container {
+      gap: 60px;
+      padding: 0 48px;
+      min-height: 650px;
+    }
+
+    .hero-content {
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      max-width: 1400px;
+    }
+
+    .hero-title {
+      font-size: 48px;
+    }
+
+    .hero-description {
+      font-size: 20px;
+      max-width: 700px;
+    }
+
+    .hero-image-container {
+      width: 100vw;
+    }
+
+    .features-section {
+      padding: 100px 100px;
+    }
+
+    .features-grid {
+      flex-direction: row;
+      align-items: center;
+      gap: 80px;
+    }
+
+    .features-text {
+      width: 50%;
+    }
+
+    .features-row {
+      flex-direction: row;
+      gap: 40px;
+    }
+
+    .feature-card {
+      width: calc(50% - 20px);
+    }
+
+    .features-image-container {
+      width: 50%;
+      max-width: 500px;
+    }
+
+    .section-title {
+      font-size: 36px;
+    }
+
+    .section-title.white {
+      font-size: 40px;
+    }
+
+    .feature-highlight {
+      flex-direction: row;
+      gap: 100px;
+      align-items: center;
+      text-align: left;
+    }
+
+    .feature-highlight.reverse {
+      flex-direction: row-reverse;
+    }
+
+    .feature-highlight-text {
+      width: auto;
+      flex: 1;
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .feature-highlight-image {
+      width: auto;
+      flex: 1;
+    }
+
+    .feature-highlight-image img {
+      max-width: 100%;
+    }
+
+    .pricing-cards {
+      flex-direction: row;
+      flex-wrap: nowrap;
+      gap: 30px;
+    }
+
+    .pricing-card {
+      width: 100%;
+      max-width: none;
+      min-height: 450px;
+    }
+
+    .team-grid {
+      gap: 4rem 20px;
+    }
+    .team-member {
+      flex: 0 0 calc(25% - 21px);
+      max-width: 240px;
+    }
+
+    .team-photo {
+      width: 160px;
+      height: 160px;
+    }
+
+    .contact-section {
+      flex-direction: row;
+      min-height: 100vh;
+    }
+
+    .contact-form-wrapper {
+      width: 50%;
+      padding: 0;
+      min-height: 100vh;
+      align-items: center;
+    }
+
+    .contact-form-container {
+      padding: 60px 48px;
+    }
+
+    .contact-brand-wrapper {
+      min-height: 100vh;
+    }
+
+    .brand-logo-large .brand-logo-image {
+      display: block;
+      min-width: 100%;
+    }
+
+    .brand-overlay-content {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+    }
+
+    .overlay-logo {
+      max-width: 100px;
+    }
+    .overlay-text-top {
+      font-size: 2rem;
+    }
+    .overlay-text-bottom {
+      font-size: 1rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .desktop-nav {
+      gap: 40px;
+    }
+  }
+}

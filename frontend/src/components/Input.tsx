@@ -29,7 +29,7 @@ const Input: React.FC<InputProps> = ({
       {label && (
         <label
           htmlFor={id}
-          className={`absolute top-[-0.8rem] left-[1rem] bg-[var(--general-alpha)] px-[0.3rem] rounded-[1rem]`}
+          className={`absolute top-[-0.8rem] left-[1rem] px-[0.3rem] rounded-[1rem] ${color}`}
         >
           {label}
         </label>

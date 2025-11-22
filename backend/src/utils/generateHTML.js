@@ -4,14 +4,11 @@ import Handlebars from "handlebars";
 import puppeteer from "puppeteer";
 import { Resend } from "resend";
 import axios from "axios";
+import sgMail from "@sendgrid/mail";
+import { fileURLToPath } from "url";
 
-if (!process.env.RESEND_API_KEY) {
-	throw new Error("Missing RESEND_API_KEY in environment variables");
-}
-
-const resend = new Resend(process.env.RESEND_API_KEY);
-
-const __dirname = import.meta.dirname;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export const generateInvoicePDF = async (invoice) => {
 	const templatePATH = path.join(__dirname, "../assets/templates/invoice-template.html");
@@ -20,7 +17,11 @@ export const generateInvoicePDF = async (invoice) => {
 	const template = Handlebars.compile(templateHTML);
 	const html = template(invoice);
 
-	const browser = await puppeteer.launch({ headless: true });
+	const browser = await puppeteer.launch({
+		headless: true,
+		args: ["--no-sandbox", "--disable-setuid-sandbox"],
+	});
+
 	const page = await browser.newPage();
 	await page.setContent(html, { waitUntil: "networkidle0" });
 
@@ -49,7 +50,10 @@ export const generateContractPDF = async (data) => {
 	const template = Handlebars.compile(templateHTML);
 	const html = template(data);
 
-	const browser = await puppeteer.launch({ headless: true });
+	const browser = await puppeteer.launch({
+		headless: true,
+		args: ["--no-sandbox", "--disable-setuid-sandbox"],
+	});
 	const page = await browser.newPage();
 	await page.setContent(html, { waitUntil: "networkidle0" });
 
@@ -84,21 +88,33 @@ export const generateEmail = async ({ invoice, client, project, user }) => {
 		your_name: user.name,
 	});
 
-	const response = await axios.get(invoice.fileUrl, { responseType: "arraybuffer" });
-	const base64File = Buffer.from(response.data).toString("base64");
+	if (!invoice.fileUrl) {
+		throw new Error("Invoice PDF is not generated yet.");
+	}
 
-	await resend.emails.send({
-		from: "Clario Invoices <onboarding@resend.dev>",
+	const response = await axios.get(invoice.fileUrl, { responseType: "arraybuffer" });
+
+	const base64File = Buffer.from(response.data).toString("base64");
+	sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+	const msg = {
 		to: client.email,
+		from: process.env.SENDGRID_SENDER_EMAIL,
 		reply_to: user.email,
 		subject: `Invoice #${invoice.invoiceNumber} for ${project.name}`,
 		html,
 		attachments: [
 			{
-				filename: `invoice_${invoice.invoiceNumber}.pdf`,
 				content: base64File,
+				filename: `invoice_${invoice.invoiceNumber}.pdf`,
+				type: "application/pdf",
+				disposition: "attachment",
 			},
 		],
-	});
+	};
+	console.log("=====", msg);
+
+	await sgMail.send(msg);
+
 	return { success: true, to: client.email };
 };

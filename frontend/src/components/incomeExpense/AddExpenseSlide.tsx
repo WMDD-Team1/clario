@@ -144,6 +144,9 @@ export const AddExpenseSlide = ({
           <Input
             required
             label="Invoice No."
+            type='number'
+            min={0}
+            onKeyDown={(e) => ['e', 'E', '+', '-'].includes(e.key) && e.preventDefault()}
             id="expenseInvoice"
             color="bg-white"
             value={transaction.origin}
