@@ -44,20 +44,9 @@ const ProjectDrawer = ({
 
   const isUploadStep = !prefilledProject && mode === 'create';
 
-  // Close when clicking outside
-  //   useEffect(() => {
-  //     const handleClickOutside = (e: MouseEvent) => {
-  //       if (!divRef.current?.contains(e.target as Node)) {
-  //         onClose();
-  //       }
-  //     };
-  //     document.addEventListener('mousedown', handleClickOutside);
-  //     return () => document.removeEventListener('mousedown', handleClickOutside);
-  //   }, []);
-
   useEffect(() => {
-    setPrefilledProject(null);
-  }, [isOpen]);
+    setPrefilledProject(project ?? null);
+  }, [isOpen, project]);
   const queryClient = useQueryClient();
   const handleClientSuccess = () => {
     queryClient.invalidateQueries({ queryKey: ['clients'] });
