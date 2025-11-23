@@ -50,7 +50,18 @@ const MoneyFlowAreaChart: React.FC = () => {
         >
           <XAxis dataKey="month" />
           <YAxis width={40} /> 
-          <Tooltip />
+          <Tooltip 
+            contentStyle={{ 
+              backgroundColor: "var(--general-alpha)", 
+              borderColor: "var(--sublight)",
+              borderRadius: "10px",
+              boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)"
+            }}
+            labelStyle={{ color: "var(--primary-text)" }}
+            itemStyle={{
+                padding: 0
+            }}
+          />
           
           <Area
             type="monotone"

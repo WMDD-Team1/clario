@@ -16,7 +16,7 @@ const TabSwitcher: React.FC<TabSwitcherProps> = ({ tabs, activeTab, onChange }) 
           className={`px-10 py-4
             ${
               activeTab === tab
-                ? "bg-blue-200 text-gray-600"
+                ? "bg-[var(----brand-alpha)] text-gray-600"
                 : "bg-white text-gray-600 hover:bg-gray-100"
             }`}
         >

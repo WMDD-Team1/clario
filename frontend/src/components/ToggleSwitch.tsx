@@ -13,8 +13,8 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({ checked, onChange }) => {
         flex items-center gap-4 px-6 py-3 rounded-full border transition-colors duration-300
         ${
           checked
-            ? "bg-slate-900 border-slate-700 text-white" // Dark Mode Styles
-            : "bg-white border-gray-200 text-slate-600" // Light Mode Styles
+            ? "bg-[var(--general-alpha0)] border-[var(--sublight)] text-[var(--tertiary-text)]" // Dark Mode Styles
+            : " border-[var(--sublight)] bg-[var(--general-alpha0)] text-[var(--tertiary-text)]" // Light Mode Styles
         }
       `}
     >
@@ -22,7 +22,7 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({ checked, onChange }) => {
       <Sun
         size={20}
         className={`transition-colors duration-300 ${
-          !checked ? "text-blue-500" : "text-slate-500"
+          !checked ? "text-[var(--brand-alpha)]" : "text-[var(--brand-alpha)]"
         }`}
       />
 
@@ -36,17 +36,17 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({ checked, onChange }) => {
         />
         <div
           className={`
-            w-12 h-7 rounded-full peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 
+            w-12 h-7 rounded-full peer-focus:outline-none  
             transition-colors duration-300 ease-in-out
-            ${checked ? "bg-slate-600" : "bg-gray-200"}
+            ${checked ? "bg-[var(--sublight)]" : "bg-[var(--sublight)]"}
           `}
         >
           {/* The Knob */}
           <div
             className={`
-              absolute top-[4px] left-[4px] bg-blue-600 border border-gray-300 
+              absolute top-[4px] left-[4px] bg-[var(--primitive-colors-brand-primary-500-base)]  
               rounded-full h-5 w-5 transition-transform duration-300 ease-in-out shadow-sm
-              ${checked ? "translate-x-5 border-white" : "translate-x-0"}
+              ${checked ? "translate-x-5 " : "translate-x-0"}
             `}
           ></div>
         </div>

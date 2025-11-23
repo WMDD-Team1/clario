@@ -5,7 +5,7 @@ interface Props {
 
 const UserPicture = ({ imgURL, variant = 'desktop' }: Props) => {
   const sizeClasses = variant === 'mobile' 
-    ? 'w-[50px] h-[50px]' 
+    ? 'w-[40px] h-[40px]' 
     : 'w-[46px] h-[46px]';
 
   return (
