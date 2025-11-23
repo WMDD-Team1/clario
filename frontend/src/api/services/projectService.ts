@@ -68,10 +68,10 @@ export const toggleArchiveProject = async (id: string, isArchived: boolean): Pro
 
 export const fetchProjectsOverview = async (): Promise<OverviewItem[]> => {
     const overview: OverviewItem[] = [
-        { key: "totalBudget", title: "Total", value: "$0" },
-        { key: "activeBudget", title: "Active", value: "$0" },
-        { key: "inactiveProjects", title: "Inactive", value: "0" },
-        { key: "archivedProjects", title: "Archived", value: "0" },
+        { key: "totalBudget", title: "Total Projects", value: "$0" },
+        { key: "activeBudget", title: "Active Projects", value: "$0" },
+        { key: "inactiveProjects", title: "Draft Projects", value: "0" },
+        { key: "archivedProjects", title: "Archived Projects", value: "0" },
         { key: "totalClients", title: "Clients", value: "0" },
     ];
 

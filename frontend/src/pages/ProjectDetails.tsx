@@ -51,7 +51,7 @@ const ProjectDetails = () => {
             <div className='flex justify-start items-center gap-2 mb-7 sticky top-35 z-100 bg-[var(--background)]'>
                 <ChevronLeft size={30} onClick={(e) => navigate(-1)} className='cursor-pointer' />
                 <h2>{project.name}</h2>
-                <StatusPill status={project.isArchived ? "Archived" : project.isActive ? "Active" : "Inactive"} />
+                <StatusPill status={project.isArchived ? "Archived" : project.isActive ? "Active" : "Draft"} />
             </div>
             <div className='hidden md:flex gap-5'>
                 <ProjectBanner project={project} onEdit={() => setIsFormOpen(true)} />

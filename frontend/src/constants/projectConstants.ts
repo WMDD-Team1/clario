@@ -56,10 +56,6 @@ export const PROJECT_HEADERS = [
         value: "Client",
     },
     {
-        key: "status",
-        value: "Stage",
-    },
-    {
         key: "milestonesCount",
         value: "Milestones",
     },
