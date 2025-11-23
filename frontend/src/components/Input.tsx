@@ -35,12 +35,12 @@ const Input: React.FC<InputProps> = ({
         </label>
       )}
 
-      <div className={`flex justify-between rounded-[1rem] ${padding} bg-[var(--background)]`}>
+      <div className={`flex justify-between rounded-[1rem] ${padding} border-2 bg-[var(--background)] border-[var(--background-alternate)]`}>
         <input
           id={id}
           {...register}
           {...props}
-          className={`w-full p-[1rem] rounded-[1rem] border-2 bg-[var(--background)] text-[var(--secondary-text)] border-[var(--background-alternate)]`}
+          className={`w-full p-[1rem] rounded-[0.89rem] bg-[var(--background)] text-[var(--secondary-text)]`}
         />
         {endAdornment && (
           <div className="m-2 flex items-center text-[var(--primitive-colors-brand-primary-500-base)]">
