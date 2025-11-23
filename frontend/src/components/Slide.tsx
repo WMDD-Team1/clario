@@ -67,7 +67,7 @@ const Slide: React.FC<SlideProps> = ({
           </button>
         </div>
         <h3
-          className={`text-3xl font-semibold text-center bg-[var(--background-alternate)] p-[2rem] sticky top-0 z-10 sm:rounded-tl-[50px]`}
+          className={`text-3xl font-semibold text-center bg-[var(--background-alternate)] p-[2rem] sticky top-0 z-10 sm:rounded-tl-[50px] text-[var(--secondary-text)]`}
         >
           {title}
         </h3>
