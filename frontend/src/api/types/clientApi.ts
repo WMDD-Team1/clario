@@ -21,3 +21,43 @@ export interface ClientApiResponse {
   projectCount: number;
   invoiceCount: number;
 }
+
+interface Address {
+  street: string;
+  postalCode: string;
+  city: string;
+  country: string;
+}
+
+interface Project {
+  id: string;
+  name: string;
+}
+
+export interface Client {
+  id: string;
+  name: string;
+  type: 'Individual' | 'Company';
+  email: string;
+  phone: string;
+  address: Address;
+  notes: string;
+  isArchived: boolean;
+  projectCount: number;
+  invoiceCount: number;
+  projects: Project[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface Meta {
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+export interface ClientResponse {
+  data: Client[];
+  meta: Meta;
+}

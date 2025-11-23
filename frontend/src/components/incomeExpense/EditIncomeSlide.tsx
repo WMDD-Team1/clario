@@ -123,9 +123,7 @@ export const EditIncomeSlide = ({
           <Input
             required
             label="Invoice No."
-            type='number'
-            min={0}
-            onKeyDown={(e) => ['e', 'E', '+', '-'].includes(e.key) && e.preventDefault()}
+            type='text'
             id="incomeInvoice"
             color="bg-white"
             value={transaction.origin}

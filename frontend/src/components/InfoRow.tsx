@@ -1,23 +1,23 @@
-import React from "react";
+import React from 'react';
 
 const InfoRow = ({
   label,
   value,
   vertical = false,
   hideBorder = false,
-  children
+  children,
 }: {
   label: string;
   value?: string;
   vertical?: boolean;
   hideBorder?: boolean;
-  children?:React.ReactNode
+  children?: React.ReactNode;
 }) => (
   <div
-    className={`${vertical ? 'flex flex-col items-start gap-[1rem]' : 'flex justify-between items-center'} ${hideBorder ? '' : 'border-b-2'} py-3 border-[var(--primitive-colors-gray-light-mode-200)]`}
+    className={`${vertical ? 'flex flex-col items-start gap-[1rem]' : 'flex justify-between items-center'} ${hideBorder ? '' : 'border-b-2'} py-3 border-[var(--background-alternate)]`}
   >
-    <p className="text-[var(--primitive-colors-gray-light-mode-400)]">{label}</p>
-    <p>{value}</p>
+    <p className="text-[var(--sub-text)]">{label}</p>
+    <p className="text-[var(--secondary-text)]">{value}</p>
     {children}
   </div>
 );

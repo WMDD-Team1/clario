@@ -33,8 +33,8 @@ export const ExpenseFilterSlide = ({
     >
       <form className="flex flex-col gap-[2rem]">
         {/* Date Range */}
-        <div className="flex flex-col justify-between gap-[1.5rem] border-b-2 pb-[1rem] border-[var(--primitive-colors-gray-light-mode-200)]">
-          <p className="text-[1.2rem]">Date Range</p>
+        <div className="flex flex-col justify-between gap-[1.5rem] border-b-2 pb-[1rem] border-[var(--background-alternate)]">
+          <p className="text-[1.2rem] text-[var(--secondary-text)]">Date Range</p>
           <div className="flex flex-row gap-[1rem] justify-between items-center">
             <Input
               type="date"
@@ -58,9 +58,10 @@ export const ExpenseFilterSlide = ({
         </div>
 
         {/* Expense Type */}
-        <div className="flex flex-col justify-between gap-[1.5rem] border-b-2 pb-[1rem] border-[var(--primitive-colors-gray-light-mode-200)]">
-          <p className="text-[1.2rem]">Type of Expense</p>
-          <div className="flex flex-col gap-[1rem]">
+
+        {expenseTypes.length !== 0 && <div className="flex flex-col justify-between gap-[1.5rem] border-b-2 pb-[1rem] border-[var(--background-alternate)]">
+          <p className="text-[1.2rem] text-[var(--secondary-text)]">Type of Expense</p>
+          <div className="flex flex-col gap-[1rem] text-[var(--sub-text)]">
             {expenseTypes.map((type) => (
               <label key={type} className="flex flex-row gap-[1rem]">
                 <input
@@ -77,11 +78,11 @@ export const ExpenseFilterSlide = ({
               </label>
             ))}
           </div>
-        </div>
+        </div>}
 
         {/* Amount Range */}
         <div className="flex flex-col justify-between gap-[1.5rem]">
-          <p className="text-[1.2rem]">Amount Range</p>
+          <p className="text-[1.2rem] text-[var(--secondary-text)]">Amount Range</p>
           <div className="flex flex-row justify-between items-center gap-[1rem]">
             <Input
               type="number"

@@ -138,7 +138,7 @@ const Header = () => {
 
   const searchResultsContent = (
     <div
-      className={`absolute bg-[var(--primitive-colors-brand-primary-025)] border border-[var(--primitive-colors-gray-light-mode-200)] shadow-md backdrop-blur-sm p-[1rem] rounded-xl top-[.5rem] w-full ${
+      className={`absolute bg-[var(--background-toggle2)] text-gray-700 border border-[var(--sublight)] shadow-md backdrop-blur-sm p-[1rem] rounded-xl top-[.5rem] w-full ${
         searchValue ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'
       } transition-all duration-300 max-h-[200px] overflow-y-scroll`}
     >
