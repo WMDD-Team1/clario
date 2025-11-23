@@ -30,7 +30,7 @@ export const Dashboard = () => {
         ].map((stat, index, arr) => (
           <div
             key={index}
-            className={`flex flex-col justify-center items-center py-3 bg-[var(--general-alpha)] backdrop-blur-sm rounded-2xl hover:shadow-lg border border-gray-100 
+            className={`flex flex-col justify-center items-center py-3 bg-[var(--general-alpha)] backdrop-blur-sm rounded-2xl hover:shadow-lg border border-[var(--sublight-2)] 
         ${index === arr.length - 1 ? 'col-span-2 sm:col-span-1' : ''}`}
           >
             <p className="font-normal text-[var(--tertiary-text)] text-sm">{stat.label}</p>

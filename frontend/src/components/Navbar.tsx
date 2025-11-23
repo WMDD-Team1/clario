@@ -42,7 +42,7 @@ const Navbar = () => {
     <nav
       className="
         fixed bottom-[40px] right-[30px] left-[30px]
-        bg-[var(--general-alpha)] border-t border-[var(--primitive-colors-gray-light-mode-200)]
+        bg-[var(--general-alpha)] border border-[var(--sublight-2)]
         flex items-center justify-around
         py-[20px]
         md:hidden
