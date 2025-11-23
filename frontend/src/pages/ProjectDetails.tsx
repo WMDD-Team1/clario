@@ -19,7 +19,8 @@ const ProjectDetails = () => {
         label: "Milestones",
     });
     const [mobileView, setMobileView] = useState<string>("overview");
-    const [isFormOpen, setIsFormOpen] = useState(false)
+    const [isFormOpen, setIsFormOpen] = useState(false);
+    const [isClientOpen, setIsClientOpen] = useState(false);
     const navigate = useNavigate();
     const { data: project, isLoading, error } = useQuery({
         queryKey: ["projects", id],
@@ -55,7 +56,8 @@ const ProjectDetails = () => {
             </div>
             <div className='hidden md:flex gap-5'>
                 <ProjectBanner project={project} onEdit={() => setIsFormOpen(true)} />
-                <ProjectDrawer isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} mode="edit" project={project} />
+                <ProjectDrawer isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} mode="edit" project={project} isClientOpen={isClientOpen}
+            onClientClose={() => setIsClientOpen(false)} onOpenClientSlide={() => setIsClientOpen(true)}/>
                 <div className='overflow-x-auto overflow-y-hidden flex-1 min-w-0'>
                     <div className='sticky left-0'>
                         <ToggleButton options={views} option={view} onClick={setView} />

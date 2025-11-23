@@ -38,8 +38,8 @@ export const IncomeFilterSlide = ({
       onClose={onClose}
     >
       <form className="flex flex-col gap-[2rem]">
-        <div className="flex flex-col justify-between gap-[1.5rem] border-b-2 pb-[1rem] border-[var(--primitive-colors-gray-light-mode-200)]">
-          <p className="text-[1.2rem]">Date Range</p>
+        <div className="flex flex-col justify-between gap-[1.5rem] border-b-2 pb-[1rem] border-[var(--background-alternate)]">
+          <p className="text-[1.2rem] text-[var(--secondary-text)]">Date Range</p>
           <div className="flex flex-row gap-[1rem] justify-between items-center">
             <Input
               type="date"
@@ -62,10 +62,11 @@ export const IncomeFilterSlide = ({
           </div>
         </div>
 
-        <div className="flex flex-col justify-between gap-[1.5rem] border-b-2 pb-[1rem] border-[var(--primitive-colors-gray-light-mode-200)]">
-          <p className="text-[1.2rem]">Type of Income</p>
-          <div className="flex flex-col gap-[1rem]">
-            {incomeTypes.map((type,index) => (
+        {incomeTypes.length !== 0 && (
+          <div className="flex flex-col justify-between gap-[1.5rem] border-b-2 pb-[1rem] border-[var(--background-alternate)]">
+            <p className="text-[1.2rem] text-[var(--secondary-text)]">Type of Income</p>
+            <div className="flex flex-col gap-[1rem] text-[var(--sub-text)]">
+              {incomeTypes.map((type, index) => (
                 <label key={type} className="flex flex-row gap-[1rem]">
                   <input
                     type="checkbox"
@@ -79,36 +80,43 @@ export const IncomeFilterSlide = ({
                   ></input>
                   {type}
                 </label>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="flex flex-col justify-between gap-[1.5rem]">
-          <p className="text-[1.2rem]">Amount Range</p>
+          <p className="text-[1.2rem] text-[var(--secondary-text)]">Amount Range</p>
           <div className="flex flex-row justify-between items-center gap-[1rem]">
             <Input
               type="number"
               label="From"
               color="bg-white"
-              padding='pr-[3.5rem]'
+              padding="pr-[3.5rem]"
               min={0}
               value={filterConditions.amountStart || ''}
               onChange={(e) =>
-                setFilterConditions({ ...filterConditions, amountStart: Number(e.target.value)})
-              }>
-                <p className="absolute right-[1rem] top-4.5 text-[var(--primitive-colors-brand-primary-500-base)]">CAD</p>
+                setFilterConditions({ ...filterConditions, amountStart: Number(e.target.value) })
+              }
+            >
+              <p className="absolute right-[1rem] top-4.5 text-[var(--primitive-colors-brand-primary-500-base)]">
+                CAD
+              </p>
             </Input>
             <Input
               type="number"
               label="To"
               color="bg-white"
-              padding='pr-[3.5rem]'
+              padding="pr-[3.5rem]"
               min={0}
               value={filterConditions.amountEnd || ''}
               onChange={(e) =>
-                setFilterConditions({ ...filterConditions, amountEnd: Number(e.target.value)})
-              }>
-                <p className="absolute right-[1rem] top-4.5 text-[var(--primitive-colors-brand-primary-500-base)]">CAD</p>
+                setFilterConditions({ ...filterConditions, amountEnd: Number(e.target.value) })
+              }
+            >
+              <p className="absolute right-[1rem] top-4.5 text-[var(--primitive-colors-brand-primary-500-base)]">
+                CAD
+              </p>
             </Input>
           </div>
         </div>

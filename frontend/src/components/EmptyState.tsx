@@ -14,9 +14,9 @@ const EmptyState = ({
     onAction,
 }: Props) => {
     return (
-        <div className="flex flex-col items-center justify-center text-center p-10 border border-dashed border-blue-200 rounded-2xl bg-blue-50/30">
-            <p className="text-gray-700 text-base mb-2">{title}</p>
-            <p className="text-gray-500 text-sm mb-6">{description}</p>
+        <div className="flex flex-col items-center justify-center text-center p-10 border border-dashed border-blue-200 rounded-2xl bg-[var(--background-alternate)]/50">
+            <p className="text-[var(--tertiary-text)] text-base mb-2">{title}</p>
+            <p className="text-[var(--sub-text)] text-sm mb-6">{description}</p>
             <Button
                 buttonColor="regularButton"
                 onClick={onAction}

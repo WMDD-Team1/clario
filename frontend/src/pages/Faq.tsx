@@ -3,7 +3,7 @@ import { FaqUnit } from "@components/FAQ/FaqUnit";
 
 export const Faq = ()=>{
     return (<>
-    <h2>Support & FAQ</h2>
+    <h2 className="text-[var(--page-subtitle)]">Support & FAQ</h2>
     <div>
         {Object.keys(clarioFAQs).map((key)=><>
         <FaqUnit

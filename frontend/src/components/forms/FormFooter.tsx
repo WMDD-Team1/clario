@@ -20,7 +20,7 @@ export default function FormFooter({
     cancelLabel = "Close",
 }: FormFooterProps) {
     return (
-        <div className="flex justify-between gap-2 absolute bottom-0 right-0 left-0 p-[30px] bg-[var(--primitive-colors-brand-primary-75)] md:rounded-bl-[50px]">
+        <div className="flex justify-between gap-2 absolute bottom-0 right-0 left-0 p-[30px] bg-[var(--background-alternate)] md:rounded-bl-[50px]">
             <Button buttonColor="white" onClick={onCancel} width="45%" textColor="var(--secondary-text)">
                 <p>{cancelLabel}</p>
             </Button>
