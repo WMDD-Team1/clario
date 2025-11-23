@@ -52,7 +52,7 @@ export default function SearchBar({
         <input
           type="text"
           placeholder={placeholder}
-          className="bg-transparent flex-1 outline-none text-gray-700 placeholder-gray-400 text-sm"
+          className="bg-transparent flex-1 outline-none text-[var(--secondary-text)] placeholder-gray-400 text-sm"
           autoFocus={isSearchOpen}
           value={searchValue ?? ''}
           onChange={(event) => onChange(event.target.value)}

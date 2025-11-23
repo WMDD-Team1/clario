@@ -53,7 +53,7 @@ const FormDrawer = ({ title, isOpen, onClose, children, divRef }: FormDrawerProp
                     >
                         {/* Header */}
                         <div className="relative p-5 bg-[var(--background-alternate)] h-[120px] flex items-center justify-center md:rounded-tl-[50px]">
-                            <h3 className="font-semibold text-[var(--page-title)] text-[22px] md:text-[28px]">{title}</h3>
+                            <h3 className="font-semibold text-[var(--secondary-text)] text-[22px] md:text-[28px]">{title}</h3>
                         </div>
 
                         <div className="absolute w-12 h-12 top-24 cursor-pointer left-[30px] md:left-[-20px] rounded-[10px] bg-[var(--general-alpha)] flex items-center justify-center"
