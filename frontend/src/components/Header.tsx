@@ -23,7 +23,6 @@ interface SearchResult {
 const Header = () => {
   const navigate = useNavigate();
   const { data } = useAppSelector((state) => state.user);
-  console.log('=======', data);
 
   // --- State ---
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -205,7 +204,7 @@ const Header = () => {
           className={`logo transition-all duration-3000 ${
             isSearchOpen ? 'hidden md:block' : 'block'
           }`}
-          onClick={() => navigate('/')}
+          onClick={() => navigate('/dashboard')}
         >
           <img src="/clario.svg" className="w-[160px] h-[46px]" alt="Clario logo" />
         </div>
