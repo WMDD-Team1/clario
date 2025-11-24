@@ -44,3 +44,7 @@ app.use("/api/contact", contactRoutes);
 
 // Swagger
 setupSwagger(app);
+
+app.get("/*path", (req, res) => {
+	res.sendFile(path.join(__dirname, "..", "public", "index.html"));
+});
