@@ -17,6 +17,7 @@ import "./utils/triggerInvoice.js";
 import cookieParser from "cookie-parser";
 
 export const app = express();
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // middlewares
 app.use(morgan("dev"));
