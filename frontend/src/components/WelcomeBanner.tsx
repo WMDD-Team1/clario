@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-
 interface WelcomeBannerProps {
   userName: string;
 }
@@ -30,7 +29,6 @@ export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({ userName }) => {
           <>Hi {userName} Welcome Back,</>
         )}
       </h2>
-      {/* Added 'hidden md:block' to hide on mobile and show on desktop */}
       <p className="hidden md:block font-['Montserrat'] text-[var(--page-subtitle)] text-[1.25rem]">
         Here’s your business overview and latest insights.
       </p>
