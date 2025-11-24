@@ -831,7 +831,7 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
               onChange={(e) => setOneClient({ ...oneClient, notes: e.target.value })}
             />
 
-            <p className="font-bold text-center">Client's Address</p>
+            <p className="font-bold text-center text-[var(--secondary-text)]">Client's Address</p>
 
             <Input
               color="bg-[var(--general-alpha)]"

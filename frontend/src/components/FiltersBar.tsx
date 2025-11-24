@@ -84,11 +84,11 @@ const FiltersBar = ({
             className='fixed inset-0'
             onClick={()=>setIsMenuOpen(false)}
             ></div>
-            <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg z-20 rounded-[1rem] md:hidden block cursor-pointer overflow-hidden">
+            <div className="absolute right-0 mt-2 w-48 bg-[var(--background-toggle2)] shadow-lg z-20 rounded-[1rem] md:hidden block cursor-pointer overflow-hidden text-[var(--tertiary-text)]">
             {sortOptions.map((option) => (
               <div
                 key={option.id}
-                className={`cursor-pointer px-4 py-2 ${selectedOptionId == option.id ?'bg-blue-200' : 'hover:bg-blue-100'}`}
+                className={`cursor-pointer px-4 py-2 ${selectedOptionId == option.id ?'bg-[var(--background-alternate)]' : 'hover:bg-blue-100'}`}
                 onClick={() => {
                   onSortChange(option);
                   setIsMenuOpen(false);

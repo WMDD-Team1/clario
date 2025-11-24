@@ -36,7 +36,8 @@ const Header = () => {
   const [themeError, setThemeError] = useState<string | null>(null);
 
   // --- Refs ---
-  const searchContainerRef = useRef<HTMLDivElement>(null);
+  const searchContainerRefDesktop = useRef<HTMLDivElement>(null);
+  const searchContainerRefMobile = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // --- Data Fetching ---
@@ -85,18 +86,17 @@ const Header = () => {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       // Search Logic
-      if (
-        searchContainerRef.current &&
-        !searchContainerRef.current.contains(event.target as Node)
-      ) {
+      const clickedInsideDesktop = searchContainerRefDesktop.current?.contains(
+        event.target as Node,
+      );
+      const clickedInsideMobile = searchContainerRefMobile.current?.contains(event.target as Node);
+      if (!clickedInsideDesktop && !clickedInsideMobile) {
         setSearchValue('');
         setIsSearchOpen(false);
       }
+
       // Dropdown Logic (Only affects Mobile now as Desktop has no dropdown)
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsDropdownOpen(false);
       }
     };
@@ -138,7 +138,7 @@ const Header = () => {
 
   const searchResultsContent = (
     <div
-      className={`absolute bg-[var(--background-toggle2)] text-[var(--secondary-text)] border border-[var(--sublight)] shadow-md backdrop-blur-sm p-[1rem] rounded-xl top-[.5rem] w-full ${
+      className={`absolute bg-[var(--background-toggle2)] text-[var(--secondary-text)] border border-[var(--sublight)] shadow-md backdrop-blur-sm p-[1rem] rounded-xl top-0 w-full ${
         searchValue ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'
       } transition-all duration-300 max-h-[200px] overflow-y-scroll`}
     >
@@ -206,19 +206,16 @@ const Header = () => {
           }`}
           onClick={() => navigate('/')}
         >
-          <img src="/clario.svg" className='w-[160px] h-[46px]' alt="Clario logo" />
+          <img src="/clario.svg" className="w-[160px] h-[46px]" alt="Clario logo" />
         </div>
 
         <div className="flex items-center justify-between gap-[20px]">
           {/* Toggle Switch */}
           <div className="hidden md:block">
-            <ToggleSwitch
-              checked={isDarkMode}
-              onChange={handleThemeToggle}
-            />
+            <ToggleSwitch checked={isDarkMode} onChange={handleThemeToggle} />
           </div>
 
-          <div ref={searchContainerRef}>
+          <div ref={searchContainerRefDesktop}>
             <SearchBar
               isSearchOpen={isSearchOpen}
               onSearchOpen={setIsSearchOpen}
@@ -242,16 +239,13 @@ const Header = () => {
 
       {/* MOBILE HEADER */}
       <div className="flex md:hidden m-0 p-[20px] justify-between items-center sticky top-0 rounded-b-[40px] bg-[var(--general-alpha)] mb-5 z-[1000]">
-        <div
-          className="logo cursor-pointer"
-          onClick={() => navigate('/')}
-        >
+        <div className="logo cursor-pointer" onClick={() => navigate('/')}>
           <img src="/clario.svg" alt="Clario logo" className="w-[100px] h-[37px]" />
         </div>
 
         <div className="flex items-center gap-[15px]">
           {/* Mobile Search */}
-          <div ref={searchContainerRef}>
+          <div ref={searchContainerRefMobile}>
             <SearchBar
               isSearchOpen={isSearchOpen}
               onSearchOpen={setIsSearchOpen}
@@ -264,10 +258,7 @@ const Header = () => {
 
           {/* Mobile User Menu (HAS DROPDOWN) */}
           <div ref={dropdownRef} className="relative">
-            <div
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="cursor-pointer"
-            >
+            <div onClick={() => setIsDropdownOpen(!isDropdownOpen)} className="cursor-pointer">
               <UserPicture imgURL={data?.picture} variant="mobile" />
             </div>
             {isDropdownOpen && dropdownMenu}
