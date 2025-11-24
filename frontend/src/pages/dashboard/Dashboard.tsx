@@ -109,9 +109,9 @@ export const Dashboard = () => {
 
       {/* MOBILE VIEW */}
       <div className="block sm:hidden w-full max-w-[1440px] mx-auto">
-        <p className="text-[28px] mt-4">
+        <div className="text-[28px] mt-4">
           <WelcomeBanner userName={appUser?.name || 'User'} />
-        </p>
+        </div>
 
         {/* Toggle Buttons */}
         <div className="flex justify-center w-full mt-4 mb-6">
