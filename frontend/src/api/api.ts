@@ -1,11 +1,11 @@
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
-import { Auth0Client } from '@auth0/auth0-spa-js';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const api = axios.create({
   baseURL: API_BASE_URL,
+  withCredentials: true,
 });
 
 axiosRetry(api, {
@@ -20,18 +20,5 @@ axiosRetry(api, {
     );
   },
 });
-
-export const attachAuthInterceptor = (auth0Client: Auth0Client) => {
-  api.interceptors.request.use(async (config) => {
-    if (config.url === '/contact') {
-      delete config.headers.Authorization;
-      return config;
-    }
-
-    const token = await auth0Client.getTokenSilently();
-    config.headers.Authorization = `Bearer ${token}`;
-    return config;
-  });
-};
 
 export default api;

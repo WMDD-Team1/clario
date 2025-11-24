@@ -14,17 +14,19 @@ import { router as settingRoutes } from "./routes/settings/settingRoutes.js";
 import { router as contactRoutes } from "./routes/contact/contactRoutes.js";
 import { setupSwagger } from "./swagger.js";
 import "./utils/triggerInvoice.js";
+import cookieParser from "cookie-parser";
 
 export const app = express();
 
 // middlewares
 app.use(morgan("dev"));
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Enable CORS only if CORS_ENABLED=true
 if (process.env.CORS_ENABLED === "true") {
-	app.use(cors({ origin: "http://localhost:5173" })); // for frontend in dev
+	app.use(cors({ origin: ["http://localhost:5173"], credentials: true })); // for frontend in dev
 }
 
 app.use("/api/auth", authRoutes);

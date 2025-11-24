@@ -9,12 +9,21 @@ import Logout from '@pages/Logout';
 import Settings from '@pages/Settings';
 import ProjectDetails from '@pages/ProjectDetails';
 import Contract from '@pages/Contract';
+import SignUpForm from '@components/forms/Auth/SignupForm';
+import LoginForm from '@components/forms/Auth/LoginForm';
+import LoginPage from '@pages/Login';
+import OnBoarding from '@pages/OnBoarding';
 
 function App() {
   return (
     <Routes>
       {/* Public route */}
       <Route path="/" element={<Landing />} />
+      <Route element={<LoginPage />}>
+        <Route path="/signup" element={<SignUpForm />} />
+        <Route path="/login" element={<LoginForm />} />
+      </Route>
+      <Route path="/onboarding" element={<OnBoarding />} />
       <Route
         path="/logout"
         element={

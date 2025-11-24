@@ -1,14 +1,13 @@
-import { useAuth0 } from '@auth0/auth0-react';
-import { useState } from 'react';
+import { MouseEvent, useState } from 'react';
 import { sendContactMessage } from '@api/services/contactService';
 import './Landing.css';
+import { useNavigate } from 'react-router-dom';
 
 export const Landing = () => {
-  const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
-
+  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const handleSmoothScroll = (e, id) => {
+  const handleSmoothScroll = (e: MouseEvent<HTMLAnchorElement, MouseEvent>, id: string) => {
     e.preventDefault();
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth' });
@@ -64,19 +63,10 @@ export const Landing = () => {
             </nav>
 
             <div className="auth-buttons">
-              <button className="btn btn-login" onClick={() => loginWithRedirect()}>
+              <button className="btn btn-login" onClick={() => navigate('/login')}>
                 Login
               </button>
-              <button
-                className="btn btn-signup"
-                onClick={() =>
-                  loginWithRedirect({
-                    authorizationParams: {
-                      screen_hint: 'signup',
-                    },
-                  })
-                }
-              >
+              <button className="btn btn-signup" onClick={() => navigate('/signup')}>
                 Sign Up
               </button>
             </div>
@@ -117,19 +107,10 @@ export const Landing = () => {
           </a>
 
           <div className="mobile-auth-buttons">
-            <button className="btn btn-login" onClick={() => loginWithRedirect()}>
+            <button className="btn btn-login" onClick={() => navigate('/login')}>
               Login
             </button>
-            <button
-              className="btn btn-signup"
-              onClick={() =>
-                loginWithRedirect({
-                  authorizationParams: {
-                    screen_hint: 'signup',
-                  },
-                })
-              }
-            >
+            <button className="btn btn-signup" onClick={() => navigate('/signup')}>
               Sign Up
             </button>
           </div>
@@ -372,7 +353,7 @@ export const Landing = () => {
       <section className="team-section" id="team">
         <div className="team-container">
           <div className="section-header text-center">
-            <h2 className="section-title blue">Let's meet our Team</h2>
+            <h2 className="section-title blue">Let&apos;s meet our Team</h2>
             <p className="section-description">
               We design with purpose, build with passion, and deliver with pride.
             </p>

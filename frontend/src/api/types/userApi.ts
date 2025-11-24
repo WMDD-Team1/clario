@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react';
+
 export interface UserApiResponse {
   id: string;
   email: string;
@@ -28,4 +30,35 @@ export interface UserApiResponse {
   };
   createdAt: string;
   updatedAt: string;
+}
+
+export interface OnboardingForm {
+  userType?: string;
+  defaultFeeType?: string;
+  goal?: string;
+}
+
+export const roleOptions: string[] = [
+  'Freelancer',
+  'Contractor',
+  'Developer',
+  'Designer',
+  'Consultant',
+  'Other',
+];
+
+export const feeOptions: string[] = ['Fixed price', 'Milestone Based', 'Hourly', 'Retainer'];
+
+export const goalOptions: string[] = [
+  'Keep finances stable',
+  'Grow my business',
+  'Save time',
+  'Stay tax-ready',
+];
+
+export interface StepProps {
+  next?: () => void;
+  prev?: () => void;
+  formData: OnboardingForm;
+  setFormData: Dispatch<SetStateAction<OnboardingForm>>;
 }

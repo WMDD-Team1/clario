@@ -29,7 +29,7 @@ const Select: React.FC<SelectProps> = ({
       <div className="relative">
         {label && (
           <label
-            className={`absolute top-[-.8rem] left-[1rem] pl-[.3rem] pr-[.3rem] rounded-[1rem] bg-[var(--background)] text-[var(--primitive-colors-gray-light-mode-400)]`}
+            className={`absolute top-[-0.8rem] left-[1rem] px-[0.3rem] rounded-[1rem] text-[var(--sub-text)] bg-[var(--background)]`}
             htmlFor={id}
           >
             {label}

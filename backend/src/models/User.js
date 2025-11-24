@@ -53,13 +53,12 @@ const SettingsSchema = new mongoose.Schema(
 
 const UserSchema = new mongoose.Schema(
 	{
-		auth0Id: {
-			type: String,
-			require: true,
-			unique: true,
-		},
 		email: {
 			type: String,
+		},
+		password: {
+			type: String,
+			required: true,
 		},
 		name: {
 			type: String,
@@ -111,7 +110,7 @@ UserSchema.set("toJSON", {
 	transform: (_, ret) => {
 		ret.id = ret._id;
 		delete ret._id;
-		delete ret.auth0Id;
+		delete ret.password;
 	},
 });
 
