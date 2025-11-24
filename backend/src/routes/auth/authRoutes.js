@@ -9,3 +9,4 @@ router.post("/login", AuthController.login);
 router.get("/me", checkJWT, attachUser, AuthController.getUser);
 router.post("/onboarding", checkJWT, attachUser, AuthController.onboarding);
 router.post("/google", AuthController.googleLogin);
+router.post("/logout", AuthController.logout);

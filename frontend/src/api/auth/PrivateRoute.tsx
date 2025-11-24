@@ -1,19 +1,25 @@
-import { useAppSelector } from '@/store/hooks';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import Error from '@components/Error';
 import Header from '@components/Header';
 import Loading from '@components/Loading';
 import Navbar from '@components/Navbar';
 import Sidebar from '@components/Sidebar';
-import { ReactNode } from 'react';
+import { fetchUser } from '@store/userSlice';
+import { ReactNode, useEffect } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { Navigate } from 'react-router-dom';
 
 export const PrivateRoute = ({ children }: { children: ReactNode }) => {
-  const isDesktop = useMediaQuery({ minWidth: 768 });
-
+  const dispatch = useAppDispatch();
   const { data: user, loading, error } = useAppSelector((state) => state.user);
 
-  if (loading || user == null) return <Loading />;
+  useEffect(() => {
+    if (!user) dispatch(fetchUser());
+  }, []);
+
+  const isDesktop = useMediaQuery({ minWidth: 768 });
+
+  if (loading) return <Loading />;
 
   if (error) return <Error message={error} />;
 

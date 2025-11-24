@@ -105,3 +105,14 @@ export const googleLogin = async (req, res) => {
 		return res.status(401).json({ message: "Google authentication failed" });
 	}
 };
+
+export const logout = (req, res) => {
+	res.clearCookie("session_token", {
+		httpOnly: true,
+		secure: !req.hostname.includes("localhost"),
+		sameSite: "strict",
+		path: "/",
+	});
+
+	return res.status(200).json({ message: "Logged out successfully" });
+};
