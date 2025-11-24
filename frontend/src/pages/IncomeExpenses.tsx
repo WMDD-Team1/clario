@@ -841,7 +841,7 @@ export const IncomeExpenses = () => {
 
   return (
     <div>
-      <h2 className="mb-[1rem] text-[var(--page-subtitle)]">Money Flow</h2>
+      <h2 className="mb-[1rem] text-[var(--page-subtitle)] sm:sticky top-33 bg-[var(--full-bg)] backdrop-blur-sm z-100 py-2 sm:shadow-[0_10px_10px_-10px_rgba(0,0,0,0.1)]">Money Flow</h2>
       <div>
         <div className="md:hidden flex justify-center mb-[1rem]">
           <ToggleButton options={options} option={selectedOption} onClick={handleToggle} />
