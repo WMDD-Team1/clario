@@ -14,9 +14,11 @@ import Loader from '@components/Loader';
 import Success from '@components/Success';
 import { ClientUploadSuccess, ClientUpdateSuccess, ViewProject } from '@assets/icons';
 import { Link, useSearchParams } from 'react-router-dom';
+import { ClientResponse, Client } from '@api/index';
 
 const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string) => void }) => {
   const [searchParams, setSearchParams] = useSearchParams();
+
 
   useEffect(() => {
     const clientId = searchParams.get('clientId');
@@ -27,45 +29,45 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
       });
     }
   }, [searchParams]);
-  interface Project {
-    id: string;
-    name: string;
-  }
+  // interface Project {
+  //   id: string;
+  //   name: string;
+  // }
 
-  interface Address {
-    street: string;
-    postalCode: string;
-    city: string;
-    country: string;
-  }
+  // interface Address {
+  //   street: string;
+  //   postalCode: string;
+  //   city: string;
+  //   country: string;
+  // }
 
-  interface Client {
-    id: string;
-    name: string;
-    type: 'Individual' | 'Company';
-    email: string;
-    phone: string;
-    address: Address;
-    notes: string;
-    isArchived: boolean;
-    projectCount: number;
-    invoiceCount: number;
-    projects: Project[];
-    createdAt: string;
-    updatedAt: string;
-  }
+  // interface Client {
+  //   id: string;
+  //   name: string;
+  //   type: 'Individual' | 'Company';
+  //   email: string;
+  //   phone: string;
+  //   address: Address;
+  //   notes: string;
+  //   isArchived: boolean;
+  //   projectCount: number;
+  //   invoiceCount: number;
+  //   projects: Project[];
+  //   createdAt: string;
+  //   updatedAt: string;
+  // }
 
-  interface Meta {
-    total: number;
-    page: number;
-    limit: number;
-    totalPages: number;
-  }
+  // interface Meta {
+  //   total: number;
+  //   page: number;
+  //   limit: number;
+  //   totalPages: number;
+  // }
 
-  interface ClientResponse {
-    data: Client[];
-    meta: Meta;
-  }
+  // interface ClientResponse {
+  //   data: Client[];
+  //   meta: Meta;
+  // }
 
   interface Option {
     id: string;
@@ -465,7 +467,7 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
     actions: (
       <div className="relative hidden md:block">
         <DotsButton
-          className="h-[1rem] cursor-pointer w-[1.5rem]"
+          className="h-[1rem] cursor-pointer"
           onClick={(e) => {
             e.stopPropagation();
             setOpenDotsId(openDotsId === client.id ? null : client.id);
@@ -567,7 +569,6 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
               data={tableData}
               total={filteredClients.length}
               page={currentPage}
-              maxHeight="29vh"
               pageSize={CLIENTS_PER_PAGE}
               onPageChange={setCurrentPage}
             />
@@ -615,14 +616,6 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
             <Input
               color="bg-[var(--general-alpha)]"
               label="Phone"
-              type="text"
-              inputMode="numeric"
-              pattern="[0-9]*"
-              onKeyDown={(e) => {
-                if (!/[0-9]/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete') {
-                  e.preventDefault();
-                }
-              }}
               value={oneClient.phone}
               onChange={(e) => {
                 setOneClient({ ...oneClient, phone: e.target.value });
@@ -650,7 +643,7 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
               onChange={(e) => setOneClient({ ...oneClient, notes: e.target.value })}
             />
 
-            <p>Client's Address</p>
+            <p className='text-[var(--secondary-text)]'>Client's Address</p>
             <Input
               color="bg-[var(--general-alpha)]"
               label="Street Address"
@@ -735,10 +728,10 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
         <InfoRow label="City" value={oneClient.address?.city} />
         <InfoRow label="Country" value={oneClient.address?.country} />
 
-        <div className="flex flex-col items-start p-[1rem] border-[var(--primitive-colors-gray-light-mode-200)] border bg-[var(--primitive-colors-brand-primary-50)] rounded-[1rem] my-[1rem] gap-[1rem]">
-          <p className="font-bold">Projects</p>
+        <div className="flex flex-col items-start p-[1rem] border-[var(--background-alternate)] bg-[var(--background-alternate)] border rounded-[1rem] my-[1rem] gap-[1rem] text-[var(--sub-text)]">
+          <p className="font-bold text-[var(--secondary-text)]">Projects</p>
           {oneClient.projects?.length == 0 || !oneClient.projects ? (
-            <p className="text-[var(--primitive-colors-gray-light-mode-400)]">No projects added.</p>
+            <p>No projects added.</p>
           ) : (
             <>
               {oneClient.projects?.slice(0, 3).map((project) => (
@@ -809,14 +802,6 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
             <Input
               color="bg-[var(--general-alpha)]"
               label="Phone"
-              type="text"
-              inputMode="numeric"
-              pattern="[0-9]*"
-              onKeyDown={(e) => {
-                if (!/[0-9]/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete') {
-                  e.preventDefault();
-                }
-              }}
               value={oneClient.phone}
               onChange={(e) => {
                 setOneClient({ ...oneClient, phone: e.target.value });

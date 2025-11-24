@@ -25,17 +25,17 @@ const Overview = () => {
   }, []);
 
   const DUMMY_DATA = [
-    { label: 'Income', value: '$12,000' },
-    { label: 'Expense', value: '$8,000' },
-    { label: 'Completed', value: '10' },
-    { label: 'Recurring Income', value: '5' },
+    { label: 'YTD Income', value: '$12,000' },
+    { label: 'YTD Expense', value: '$8,000' },
+    { label: 'YTD Taxes', value: '10' },
+    { label: 'This Month Taxes', value: '5' },
     { label: 'Recurring Expense', value: '30' },
   ];
   const mapOverviewToStats = (data: OverviewResponse) => [
-    { label: 'Income', value: `$${data.income.toLocaleString()}` },
-    { label: 'Expense', value: `$${data.expense.toLocaleString()}` },
-    { label: 'Taxes', value: `$${data.taxes.toLocaleString()}` },
-    { label: 'Recurring Income', value: `$${data.recurringIncome.toLocaleString()}` },
+    { label: 'YTD Income', value: `$${data.income.toLocaleString()}` },
+    { label: 'YTD Expense', value: `$${data.expense.toLocaleString()}` },
+    { label: 'YTD Taxes', value: `$${data.taxes.toLocaleString()}` },
+    { label: 'This Month Taxes', value: `$${data.recurringIncome.toLocaleString()}` },
     { label: 'Recurring Expense', value: `$${data.recurringExpense.toLocaleString()}` },
   ];
   const isAllZero = (data: OverviewResponse | null) => {
@@ -55,7 +55,7 @@ const Overview = () => {
             key={idx}
             title={label}
             value={value}
-            className={`flex flex-col justify-center items-center h-[96px] p-4 rounded-2xl shadow-sm border border-[var(--sublight-2)] bg-[var(--general-alpha) transition-all duration-200 ${
+            className={`flex flex-col justify-center items-center h-[96px] p-4 rounded-2xl hover:shadow-md border border-[var(--sublight-2)] bg-[var(--general-alpha) transition-all duration-200 ${
               isLast && isOdd ? 'sm:col-span-2 md:col-span-2 lg:col-span-4 xl:col-span-1' : ''
             }`}
           />

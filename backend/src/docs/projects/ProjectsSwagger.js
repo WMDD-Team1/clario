@@ -440,29 +440,19 @@
  * /api/projects/overview:
  *   get:
  *     summary: Get project and client overview metrics
- *     description: >
- *       Returns aggregated counts of all user projects and clients.
- *       - **total**: total number of projects
- *       - **active**: projects where `isActive === true` and `isArchived === false`
- *       - **draft**: projects where `isActive === false` and `isArchived === false`
- *       - **archive**: projects where `isArchived === true`
- *       - **clients**: total number of clients
  *     tags: [Projects]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Overview metrics retrieved successfully
+ *         description: Summary of project and client stats
  *         content:
  *           application/json:
  *             example:
- *               total: 8
- *               active: 5
- *               draft: 2
- *               archive: 1
- *               clients: 4
- *       401:
- *         description: Unauthorized
- *       500:
- *         description: Internal Server Error
+ *               totalProjects: 8
+ *               activeProjects: 5
+ *               inactiveProjects: 2
+ *               archivedProjects: 1
+ *               totalClients: 4
+ *               activeBudget: 33000
  */

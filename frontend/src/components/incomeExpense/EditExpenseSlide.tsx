@@ -147,6 +147,7 @@ export const EditExpenseSlide = ({
           <Input
             required
             label="Invoice No."
+            type='text'
             id="expenseInvoice"
             color="bg-white"
             value={transaction.origin}
@@ -186,8 +187,8 @@ export const EditExpenseSlide = ({
           {/* Recurring Expense */}
           <div className="flex flex-col gap-[1rem]">
             <div className="flex justify-between items-center">
-              <p>Make this recurring expense</p>
-              <div className="flex items-center gap-2">
+              <p className='text-[var(--secondary-text)]'>Make this recurring expense</p>
+              <div className="flex items-center gap-2 text-[var(--secondary-text)]">
                 Off
                 <div
                   className="w-[45px] h-[20px] border-2 rounded-full flex items-center p-[2px] cursor-pointer border-[var(--primitive-colors-brand-primary-500-base)]"

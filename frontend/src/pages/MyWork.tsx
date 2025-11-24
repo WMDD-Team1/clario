@@ -61,7 +61,7 @@ const MyWork = () => {
         ) : null}
         <section className=" md:flex justify-between items-center hidden transition">
           <div className="header-left flex items-center gap-4">
-            <h2>My Work</h2>
+            <h2 className='text-[var(--page-subtitle)]'>My Work</h2>
             <ToggleButton options={MY_WORK_VIEWS} option={view} onClick={setView} />
           </div>
           <Button

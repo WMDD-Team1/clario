@@ -16,37 +16,21 @@ export const Dashboard = () => {
   const { data: appUser } = useAppSelector((state: RootState) => state.user);
   const [activeTab, setActiveTab] = useState<'reminders' | 'dashboard' | 'insights'>('dashboard');
 
-  const balanceData = [
-    { name: 'Expense', value: 2000, color: '#9CA3AF' },
-    { name: 'Balance', value: 3250, color: '#4B5563' },
-  ];
-
-  const flowData = [
-    { name: 'Jan', income: 4000, expense: 2400 },
-    { name: 'Feb', income: 3000, expense: 1398 },
-    { name: 'Mar', income: 2000, expense: 9800 },
-  ];
-
-  const expenses = [
-    { id: 1, category: 'Rent', amount: 1200 },
-    { id: 2, category: 'Groceries', amount: 300 },
-  ];
-
   /** ---------------- MOBILE DASHBOARD ---------------- **/
   const renderDashboard = () => (
     <div className="flex flex-col w-full gap-4">
       {/* Stats Section */}
       <div className="grid grid-cols-2 gap-4 sm:gap-4">
         {[
-          { label: 'Income', value: '$12,000' },
-          { label: 'Expense', value: '$8,000' },
-          { label: 'Completed', value: '10' },
+          { label: 'YTD Income', value: '$12,000' },
+          { label: 'YTD Expense', value: '$8,000' },
+          { label: 'YTD Taxes', value: '10' },
           { label: 'Active Projects', value: '5' },
           { label: 'Clients', value: '30' },
         ].map((stat, index, arr) => (
           <div
             key={index}
-            className={`flex flex-col justify-center items-center py-3 bg-white backdrop-blur-sm rounded-2xl hover:shadow-lg border border-gray-100 
+            className={`flex flex-col justify-center items-center py-3 bg-[var(--general-alpha)] backdrop-blur-sm rounded-2xl hover:shadow-lg border border-[var(--sublight-2)] 
         ${index === arr.length - 1 ? 'col-span-2 sm:col-span-1' : ''}`}
           >
             <p className="font-normal text-[var(--tertiary-text)] text-sm">{stat.label}</p>
@@ -82,12 +66,15 @@ export const Dashboard = () => {
   /** ---------------- DESKTOP DASHBOARD ---------------- **/
   return (
     <>
-      {/* DESKTOP VIEW */}
-      <div className="hidden sm:block">
-        <div className="flex flex-col w-full gap-4 overflow-hidden">
+      <div className="sticky top-33 z-99 bg-[var(--full-bg)] backdrop-blur-sm hidden sm:block shadow-[0_10px_10px_-10px_rgba(0,0,0,0.1)]">
+        <div className="w-full max-w-[1440px] mx-auto">
           <WelcomeBanner userName={appUser?.name || 'User'} />
+        </div>
+      </div>
 
-          <div className="flex flex-col xl:flex-row gap-4 w-full items-start">
+      <div className="hidden sm:block w-full max-w-[1440px] mx-auto">
+        <div className="flex flex-col w-full gap-4 overflow-hidden">
+          <div className="flex flex-col xl:flex-row gap-4 w-full items-start font-['Red_Hat_Display']">
             {/* LEFT SECTION */}
             <div className={`flex flex-col flex-1 gap-4 xl:min-w-0 lg:min-w-[100%] sm:min-w-[100%]`}>
               <Overview />
@@ -121,20 +108,20 @@ export const Dashboard = () => {
       </div>
 
       {/* MOBILE VIEW */}
-      <div className="block sm:hidden">
-        <p className="text-[28px] font-semibold font-merriweather mt-4 mb-2">
-          Hi {user?.name || 'User'}, Welcome Back
+      <div className="block sm:hidden w-full max-w-[1440px] mx-auto">
+        <p className="text-[28px] mt-4">
+          <WelcomeBanner userName={appUser?.name || 'User'} />
         </p>
 
         {/* Toggle Buttons */}
         <div className="flex justify-center w-full mt-4 mb-6">
-          <div className="flex bg-[var(--general-alpha)] text-[var(--background-focus)] rounded-xl p-1 w-full max-w-md justify-between">
+          <div className="flex bg-[var(--general-alpha)] text-[var(--background-focus)] broder broder-[var(--sublight-2)] h-[50px] hover:shadow-sm rounded-xl p-1 w-full max-w-full justify-between">
             {['insights', 'dashboard', 'reminders'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab as any)}
                 className={`flex-1 py-2 rounded-xl text-[var(--background-focus)] text-sm font-medium transition-all ${activeTab === tab
-                  ? 'bg-[var(--background-unfocused-toggle)] text-[var(--background-toggle2)] shadow-md'
+                  ? 'bg-[var(--background-toggle-active)] text-[var(--general-alpha)] h-[40px]'
                   : 'text-[var(--background-focus)]'
                   }`}
               >

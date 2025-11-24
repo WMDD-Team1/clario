@@ -85,7 +85,7 @@ export default function ProjectForm({
         upfrontAmount: 0,
       };
 
-  const clients = data?.data ?? [];
+  const clients = (data?.data ?? []).slice().sort((a,b)=>new Date(b.createdAt).getTime()-new Date(a.createdAt).getTime());
 
   // Filter clients based on search
   const filteredClients = clients.filter((client: any) =>
@@ -229,7 +229,7 @@ export default function ProjectForm({
             />
 
             <div
-              className={`absolute bg-[var(--primitive-colors-brand-primary-025)] border border-[var(--primitive-colors-gray-light-mode-200)] shadow-md backdrop-blur-sm p-[1rem] rounded-xl top-[4rem] w-full ${clientOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5 pointer-events-none'} transition-all duration-300 z-30 max-h-[300px] overflow-y-scroll`}
+              className={`absolute bg-[var(--background)] border border-[var(--background-alternate)] shadow-md backdrop-blur-sm p-[1rem] rounded-xl top-[4rem] w-full ${clientOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5 pointer-events-none'} transition-all duration-300 z-30 max-h-[300px] overflow-y-scroll`}
             >
               {filteredClients.length > 0 ? (
                 filteredClients.map((client: any) => (
@@ -240,7 +240,7 @@ export default function ProjectForm({
                       setClientOpen(false);
                     }}
                     key={client.id}
-                    className="flex flex-row justify-between items-center mb-1 pb-2 cursor-pointer px-2 py-1 rounded transition-all relative group"
+                    className="flex flex-row justify-between items-center mb-1 pb-2 cursor-pointer px-2 py-1 rounded transition-all relative group text-[var(--secondary-text)]"
                   >
                     {client.name}
                     <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-[var(--primitive-colors-brand-primary-400)] transition-all duration-300 ease-out group-hover:left-0 group-hover:w-full" />

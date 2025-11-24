@@ -23,14 +23,14 @@ export const FaqUnit = ({ title, data }: FaqUnitFormat) => {
       <h3 className="text-[var(--primitive-colors-brand-primary-500-base)] text-3xl mb-[.5rem] mt-[2rem] font-extralight">
         {title}
       </h3>
-      <div className="flex flex-row flex-wrap gap-[1rem]">
+      <div className="flex flex-row flex-wrap gap-[1rem] w-full">
         {data.map((question, index) => (
           <div
             key={question.question}
-            className="relative overflow-hidden md:basis-[45%] basis-[100%] cursor-pointer"
+            className="relative overflow-hidden md:basis-[calc(50%-0.5rem)] basis-[100%] cursor-pointer"
             onClick={() => toggleIndex(index)}
           >
-            <p className="p-[1rem] text-[var(--tertiary-text)] rounded-2xl border-2 border-[var(--primitive-colors-brand-primary-75)] text-left">
+            <p className="p-[1rem] text-[var(--sub-text)] rounded-2xl border-2 border-[var(--background-alternate)] text-left">
               {question.question}
             </p>
 
@@ -42,7 +42,7 @@ export const FaqUnit = ({ title, data }: FaqUnitFormat) => {
                 openIndex.includes(index) ? 'max-h-100 opacity-100' : 'max-h-0 opacity-0'
               }`}
             >
-              <p className="p-[1rem] text-[var(--tertiary-text)] rounded-2xl border-2 border-[var(--primitive-colors-brand-primary-75)] text-left mt-[.5rem] bg-[var(--primitive-colors-brand-primary-75)]">
+              <p className="p-[1rem] text-[var(--tertiary-text)] rounded-2xl border-2 border-[var(--background-alternate)] text-left mt-[.5rem] bg-[var(--background-alternate)]">
                 {question.answer}
               </p>
             </div>

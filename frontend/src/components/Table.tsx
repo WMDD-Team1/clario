@@ -10,7 +10,6 @@ interface RowData {
 interface Header {
     key: string;
     value: string;
-    mobileHidden?: boolean;
     render?: (row: RowData) => React.ReactNode;
 }
 
@@ -25,7 +24,6 @@ interface Props {
     data: RowData[];
     total: number;
     page: number;
-    maxHeight?: string;
     pageSize: number;
     onPageChange: (page: number) => void;
     onClickChildren?: (childId: string) => void;
@@ -39,7 +37,6 @@ const Table = ({
     actions = [],
     total,
     page,
-    maxHeight,
     pageSize,
     onPageChange,
     onClickChildren,
@@ -56,8 +53,8 @@ const Table = ({
             return value ? formatDate(value, { stringMonth: true }) : "-";
         }
 
-        if (lowerKey.includes("amount") || lowerKey.includes("price")) {
-            return value ? `$ ${formatCurrency(value)}` : "-";
+        if (lowerKey.includes("amount") || lowerKey.includes("price") || lowerKey.includes("budget")) {
+            return value ? `$ ${formatCurrency(value)}` : `$ ${formatCurrency(0)}`;
         }
 
         if (lowerKey.includes(".")) {
@@ -96,25 +93,23 @@ const Table = ({
     };
 
     return (
-        <div className={`w-full bg-white border border-gray-200 ${topRemoveRounded ? 'rounded-bl-2xl rounded-br-2xl' : 'rounded-2xl'} shadow-sm overflow-hidden`}>
+        <div className={`w-full bg-white border border-gray-200 ${topRemoveRounded?'rounded-bl-2xl rounded-br-2xl':'rounded-2xl'} shadow-sm overflow-hidden`}>
             {/* Table Section */}
-            <div className={`overflow-auto ${maxHeight ? `max-h-[${maxHeight}]` : ""}`}>
+            <div className="overflow-x-auto">
                 <table
                     role="table"
                     className="w-full min-w-max text-center border-collapse"
                 >
                     <thead
                         role="rowgroup"
-                        className="bg-[var(--primitive-colors-brand-primary-51)]
-                        text-[var(--primitive-colors-gray-light-mode-700)]
-                        text-sm sticky top-0 z-10"
+                        className="bg-[var(--primitive-colors-brand-primary-51)] text-[var(--primitive-colors-gray-light-mode-700)] text-sm"
                     >
                         <tr role="row">
                             {headers.map((header) => (
                                 <th
                                     key={header.key}
                                     scope="col"
-                                    className={`${header.mobileHidden ? "hidden md:table-cell" : ""} px-6 py-3 whitespace-nowrap`}
+                                    className="px-6 py-3 whitespace-nowrap"
                                 >
                                     {header.value}
                                 </th>
@@ -145,9 +140,9 @@ const Table = ({
                                             onClick={() =>
                                                 onClickChildren && !header.render && row.id && onClickChildren(row.id)
                                             }
-                                            className={`${header.mobileHidden ? "hidden md:table-cell" : ""} px-6 py-4 whitespace-nowrap text-sm text-gray-600 ${header.key.toLowerCase().includes("amount") ||
+                                            className={`px-6 py-4 whitespace-nowrap text-sm text-gray-600 ${header.key.toLowerCase().includes("amount") ||
                                                 header.key.toLowerCase().includes("price")
-                                                ? "text-left"
+                                                ? "text-center"
                                                 : ""
                                                 }`}
                                         >

@@ -62,8 +62,8 @@ export const IncomeExpenseViewSlide = ({
             <InfoRow label="Repeat" value={activeRepeatableTransaction?.frequency || 'None'} />
           )}
 
-          <div className="flex flex-col p-[1rem] border-[var(--primitive-colors-gray-light-mode-200)] bg-[var(--background-alternate)] rounded-[1rem] my-[1rem] border">
-            <p>Financial Breakdown</p>
+          <div className="flex flex-col p-[1rem] border-[var(--background-alternate)] bg-[var(--background-alternate)] rounded-[1rem] my-[1rem] border">
+            <p className='text-[var(--secondary-text)]'>Financial Breakdown</p>
             <InfoRow
               label="Base Amount"
               value={`$ ${String(oneTransaction.baseAmount.toLocaleString())}`}

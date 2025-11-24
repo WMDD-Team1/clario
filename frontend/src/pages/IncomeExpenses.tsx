@@ -841,7 +841,7 @@ export const IncomeExpenses = () => {
 
   return (
     <div>
-      <h2 className="mb-[1rem]">Money Flow</h2>
+      <h2 className="mb-[1rem] text-[var(--page-subtitle)]">Money Flow</h2>
       <div>
         <div className="md:hidden flex justify-center mb-[1rem]">
           <ToggleButton options={options} option={selectedOption} onClick={handleToggle} />
@@ -854,15 +854,15 @@ export const IncomeExpenses = () => {
               selectedOption.key === 'expense' ? 'hidden md:flex' : 'flex'
             }`}
           >
-            <div className="flex flex-row flex-wrap justify-between items-center p-[1rem] bg-[var(--general-alpha)] border-[var(--primitive-colors-gray-light-mode-200)] border rounded-tl-2xl rounded-tr-2xl">
-              <h3 className="text-2xl">Incomes</h3>
+            <div className="flex flex-row flex-wrap justify-between items-center p-[1rem] bg-[var(--general-alpha)] border-[var(--background-alternate)] border rounded-tl-2xl rounded-tr-2xl">
+              <h3 className="text-2xl text-[var(--page-subtitle)]">Incomes</h3>
               <div className="md:flex hidden flex-row flex-nowrap justify-end items-center gap-[1rem]">
                 <div
-                  className="p-[1rem] bg-[var(--background)] rounded-[1rem] flex flex-row justify-between items-center gap-[3rem] cursor-pointer"
+                  className="p-[1rem] bg-[var(--background)] rounded-[1rem] flex flex-row justify-between items-center gap-[3rem] cursor-pointer border border-[var(--background-alternate)]"
                   onClick={() => setIncomeFilterSlide('0px')}
                 >
                   <MenuScale />
-                  <p>Filter</p>
+                  <p className='text-[var(--primitive-colors-gray-light-mode-400)]'>Filter</p>
                 </div>
 
                 <Button
@@ -923,16 +923,16 @@ export const IncomeExpenses = () => {
               selectedOption.key === 'income' ? 'hidden md:flex' : 'flex'
             }`}
           >
-            <div className="flex flex-row flex-wrap justify-between items-center p-[1rem] bg-[var(--general-alpha)] border-[var(--primitive-colors-gray-light-mode-200)] border rounded-tl-2xl rounded-tr-2xl">
-              <h3 className="text-2xl">Expenses</h3>
+            <div className="flex flex-row flex-wrap justify-between items-center p-[1rem] bg-[var(--general-alpha)] border-[var(--background-alternate)] border rounded-tl-2xl rounded-tr-2xl">
+              <h3 className="text-2xl text-[var(--page-subtitle)]">Expenses</h3>
 
               <div className="md:flex hidden flex-row flex-nowrap justify-end items-center gap-[1rem]">
                 <div
-                  className="p-[1rem] bg-[var(--background)] rounded-[1rem] flex flex-row justify-between items-center gap-[3rem] cursor-pointer"
+                  className="p-[1rem] bg-[var(--background)] rounded-[1rem] flex flex-row justify-between items-center gap-[3rem] cursor-pointer border-[var(--background-alternate)] border"
                   onClick={() => setExpenseFilterSlide('0px')}
                 >
                   <MenuScale />
-                  <p>Filter</p>
+                  <p className='text-[var(--primitive-colors-gray-light-mode-400)]'>Filter</p>
                 </div>
 
                 <Button

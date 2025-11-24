@@ -33,7 +33,7 @@ export default function SearchBar({
       {/* Search icon (mobile) */}
       <button
         onClick={() => onSearchOpen(!isSearchOpen)}
-        className={`block  text-blue-500 ${needCollapse ? 'md:hidden' : 'hidden'}`}
+        className={`block  text-[var(--primitive-colors-brand-primary-500-base)] ${needCollapse ? 'md:hidden' : 'hidden'}`}
       >
         <Search size={22} />
       </button>
@@ -42,17 +42,17 @@ export default function SearchBar({
       <div
         className={`${
           !needCollapse
-            ? 'flex items-center bg-[#F8FBFF] border border-gray-200 rounded-[15px] px-4 py-2 relative'
+            ? 'flex items-center bg-[var(--background-toggle2)] border border-[var(--sublight)] rounded-[20px] w-[300px] h-[46px] relative'
             : isSearchOpen
-              ? 'flex absolute left-0 right-0 mx-6 bg-[#F8FBFF] border border-gray-200 rounded-[15px] px-4 py-2 items-center z-10 md:relative md:left-auto md:right-auto md:mx-0'
-              : 'hidden md:flex items-center bg-[#F8FBFF] border border-gray-200 rounded-[15px] px-4 py-2 relative'
+              ? 'flex absolute left-0 right-0 mx-6 bg-[var(--background-toggle2)] border border-[var(--sublight)] rounded-[15px] px-4 py-4 items-center z-10 md:relative md:left-auto md:right-auto md:mx-0'
+              : 'hidden md:flex items-center bg-[var(--background-toggle2)] border border-[var(--sublight)] rounded-[20px] px-4 py-4 relative'
         }`}
       >
         <Search className="text-blue-500 w-5 h-5 mr-3" strokeWidth={2} />
         <input
           type="text"
           placeholder={placeholder}
-          className="bg-transparent flex-1 outline-none text-gray-700 placeholder-gray-400 text-sm"
+          className="bg-transparent flex-1 outline-none text-[var(--secondary-text)] placeholder-gray-400 text-sm"
           autoFocus={isSearchOpen}
           value={searchValue ?? ''}
           onChange={(event) => onChange(event.target.value)}

@@ -47,7 +47,7 @@ export default function ProjectUploadStep({ onProjectDataReady, onCancel }: Proj
     return (
         <div className="flex flex-col justify-between h-full pb-150">
             <div className="flex flex-col items-center text-center">
-                <p className="mb-6">Choose how you want to start.</p>
+                <p className="mb-6 text-[var(--tertiary-text)]">Choose how you want to start.</p>
 
                 {/* Upload Box */}
                 <div
@@ -80,7 +80,7 @@ export default function ProjectUploadStep({ onProjectDataReady, onCancel }: Proj
                     onClick={() => onProjectDataReady(null, null)}
                     disabled={isUploading}
                     className={`h-[160px] mt-6 w-full max-w-sm border-2 border-dashed border-[var(--primitive-colors-brand-primary-95)] 
-                    rounded-2xl py-3 bg-[var(--background-alternate)] hover:opacity-80
+                    rounded-2xl py-3 bg-[var(--background-alternate)] text-[var(--tertiary-text)] hover:opacity-80
                     transition-colors ${isUploading ? "opacity-50 cursor-not-allowed" : ""}`}
                 >
                     {isUploading ? "Processing..." : "Create From Scratch"}
@@ -88,7 +88,7 @@ export default function ProjectUploadStep({ onProjectDataReady, onCancel }: Proj
             </div>
 
             {/* Cancel */}
-            <div className="flex justify-between gap-2 absolute bottom-0 right-0 left-0 p-[30px] bg-[var(--primitive-colors-brand-primary-75)] md:rounded-bl-[50px]">
+            <div className="flex justify-between gap-2 absolute bottom-0 right-0 left-0 p-[30px] bg-[var(--background-alternate)] md:rounded-bl-[50px]">
                 <Button
                     buttonColor="regularButton"
                     textColor="white"

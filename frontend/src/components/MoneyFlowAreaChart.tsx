@@ -29,11 +29,11 @@ const MoneyFlowAreaChart: React.FC = () => {
           }));
           setData(formatted);
         } else {
-          setData([]); // no dummy fallback
+          setData([]); 
         }
       } catch (err) {
         console.error("Failed to fetch money flow:", err);
-        setData([]); // no dummy fallback
+        setData([]); 
       }
     };
 
@@ -42,24 +42,41 @@ const MoneyFlowAreaChart: React.FC = () => {
 
   return (
     <div className="h-[320px] w-full p-5 rounded-[20px] bg-[var(--general-alpha)] hover:shadow-md shadow-sm">
-      <p className="text-lg mb-4 text-[var(--primary-text)]">Money Flow</p>
+      <p className="text-[1.125rem] mb-4 text-[var(--primary-text)]">Money Flow</p>
       <ResponsiveContainer width="100%" height={250}>
-        <AreaChart data={data}>
+        <AreaChart 
+            data={data}
+            margin={{ top: 10, right: 0, left: -20, bottom: 0 }} 
+        >
           <XAxis dataKey="month" />
-          <YAxis />
-          <Tooltip />
+          <YAxis width={40} /> 
+          <Tooltip 
+            contentStyle={{ 
+              backgroundColor: "var(--general-alpha)", 
+              borderColor: "var(--sublight)",
+              borderRadius: "10px",
+              boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)"
+            }}
+            labelStyle={{ color: "var(--primary-text)" }}
+            itemStyle={{
+                padding: 0
+            }}
+          />
+          
           <Area
             type="monotone"
             dataKey="income"
-            stroke="#17B26A"
-            fill="#C7D2FE"
+            // Wrapped in var()
+            stroke="var(--primitive-colors-success-500)"
+            fill="var(--primitive-colors-success-100)"
             fillOpacity={0.4}
           />
           <Area
             type="monotone"
             dataKey="expense"
-            stroke="#F04438"
-            fill="#FCA5A5"
+            // Wrapped in var()
+            stroke="var(--primitive-colors-error-500)"
+            fill="var(--primitive-colors-error-100)"
             fillOpacity={0.4}
           />
         </AreaChart>

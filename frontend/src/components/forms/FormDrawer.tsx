@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
-import { Ref } from "react";
+import { Ref, useEffect } from "react";
 
 interface FormDrawerProps {
     title: string;
@@ -11,6 +11,21 @@ interface FormDrawerProps {
 }
 
 const FormDrawer = ({ title, isOpen, onClose, children, divRef }: FormDrawerProps) => {
+    useEffect(() => {
+        if (!isOpen) return;
+
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "Escape") {
+                onClose();
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [isOpen, onClose]);
 
     return (
         <AnimatePresence>
@@ -37,12 +52,12 @@ const FormDrawer = ({ title, isOpen, onClose, children, divRef }: FormDrawerProp
                         className="fixed right-0 top-0 h-full w-full md:max-w-md bg-[var(--background)] shadow-xl z-1010 flex flex-col md:rounded-l-[50px]"
                     >
                         {/* Header */}
-                        <div className="relative p-5 bg-[var(--primitive-colors-brand-primary-75)] h-[120px] flex items-center justify-center md:rounded-tl-[50px]">
-                            <h3 className="font-semibold text-[var(--primitive-colors-gray-light-mode-950)] text-[22px] md:text-[28px]">{title}</h3>
+                        <div className="relative p-5 bg-[var(--background-alternate)] h-[120px] flex items-center justify-center md:rounded-tl-[50px]">
+                            <h3 className="font-semibold text-[var(--secondary-text)] text-[22px] md:text-[28px]">{title}</h3>
                         </div>
 
                         <div className="absolute w-12 h-12 top-24 cursor-pointer left-[30px] md:left-[-20px] rounded-[10px] bg-[var(--general-alpha)] flex items-center justify-center"
-                        onClick={onClose}
+                            onClick={onClose}
                         >
                             <button
                                 className="text-[var(--page-title)] hover:text-gray-700 transition-colors rounded-2xl cursor-pointer"

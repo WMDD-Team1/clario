@@ -43,8 +43,10 @@ const Insight = () => {
   if (loading) return <p>Loading insights...</p>;
 
   return (
-    <div className="flex flex-col gap-4 w-full h-full max-w-full">
-      <p className="hidden md:block text-2xl font-medium text-[var(--primary-text)] border-[var(--sub-text)]">Insights of Your Work</p>
+    <div className="flex flex-col gap-4 max-w-full">
+      <p className="hidden md:block text-[clamp(1.25rem,calc(1.102rem+0.417vw),1.75rem)] font-medium text-[var(--primary-text)] border-[var(--sub-text)]">
+  Insights of Your Work
+</p>
 
       {insights?.map((insight, idx) => (
         <InsightCard key={idx} title={insight.title} text={insight.text} month={insight.month} />

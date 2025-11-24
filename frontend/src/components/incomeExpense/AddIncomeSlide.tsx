@@ -120,6 +120,7 @@ export const AddIncomeSlide = ({
           <Input
             required
             label="Invoice No."
+            type='text'
             id="incomeInvoice"
             color="bg-white"
             value={transaction.origin}

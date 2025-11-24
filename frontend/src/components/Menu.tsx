@@ -15,7 +15,7 @@ interface Props {
 const Menu = ({ items }: Props) => {
 
     return (
-        <div className='flex flex-col items-center justify-between py-[30px] px-5 bg-white  rounded-[30px] shadow-[0_20px_50px_-30px_#afafaf75]'>
+        <div className='flex flex-col items-center justify-between py-[30px] px-5 bg-[var(--background-toggle2)]  rounded-[30px] shadow-[0_20px_50px_-30px_#afafaf75]'>
             <nav className='flex flex-col gap-10'>
                 {items.map(({ tooltip, route, activeIcon: ActiveIcon, inactiveIcon: InactiveIcon }) => (
                     <Tooltip key={route} title={tooltip} arrow placement="right" slotProps={{
