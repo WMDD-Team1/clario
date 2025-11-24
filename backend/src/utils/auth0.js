@@ -6,6 +6,7 @@ export const getManagementToken = async () => {
 		client_secret: process.env.AUTH0_CLIENT_SECRET,
 		audience: `https://${process.env.AUTH0_DOMAIN}/api/v2/`,
 		grant_type: "client_credentials",
+		scope: "create:users read:users update:users",
 	});
 
 	return res.data.access_token;

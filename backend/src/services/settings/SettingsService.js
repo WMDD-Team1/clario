@@ -1,34 +1,10 @@
-import axios from "axios";
 import User from "../../models/User.js";
-import { getManagementToken } from "../../utils/auth0.js";
 import Transaction from "../../models/Transaction.js";
 import { Parser } from "json2csv";
-
-export const updateAuth0Profile = async (auth0Id, updates) => {
-	const token = await getManagementToken();
-
-	const allowedFields = ["name", "email", "picture"];
-	const payload = {};
-
-	allowedFields.forEach((key) => {
-		if (updates[key]) payload[key] = updates[key];
-	});
-	if (Object.keys(payload).length === 0) return {};
-
-	await axios.patch(`https://${process.env.AUTH0_DOMAIN}/api/v2/users/${auth0Id}`, payload, {
-		headers: {
-			Authorization: `Bearer ${token}`,
-			"Content-Type": "application/json",
-		},
-	});
-
-	return payload;
-};
+import bcrypt from "bcrypt";
 
 export const updateUserProfile = async (user, updates) => {
 	if (!user) throw new Error("User not found");
-
-	await updateAuth0Profile(user.auth0Id, updates);
 
 	if (updates.name) user.name = updates.name;
 	if (updates.email) user.email = updates.email;
@@ -44,7 +20,6 @@ export const updateUserProfile = async (user, updates) => {
 	}
 
 	await user.save();
-
 	return user;
 };
 
@@ -53,7 +28,7 @@ export const updateUserPreferences = async (userId, updates) => {
 	if (!user) throw new Error("User not found");
 
 	if (updates.language) user.settings.general.language = updates.language;
-	if (updates.theme) user.settings.general.theme = updates.theme; // "light" | "dark"
+	if (updates.theme) user.settings.general.theme = updates.theme;
 
 	await user.save();
 	return user;
@@ -145,39 +120,22 @@ export const exportTransactionsCSV = async (userId) => {
 	return csv;
 };
 
-export const updateUserPasswordService = async (auth0Id, updates) => {
-	const token = await getManagementToken();
+export const updateUserPasswordService = async (email, updates) => {
+	const user = await User.findOne({ email });
+	if (!user) throw new Error("User not found");
 
-	const allowedFields = ["password"];
-	const payload = {};
+	const hashed = await bcrypt.hash(updates.password, 10);
+	user.password = hashed;
 
-	allowedFields.forEach((key) => {
-		if (updates[key]) payload[key] = updates[key];
-	});
-
-	await axios.patch(`https://${process.env.AUTH0_DOMAIN}/api/v2/users/${auth0Id}`, payload, {
-		headers: {
-			Authorization: `Bearer ${token}`,
-			"Content-Type": "application/json",
-		},
-	});
-	return payload;
+	await user.save();
+	return { success: true };
 };
 
 export const verifyPassword = async (email, currentPassword) => {
-	try {
-		await axios.post(`https://${process.env.AUTH0_DOMAIN}/oauth/token`, {
-			grant_type: "http://auth0.com/oauth/grant-type/password-realm",
-			realm: process.env.AUTH0_DB_CONNECTION,
-			username: email,
-			password: currentPassword,
-			client_id: process.env.AUTH0_SP_CLIENT_ID,
-			client_secret: process.env.AUTH0_SP_CLIENT_SECRET,
-			scope: "openid",
-		});
-		return true;
-	} catch (err) {
-		console.error("verifyPassword error:", err.response?.data || err.message);
-		return false;
-	}
+	const user = await User.findOne({ email });
+	if (!user) return false;
+
+	if (!user.password || user.password === "google_oauth") return false;
+
+	return bcrypt.compare(currentPassword, user.password);
 };

@@ -23,11 +23,7 @@ export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({ userName }) => {
   return (
     <div className="pb-1 mb-3">
       <h2 className="!font-['merriweather'] font-bold text-[clamp(1.75rem,calc(1.536rem+1.071vw),2.5rem)] text-[var(--primary-text)] leading-[40px]">
-        {isFirstTime ? (
-          <>Welcome, {userName}</>
-        ) : (
-          <>Hi {userName} Welcome Back,</>
-        )}
+        {isFirstTime ? <>Welcome, {userName}</> : <>Hi {userName} Welcome Back,</>}
       </h2>
       <p className="hidden md:block font-['Montserrat'] text-[var(--page-subtitle)] text-[1.25rem]">
         Here’s your business overview and latest insights.

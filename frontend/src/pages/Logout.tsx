@@ -1,21 +1,30 @@
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { logout as logoutSliceAction } from "@/store/userSlice";
-import { useAuth0 } from "@auth0/auth0-react";
-import Button from "@components/Button";
+import { useEffect } from 'react';
+import { useAppDispatch } from '@/store/hooks';
+import { logout as logoutSliceAction } from '@store/userSlice';
+import api from '@api/api';
+import { useNavigate } from 'react-router-dom';
 
-export const Logout = () => {
-    const { logout } = useAuth0();
-    const dispatch = useAppDispatch();
+const Logout = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
-    const handleLogout = () => {
-        dispatch(logoutSliceAction());
-        logout({ logoutParams: { returnTo: window.location.origin } })
-    }
-    return (
-        <>
-        {handleLogout()}
-        </>
-    )
-}
+  useEffect(() => {
+    const doLogout = async () => {
+      try {
+        await api.post('/auth/logout', {}, { withCredentials: true });
+      } catch (err) {
+        console.error('Logout error:', err);
+      }
 
-export default Logout
+      dispatch(logoutSliceAction());
+
+      navigate('/login');
+    };
+
+    doLogout();
+  }, []);
+
+  return null;
+};
+
+export default Logout;

@@ -1,8 +1,6 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '../components/Button';
 import Table from '@components/Table';
-import axios from 'axios';
-import { useAuth0 } from '@auth0/auth0-react';
 import ToggleButton from '@components/ToggleButton';
 import { IncomeExpenseViewSlide } from '@components/incomeExpense/IncomeExpenseViewSlide';
 import { IncomeUploadSlide } from '@components/incomeExpense/IncomeUploadSlide';
@@ -24,6 +22,7 @@ import { EditExpenseSlide } from '@components/incomeExpense/EditExpenseSlide';
 import { IncomeFilterSlide } from '@components/incomeExpense/IncomeFilter';
 import { ExpenseFilterSlide } from '@components/incomeExpense/ExpenseFilter';
 import { formatDate } from '@utils/formatDate';
+import api from '@api/api';
 
 export const IncomeExpenses = () => {
   const [incomeSlide, setIncomeSlide] = useState('110%');
@@ -168,26 +167,11 @@ export const IncomeExpenses = () => {
 
   const cancelOperation = () => reset();
 
-  const { getAccessTokenSilently } = useAuth0();
-
   // ------fetch all transactions-------------
 
   async function getTransactionData() {
     try {
-      const token = await getAccessTokenSilently({
-        authorizationParams: {
-          audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
-        },
-      });
-
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_BASE_URL}/transactions?limit=1000`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
+      const response = await api.get('/transactions?limit=1000');
 
       const transactionResponse = response.data;
 
@@ -249,20 +233,7 @@ export const IncomeExpenses = () => {
   //Fetch Categories-------
   const getCategories = async (transactionType: string) => {
     try {
-      const token = await getAccessTokenSilently({
-        authorizationParams: {
-          audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
-        },
-      });
-
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_BASE_URL}/settings/categories/${transactionType}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
+      const response = await api.get(`/settings/categories/${transactionType}`);
 
       const categoriesResponse = response.data;
       console.log('Categories response:', categoriesResponse);
@@ -297,20 +268,7 @@ export const IncomeExpenses = () => {
   //Fetch recurrences-------
   const getAllRecurrences = async () => {
     try {
-      const token = await getAccessTokenSilently({
-        authorizationParams: {
-          audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
-        },
-      });
-
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_BASE_URL}/recurrences?limit=1000`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
+      const response = await api.get(`/recurrences?limit=1000`);
 
       const recurrencesResponse = response.data;
       console.log('Categories response:', recurrencesResponse);
@@ -355,27 +313,13 @@ export const IncomeExpenses = () => {
     if (file) {
       // setLoader(true);
       // setSuccess(false);
-      const token = await getAccessTokenSilently({
-        authorizationParams: {
-          audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
-        },
-      });
 
       const formData = new FormData();
       formData.append('file', file);
 
       try {
         setLoader(true);
-        const scanResponse = await axios.post(
-          `${import.meta.env.VITE_API_BASE_URL}/transactions/scan`,
-          formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
+        const scanResponse = await api.post(`/transactions/scan`, formData);
 
         const scanInfo = scanResponse.data;
 
@@ -406,23 +350,9 @@ export const IncomeExpenses = () => {
     }
     setLoader(true);
     setSuccess(false);
-    const token = await getAccessTokenSilently({
-      authorizationParams: {
-        audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
-      },
-    });
 
     try {
-      const transactionResponse = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}/transactions`,
-        payload,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
+      const transactionResponse = await api.post(`/transactions`, payload);
 
       console.log(transactionResponse.data);
       if (repeat) {
@@ -435,16 +365,12 @@ export const IncomeExpenses = () => {
 
         console.log(payload);
         try {
-          const recurrenceResponse = await axios.post(
-            `${import.meta.env.VITE_API_BASE_URL}/recurrences`,
-            payload,
-            {
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-              },
+          const recurrenceResponse = await api.post(`/recurrences`, payload, {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
             },
-          );
+          });
         } catch (error) {
           console.error('Error saving recurrence:', error);
         }
@@ -470,11 +396,6 @@ export const IncomeExpenses = () => {
 
     setLoader(true);
     setUpdateSuccess(false);
-    const token = await getAccessTokenSilently({
-      authorizationParams: {
-        audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
-      },
-    });
 
     const payload = {
       // projectId: '670a12b4d9e4fa1234abcd99',
@@ -490,16 +411,7 @@ export const IncomeExpenses = () => {
     };
 
     try {
-      const updateResponse = await axios.patch(
-        `${import.meta.env.VITE_API_BASE_URL}/transactions/${oneTransaction.id}`,
-        payload,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
+      const updateResponse = await api.patch(`/transactions/${oneTransaction.id}`, payload);
 
       console.log(updateResponse.data);
       if (activeRepeatableTransaction) {
@@ -508,20 +420,14 @@ export const IncomeExpenses = () => {
             frequency: recurrence.frequency,
           };
           const archivePayLoad = { isArchived: false };
-          const recurrenceUrl = `${import.meta.env.VITE_API_BASE_URL}/recurrences/${activeRepeatableTransaction.id}`;
-          const archiveUrl = `${import.meta.env.VITE_API_BASE_URL}/recurrences/${activeRepeatableTransaction.id}/archive`;
-          await axios.patch(recurrenceUrl, payload, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          await axios.patch(archiveUrl, archivePayLoad, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
+          const recurrenceUrl = `/recurrences/${activeRepeatableTransaction.id}`;
+          const archiveUrl = `/recurrences/${activeRepeatableTransaction.id}/archive`;
+          await api.patch(recurrenceUrl, payload);
+          await api.patch(archiveUrl, archivePayLoad);
         } else {
           const payload = { isArchived: true };
-          const recurrenceUrl = `${import.meta.env.VITE_API_BASE_URL}/recurrences/${activeRepeatableTransaction.id}/archive`;
-          await axios.patch(recurrenceUrl, payload, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
+          const recurrenceUrl = `/recurrences/${activeRepeatableTransaction.id}/archive`;
+          await api.patch(recurrenceUrl, payload);
         }
       } else if (repeat) {
         const payload = {
@@ -529,9 +435,7 @@ export const IncomeExpenses = () => {
           frequency: recurrence.frequency,
           endDate: '2025-10-05',
         };
-        await axios.post(`${import.meta.env.VITE_API_BASE_URL}/recurrences`, payload, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        await api.post(`/recurrences`, payload);
       }
 
       await getAllRecurrences();
@@ -548,26 +452,12 @@ export const IncomeExpenses = () => {
   const deleteTransaction = async () => {
     setLoader(true);
     setDeleteSuccess(false);
-    const token = await getAccessTokenSilently({
-      authorizationParams: {
-        audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
-      },
-    });
 
     try {
-      const response = await axios.patch(
-        `${import.meta.env.VITE_API_BASE_URL}/transactions/${oneTransaction.id}/archive`,
-        {
-          isArchived: true,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
+      const response = await api.patch(`/transactions/${oneTransaction.id}/archive`, {
+        isArchived: true,
+      });
       const data = await response.data;
-      console.log(data);
       await getTransactionData();
       // setTransactionDetail('110%');
       setLoader(false);
@@ -793,24 +683,13 @@ export const IncomeExpenses = () => {
   //--------handle Income Details------
   const handleTransactionDetail = async (id: string) => {
     try {
-      const token = await getAccessTokenSilently({
-        authorizationParams: {
-          audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
-        },
-      });
-
-      const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/transactions/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await api.get(`/transactions/${id}`);
 
       setOneTransaction(response.data);
       setTransactionDetail('0px');
     } catch (error) {
       console.error(error);
     }
-    console.log(oneTransaction);
   };
 
   //-------handle file uploading------
@@ -841,7 +720,7 @@ export const IncomeExpenses = () => {
 
   return (
     <div>
-      <h2 className="mb-[1rem] text-[var(--page-subtitle)]">Money Flow</h2>
+      <h2 className="mb-[1rem] text-[var(--page-subtitle)] sm:sticky top-33 bg-[var(--full-bg)] backdrop-blur-sm z-100 py-2 sm:shadow-[0_10px_10px_-10px_rgba(0,0,0,0.1)]">Money Flow</h2>
       <div>
         <div className="md:hidden flex justify-center mb-[1rem]">
           <ToggleButton options={options} option={selectedOption} onClick={handleToggle} />
@@ -862,7 +741,7 @@ export const IncomeExpenses = () => {
                   onClick={() => setIncomeFilterSlide('0px')}
                 >
                   <MenuScale />
-                  <p className='text-[var(--primitive-colors-gray-light-mode-400)]'>Filter</p>
+                  <p className="text-[var(--primitive-colors-gray-light-mode-400)]">Filter</p>
                 </div>
 
                 <Button
@@ -932,7 +811,7 @@ export const IncomeExpenses = () => {
                   onClick={() => setExpenseFilterSlide('0px')}
                 >
                   <MenuScale />
-                  <p className='text-[var(--primitive-colors-gray-light-mode-400)]'>Filter</p>
+                  <p className="text-[var(--primitive-colors-gray-light-mode-400)]">Filter</p>
                 </div>
 
                 <Button

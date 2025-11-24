@@ -142,7 +142,6 @@ export const exportCSV = async (req, res) => {
 export const updatePassword = async (req, res) => {
 	try {
 		const { email } = req.user;
-		const { sub: auth0Id } = req.auth;
 		const { currentPassword, newPassword } = req.body;
 		console.log(email, currentPassword);
 
@@ -153,7 +152,7 @@ export const updatePassword = async (req, res) => {
 			});
 		}
 
-		await updateUserPasswordService(auth0Id, { password: newPassword });
+		await updateUserPasswordService(email, { password: newPassword });
 
 		res.status(200).json({
 			message: "Password updated successfully",

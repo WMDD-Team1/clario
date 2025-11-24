@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
 import { useAppSelector } from '@/store/hooks';
 import BalanceChart from '@/components/BalanceChart';
 import { ExpensesTable } from '@/components/ExpensesTable';
@@ -12,8 +11,7 @@ import Overview from './components/Overview';
 import Insight from './components/Insight';
 
 export const Dashboard = () => {
-  const { user } = useAuth0();
-  const { data: appUser } = useAppSelector((state: RootState) => state.user);
+  const { data: user } = useAppSelector((state: RootState) => state.user);
   const [activeTab, setActiveTab] = useState<'reminders' | 'dashboard' | 'insights'>('dashboard');
 
   /** ---------------- MOBILE DASHBOARD ---------------- **/
@@ -54,29 +52,33 @@ export const Dashboard = () => {
     </div>
   );
 
-  const renderReminders = () =>
+  const renderReminders = () => (
     <div className="flex flex-col gap-4 w-full max-w-md mx-auto px-0 md:px-4">
       <RemindersList />
     </div>
-  const renderInsights = () =>
+  );
+  const renderInsights = () => (
     <div className="flex flex-col gap-4 w-full max-w-md mx-auto px-0 md:px-4">
       <Insight />
     </div>
+  );
 
   /** ---------------- DESKTOP DASHBOARD ---------------- **/
   return (
     <>
       <div className="sticky top-33 z-99 bg-[var(--full-bg)] backdrop-blur-sm hidden sm:block shadow-[0_10px_10px_-10px_rgba(0,0,0,0.1)]">
-        <div className="w-full max-w-[1440px] mx-auto">
-          <WelcomeBanner userName={appUser?.name || 'User'} />
+        <div className="w-full  mx-auto">
+          <WelcomeBanner userName={user?.name || 'User'} />
         </div>
       </div>
 
-      <div className="hidden sm:block w-full max-w-[1440px] mx-auto">
+      <div className="hidden sm:block w-full  mx-auto">
         <div className="flex flex-col w-full gap-4 overflow-hidden">
           <div className="flex flex-col xl:flex-row gap-4 w-full items-start font-['Red_Hat_Display']">
             {/* LEFT SECTION */}
-            <div className={`flex flex-col flex-1 gap-4 xl:min-w-0 lg:min-w-[100%] sm:min-w-[100%]`}>
+            <div
+              className={`flex flex-col flex-1 gap-4 xl:min-w-0 lg:min-w-[100%] sm:min-w-[100%]`}
+            >
               <Overview />
 
               <div className="flex flex-col lg:flex-row gap-4 w-full items-stretch ">
@@ -110,7 +112,7 @@ export const Dashboard = () => {
       {/* MOBILE VIEW */}
       <div className="block sm:hidden w-full max-w-[1440px] mx-auto">
         <div className="text-[28px] mt-4">
-          <WelcomeBanner userName={appUser?.name || 'User'} />
+          <WelcomeBanner userName={user?.name || 'User'} />
         </div>
 
         {/* Toggle Buttons */}
@@ -120,10 +122,11 @@ export const Dashboard = () => {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab as any)}
-                className={`flex-1 py-2 rounded-xl text-[var(--background-focus)] text-sm font-medium transition-all ${activeTab === tab
-                  ? 'bg-[var(--background-toggle-active)] text-[var(--general-alpha)] h-[40px]'
-                  : 'text-[var(--background-focus)]'
-                  }`}
+                className={`flex-1 py-2 rounded-xl text-[var(--background-focus)] text-sm font-medium transition-all ${
+                  activeTab === tab
+                    ? 'bg-[var(--background-toggle-active)] text-[var(--general-alpha)] h-[40px]'
+                    : 'text-[var(--background-focus)]'
+                }`}
               >
                 {tab.charAt(0).toUpperCase() + tab.slice(1)}
               </button>

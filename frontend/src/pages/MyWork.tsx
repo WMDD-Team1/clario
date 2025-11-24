@@ -48,7 +48,7 @@ const MyWork = () => {
 
   return (
     <>
-      <div className="header mb-8">
+      <div className="header mb-8 sm:sticky top-33 bg-[var(--full-bg)] backdrop-blur-sm z-100 py-2 sm:shadow-[0_10px_10px_-10px_rgba(0,0,0,0.1)]">
         {view.key === 'projects' ? (
           <ProjectDrawer
             isClientOpen={isClientOpen}
@@ -59,7 +59,7 @@ const MyWork = () => {
             onOpenClientSlide={() => setIsClientOpen(true)}
           />
         ) : null}
-        <section className=" md:flex justify-between items-center hidden transition">
+        <section className="md:flex justify-between items-center hidden transition">
           <div className="header-left flex items-center gap-4">
             <h2 className='text-[var(--page-subtitle)]'>My Work</h2>
             <ToggleButton options={MY_WORK_VIEWS} option={view} onClick={setView} />
@@ -77,7 +77,7 @@ const MyWork = () => {
         </section>
         <section className="md:hidden transition">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-[28px] font-semibold text-black">My Work</h2>
+            <h2 className="text-[28px] font-semibold text-[var(--page-subtitle)]">My Work</h2>
             <Button
               buttonColor="regularButton"
               onClick={() => {

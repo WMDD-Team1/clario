@@ -1,4 +1,4 @@
-export { default as api, attachAuthInterceptor } from './api';
+export { default as api } from './api';
 
 // services
 export * from './services/userService';
