@@ -63,6 +63,11 @@ const Settings: React.FC = () => {
     taxRegime: user?.settings?.finance?.province || 'British Columbia',
   };
 
+  const truncateToWords = (text: string, limit: number) => {
+    const words = text.split(" ");
+    return words.length > limit ? words.slice(0, limit).join(" ") + "..." : text;
+  };
+
   const openDrawer = (title: string, content: React.ReactNode) => {
     setDrawerTitle(title);
     setDrawerContent(content);
@@ -402,7 +407,7 @@ const Settings: React.FC = () => {
         <section className="rounded-xl border border-[var(--sublight-2)] p-[16px]">
           {/* Mobile layout */}
           <div className="flex flex-col gap-3">
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-top">
               <h3 className="text-[var(--tertiary-text)] text-base">Tax Regime</h3>
               <Button
                 className="px-5 py-1"
