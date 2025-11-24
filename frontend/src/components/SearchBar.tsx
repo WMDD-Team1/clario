@@ -42,7 +42,7 @@ export default function SearchBar({
       <div
         className={`${
           !needCollapse
-            ? 'flex items-center bg-[var(--background-toggle2)] border border-[var(--sublight)] rounded-[20px] w-[300px] h-[46px] relative'
+            ? 'flex items-center bg-[var(--background-toggle2)] border border-[var(--sublight)] rounded-[20px] w-[300px] h-[46px] relative pl-4'
             : isSearchOpen
               ? 'flex absolute left-0 right-0 mx-6 bg-[var(--background-toggle2)] border border-[var(--sublight)] rounded-[15px] px-4 py-4 items-center z-10 md:relative md:left-auto md:right-auto md:mx-0'
               : 'hidden md:flex items-center bg-[var(--background-toggle2)] border border-[var(--sublight)] rounded-[20px] px-4 py-4 relative'
