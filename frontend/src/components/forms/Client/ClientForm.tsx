@@ -4,12 +4,12 @@ import { useState } from 'react';
 import Input from '@components/Input';
 import TextArea from '@components/TextArea';
 import { ClientUploadSuccess } from '@assets/icons';
-import { useAuth0 } from '@auth0/auth0-react';
 import FormFooter from '../FormFooter';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import axios from 'axios';
+import api from '@api/api';
 
 const clientSchema = z.object({
   name: z.string().min(1, 'Client name is required'),
@@ -34,7 +34,6 @@ interface Props {
 export const ClientForm = ({ onCancel, onSuccess }: Props) => {
   const [loader, setLoader] = useState(false);
   const [success, setSuccess] = useState(false);
-  const { getAccessTokenSilently } = useAuth0();
 
   const {
     control,
@@ -66,35 +65,20 @@ export const ClientForm = ({ onCancel, onSuccess }: Props) => {
     };
 
     try {
-      const token = await getAccessTokenSilently({
-        authorizationParams: {
-          audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
-        },
-      });
-
-      console.log('Token:', token);
-      console.log('Payload:', payload);
-
-      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/clients`, payload, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      console.log('Response:', response.data);
+      const response = await api.post('/clients', payload);
 
       setLoader(false);
       setSuccess(true);
 
       onSuccess?.();
-      setTimeout(()=>{onCancel()},500)
+      setTimeout(() => {
+        onCancel();
+      }, 500);
     } catch (error) {
       setLoader(false);
       console.error('Error saving client:', error);
     }
   };
-
 
   if (loader) {
     return (
@@ -104,7 +88,6 @@ export const ClientForm = ({ onCancel, onSuccess }: Props) => {
     );
   }
 
-
   if (success) {
     return (
       <Success title="Client Added successfully." p1="The details have been added to your records.">
@@ -112,7 +95,6 @@ export const ClientForm = ({ onCancel, onSuccess }: Props) => {
       </Success>
     );
   }
-
 
   return (
     <form className="flex flex-col gap-[1.5rem]">

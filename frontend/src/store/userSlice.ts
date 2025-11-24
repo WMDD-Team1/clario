@@ -1,33 +1,22 @@
-import { createUser, mapUser } from '@/api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { User } from '../models';
+import api from '@api/api';
 
 interface UserState {
-  data: User | null;
+  data: User | undefined | null;
   loading: boolean;
   error: string | null;
-  isAuthenticated: boolean;
 }
 
 const initialState: UserState = {
   data: null,
   loading: false,
   error: null,
-  isAuthenticated: false,
 };
 
-export const login = createAsyncThunk('user/login', async () => {
-  try {
-    const res = await createUser();
-    return mapUser(res);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (err: any) {
-    console.error('Error in login thunk:', err);
-    if (err.response && err.response.status === 404) {
-      throw new Error('404: User not found');
-    }
-    throw err;
-  }
+export const fetchUser = createAsyncThunk('user/fetchUser', async () => {
+  const res = await api.get('/auth/me');
+  return res.data;
 });
 
 const userSlice = createSlice({
@@ -35,9 +24,9 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     logout: (state) => {
-      state.data = null;
-      state.isAuthenticated = false;
+      state.data = undefined;
       state.error = null;
+      state.loading = false;
     },
     updateUser: (state, action) => {
       if (state.data) {
@@ -54,21 +43,19 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(login.pending, (state) => {
+      .addCase(fetchUser.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(login.fulfilled, (state, action) => {
+      .addCase(fetchUser.fulfilled, (state, action) => {
         state.data = action.payload;
         state.loading = false;
         state.error = null;
-        state.isAuthenticated = true;
       })
-      .addCase(login.rejected, (state, action) => {
-        state.data = null;
+      .addCase(fetchUser.rejected, (state, action) => {
+        state.data = undefined;
         state.loading = false;
-        state.error = action.error.message || 'Unknown error fetching the user';
-        state.isAuthenticated = false;
+        state.error = action.error?.message || null;
       });
   },
 });

@@ -1,16 +1,16 @@
-import dotenv from "dotenv";
-dotenv.config();
-import { expressjwt } from "express-jwt";
-import jwksRsa from "jwks-rsa";
+import jwt from "jsonwebtoken";
 
-export const checkJWT = expressjwt({
-	secret: jwksRsa.expressJwtSecret({
-		cache: true,
-		rateLimit: true,
-		jwksRequestsPerMinute: 5,
-		jwksUri: `https://${process.env.AUTH0_CLIENT_DOMAIN}/.well-known/jwks.json`,
-	}),
-	audience: process.env.AUTH0_AUDIENCE,
-	issuer: `https://${process.env.AUTH0_CLIENT_DOMAIN}/`,
-	algorithms: ["RS256"],
-});
+export const checkJWT = (req, res, next) => {
+	const token = req.cookies?.session_token;
+
+	if (!token) return res.status(401).json({ message: "No session token" });
+
+	try {
+		const decoded = jwt.verify(token, process.env.JWT_SECRET);
+		req.auth = decoded;
+		next();
+	} catch (err) {
+		console.error("JWT Error:", err.message);
+		return res.status(401).json({ message: "Invalid session token" });
+	}
+};

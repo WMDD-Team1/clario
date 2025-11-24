@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
 import Button from '@components/Button';
 import Input from '@components/Input';
-import { useAuth0 } from '@auth0/auth0-react';
 import TextArea from '@components/TextArea';
-import axios from 'axios';
 import InfoRow from '@components/InfoRow';
 import Slide from '@components/Slide';
 import FiltersBar from '@components/FiltersBar';
@@ -14,11 +12,10 @@ import Loader from '@components/Loader';
 import Success from '@components/Success';
 import { ClientUploadSuccess, ClientUpdateSuccess, ViewProject } from '@assets/icons';
 import { Link, useSearchParams } from 'react-router-dom';
-import { ClientResponse, Client } from '@api/index';
+import { ClientResponse, Client, api } from '@api/index';
 
 const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string) => void }) => {
   const [searchParams, setSearchParams] = useSearchParams();
-
 
   useEffect(() => {
     const clientId = searchParams.get('clientId');
@@ -157,8 +154,6 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
   const [loader, setLoader] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  const { getAccessTokenSilently } = useAuth0();
-
   const sortOptions: Option[] = [
     { id: 'newest', label: 'Names (Newest-Oldest)' },
     { id: 'invoices', label: 'Invoices (Fewest→Most)' },
@@ -172,19 +167,8 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
   }, [searchText, activeTab, selectedSort]);
 
   const fetchClients = async () => {
-    const token = await getAccessTokenSilently({
-      authorizationParams: {
-        audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
-      },
-    });
-
-    const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/clients?limit=1000`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await api.get(`/clients?limit=1000`, {});
     const data = await response.data;
-    console.log(data);
     setClients(data);
   };
 
@@ -209,17 +193,7 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
 
   const handleClientDetail = async (id: string) => {
     try {
-      const token = await getAccessTokenSilently({
-        authorizationParams: {
-          audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
-        },
-      });
-
-      const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/clients/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await api.get(`/clients/${id}`);
 
       setOneClient(response.data);
       setClientId(id);
@@ -230,23 +204,9 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
   };
 
   const deleteClient = async () => {
-    const token = await getAccessTokenSilently({
-      authorizationParams: {
-        audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
-      },
+    const response = await api.patch(`/clients/${oneClient.id}/archive`, {
+      isArchived: true,
     });
-
-    const response = await axios.patch(
-      `${import.meta.env.VITE_API_BASE_URL}/clients/${oneClient.id}/archive`,
-      {
-        isArchived: true,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
     const data = await response.data;
     console.log(data);
     await fetchClients();
@@ -254,23 +214,9 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
   };
 
   const unarchiveClient = async () => {
-    const token = await getAccessTokenSilently({
-      authorizationParams: {
-        audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
-      },
+    const response = await api.patch(`/clients/${clientId}`, {
+      isArchived: false,
     });
-
-    const response = await axios.patch(
-      `${import.meta.env.VITE_API_BASE_URL}/clients/${clientId}`,
-      {
-        isArchived: false,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
     const data = await response.data;
     console.log(data);
     await fetchClients();
@@ -284,11 +230,6 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
     }
     setLoader(true);
     setSuccess(false);
-    const token = await getAccessTokenSilently({
-      authorizationParams: {
-        audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
-      },
-    });
 
     const payload = {
       name: oneClient.name,
@@ -299,15 +240,7 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
       notes: oneClient.notes,
     };
 
-    const response = await axios.patch(
-      `${import.meta.env.VITE_API_BASE_URL}/clients/${oneClient.id}`,
-      payload,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
+    const response = await api.patch(`/clients/${oneClient.id}`, payload);
 
     setLoader(false);
     setSuccess(true);
@@ -358,23 +291,8 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
       notes: oneClient.notes,
     };
 
-    const token = await getAccessTokenSilently({
-      authorizationParams: {
-        audience: import.meta.env.VITE_AUTH0_AUDIENCE as string,
-      },
-    });
-
-    console.log(token);
-    console.log('--------');
-    console.log(payload);
-
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/clients`, payload, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await api.post(`/clients`, payload);
 
       console.log(response.data);
       setOneClient(response.data);
@@ -643,7 +561,7 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
               onChange={(e) => setOneClient({ ...oneClient, notes: e.target.value })}
             />
 
-            <p className='text-[var(--secondary-text)]'>Client's Address</p>
+            <p className="text-[var(--secondary-text)]">Client's Address</p>
             <Input
               color="bg-[var(--general-alpha)]"
               label="Street Address"
@@ -735,7 +653,7 @@ const Clients = ({ slide, setSlide }: { slide: string; setSlide: (value: string)
           ) : (
             <>
               {oneClient.projects?.slice(0, 3).map((project) => (
-                <div className="flex flex-row flex-nowrap justify-between w-full">
+                <div key={project.id} className="flex flex-row flex-nowrap justify-between w-full">
                   <p key={project.id}>{project.name}</p>
                   <Link to={`/projects/${project.id}`}>
                     <ViewProject />

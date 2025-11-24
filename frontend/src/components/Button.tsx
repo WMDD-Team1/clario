@@ -1,25 +1,31 @@
-import { ReactNode } from "react";
-import { colorOptions } from "./style/color";
+import { ReactNode } from 'react';
+import { colorOptions } from './style/color';
 
 interface ButtonProps {
-  buttonColor: 'white' |'lightButton' | 'darkButton' | 'regularButton' | 'deleteButton' | 'whiteButton';
+  buttonColor?:
+    | 'white'
+    | 'lightButton'
+    | 'darkButton'
+    | 'regularButton'
+    | 'deleteButton'
+    | 'whiteButton';
   children: ReactNode;
   onClick?: () => void;
-  type?: "button" | "submit" | "reset";
+  type?: 'button' | 'submit' | 'reset';
   className?: string;
   width?: string;
-  textColor?: string
+  textColor?: string;
   disabled?: boolean;
 }
 
 const Button = ({
   children,
   onClick,
-  type = "button",
+  type = 'button',
   buttonColor,
   width,
   textColor,
-  disabled=false
+  disabled = false,
 }: ButtonProps) => {
   return (
     <button
@@ -27,7 +33,7 @@ const Button = ({
       disabled={disabled}
       onClick={onClick}
       className={`p-[1rem] rounded-[1rem] ${colorOptions[buttonColor]} ${disabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-      style={{width:width, color:textColor}}
+      style={{ width: width, color: textColor }}
     >
       {children}
     </button>

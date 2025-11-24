@@ -23,6 +23,7 @@ interface SearchResult {
 const Header = () => {
   const navigate = useNavigate();
   const { data } = useAppSelector((state) => state.user);
+  console.log('=======', data);
 
   // --- State ---
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -232,7 +233,7 @@ const Header = () => {
               isSearchOpen ? 'hidden md:block' : 'block'
             }`}
           >
-            <UserPicture imgURL={data?.picture} />
+            <UserPicture imgURL={data?.picture} name={data?.name} />
           </div>
         </div>
       </div>
@@ -259,7 +260,7 @@ const Header = () => {
           {/* Mobile User Menu (HAS DROPDOWN) */}
           <div ref={dropdownRef} className="relative">
             <div onClick={() => setIsDropdownOpen(!isDropdownOpen)} className="cursor-pointer">
-              <UserPicture imgURL={data?.picture} variant="mobile" />
+              <UserPicture imgURL={data?.picture} variant="mobile" name={data?.name} />
             </div>
             {isDropdownOpen && dropdownMenu}
           </div>

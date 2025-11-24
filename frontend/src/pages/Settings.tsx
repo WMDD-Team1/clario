@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import Button from '@/components/Button';
 import ToggleButton from '@/components/ToggleButton';
-import { useAuth0 } from '@auth0/auth0-react';
 import SettingsDrawer from '../components/forms/SettingsDrawer';
 import ChangeName from '@components/forms/ChangeName';
 import ChangePassword from '@components/forms/ChangePassword';
@@ -14,13 +13,13 @@ import ChangeTaxRegime from '@components/forms/ChangeTaxRegime';
 import ChangeMode from '@components/forms/ChangeMode';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@store/index';
-import { SquarePen, Download  } from "lucide-react";
+import { SquarePen, Download } from 'lucide-react';
 import { exportUserTransactions } from '@api/services/settingService';
+import Loader from '@components/Loader';
 
 const Settings: React.FC = () => {
-  const { isAuthenticated, isLoading } = useAuth0();
   const dispatch = useDispatch();
-  const { data: user } = useSelector((state: RootState) => state.user);
+  const { data: user, loading } = useSelector((state: RootState) => state.user);
 
   const [isOpen, setIsOpen] = useState(false);
   const [drawerTitle, setDrawerTitle] = useState('');
@@ -87,9 +86,11 @@ const Settings: React.FC = () => {
     <div className="flex flex-col gap-8 mt-4 font-['Red_Hat_Display']">
       {/* Profile */}
       <section>
-        <h3 className="!text-[var(--page-title)] text-[clamp(1.75rem,calc(1.536rem+1.071vw),2.5rem)] mb-3">Profile</h3>
+        <h3 className="!text-[var(--page-title)] text-[clamp(1.75rem,calc(1.536rem+1.071vw),2.5rem)] mb-3">
+          Profile
+        </h3>
 
-        <div className='grid md:grid-cols-2 gap-4'>
+        <div className="grid md:grid-cols-2 gap-4">
           {/* Name */}
           <div className="flex flex-col gap-2 p-[16px] rounded-xl border border-[var(--sublight-2)]">
             <div className="flex justify-between items-top text-base font-['Red_Hat_Display'] pt-2">
@@ -105,7 +106,9 @@ const Settings: React.FC = () => {
                 <SquarePen size={20} strokeWidth={1.5} />
               </Button>
             </div>
-            <span className="text-base text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold mt-[-30px]">{profile.name}</span>
+            <span className="text-base text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold mt-[-30px]">
+              {profile.name}
+            </span>
             {/* <div className="hidden md:flex items-center justify-between gap-4">
               <span className="text-base text-[var(--tertiary-text)] !font-normal w-1/5">Name</span>
               <span className="text-lg text-[var(--tertiary-text)] !font-normal flex-1 whitespace-nowrap">
@@ -139,7 +142,9 @@ const Settings: React.FC = () => {
                 <SquarePen size={20} strokeWidth={1.5} />
               </Button>
             </div>
-            <span className="text-lg text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold mt-[-30px]">{profile.email}</span>
+            <span className="text-lg text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold mt-[-30px]">
+              {profile.email}
+            </span>
             {/* <div className="hidden md:flex items-center justify-between gap-4">
               <span className="text-base text-[var(--tertiary-text)] !font-normal w-1/5">Email</span>
               <span className="text-lg text-[var(--tertiary-text)] !font-normal flex-1 whitespace-nowrap">
@@ -173,7 +178,9 @@ const Settings: React.FC = () => {
                 <SquarePen size={20} strokeWidth={1.5} />
               </Button>
             </div>
-            <span className="text-lg text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold mt-[-30px] line-clamp-2 mt-1 block">{profile.address}</span>
+            <span className="text-lg text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold mt-[-30px] line-clamp-2 mt-1 block">
+              {profile.address}
+            </span>
             {/* <div className="hidden md:flex items-center justify-between gap-4">
               <span className="text-base text-[var(--tertiary-text)] font-normal w-1/5">Address</span>
               <span className="text-lg text-[var(--tertiary-text)] font-normal flex-1 whitespace-nowrap">
@@ -207,7 +214,9 @@ const Settings: React.FC = () => {
                 <SquarePen size={20} strokeWidth={1.5} />
               </Button>
             </div>
-            <span className="text-lg text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold mt-[-30px]">**********</span>
+            <span className="text-lg text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold mt-[-30px]">
+              **********
+            </span>
             {/* <div className="hidden md:flex items-center justify-between gap-4">
               <span className="text-base text-[var(--tertiary-text)] font-normal w-1/5">Password</span>
               <span className="text-lg text-[var(--tertiary-text)] font-normal flex-1 whitespace-nowrap">
@@ -230,7 +239,9 @@ const Settings: React.FC = () => {
 
       {/* Preferences */}
       <section>
-        <h3 className="!text-[var(--tertiary-text)] text-[clamp(1.75rem,calc(1.536rem+1.071vw),2.5rem)] mb-3">Preferences</h3>
+        <h3 className="!text-[var(--tertiary-text)] text-[clamp(1.75rem,calc(1.536rem+1.071vw),2.5rem)] mb-3">
+          Preferences
+        </h3>
         <div className="grid md:grid-cols-2 gap-4 divide-[var(--sublight-2)]">
           {/* Language */}
           <div className="flex flex-col gap-2 p-[16px] rounded-xl border border-[var(--sublight-2)]">
@@ -247,7 +258,9 @@ const Settings: React.FC = () => {
                 <SquarePen size={20} strokeWidth={1.5} />
               </Button>
             </div>
-            <span className="text-lg text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold mt-[-30px]">{preferences.language}</span>
+            <span className="text-lg text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold mt-[-30px]">
+              {preferences.language}
+            </span>
             {/* <div className="hidden md:flex items-center justify-between gap-4">
               <span className="text-base text-[var(--tertiary-text)] w-1/5">Language</span>
               <span className="text-lg text-[var(--tertiary-text)] flex-1 whitespace-nowrap">
@@ -274,12 +287,16 @@ const Settings: React.FC = () => {
                 className="px-5 py-1"
                 buttonColor="regularButton"
                 textColor="var(--general-alpha)"
-                onClick={() => openDrawer('Change Mode', <ChangeMode onClose={() => setIsOpen(false)} />)}
+                onClick={() =>
+                  openDrawer('Change Mode', <ChangeMode onClose={() => setIsOpen(false)} />)
+                }
               >
                 <SquarePen size={20} strokeWidth={1.5} />
               </Button>
             </div>
-            <span className="text-lg text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold mt-[-30px]">{preferences.mode}</span>
+            <span className="text-lg text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold mt-[-30px]">
+              {preferences.mode}
+            </span>
             {/* <div className="hidden md:flex items-center justify-between gap-4">
               <span className="text-base text-[var(--tertiary-text)] w-1/5">Mode</span>
               <span className="text-lg text-[var(--tertiary-text)] flex-1 whitespace-nowrap">
@@ -314,30 +331,25 @@ const Settings: React.FC = () => {
           {/* Mobile layout */}
           <div className="flex flex-col gap-3">
             <div className="flex justify-between items-center">
-              <h3 className="text-[var(--tertiary-text)] text-base">
-                Expenses Categories
-              </h3>
-                <Button
-                  className="rounded-xl px-5 py-1"
-                  buttonColor="regularButton"
-                  textColor="var(--general-alpha)"
-                  onClick={() =>
-                    openDrawer(
-                      'Expenses Categories',
-                      <ExpensesCategories
-                        expenseCategories={finance.expenseCategories}
-                        onClose={() => setIsOpen(false)}
-                      />,
-                    )
-                  }
-                >
-                  <SquarePen size={20} strokeWidth={1.5} />
-                </Button>
+              <h3 className="text-[var(--tertiary-text)] text-base">Expenses Categories</h3>
+              <Button
+                className="rounded-xl px-5 py-1"
+                buttonColor="regularButton"
+                textColor="var(--general-alpha)"
+                onClick={() =>
+                  openDrawer(
+                    'Expenses Categories',
+                    <ExpensesCategories
+                      expenseCategories={finance.expenseCategories}
+                      onClose={() => setIsOpen(false)}
+                    />,
+                  )
+                }
+              >
+                <SquarePen size={20} strokeWidth={1.5} />
+              </Button>
             </div>
-            <div
-              className="flex flex-wrap gap-2 overflow-x-auto pb-1"
-              style={hideScrollbar}
-            >
+            <div className="flex flex-wrap gap-2 overflow-x-auto pb-1" style={hideScrollbar}>
               {finance.expenseCategories.map((cat) => (
                 <span
                   key={cat}
@@ -355,9 +367,7 @@ const Settings: React.FC = () => {
           {/* Mobile layout */}
           <div className="flex flex-col gap-3">
             <div className="flex justify-between items-center">
-              <h3 className="text-[var(--tertiary-text)] text-base">
-                Income Categories
-              </h3>
+              <h3 className="text-[var(--tertiary-text)] text-base">Income Categories</h3>
               <Button
                 className="px-5 py-1"
                 buttonColor="regularButton"
@@ -375,10 +385,7 @@ const Settings: React.FC = () => {
                 <SquarePen size={20} strokeWidth={1.5} />
               </Button>
             </div>
-            <div
-              className="flex flex-wrap gap-2 overflow-x-auto pb-1"
-              style={hideScrollbar}
-            >
+            <div className="flex flex-wrap gap-2 overflow-x-auto pb-1" style={hideScrollbar}>
               {finance.incomeCategories.map((cat) => (
                 <span
                   key={cat}
@@ -411,7 +418,9 @@ const Settings: React.FC = () => {
                 <SquarePen size={20} strokeWidth={1.5} />
               </Button>
             </div>
-            <p className="text-[var(--tertiary-text)] font-semibold text-base">{finance.taxRegime}</p>
+            <p className="text-[var(--tertiary-text)] font-semibold text-base">
+              {finance.taxRegime}
+            </p>
           </div>
         </section>
 
@@ -433,13 +442,10 @@ const Settings: React.FC = () => {
     );
   };
 
-  if (isLoading) return <div className="p-10 text-[var(--tertiary-text)]">Loading...</div>;
-  if (!isAuthenticated)
-    return <div className="p-10 text-[var(--tertiary-text)]">Please log in to view settings.</div>;
+  if (loading) return <Loader />;
 
   return (
     <div className="flex flex-col gap-2 w-full">
-      
       <SettingsDrawer isOpen={isOpen} onClose={() => setIsOpen(false)} title={drawerTitle}>
         {drawerContent}
       </SettingsDrawer>

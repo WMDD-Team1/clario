@@ -29,13 +29,15 @@ const Input: React.FC<InputProps> = ({
       {label && (
         <label
           htmlFor={id}
-          className={`absolute top-[-0.8rem] left-[1rem] px-[0.3rem] rounded-[1rem] bg-[var(--background)] text-[var(--primitive-colors-gray-light-mode-400)] `}
+          className={`absolute top-[-0.8rem] left-[1rem] px-[0.3rem] rounded-[1rem] text-[var(--primitive-colors-gray-light-mode-500)] bg-[var(--primitive-colors-gray-light-mode-25)]`}
         >
           {label}
         </label>
       )}
 
-      <div className={`flex justify-between rounded-[1rem] ${padding} border-2 bg-[var(--background)] border-[var(--background-alternate)]`}>
+      <div
+        className={`flex justify-between rounded-[1rem] border-[var(--primitive-colors-gray-light-mode-200)] border-2 ${color} ${padding}`}
+      >
         <input
           id={id}
           {...register}
@@ -43,9 +45,7 @@ const Input: React.FC<InputProps> = ({
           className={`w-full p-[1rem] rounded-[0.89rem] bg-[var(--background)] text-[var(--secondary-text)]`}
         />
         {endAdornment && (
-          <div className="m-2 flex items-center text-[var(--primitive-colors-brand-primary-500-base)]">
-            {endAdornment}
-          </div>
+          <div className="m-2 flex items-center text-[var(--brand-beta)]">{endAdornment}</div>
         )}
       </div>
       {children}
