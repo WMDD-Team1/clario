@@ -16,6 +16,9 @@ import { setupSwagger } from "./swagger.js";
 import "./utils/triggerInvoice.js";
 import cookieParser from "cookie-parser";
 
+import path from "path";
+import { fileURLToPath } from "url";
+
 export const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
