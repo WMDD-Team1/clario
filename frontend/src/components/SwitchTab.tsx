@@ -6,7 +6,7 @@ interface Props {
 
 const SwitchTab = ({ currentFilter, filters, onFilter }: Props) => {
     return (
-        <div className="flex bg-white rounded-[20px] justify-between w-full md:w-[520px] h-[60px]">
+        <div className="flex bg-[var(--general-alpha)] rounded-[20px] justify-between w-full md:w-[520px] h-[60px]">
             {filters.map((label, idx) => {
                 const isActive = label === currentFilter;
                 const isFirst = idx === 0;
