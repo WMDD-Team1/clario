@@ -46,7 +46,7 @@ const MoneyFlowAreaChart: React.FC = () => {
       <ResponsiveContainer width="100%" height={250}>
         <AreaChart 
             data={data}
-            margin={{ top: 10, right: 0, left: -20, bottom: 0 }} 
+            margin={{ top: 10, right: 0, left: -10, bottom: 0 }} 
         >
           <XAxis dataKey="month" />
           <YAxis width={40} /> 
