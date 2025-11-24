@@ -48,7 +48,7 @@ const MyWork = () => {
 
   return (
     <>
-      <div className="header mb-8 sm:sticky top-33 bg-[var(--full-bg)] backdrop-blur-sm z-100 py-2 sm:shadow-[0_10px_10px_-10px_rgba(0,0,0,0.1)]">
+      <div className="header mb-8">
         {view.key === 'projects' ? (
           <ProjectDrawer
             isClientOpen={isClientOpen}
