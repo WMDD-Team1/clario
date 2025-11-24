@@ -48,8 +48,7 @@ const MyWork = () => {
 
   return (
     <>
-      <div className="header mb-8">
-        {view.key === 'projects' ? (
+    {view.key === 'projects' ? (
           <ProjectDrawer
             isClientOpen={isClientOpen}
             onClientClose={() => setIsClientOpen(false)}
@@ -59,6 +58,17 @@ const MyWork = () => {
             onOpenClientSlide={() => setIsClientOpen(true)}
           />
         ) : null}
+      <div className="header mb-8 sm:sticky top-33 bg-[var(--full-bg)] backdrop-blur-sm z-100 py-2 sm:shadow-[0_10px_10px_-10px_rgba(0,0,0,0.1)]">
+        {/* {view.key === 'projects' ? (
+          <ProjectDrawer
+            isClientOpen={isClientOpen}
+            onClientClose={() => setIsClientOpen(false)}
+            isOpen={isOpen}
+            onClose={() => setIsOpen(false)}
+            mode="create"
+            onOpenClientSlide={() => setIsClientOpen(true)}
+          />
+        ) : null} */}
         <section className="md:flex justify-between items-center hidden transition">
           <div className="header-left flex items-center gap-4">
             <h2 className='text-[var(--page-subtitle)]'>My Work</h2>
