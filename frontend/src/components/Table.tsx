@@ -102,7 +102,7 @@ const Table = ({
                 >
                     <thead
                         role="rowgroup"
-                        className="bg-[var(--primitive-colors-brand-primary-51)] text-[var(--primitive-colors-gray-light-mode-700)] text-sm"
+                        className="bg-[var(--background-alternate)] text-[var(--tertiary-text)] text-sm"
                     >
                         <tr role="row">
                             {headers.map((header) => (
@@ -118,12 +118,12 @@ const Table = ({
                         </tr>
                     </thead>
 
-                    <tbody role="rowgroup">
+                    <tbody role="rowgroup" className="bg-[var(--general-alpha)]">
                         {data.length === 0 ? (
                             <tr>
                                 <td
                                     colSpan={headers.length}
-                                    className="text-center text-gray-500 py-6"
+                                    className="text-center text-[var(--secondary-text)] py-6"
                                 >
                                     No data available
                                 </td>
@@ -132,7 +132,7 @@ const Table = ({
                             data.map((row, i) => (
                                 <tr
                                     key={row.id || i}
-                                    className={`border-t border-gray-100 ${onClickChildren && 'hover:bg-[#f9fbff] transition cursor-pointer'}`}
+                                    className={`border-t border-gray-100 ${onClickChildren && 'hover:saturate-10 transition cursor-pointer'}`}
                                 >
                                     {headers.map((header) => (
                                         <td
@@ -140,7 +140,7 @@ const Table = ({
                                             onClick={() =>
                                                 onClickChildren && !header.render && row.id && onClickChildren(row.id)
                                             }
-                                            className={`px-6 py-4 whitespace-nowrap text-sm text-gray-600 ${header.key.toLowerCase().includes("amount") ||
+                                            className={`px-6 py-4 whitespace-nowrap text-sm text-[var(--secondary-text)] ${header.key.toLowerCase().includes("amount") ||
                                                 header.key.toLowerCase().includes("price")
                                                 ? "text-center"
                                                 : ""
@@ -167,9 +167,9 @@ const Table = ({
             </div>
 
             {/* Footer Section */}
-            <div className="flex items-center justify-between px-6 py-4 border-t border-gray-100 bg-[var(--primitive-colors-gray-light-mode-1)]">
+            <div className="flex items-center justify-between px-6 py-4 border-t border-gray-100 bg-[var(--background-alternate)]">
                 {/* Total */}
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-[var(--secondary-text)]">
                     Total{" "}
                     <span className="font-semibold text-blue-600">
                         {total.toLocaleString()}
