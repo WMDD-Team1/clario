@@ -26,7 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Enable CORS only if CORS_ENABLED=true
 if (process.env.CORS_ENABLED === "true") {
-	app.use(cors({ origin: ["http://localhost:5173"], credentials: true })); // for frontend in dev
+	app.use(cors({ origin: ["http://localhost:5173", "https://www.c-lario.com"], credentials: true })); // for frontend in dev
 }
 
 app.use("/api/auth", authRoutes);
