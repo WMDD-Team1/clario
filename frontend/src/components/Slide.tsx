@@ -33,18 +33,17 @@ const Slide: React.FC<SlideProps> = ({
   showExtral = true,
   showConfirm = true,
 }) => {
-
-  useEffect(()=>{
-    const handleEscKey = (event:KeyboardEvent)=>{
-      if (event.key === 'Escape' && slide ==='0px') {
+  useEffect(() => {
+    const handleEscKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && slide === '0px') {
         onClose();
       }
-    }
-    document.addEventListener('keydown', handleEscKey)
-    return ()=>{
-      document.removeEventListener('keydown', handleEscKey)
-    }
-  },[onClose,slide])
+    };
+    document.addEventListener('keydown', handleEscKey);
+    return () => {
+      document.removeEventListener('keydown', handleEscKey);
+    };
+  }, [onClose, slide]);
   return (
     <>
       <div
@@ -59,18 +58,18 @@ const Slide: React.FC<SlideProps> = ({
         style={{ transform: `translateX(${slide})` }}
       >
         <div
-          className="absolute w-12 h-12 top-19 cursor-pointer left-[30px] md:left-[-20px] rounded-[10px] bg-[var(--general-alpha)] flex items-center justify-center z-50"
+          className="absolute w-12 h-12 top-24 cursor-pointer left-[30px] md:left-[-20px] rounded-[10px] bg-[var(--general-alpha)] flex items-center justify-center z-50"
           onClick={onClose}
         >
           <button className="text-[var(--page-title)] hover:text-gray-700 transition-colors rounded-2xl cursor-pointer">
             <ChevronRight size={30} />
           </button>
         </div>
-        <h3
-          className={`text-3xl font-semibold text-center bg-[var(--background-alternate)] p-[2rem] sticky top-0 z-10 sm:rounded-tl-[50px] text-[var(--secondary-text)]`}
-        >
-          {title}
-        </h3>
+        <div className="relative p-5 bg-[var(--background-alternate)] min-h-[120px] flex items-center justify-center md:rounded-tl-[50px]">
+          <h3 className={`font-semibold text-[var(--secondary-text)] text-[22px] md:text-[28px]`}>
+            {title}
+          </h3>
+        </div>
         <div className="flex flex-col gap-[1.5rem] p-[2rem] h-full overflow-y-auto pt-[2.5rem]">
           {children}
         </div>

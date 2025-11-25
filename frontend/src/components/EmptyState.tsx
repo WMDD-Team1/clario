@@ -4,6 +4,7 @@ interface Props {
     title?: string;
     description?: string;
     buttonText?: string;
+    topRemoveRounded?:boolean;
     onAction?: () => void;
 }
 
@@ -11,10 +12,11 @@ const EmptyState = ({
     title = "It's a little quiet here 👀",
     description = "Add your first client and let's get things moving!",
     buttonText = "Add Project",
+    topRemoveRounded = false,
     onAction,
 }: Props) => {
     return (
-        <div className="flex flex-col items-center justify-center text-center p-10 border border-dashed border-blue-200 rounded-2xl bg-[var(--background-alternate)]/50">
+        <div className={`flex flex-col items-center justify-center text-center p-10 border border-dashed border-blue-200 ${topRemoveRounded?'rounded-b-2xl':'rounded-2xl'} bg-[var(--background-alternate)]/50`}>
             <p className="text-[var(--tertiary-text)] text-base mb-2">{title}</p>
             <p className="text-[var(--sub-text)] text-sm mb-6">{description}</p>
             <Button
