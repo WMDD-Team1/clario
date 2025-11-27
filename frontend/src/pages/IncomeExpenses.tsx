@@ -368,9 +368,10 @@ export const IncomeExpenses = () => {
           const recurrenceResponse = await api.post(`/recurrences`, payload, {
             headers: {
               'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
+              // Authorization: `Bearer ${token}`,
             },
           });
+          setRecurrence(recurrenceResponse.data)
         } catch (error) {
           console.error('Error saving recurrence:', error);
         }
@@ -781,6 +782,7 @@ export const IncomeExpenses = () => {
                   addIncome();
                   resetForm();
                 }}
+                topRemoveRounded={true}
               />
             ) : (
               <Table
@@ -852,6 +854,7 @@ export const IncomeExpenses = () => {
                   addExpenses();
                   resetForm();
                 }}
+                topRemoveRounded={true}
               />
             ) : (
               <Table

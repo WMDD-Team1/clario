@@ -23,7 +23,7 @@ export const PrivateRoute = ({ children }: { children: ReactNode }) => {
 
   if (error) return <Error message={error} />;
 
-  if (!user) return <Navigate to="/login" replace />;
+  if (user == undefined) return <Navigate to="/login" replace />;
 
   return (
     <>
