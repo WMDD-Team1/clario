@@ -29,7 +29,7 @@ const Select: React.FC<SelectProps> = ({
       <div className="relative">
         {label && (
           <label
-            className={`absolute top-[-0.8rem] left-[1rem] px-[0.3rem] rounded-[1rem] text-[var(--sub-text)] bg-[var(--background)]`}
+            className={`absolute top-[-0.8rem] left-[1rem] px-[0.3rem] rounded-[1rem] text-[var(--primitive-colors-gray-light-mode-500)] bg-[var(--background)]`}
             htmlFor={id}
           >
             {label}
@@ -37,7 +37,7 @@ const Select: React.FC<SelectProps> = ({
         )}
         <select
           style={{ width: width }}
-          className={`p-[1rem] rounded-[1rem] border-2 cursor-pointer bg-[var(--background)] text-[var(--secondary-text)] appearance-none border-[var(--background-alternate)]`}
+          className={`p-[1rem] rounded-[1rem] border-2 cursor-pointer bg-[var(--background)] text-[var(--secondary-text)] appearance-none border-[var(--sublight)] focus-within:border-[var(--primitive-colors-brand-primary-500-base)] transition-all focus:outline-none`}
           id={id}
           value={value}
           onChange={(e) => {

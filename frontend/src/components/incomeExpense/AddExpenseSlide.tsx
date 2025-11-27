@@ -205,7 +205,7 @@ export const AddExpenseSlide = ({
             </div>
 
             <div
-              className={`${repeat ? 'max-h-20 opacity-100' : 'max-h-0 opacity-0'} transition-all`}
+              className={`${repeat ? 'max-h-20 opacity-100' : 'max-h-0 opacity-0 pointer-events-none'} transition-all`}
             >
               <Select
                 label="Recurrence Type"
