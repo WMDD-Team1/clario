@@ -27,6 +27,7 @@ app.use(morgan("dev"));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "..", "public")));
 
 // Enable CORS only if CORS_ENABLED=true
 if (process.env.CORS_ENABLED === "true") {
