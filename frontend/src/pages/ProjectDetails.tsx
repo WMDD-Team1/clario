@@ -49,7 +49,7 @@ const ProjectDetails = () => {
 
     return (
         <>
-            <div className='flex justify-start items-center gap-2 mb-7 sticky top-35 z-100 bg-[var(--full-bg)]'>
+            <div className='flex justify-start items-center gap-2 mb-7 sticky top-33 z-100 bg-[var(--full-bg)]'>
                 <ChevronLeft size={30} onClick={(e) => navigate(-1)} className='cursor-pointer text-[var(--primary-text)]' />
                 <h2>{project.name}</h2>
                 <StatusPill status={project.isArchived ? "Archived" : project.isActive ? "Active" : "Draft"} />
