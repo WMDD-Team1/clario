@@ -39,13 +39,13 @@ const Milestone = ({ milestone, projectId, onClickAdd, onEditMilestone, onEditDe
         <div className="md:w-[400px] bg-[var(--general-alpha)] rounded-2xl shadow-sm border border-[var(--primitive-colors-gray-light-mode-200)] overflow-hidden">
             {/* Header */}
             <div className={`flex justify-between items-center
-            ${milestone?.isCompleted ? 'bg-[var(--primitive-colors-success-100)]' : 'bg-[var(--primitive-colors-brand-primary-50)]'}
+            ${milestone?.isCompleted ? 'bg-[var(--success-background1)]' : 'bg-[var(--background-alternate)]'}
             px-4 py-2 h-16`}>
                 <span className={`
-                    ${milestone?.isCompleted ? 'text-[var(--primitive-colors-success-600)]' : 'text-[var(--brand-subtext)]'}
+                    ${milestone?.isCompleted ? 'text-[var(--success-contrast1)]' : 'text-[var(--brand-subtext)]'}
                     font-[500]`}>{milestone?.name}</span>
                 <div className='flex gap-5 items-center'>
-                    {milestone?.isCompleted ? <CircleCheck className="w-5 h-5 text-[var(--primitive-colors-success-600)]" /> : null}
+                    {milestone?.isCompleted ? <CircleCheck className="w-5 h-5 text-[var(--success-contrast1)]" /> : null}
                     <ActionMenu
                         direction="horizontal"
                         actions={actions}

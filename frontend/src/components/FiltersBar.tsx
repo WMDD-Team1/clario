@@ -69,9 +69,9 @@ const FiltersBar = ({
         {/* Sort By */}
         <SelectionFilter
           className="hidden md:block"
-          selectedValue={selectedSort}
+          value={selectedSort}
           options={sortOptions}
-          onSelect={onSortChange}
+          onChange={onSortChange}
         />
 
         <MenuScale
@@ -107,9 +107,9 @@ const FiltersBar = ({
         {stageOptions && selectedStage && onStageChange && (
           <SelectionFilter
             className="hidden md:block"
-            selectedValue={selectedStage}
+            value={selectedStage}
             options={stageOptions}
-            onSelect={onStageChange}
+            onChange={onStageChange}
           />
         )}
       </div>

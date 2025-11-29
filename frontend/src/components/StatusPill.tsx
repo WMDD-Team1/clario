@@ -6,8 +6,8 @@ interface StatusPillProps {
 
 const StatusPill: React.FC<StatusPillProps> = ({ status }) => {
     const styles = {
-        Active: "bg-[#DBFAE6] text-[var(--success-contrast1)]",
-        Draft: "bg-[#FEEFC7] text-[var(--warning-contrast1)]",
+        Active: "bg-[var(--success-background1)] text-[var(--success-contrast1)]",
+        Draft: "bg-[var(--warning-background1)] text-[var(--warning-contrast1)]",
         Archived: "bg-[#4C4C4C26] text-[#575757]",
     }[status];
 
