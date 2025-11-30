@@ -28,7 +28,7 @@ export const Dashboard = () => {
         ].map((stat, index, arr) => (
           <div
             key={index}
-            className={`flex flex-col justify-center items-center py-3 bg-[var(--general-alpha)] backdrop-blur-sm rounded-2xl hover:shadow-lg border border-[var(--sublight-2)] 
+            className={`flex flex-col justify-center items-center py-3 bg-[var(--general-alpha)] backdrop-blur-sm rounded-2xl border border-[var(--sublight-2)] 
         ${index === arr.length - 1 ? 'col-span-2 sm:col-span-1' : ''}`}
           >
             <p className="font-normal text-[var(--tertiary-text)] text-sm">{stat.label}</p>
@@ -117,7 +117,7 @@ export const Dashboard = () => {
 
         {/* Toggle Buttons */}
         <div className="flex justify-center w-full mt-4 mb-6">
-          <div className="flex bg-[var(--general-alpha)] text-[var(--background-focus)] broder broder-[var(--sublight-2)] h-[50px] hover:shadow-sm rounded-xl p-1 w-full max-w-full justify-between">
+          <div className="flex bg-[var(--general-alpha)] text-[var(--background-focus)] broder broder-[var(--sublight-2)] h-[50px] rounded-xl p-1 w-full max-w-full justify-between">
             {['insights', 'dashboard', 'reminders'].map((tab) => (
               <button
                 key={tab}
