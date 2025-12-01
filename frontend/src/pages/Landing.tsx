@@ -507,7 +507,7 @@ export const Landing = () => {
             </div>
 
             <div className="team-member">
-              <img src="images/yahui.png" className="team-photo" />
+              <img src="images/yahui.jpg" className="team-photo" />
               <h4 className="team-name">Yahui Xu</h4>
               <div className="team-role-container">
                 <a href="https://www.linkedin.com/in/yahui-xu" className="linkedin-link">
@@ -576,7 +576,7 @@ export const Landing = () => {
             </div>
 
             <div className="team-member">
-              <img src="images/theertha.png" className="team-photo" />
+              <img src="images/theertha.jpg" className="team-photo" />
               <h4 className="team-name">Theertha Vinod</h4>
               <div className="team-role-container">
                 <a
@@ -590,7 +590,7 @@ export const Landing = () => {
             </div>
 
             <div className="team-member">
-              <img src="images/ankit.png" className="team-photo" />
+              <img src="images/ankit.jpg" className="team-photo" />
               <h4 className="team-name">Ankit Kate</h4>
               <div className="team-role-container">
                 <a href="https://www.linkedin.com/in/ankitkate/" className="linkedin-link">
