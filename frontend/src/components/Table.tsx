@@ -167,7 +167,7 @@ const Table = ({
             </div>
 
             {/* Footer Section */}
-            <div className="flex items-center justify-between px-6 py-4 border-t border-gray-100 bg-[var(--background-alternate)]">
+            <div className="flex items-center justify-between px-6 py-4 border-t border-gray-100 bg-[var(--general-alpha)]">
                 {/* Total */}
                 <p className="text-sm text-[var(--secondary-text)]">
                     Total{" "}
@@ -180,8 +180,8 @@ const Table = ({
                 <div className="flex items-center gap-2">
                     <button
                         className={`p-2 rounded-md border transition ${page === 1
-                            ? "text-gray-300 border-gray-200 cursor-not-allowed"
-                            : "text-[var(--primitive-colors-brand-primary-500-base)] border-gray-300 hover:bg-blue-50"
+                            ? "text-[var(--sublight-2)] border-[var(--sublight-2)] cursor-not-allowed"
+                            : "text-[var(--brand-alpha)] border-gray-300 hover:bg-blue-50"
                             }`}
                         onClick={() => handlePageChange(page - 1)}
                         disabled={page === 1}

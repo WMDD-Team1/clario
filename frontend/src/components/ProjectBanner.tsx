@@ -12,10 +12,10 @@ interface Props {
 const ProjectBanner = ({ project, onEdit }: Props) => {
     const clientName = typeof project.clientId === "object" && project.clientId !== null ? project.clientId.name : (typeof project.clientId === "string" ? "" : "")
     return (
-        <div className="bg-white p-5 rounded-2xl h-full w-full md:max-w-[340px] flex flex-col gap-5">
+        <div className="bg-[var(--general-alpha)] p-5 rounded-2xl h-full w-full md:max-w-[340px] flex flex-col gap-5">
             <div>
                 <div className="flex items-center justify-between pb-[18px]">
-                    <h3 className="font-semibold text-[18px]">Project Details</h3>
+                    <h3 className="font-semibold text-[18px] text-[var(--tertiary-text)]">Project Details</h3>
                     <button
                         onClick={onEdit}
                         className="p-1 rounded-full hover:bg-[var(--primitive-colors-gray-light-mode-100)] transition-colors"
