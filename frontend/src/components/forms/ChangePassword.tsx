@@ -1,10 +1,11 @@
-import React, { useState } from "react";
-import Button from "@/components/Button";
-import successImage from "@/assets/icons/client-upload-success.svg"; 
+import React, { useState } from 'react';
+import Button from '@/components/Button';
+import successImage from '@/assets/icons/client-upload-success.svg';
 
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 import { updateUserPassword } from '@api/services/settingService';
 import SuccessForm from './SuccessForm';
+import Input from '@components/Input';
 interface Props {
   onClose: () => void;
 }
@@ -70,60 +71,51 @@ const ChangePassword: React.FC<Props> = ({ onClose }) => {
     <form className="flex flex-col h-full">
       <div className="flex-1 flex flex-col justify-top">
         <div className="relative mb-6">
-          <label className="absolute -top-2 left-4 bg-[var(--general-alpha)] px-1 text-sm text-[var(--border)]">
-            Current Password
-          </label>
-          <input
+          <Input
+            label="Current Password"
+            id="currentPassword"
             type={showCurrent ? 'text' : 'password'}
             placeholder="Enter Current Password"
             value={currentPassword}
             onChange={(e) => setCurrentPassword(e.target.value)}
-            className="w-full border border-[var(--sublight)] text-[var(--page-title)] rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[var(--brand-alpha)]"
+            endAdornment={
+              <span className="cursor-pointer text-lg" onClick={() => setShowCurrent(!showCurrent)}>
+                {showCurrent ? <FaRegEye /> : <FaRegEyeSlash />}
+              </span>
+            }
           />
-          <span
-            className="absolute right-4 top-3.5 text-[var(--brand-alpha)] cursor-pointer text-lg"
-            onClick={() => setShowCurrent(!showCurrent)}
-          >
-            {showCurrent ? <FaRegEye /> : <FaRegEyeSlash />}
-          </span>
         </div>
 
         <div className="relative mb-6">
-          <label className="absolute -top-2 left-4 bg-[var(--general-alpha)] px-1 text-sm text-[var(--border)]">
-            New Password
-          </label>
-          <input
+          <Input
+            label="New Password"
+            id="newPassword"
             type={showNew ? 'text' : 'password'}
             placeholder="Enter New Password"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
-            className="w-full border border-[var(--sublight)] text-[var(--page-title)] rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[var(--brand-alpha)]"
+            endAdornment={
+              <span className="cursor-pointer text-lg" onClick={() => setShowNew(!showNew)}>
+                {showNew ? <FaRegEye /> : <FaRegEyeSlash />}
+              </span>
+            }
           />
-          <span
-            className="absolute right-4 top-3.5 text-[var(--brand-alpha)] cursor-pointer text-lg"
-            onClick={() => setShowNew(!showNew)}
-          >
-            {showNew ? <FaRegEye /> : <FaRegEyeSlash />}
-          </span>
         </div>
 
         <div className="relative">
-          <label className="absolute -top-2 left-4 bg-[var(--general-alpha)] px-1 text-sm text-[var(--border)]">
-            Confirm New Password
-          </label>
-          <input
+          <Input
+            label="Confirm New Password"
+            id="confirmPassword"
             type={showConfirm ? 'text' : 'password'}
             placeholder="Re-enter New Password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            className="w-full border border-[var(--sublight)] text-[var(--page-title)] rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[var(--brand-alpha)]"
+            endAdornment={
+              <span className="cursor-pointer text-lg" onClick={() => setShowConfirm(!showConfirm)}>
+                {showConfirm ? <FaRegEye /> : <FaRegEyeSlash />}
+              </span>
+            }
           />
-          <span
-            className="absolute right-4 top-3.5 text-[var(--brand-alpha)] cursor-pointer text-lg"
-            onClick={() => setShowConfirm(!showConfirm)}
-          >
-            {showConfirm ? <FaRegEye /> : <FaRegEyeSlash />}
-          </span>
         </div>
         {error && <p className="text-[var(--error-accent1)] text-sm mt-4">{error}</p>}
       </div>

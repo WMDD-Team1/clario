@@ -5,6 +5,7 @@ import { updateUserPreferences } from '@api/services/settingService';
 import { updateUser } from '@store/userSlice';
 import { useDispatch } from 'react-redux';
 import SuccessForm from './SuccessForm';
+import Select from '@components/Select';
 
 interface Props {
   onClose: () => void;
@@ -60,21 +61,16 @@ const ChangeLanguage: React.FC<Props> = ({ onClose }) => {
     <form className="flex flex-col h-full">
       <div className="flex-1 flex flex-col justify-top">
         <div className="relative mb-6">
-          <label className="absolute -top-2.5 left-4 bg-[var(--general-alpha)] px-1 text-sm text-[var(--border)]">
-            Language
-          </label>
-
-          <select
+          <Select
+            id="language"
+            label="Language"
             value={language}
-            onChange={(e) => setLanguage('en')}
-            className="border border-[var(--sublight)] text-[var(--page-title)] rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-[var(--brand-alpha)] bg-white"
-          >
-            <option value="" disabled>
-              Select a language
-            </option>
-            <option value="english">English</option>
-            <option value="french">French</option>
-          </select>
+            onChange={(val) => setLanguage(val as 'en' | 'fr')}
+            options={['en', 'fr']}
+            placeHolder="Select a language"
+            color="var(--secondary-text)"
+            width="100%"
+          />
         </div>
 
         <div className="flex justify-between gap-2 absolute bottom-0 right-0 left-0 p-[30px] bg-[var(--primitive-colors-brand-primary-75)] rounded-bl-[50px]">
