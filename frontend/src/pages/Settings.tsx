@@ -111,7 +111,7 @@ const Settings: React.FC = () => {
                 <SquarePen size={20} strokeWidth={1.5} />
               </Button>
             </div>
-            <span className="text-base text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold mt-[-30px]">
+            <span className="text-base text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold ">
               {profile.name}
             </span>
           </div>
@@ -131,7 +131,7 @@ const Settings: React.FC = () => {
                 <SquarePen size={20} strokeWidth={1.5} />
               </Button>
             </div>
-            <span className="text-lg text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold mt-[-30px]">
+            <span className="text-lg text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold">
               {profile.email}
             </span>
           </div>
@@ -151,7 +151,7 @@ const Settings: React.FC = () => {
                 <SquarePen size={20} strokeWidth={1.5} />
               </Button>
             </div>
-            <span className="text-lg text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold mt-[-30px] line-clamp-2 mt-1 block">
+            <span className="text-lg text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold  line-clamp-2 mt-1 block">
               {profile.address}
             </span>
           </div>
@@ -171,7 +171,7 @@ const Settings: React.FC = () => {
                 <SquarePen size={20} strokeWidth={1.5} />
               </Button>
             </div>
-            <span className="text-lg text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold mt-[-30px]">
+            <span className="text-lg text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold">
               **********
             </span>
           </div>
@@ -199,7 +199,7 @@ const Settings: React.FC = () => {
                 <SquarePen size={20} strokeWidth={1.5} />
               </Button>
             </div>
-            <span className="text-lg text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold mt-[-30px]">
+            <span className="text-lg text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold">
               {preferences.language}
             </span>
           </div>
@@ -219,7 +219,7 @@ const Settings: React.FC = () => {
                 <SquarePen size={20} strokeWidth={1.5} />
               </Button>
             </div>
-            <span className="text-lg text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold mt-[-30px]">
+            <span className="text-lg text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold">
               {preferences.mode}
             </span>
           </div>

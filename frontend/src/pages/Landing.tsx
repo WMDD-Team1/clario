@@ -521,7 +521,7 @@ export const Landing = () => {
               <img src="images/daniel.png" className="team-photo" />
               <h4 className="team-name">Daniel Velastegui</h4>
               <div className="team-role-container">
-                <a href="https://www.linkedin.com/in/velasteguidaniel" className="linkedin-link">
+                <a href="https://www.linkedin.com/in/velastegui-alex/" className="linkedin-link">
                   <img src="images/LinkedIn_icon.png" className="linkedin-icon" />
                 </a>
                 <span className="team-role">Developer</span>
