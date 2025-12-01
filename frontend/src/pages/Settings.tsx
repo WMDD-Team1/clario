@@ -63,6 +63,11 @@ const Settings: React.FC = () => {
     taxRegime: user?.settings?.finance?.province || 'British Columbia',
   };
 
+  const truncateToWords = (text: string, limit: number) => {
+    const words = text.split(' ');
+    return words.length > limit ? words.slice(0, limit).join(' ') + '...' : text;
+  };
+
   const openDrawer = (title: string, content: React.ReactNode) => {
     setDrawerTitle(title);
     setDrawerContent(content);
@@ -109,22 +114,6 @@ const Settings: React.FC = () => {
             <span className="text-base text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold mt-[-30px]">
               {profile.name}
             </span>
-            {/* <div className="hidden md:flex items-center justify-between gap-4">
-              <span className="text-base text-[var(--tertiary-text)] !font-normal w-1/5">Name</span>
-              <span className="text-lg text-[var(--tertiary-text)] !font-normal flex-1 whitespace-nowrap">
-                {profile.name}
-              </span>
-              <Button
-                className="px-5 py-1 flex-shrink-0"
-                buttonColor="regularButton"
-                textColor="var(--general-alpha)"
-                onClick={() =>
-                  openDrawer('Change Name', <ChangeName onClose={() => setIsOpen(false)} />)
-                }
-              >
-                Edit
-              </Button>
-            </div> */}
           </div>
 
           {/* Email */}
@@ -145,22 +134,6 @@ const Settings: React.FC = () => {
             <span className="text-lg text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold mt-[-30px]">
               {profile.email}
             </span>
-            {/* <div className="hidden md:flex items-center justify-between gap-4">
-              <span className="text-base text-[var(--tertiary-text)] !font-normal w-1/5">Email</span>
-              <span className="text-lg text-[var(--tertiary-text)] !font-normal flex-1 whitespace-nowrap">
-                {profile.email}
-              </span>
-              <Button
-                className="px-5 py-1 flex-shrink-0"
-                buttonColor="regularButton"
-                textColor="var(--general-alpha)"
-                onClick={() =>
-                  openDrawer('Update Email', <ChangeEmail onClose={() => setIsOpen(false)} />)
-                }
-              >
-                Edit
-              </Button>
-            </div> */}
           </div>
 
           {/* Address */}
@@ -181,22 +154,6 @@ const Settings: React.FC = () => {
             <span className="text-lg text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold mt-[-30px] line-clamp-2 mt-1 block">
               {profile.address}
             </span>
-            {/* <div className="hidden md:flex items-center justify-between gap-4">
-              <span className="text-base text-[var(--tertiary-text)] font-normal w-1/5">Address</span>
-              <span className="text-lg text-[var(--tertiary-text)] font-normal flex-1 whitespace-nowrap">
-                {profile.address}
-              </span>
-              <Button
-                className="px-5 py-1 flex-shrink-0"
-                buttonColor="regularButton"
-                textColor="var(--general-alpha)"
-                onClick={() =>
-                  openDrawer('Update Address', <ChangeAddress onClose={() => setIsOpen(false)} />)
-                }
-              >
-                Edit
-              </Button>
-            </div> */}
           </div>
 
           {/* Password */}
@@ -217,22 +174,6 @@ const Settings: React.FC = () => {
             <span className="text-lg text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold mt-[-30px]">
               **********
             </span>
-            {/* <div className="hidden md:flex items-center justify-between gap-4">
-              <span className="text-base text-[var(--tertiary-text)] font-normal w-1/5">Password</span>
-              <span className="text-lg text-[var(--tertiary-text)] font-normal flex-1 whitespace-nowrap">
-                **********
-              </span>
-              <Button
-                className="px-5 py-1 md:px-10 flex-shrink-0"
-                buttonColor="regularButton"
-                textColor="var(--general-alpha)"
-                onClick={() =>
-                  openDrawer('Change Password', <ChangePassword onClose={() => setIsOpen(false)} />)
-                }
-              >
-                Change password
-              </Button>
-            </div> */}
           </div>
         </div>
       </section>
@@ -261,22 +202,6 @@ const Settings: React.FC = () => {
             <span className="text-lg text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold mt-[-30px]">
               {preferences.language}
             </span>
-            {/* <div className="hidden md:flex items-center justify-between gap-4">
-              <span className="text-base text-[var(--tertiary-text)] w-1/5">Language</span>
-              <span className="text-lg text-[var(--tertiary-text)] flex-1 whitespace-nowrap">
-                {preferences.language}
-              </span>
-              <Button
-                className="px-5 py-1 flex-shrink-0"
-                buttonColor="regularButton"
-                textColor="var(--general-alpha)"
-                onClick={() =>
-                  openDrawer('Update Language', <ChangeLanguage onClose={() => setIsOpen(false)} />)
-                }
-              >
-                Change
-              </Button>
-            </div> */}
           </div>
 
           {/* Mode */}
@@ -297,20 +222,6 @@ const Settings: React.FC = () => {
             <span className="text-lg text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold mt-[-30px]">
               {preferences.mode}
             </span>
-            {/* <div className="hidden md:flex items-center justify-between gap-4">
-              <span className="text-base text-[var(--tertiary-text)] w-1/5">Mode</span>
-              <span className="text-lg text-[var(--tertiary-text)] flex-1 whitespace-nowrap">
-                {preferences.mode}
-              </span>
-              <Button
-                className="px-5 py-1 flex-shrink-0"
-                buttonColor="regularButton"
-                textColor="var(--general-alpha)"
-                onClick={() => openDrawer('Change Mode', <ChangeMode onClose={() => setIsOpen(false)} />)}
-              >
-                Change
-              </Button>
-            </div> */}
           </div>
         </div>
       </section>
@@ -402,7 +313,7 @@ const Settings: React.FC = () => {
         <section className="rounded-xl border border-[var(--sublight-2)] p-[16px]">
           {/* Mobile layout */}
           <div className="flex flex-col gap-3">
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-top">
               <h3 className="text-[var(--tertiary-text)] text-base">Tax Regime</h3>
               <Button
                 className="px-5 py-1"

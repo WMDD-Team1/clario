@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
-import Button from "@/components/Button";
+import React, { useEffect, useState } from 'react';
+import Button from '@/components/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateFinanceSettings } from '@api/services/settingService';
 import { updateUser } from '@store/userSlice';
 import { RootState } from '@store/index';
 import SuccessForm from './SuccessForm';
+import Select from '@components/Select';
 
 interface Props {
   onClose: () => void;
@@ -30,7 +31,6 @@ const ChangeTaxRegime: React.FC<Props> = ({ onClose, tax }) => {
     }
   }, [tax, currentProvince]);
 
-  
   const handleSave = async () => {
     if (!taxRegime) {
       setError('Please select a tax regime.');
@@ -53,7 +53,7 @@ const ChangeTaxRegime: React.FC<Props> = ({ onClose, tax }) => {
       setLoading(false);
     }
   };
-   if (isSuccess)
+  if (isSuccess)
     return (
       <SuccessForm
         iconPath="/setting-update-success.svg"
@@ -64,12 +64,12 @@ const ChangeTaxRegime: React.FC<Props> = ({ onClose, tax }) => {
     );
 
   const handleCancel = () => {
-    console.log("Cancelled");
+    console.log('Cancelled');
     onClose();
   };
 
   const handleClose = () => {
-    console.log("Closed");
+    console.log('Closed');
     onClose();
     setIsSaved(false);
   };
@@ -78,23 +78,21 @@ const ChangeTaxRegime: React.FC<Props> = ({ onClose, tax }) => {
     <form className="flex flex-col h-full">
       <div className="flex-1 flex flex-col justify-top">
         <div className="relative mb-6">
-          <label className="absolute -top-2.5 left-4 bg-[var(--general-alpha)] px-1 text-sm text-[var(--border)]">
-            Tax Regime
-          </label>
-
-          <select
+          <Select
+            id="taxRegime"
+            label="Tax Regime"
             value={taxRegime}
-            onChange={(e) => setTaxRegime(e.target.value as 'British Columbia' | 'Quebec')}
-            className="border border-[var(--sublight)] text-[var(--page-title)] rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-[var(--brand-alpha)] bg-[var(--general-alpha)]"
-          >
-            <option value="" disabled>
-              Select your Tax Regime
-            </option>
-            <option value="British Columbia">British Columbia</option>
-            <option value="Quebec">Quebec</option>
-          </select>
+            onChange={(value) => {
+              setTaxRegime(value as 'British Columbia' | 'Quebec');
+              if (error) setError(null);
+            }}
+            options={['British Columbia', 'Quebec']}
+            placeHolder="Select your Tax Regime"
+            color="var(--secondary-text)"
+            width="100%"
+          />
         </div>
-         {error && <p className="text-[var(--error-accent1)] text-sm mt-2">{error}</p>}
+        {error && <p className="text-[var(--error-accent1)] text-sm mt-2">{error}</p>}
       </div>
 
       <>
@@ -116,7 +114,7 @@ const ChangeTaxRegime: React.FC<Props> = ({ onClose, tax }) => {
               buttonColor="regularButton"
               textColor="white"
               width="48%"
-               disabled={loading}
+              disabled={loading}
             >
               {loading ? 'Saving...' : 'Save'}
             </Button>

@@ -9,7 +9,7 @@ interface UserState {
 }
 
 const initialState: UserState = {
-  data: null,
+  data: undefined,
   loading: false,
   error: null,
 };
@@ -53,7 +53,7 @@ const userSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchUser.rejected, (state, action) => {
-        state.data = undefined;
+        state.data = null;
         state.loading = false;
         state.error = action.error?.message || null;
       });

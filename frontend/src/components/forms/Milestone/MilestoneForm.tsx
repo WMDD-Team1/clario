@@ -3,13 +3,14 @@ import Input from "@components/Input";
 import Loader from "@components/Loader";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import FormFooter from "../FormFooter";
 import { useState } from "react";
 import SuccessForm from "../SuccessForm";
 import TextArea from "@components/TextArea";
 import { Select } from "@mui/material";
+import SelectInput from "@components/SelectInput";
 
 // Validation schema
 const milestoneSchema = z.object({
@@ -25,6 +26,11 @@ const milestoneSchema = z.object({
         path: ["generateInvoice"]
     }
 )
+
+const GENERATE_INVOICE_OPTIONS = [
+    { label: "On Completion", value: "on_completion" },
+    { label: "On Due Date", value: "on_due_date" },
+];
 
 type MilestoneFormData = z.infer<typeof milestoneSchema>;
 
@@ -66,6 +72,7 @@ export default function ProjectForm({ onCancel, milestone, projectId }: Props) {
 
     const {
         register,
+        control,
         handleSubmit,
         formState: { errors, isSubmitting },
     } = useForm<MilestoneFormData>({
@@ -151,15 +158,24 @@ export default function ProjectForm({ onCancel, milestone, projectId }: Props) {
 
             {/* Generate Invoice */}
             <div>
-                <label className="block text-sm text-gray-500">When to Generate Invoice</label>
-                <select
-                    {...register("generateInvoice")}
-                    className="w-full border-b border-gray-300 focus:border-blue-500 outline-none py-1 bg-transparent"
-                >
-                    <option value="" disabled>Select a client</option>
-                    <option value="on_completion">On Completion</option>
-                    <option value="on_due_date">On Due Date</option>
-                </select>
+                <Controller
+                    name="generateInvoice"
+                    control={control}
+                    defaultValue=""
+                    render={({ field, fieldState }) => (
+                        <SelectInput
+                            label="When to Generate Invoice"
+                            id="generateInvoice"
+                            options={GENERATE_INVOICE_OPTIONS}
+                            value={
+                                GENERATE_INVOICE_OPTIONS.find(opt => opt.value === field.value) ||
+                                null
+                            }
+                            onChange={(opt) => field.onChange(opt.value)}
+                            error={fieldState.error?.message}
+                        />
+                    )}
+                />
             </div>
 
             <FormFooter

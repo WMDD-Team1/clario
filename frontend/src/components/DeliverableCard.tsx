@@ -20,7 +20,7 @@ export default function DeliverableCard({ deliverable, milestone, onEdit, onDele
     }
     return (
         <div
-            className="bg-[var(--primitive-colors-brand-primary-50)] rounded-xl p-4 transition w-full"
+            className="bg-[var(--background)] rounded-xl p-4 transition w-full"
         >
             {/* Header */}
             <div className="flex justify-between items-start mb-2">
