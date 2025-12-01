@@ -50,7 +50,7 @@ const MoneyFlowAreaChart: React.FC = () => {
   }, []);
 
   return (
-    <div className="h-[320px] w-full p-5 rounded-[20px] bg-[var(--general-alpha)] shadow-sm">
+    <div className="h-[320px] w-full p-5 rounded-[20px] bg-[var(--general-alpha)] border border-[var(--sublight-2)]">
       <p className="text-[1.125rem] mb-4 text-[var(--primary-text)]">Money Flow</p>
       <ResponsiveContainer width="100%" height={250}>
         <AreaChart 

@@ -14,7 +14,7 @@ const InsightCard: React.FC<StatCardProps> = ({ title, month, text }) => {
       flex flex-col items-start gap-5
       w-full  p-5 rounded-[20px]
       bg-[var(--general-alpha)] border
-      border-[var(--sublight-2)] hover:shadow-md flex-1">
+      border-[var(--sublight-2)]">
       {/* Header Row */}
       <div className="flex justify-between gap-1 items-center w-full">
         <span className="font-['Red_Hat_Display'] text-[1.125rem] text-[var(--page-subtitle)] not-italic font-bold leading-normal">{month}</span>
