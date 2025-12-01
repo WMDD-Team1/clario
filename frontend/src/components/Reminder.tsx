@@ -25,7 +25,7 @@ const Reminder: React.FC<{ data: ReminderResponse }> = ({ data }) => {
   return (
     <div
       onClick={() => navigate(`/projects/${projectId}`)}
-      className="cursor-pointer flex flex-col justify-between gap-4 p-5 rounded-2xl bg-[var(--background-alternate)] text-[var(--general-alpha)] border border-[var(--sublight-2)]  hover:shadow-md transition-all duration-300 mb-5 md:mb-0"
+      className="cursor-pointer flex flex-col justify-between gap-4 p-5 rounded-2xl bg-[var(--background-alternate)] text-[var(--general-alpha)] border border-[var(--sublight-2)] transition-all duration-300 mb-5 md:mb-0"
     >
       {/* Top Row — Icon, Title, Client */}
       <div className="flex justify-between items-start">
