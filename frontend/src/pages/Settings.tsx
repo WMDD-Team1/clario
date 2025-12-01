@@ -151,9 +151,7 @@ const Settings: React.FC = () => {
                 <SquarePen size={20} strokeWidth={1.5} />
               </Button>
             </div>
-            <span className="text-lg text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold mt-[-30px] line-clamp-2 mt-1 block">
-              {profile.address}
-            </span>
+            <span className="text-lg text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold mt-[-30px] line-clamp-2 block">{truncateToWords(profile.address, 4)}</span>
           </div>
 
           {/* Password */}
@@ -240,9 +238,24 @@ const Settings: React.FC = () => {
         {/* ===== Expenses Categories ===== */}
         <section className="rounded-xl border border-[var(--sublight-2)] p-[16px]">
           {/* Mobile layout */}
-          <div className="flex flex-col gap-3">
-            <div className="flex justify-between items-center">
+          <div className="flex flex-row gap-3">
+            <div className="flex flex-col gap-2.5 items-start">
               <h3 className="text-[var(--tertiary-text)] text-base">Expenses Categories</h3>
+              <div
+                className="flex flex-wrap gap-2 overflow-x-auto"
+                style={hideScrollbar}
+              >
+                {finance.expenseCategories.map((cat) => (
+                  <span
+                    key={cat}
+                    className="px-3 py-1 text-base font-semibold rounded-full border border-[var(--sublight-2)] md:border-[var(--tertiary-text)] text-[var(--tertiary-text)] whitespace-nowrap"
+                  >
+                    {cat}
+                  </span>
+                ))}
+              </div>
+              </div>
+              <div className='flex items-center justify-center'>
               <Button
                 className="rounded-xl px-5 py-1"
                 buttonColor="regularButton"
@@ -260,8 +273,17 @@ const Settings: React.FC = () => {
                 <SquarePen size={20} strokeWidth={1.5} />
               </Button>
             </div>
-            <div className="flex flex-wrap gap-2 overflow-x-auto pb-1" style={hideScrollbar}>
-              {finance.expenseCategories.map((cat) => (
+          </div>
+        </section>
+
+        {/* ===== Income Categories ===== */}
+        <section className="rounded-xl border border-[var(--sublight-2)] p-[16px]">
+          {/* Mobile layout */}
+          <div className="flex flex-row gap-3 justify-between">
+            <div className="flex flex-col gap-2.5 items-start">
+              <h3 className="text-[var(--tertiary-text)] text-base">Income Categories</h3>
+              <div className="flex flex-wrap gap-2 overflow-x-auto pb-1" style={hideScrollbar}>
+              {finance.incomeCategories.map((cat) => (
                 <span
                   key={cat}
                   className="px-3 py-1 text-base font-semibold rounded-full border border-[var(--sublight-2)] md:border-[var(--tertiary-text)] text-[var(--tertiary-text)] whitespace-nowrap"
@@ -269,16 +291,9 @@ const Settings: React.FC = () => {
                   {cat}
                 </span>
               ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ===== Income Categories ===== */}
-        <section className="rounded-xl border border-[var(--sublight-2)] p-[16px]">
-          {/* Mobile layout */}
-          <div className="flex flex-col gap-3">
-            <div className="flex justify-between items-center">
-              <h3 className="text-[var(--tertiary-text)] text-base">Income Categories</h3>
+              </div>
+            </div>  
+            <div className='flex items-center justify-center'>
               <Button
                 className="px-5 py-1"
                 buttonColor="regularButton"
@@ -295,18 +310,9 @@ const Settings: React.FC = () => {
               >
                 <SquarePen size={20} strokeWidth={1.5} />
               </Button>
-            </div>
-            <div className="flex flex-wrap gap-2 overflow-x-auto pb-1" style={hideScrollbar}>
-              {finance.incomeCategories.map((cat) => (
-                <span
-                  key={cat}
-                  className="px-3 py-1 text-base font-semibold rounded-full border border-[var(--sublight-2)] md:border-[var(--tertiary-text)] text-[var(--tertiary-text)] whitespace-nowrap"
-                >
-                  {cat}
-                </span>
-              ))}
-            </div>
+          </div>                     
           </div>
+           
         </section>
 
         {/* ===== Tax Regime ===== */}
@@ -329,9 +335,7 @@ const Settings: React.FC = () => {
                 <SquarePen size={20} strokeWidth={1.5} />
               </Button>
             </div>
-            <p className="text-[var(--tertiary-text)] font-semibold text-base">
-              {finance.taxRegime}
-            </p>
+            <p className="text-[var(--tertiary-text)] font-semibold text-base mt-[-30px]">{finance.taxRegime}</p>
           </div>
         </section>
 
