@@ -132,7 +132,12 @@ export const Landing = () => {
               <div className="btn-group ">
                 <Button
                   className="bg-[#F5F9FF] border-2 border-[#CEDEF8] flex gap-[10px]"
-                  onClick={() => navigate('/')}
+                  onClick={() =>
+                    window.open(
+                      'https://firebasestorage.googleapis.com/v0/b/clario-6bfca.firebasestorage.app/o/public%2FProject-Proposal-team-clario.pdf?alt=media&token=a86b7dd1-df46-4297-ade6-045eac2d1bc7',
+                      '_blank',
+                    )
+                  }
                 >
                   Download Proposal
                   <svg
