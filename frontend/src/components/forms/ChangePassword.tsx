@@ -124,7 +124,7 @@ const ChangePassword: React.FC<Props> = ({ onClose }) => {
           onClick={onClose}
           className="py-4 mr-2"
           buttonColor="white"
-          textColor="black"
+          textColor="var(--primary-text)"
           width="48%"
         >
           Cancel

@@ -22,7 +22,7 @@ const Button = ({
   children,
   onClick,
   type = 'button',
-  buttonColor,
+  buttonColor = 'regularButton',
   width,
   textColor,
   disabled = false,
