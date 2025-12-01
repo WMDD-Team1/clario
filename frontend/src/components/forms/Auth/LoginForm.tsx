@@ -11,6 +11,7 @@ import { googleLogin, login } from '@api/services/authService';
 import { fetchUser } from '@store/userSlice';
 import { GoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
+import { Alert, Snackbar } from '@mui/material';
 
 const LoginSchema = z.object({
   email: z.email('Enter a valid email'),
@@ -22,6 +23,9 @@ type LoginSchemaType = z.infer<typeof LoginSchema>;
 const LoginForm = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const [showToast, setShowToast] = useState(false);
+  const [toastSetup, setToastSetup] = useState<{ success: boolean; message: string } | null>(null);
 
   const {
     register,
@@ -45,6 +49,17 @@ const LoginForm = () => {
       }
     } catch (err: any) {
       console.error('Login error:', err);
+      if (axios.isAxiosError(err)) {
+        if (err.response?.status === 401) {
+          setToastSetup({ success: false, message: 'Invalid email or password.' });
+        } else {
+          setToastSetup({ success: false, message: 'Something went wrong. Please try again.' });
+        }
+      } else {
+        setToastSetup({ success: false, message: 'Unexpected error occurred.' });
+      }
+
+      setShowToast(true);
     }
   };
   const handleGoogleSuccess = async (credentialResponse) => {
@@ -61,54 +76,57 @@ const LoginForm = () => {
   };
 
   return (
-    <form className="space-y-[30px]" onSubmit={handleSubmit(onSubmit)}>
-      <div>
-        <Input
-          label="Email"
-          id="email"
-          placeholder="Enter Your Email"
-          type="email"
-          register={register('email')}
-        />
-        {errors.email && <p className="text-red-500 mt-1 text-sm">{errors.email.message}</p>}
-      </div>
-
-      <div>
-        <Input
-          label="Password"
-          id="password"
-          type={showPassword ? 'text' : 'password'}
-          placeholder="Enter Your Password"
-          register={register('password')}
-          endAdornment={
-            <div onClick={() => setShowPassword(!showPassword)} className="cursor-pointer">
-              {showPassword ? <FaRegEye size={20} /> : <FaRegEyeSlash size={20} />}
-            </div>
-          }
-        />
-        {errors.password && <p className="text-red-500 mt-1 text-sm">{errors.password.message}</p>}
-        <div className="flex justify-between items-center text-sm mt-[10px]">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" className="cursor-pointer" />
-            <span className="text-[var(--primary-text)]">Remember me</span>
-          </label>
-
-          <button type="button" className="text-[#3C3C3C] hover:underline">
-            Forgot password?
-          </button>
+    <>
+      <form className="space-y-[30px]" onSubmit={handleSubmit(onSubmit)}>
+        <div>
+          <Input
+            label="Email"
+            id="email"
+            placeholder="Enter Your Email"
+            type="email"
+            register={register('email')}
+          />
+          {errors.email && <p className="text-red-500 mt-1 text-sm">{errors.email.message}</p>}
         </div>
-      </div>
 
-      {/* Login Button */}
-      <Button type="submit" buttonColor="regularButton" width="100%" textColor="#fff">
-        Login
-      </Button>
+        <div>
+          <Input
+            label="Password"
+            id="password"
+            type={showPassword ? 'text' : 'password'}
+            placeholder="Enter Your Password"
+            register={register('password')}
+            endAdornment={
+              <div onClick={() => setShowPassword(!showPassword)} className="cursor-pointer">
+                {showPassword ? <FaRegEye size={20} /> : <FaRegEyeSlash size={20} />}
+              </div>
+            }
+          />
+          {errors.password && (
+            <p className="text-red-500 mt-1 text-sm">{errors.password.message}</p>
+          )}
+          <div className="flex justify-between items-center text-sm mt-[10px]">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" className="cursor-pointer" />
+              <span className="text-[var(--primary-text)]">Remember me</span>
+            </label>
 
-      <div className="flex justify-center items-center gap-[30px]">
-        <span className="text-sm text-black font-bold ">Or</span>
-      </div>
+            <button type="button" className="text-[#3C3C3C] hover:underline">
+              Forgot password?
+            </button>
+          </div>
+        </div>
 
-      {/* <button className="gsi-material-button">
+        {/* Login Button */}
+        <Button type="submit" buttonColor="regularButton" width="100%" textColor="#fff">
+          Login
+        </Button>
+
+        <div className="flex justify-center items-center gap-[30px]">
+          <span className="text-sm text-black font-bold ">Or</span>
+        </div>
+
+        {/* <button className="gsi-material-button">
         <div className="gsi-material-button-state"></div>
         <div className="gsi-material-button-content-wrapper">
           <div className="gsi-material-button-icon">
@@ -141,12 +159,28 @@ const LoginForm = () => {
           <span style={{ display: 'none' }}>Sign in with Google</span>
         </div>
       </button> */}
-      <GoogleLogin
-        locale="en"
-        onSuccess={handleGoogleSuccess}
-        onError={() => console.log('Google Login Failed')}
-      />
-    </form>
+        <GoogleLogin
+          locale="en"
+          onSuccess={handleGoogleSuccess}
+          onError={() => console.log('Google Login Failed')}
+        />
+      </form>
+      <Snackbar open={showToast} autoHideDuration={3000} onClose={() => setShowToast(false)}>
+        <Alert
+          severity={toastSetup?.success ? 'success' : 'error'}
+          sx={{
+            backgroundColor: `var(${
+              toastSetup?.success
+                ? '--primitive-colors-success-500'
+                : '--primitive-colors-error-500'
+            })`,
+            color: 'white',
+          }}
+        >
+          {toastSetup?.message}
+        </Alert>
+      </Snackbar>
+    </>
   );
 };
 
