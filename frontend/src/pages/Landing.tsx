@@ -210,7 +210,7 @@ export const Landing = () => {
                   className="bg-[#F5F9FF] border-2 border-[#CEDEF8] flex gap-[10px]"
                   onClick={() =>
                     window.open(
-                      'https://www.figma.com/design/wS7LFcfSmH6QPX994ivqHh/Mockups?node-id=0-1&m=dev',
+                      'https://www.figma.com/design/wS7LFcfSmH6QPX994ivqHh/Mockups?node-id=0-1&p=f&t=1iXRcwYzj5JTXnIi-0',
                       '_blank',
                     )
                   }
