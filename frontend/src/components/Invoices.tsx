@@ -8,10 +8,16 @@ import { ChevronDown } from "lucide-react";
 import { useLoader } from "./LoaderProvider";
 import InvoiceDrawer from "./forms/Invoice/InvoiceDrawer";
 import { Alert, Snackbar } from "@mui/material";
+import SelectionFilter from "./SelectionFilter";
 
 interface Props {
     projectId: string;
 }
+
+const INVOICE_STATUS_OPTIONS = [
+    { id: 'Paid', label: 'Paid' },
+    { id: 'Pending', label: 'Pending' },
+];
 
 const Invoices = ({ projectId }: Props) => {
     const { setIsLoading } = useLoader();
@@ -39,21 +45,13 @@ const Invoices = ({ projectId }: Props) => {
         h.key === "status" ? {
             ...h,
             render: (row: any): ReactNode => (
-                <div className="relative inline-flex items-center">
-                    <select
-                        value={row.status}
-                        onChange={(e) => handleStatusChange(row.id, e.target.value)}
-                        className="bg-[var(--primitive-colors-brand-primary-51)] text-[var(--secondary-text)] appearance-none
-                                    text-sm rounded-[20px] pl-4 pr-10 py-1 h-[40px] outline-none border-none cursor-pointer"
-                    >
-                        <option value="Paid">Paid</option>
-                        <option value="Pending">Pending</option>
-                    </select>
-                    <ChevronDown
-                        size={14}
-                        className="absolute right-3 text-[var(--secondary-text)] pointer-events-none"
-                    />
-                </div>
+                <SelectionFilter
+                    className="max-w-[150px]"
+                    customBg="bg-[var(--background-alternate)]"
+                    value={INVOICE_STATUS_OPTIONS.find(option => option.id === row.status) || INVOICE_STATUS_OPTIONS[0]}
+                    options={INVOICE_STATUS_OPTIONS}
+                    onChange={(newStatus) => handleStatusChange(row.id, newStatus.id)}
+                />
             )
         } : h
     ))
