@@ -5,6 +5,7 @@ import { updateUser } from '@store/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import SuccessForm from './SuccessForm';
 import { RootState } from '@store/index';
+import Select from '@components/Select';
 
 interface Props {
   onClose: () => void;
@@ -18,21 +19,15 @@ const ChangeMode: React.FC<Props> = ({ onClose }) => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  
   useEffect(() => {
-    const savedTheme = (localStorage.getItem('theme') as 'light' | 'dark' | null)
-      || user?.settings?.general?.theme
-      || 'light';
+    const savedTheme =
+      (localStorage.getItem('theme') as 'light' | 'dark' | null) ||
+      user?.settings?.general?.theme ||
+      'light';
 
     setMode(savedTheme);
     document.documentElement.setAttribute('data-theme', savedTheme);
   }, [user]);
-
-  
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', mode);
-    localStorage.setItem('theme', mode);
-  }, [mode]);
 
   const handleSave = async () => {
     if (!mode) {
@@ -46,6 +41,7 @@ const ChangeMode: React.FC<Props> = ({ onClose }) => {
     try {
       const res = await updateUserPreferences({ theme: mode });
       dispatch(updateUser(res.data));
+      document.documentElement.setAttribute('data-theme', mode);
       localStorage.setItem('theme', mode);
       setIsSuccess(true);
     } catch (err: any) {
@@ -79,21 +75,19 @@ const ChangeMode: React.FC<Props> = ({ onClose }) => {
     <form className="flex flex-col h-full">
       <div className="flex-1 flex flex-col justify-start">
         <div className="relative mb-6">
-          <label className="absolute -top-2.5 left-4 bg-[var(--general-alpha)] px-1 text-sm text-[var(--border)]">
-            Display Mode
-          </label>
-
-          <select
+          <Select
+            id="displayMode"
+            label="Display Mode"
             value={mode}
-            onChange={handleModeChange}
-            className="border border-[var(--sublight)] text-[var(--page-title)] rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-[var(--brand-alpha)] bg-[var(--general-alpha)]"
-          >
-            <option value="" disabled>
-              Select a display mode
-            </option>
-            <option value="light">Light Mode</option>
-            <option value="dark">Dark Mode</option>
-          </select>
+            onChange={(value) => {
+              setMode(value as 'light' | 'dark');
+              if (error) setError(null);
+            }}
+            options={['light', 'dark']}
+            placeHolder="Select a display mode"
+            color="var(--secondary-text)"
+            width="100%"
+          />
           {error && <p className="text-[var(--error-accent1)] text-sm mt-2">{error}</p>}
         </div>
       </div>

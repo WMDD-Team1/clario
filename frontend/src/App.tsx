@@ -23,15 +23,16 @@ function App() {
         <Route path="/signup" element={<SignUpForm />} />
         <Route path="/login" element={<LoginForm />} />
       </Route>
-      <Route path="/onboarding" element={<OnBoarding />} />
+
       <Route
-        path="/logout"
+        path="/onboarding"
         element={
           <PrivateRoute>
-            <Logout />
+            <OnBoarding />
           </PrivateRoute>
         }
       />
+      <Route path="/logout" element={<Logout />} />
 
       {/* Auth routes */}
       <Route

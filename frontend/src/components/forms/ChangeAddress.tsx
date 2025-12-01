@@ -1,10 +1,11 @@
-import React, { useState } from "react";
-import Button from "@/components/Button";
-import successImage from "@/assets/icons/client-upload-success.svg";
+import React, { useState } from 'react';
+import Button from '@/components/Button';
+import successImage from '@/assets/icons/client-upload-success.svg';
 import { updateUserProfile } from '@api/services/settingService';
 import { useDispatch } from 'react-redux';
 import { updateUser } from '@store/userSlice';
 import SuccessForm from './SuccessForm';
+import Input from '@components/Input';
 
 interface Props {
   onClose: () => void;
@@ -27,7 +28,7 @@ const ChangeAddress: React.FC<Props> = ({ onClose }) => {
     if (error) setError(null);
   };
 
-   const handleSave = async () => {
+  const handleSave = async () => {
     if (!street.trim() || !city.trim() || !postalCode.trim() || !country.trim()) {
       setError('Please fill in all required fields.');
       return;
@@ -86,81 +87,65 @@ const ChangeAddress: React.FC<Props> = ({ onClose }) => {
     <form className="relative flex flex-col h-full">
       {isSaved && (
         <div className="absolute inset-0 flex justify-center items-center z-0">
-          <img
-            src={successImage}
-            alt="Success"
-            className="w-40 h-40 object-contain"
-          />
+          <img src={successImage} alt="Success" className="w-40 h-40 object-contain" />
         </div>
       )}
 
       {!isSaved && (
         <div className="flex-1 flex flex-col justify-top z-10">
           <div className="relative mb-6">
-            <label className="absolute -top-2 left-4 bg-[var(--general-alpha)] px-1 text-sm text-[var(--border)]">
-              Address Line
-            </label>
-            <input
-              type="text"
+            <Input
+              label="Address Line"
+              id="street"
               value={street}
+              placeholder="1645 SW Marine Drive"
               onChange={(e) => {
-              setStreet(e.target.value);
-              clearErrorOnInput();
-            }}
-            placeholder="1645 SW Marine Drive"
-              className="border border-[var(--sublight)] text-[var(--page-title)] rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-[var(--brand-alpha)]"
+                setStreet(e.target.value);
+                clearErrorOnInput();
+              }}
             />
           </div>
 
           <div className="relative mb-6">
-            <label className="absolute -top-2 left-4 bg-[var(--general-alpha)] px-1 text-sm text-[var(--border)]">
-              City
-            </label>
-            <input
-              type="text"
+            <Input
+              label="City"
+              id="city"
               value={city}
+              placeholder="Vancouver"
               onChange={(e) => {
-              setCity(e.target.value);
-              clearErrorOnInput();
-            }}
-            placeholder="Vancouver"
-              className="border border-[var(--sublight)] text-[var(--page-title)] rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-[var(--brand-alpha)]"
+                setCity(e.target.value);
+                clearErrorOnInput();
+              }}
             />
           </div>
 
           <div className="relative mb-6">
-            <label className="absolute -top-2 left-4 bg-[var(--general-alpha)] px-1 text-sm text-[var(--border)]">
-              Postal Code
-            </label>
-            <input
-              type="text"
+            <Input
+              label="Postal Code"
+              id="postalCode"
               value={postalCode}
+              placeholder="V5K 0A1"
               onChange={(e) => {
-              setPostalCode(e.target.value);
-              clearErrorOnInput();
-            }}
-            placeholder="V5K 0A1"
-              className="border border-[var(--sublight)] text-[var(--page-title)] rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-[var(--brand-alpha)]"
+                setPostalCode(e.target.value);
+                clearErrorOnInput();
+              }}
             />
           </div>
 
           <div className="relative mb-6">
-          <label className="absolute -top-2 left-4 bg-[var(--general-alpha)] px-1 text-sm text-[var(--border)]">
-            Country
-          </label>
-          <input
-            type="text"
-            value={country}
-            onChange={(e) => {
-              setCountry(e.target.value);
-              clearErrorOnInput();
-            }}
-            placeholder="Canada"
-            className="border border-[var(--sublight)] text-[var(--page-title)] rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-[var(--brand-alpha)]"
-          />
-        </div>
-        
-        {error && <p className="text-[var(--error-accent1)] text-sm mb-4">{error}</p>}
+            <Input
+              label="Country"
+              id="country"
+              value={country}
+              placeholder="Canada"
+              onChange={(e) => {
+                setCountry(e.target.value);
+                clearErrorOnInput();
+              }}
+            />
+          </div>
+
+          {error && <p className="text-[var(--error-accent1)] text-sm mb-4">{error}</p>}
         </div>
       )}
 

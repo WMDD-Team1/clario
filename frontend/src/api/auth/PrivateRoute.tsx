@@ -14,16 +14,14 @@ export const PrivateRoute = ({ children }: { children: ReactNode }) => {
   const { data: user, loading, error } = useAppSelector((state) => state.user);
 
   useEffect(() => {
-    if (!user) dispatch(fetchUser());
+    dispatch(fetchUser());
   }, []);
 
   const isDesktop = useMediaQuery({ minWidth: 768 });
 
-  if (loading) return <Loading />;
+  if (loading || user == null) return <Loading />;
 
   if (error) return <Error message={error} />;
-
-  if (user == undefined) return <Navigate to="/login" replace />;
 
   return (
     <>
