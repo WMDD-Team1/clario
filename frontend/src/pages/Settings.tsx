@@ -101,7 +101,7 @@ const Settings: React.FC = () => {
             <div className="flex justify-between items-top text-base font-['Red_Hat_Display'] pt-2">
               <span className="text-[var(--primary-text)]">Name</span>
               <Button
-                className="px-5 py-1"
+                className="px-5 py-4"
                 buttonColor="regularButton"
                 textColor="var(--general-alpha)"
                 onClick={() =>
@@ -121,7 +121,7 @@ const Settings: React.FC = () => {
             <div className="flex justify-between items-top text-base font-['Red_Hat_Display'] pt-2">
               <span className="text-[var(--primary-text)]">Email</span>
               <Button
-                className="px-5 py-1"
+                className="px-5 py-4"
                 buttonColor="regularButton"
                 textColor="var(--general-alpha)"
                 onClick={() =>
@@ -141,7 +141,7 @@ const Settings: React.FC = () => {
             <div className="flex justify-between items-top pt-2">
               <span className="text-base text-[var(--tertiary-text)]">Address</span>
               <Button
-                className="px-5 py-1"
+                className="px-5 py-4"
                 buttonColor="regularButton"
                 textColor="var(--general-alpha)"
                 onClick={() =>
@@ -151,7 +151,7 @@ const Settings: React.FC = () => {
                 <SquarePen size={20} strokeWidth={1.5} />
               </Button>
             </div>
-            <span className="text-lg text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold mt-[-30px] line-clamp-2 block">{truncateToWords(profile.address, 4)}</span>
+            <span className="text-lg text-[var(--tertiary-text)] font-['Red_Hat_Display'] font-bold mt-[-5px] line-clamp-2 block">{truncateToWords(profile.address, 4)}</span>
           </div>
 
           {/* Password */}
@@ -159,7 +159,7 @@ const Settings: React.FC = () => {
             <div className="flex justify-between items-top pt-2">
               <span className="text-base text-[var(--tertiary-text)] font-normal">Password</span>
               <Button
-                className="px-5 py-1"
+                className="px-5 py-4"
                 buttonColor="regularButton"
                 textColor="var(--general-alpha)"
                 onClick={() =>
@@ -187,7 +187,7 @@ const Settings: React.FC = () => {
             <div className="flex justify-between items-top pt-2">
               <span className="text-base text-[var(--tertiary-text)] font-normal">Language</span>
               <Button
-                className="px-5 py-1"
+                className="px-5 py-4"
                 buttonColor="regularButton"
                 textColor="var(--general-alpha)"
                 onClick={() =>
@@ -207,7 +207,7 @@ const Settings: React.FC = () => {
             <div className="flex justify-between items-top pt-2">
               <span className="text-base text-[var(--tertiary-text)]">Mode</span>
               <Button
-                className="px-5 py-1"
+                className="px-5 py-4"
                 buttonColor="regularButton"
                 textColor="var(--general-alpha)"
                 onClick={() =>
@@ -257,7 +257,7 @@ const Settings: React.FC = () => {
               </div>
               <div className='flex items-center justify-center'>
               <Button
-                className="rounded-xl px-5 py-1"
+                className="rounded-xl px-5 py-4"
                 buttonColor="regularButton"
                 textColor="var(--general-alpha)"
                 onClick={() =>
@@ -295,7 +295,7 @@ const Settings: React.FC = () => {
             </div>  
             <div className='flex items-center justify-center'>
               <Button
-                className="px-5 py-1"
+                className="px-5 py-4"
                 buttonColor="regularButton"
                 textColor="var(--general-alpha)"
                 onClick={() =>
@@ -322,7 +322,7 @@ const Settings: React.FC = () => {
             <div className="flex justify-between items-top">
               <h3 className="text-[var(--tertiary-text)] text-base">Tax Regime</h3>
               <Button
-                className="px-5 py-1"
+                className="px-5 py-4"
                 buttonColor="regularButton"
                 textColor="var(--general-alpha)"
                 onClick={() =>
@@ -344,7 +344,7 @@ const Settings: React.FC = () => {
           <div className="flex justify-between items-center">
             <h3 className=" text-[var(--tertiary-text)] text-base">Export Data</h3>
             <Button
-              className="text-[var(--general-alpha)] rounded-xl px-5 py-1"
+              className="text-[var(--general-alpha)] rounded-xl px-5 py-4"
               buttonColor="regularButton"
               textColor="var(--general-alpha)"
               onClick={handleExportData}
