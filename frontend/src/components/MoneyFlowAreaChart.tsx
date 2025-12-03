@@ -54,11 +54,14 @@ const MoneyFlowAreaChart: React.FC = () => {
       <p className="text-[1.125rem] mb-4 text-[var(--primary-text)]">Money Flow</p>
       <ResponsiveContainer width="100%" height={250}>
         <AreaChart 
-            data={data}
-            margin={{ top: 10, right: 0, left: -10, bottom: 0 }} 
+          data={data}
+          margin={{ top: 10, right: 0, left: -10, bottom: 0 }} 
         >
           <XAxis dataKey="month" />
-          <YAxis width={40} tickFormatter={(value) => value.toLocaleString()} />
+          <YAxis 
+            width={65} 
+            tickFormatter={(value) => value.toLocaleString()} 
+          />
           <Tooltip
             contentStyle={{
               backgroundColor: 'var(--general-alpha)',
@@ -75,17 +78,15 @@ const MoneyFlowAreaChart: React.FC = () => {
           <Area
             type="monotone"
             dataKey="income"
-            // Wrapped in var()
-            stroke="var(--primitive-colors-success-500)"
-            fill="var(--primitive-colors-success-100)"
+            stroke="var(--primitive-colors-success-600)"
+            fill="var(--primitive-colors-success-500)"
             fillOpacity={0.4}
           />
           <Area
             type="monotone"
             dataKey="expense"
-            // Wrapped in var()
-            stroke="var(--primitive-colors-error-500)"
-            fill="var(--primitive-colors-error-100)"
+            stroke="var(--primitive-colors-error-600)"
+            fill="var(--primitive-colors-error-500)"
             fillOpacity={0.4}
           />
         </AreaChart>
