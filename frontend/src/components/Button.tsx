@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { colorOptions } from './style/color';
+import classNames from 'classnames';
 
 interface ButtonProps {
   buttonColor?:
@@ -26,13 +27,19 @@ const Button = ({
   width,
   textColor,
   disabled = false,
+  className,
 }: ButtonProps) => {
   return (
     <button
       type={type}
       disabled={disabled}
       onClick={onClick}
-      className={`p-[1rem] rounded-[1rem] ${colorOptions[buttonColor]} ${disabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+      className={classNames(
+        'p-[1rem] rounded-[1rem]',
+        colorOptions[buttonColor],
+        disabled ? 'cursor-not-allowed' : 'cursor-pointer',
+        className,
+      )}
       style={{ width: width, color: textColor }}
     >
       {children}

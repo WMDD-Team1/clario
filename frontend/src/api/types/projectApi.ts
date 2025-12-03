@@ -6,7 +6,7 @@ export interface ProjectApiResponse {
     name: string;
     description: string;
     type: string;
-    totalBudget: number;
+    totalAmount: number;
     status: 'Planning' | 'In-Progress' | 'Review' | 'Done';
     isActive: boolean;
     isArchived: boolean;

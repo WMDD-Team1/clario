@@ -14,7 +14,7 @@ export interface UserApiResponse {
     country?: string;
   };
   userType: 'Freelancer' | 'Contractor' | 'Developer' | 'Designer' | 'Consultant' | 'Other' | null;
-  defaultFeeType: 'Fixed price' | 'Milestone based' | 'Hourly' | 'Retainer' | null;
+  defaultFeeType: 'Fixed Price' | 'Milestone Based' | 'Hourly' | 'Retainer' | null;
   goal: 'Keep finances stable' | 'Grow my business' | 'Save time' | 'Stay tax-ready' | null;
   onBoardingCompletedAt: string;
   settings: {

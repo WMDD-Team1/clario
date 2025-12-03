@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from 'react';
 
 interface WelcomeBannerProps {
   userName: string;
@@ -9,12 +9,12 @@ export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({ userName }) => {
   const hasInitializedRef = useRef(false);
 
   useEffect(() => {
-    if (!userName || userName === "User") return;
+    if (!userName || userName === 'User') return;
 
     if (hasInitializedRef.current) return;
     hasInitializedRef.current = true;
 
-    if (typeof window === "undefined") {
+    if (typeof window === 'undefined') {
       setIsFirstTime(false);
       return;
     }
@@ -24,7 +24,7 @@ export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({ userName }) => {
 
     if (!hasVisited) {
       setIsFirstTime(true);
-      window.localStorage.setItem(storageKey, "true");
+      window.localStorage.setItem(storageKey, 'true');
     } else {
       setIsFirstTime(false);
     }
@@ -34,11 +34,11 @@ export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({ userName }) => {
   return (
     <div className="pb-1 mb-3">
       <h2 className="!font-['merriweather'] font-bold text-[var(--primary-text)] leading-[40px]">
-        {isFirstTime ? (
-          <>Welcome {userName},</>
-        ) : (
-          <>Hi {userName} Welcome Back,</>
-        )}
+        {/* {isFirstTime ? ( */}
+        <>Welcome {userName}, </>
+        {/* ) : ( */}
+        {/* <>Hi {userName} Welcome Back,</> */}
+        {/* )} */}
       </h2>
       <p className="hidden md:block font-['Montserrat'] text-[var(--page-subtitle)] text-[1.25rem]">
         Here’s your business overview and latest insights.
