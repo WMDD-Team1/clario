@@ -9,10 +9,24 @@ import type { RootState } from '@/store';
 import { RemindersList } from './components/RemindersList';
 import Overview from './components/Overview';
 import Insight from './components/Insight';
+import { fetchAllProjects } from '@api/index';
+import { useQuery } from '@tanstack/react-query';
+import Spinner from '@components/Spinner';
 
 export const Dashboard = () => {
   const { data: user } = useAppSelector((state: RootState) => state.user);
   const [activeTab, setActiveTab] = useState<'reminders' | 'dashboard' | 'insights'>('dashboard');
+
+  const { isLoading, error, data } = useQuery({
+    queryKey: ['projects', 'list'],
+
+    queryFn: () => fetchAllProjects(),
+  });
+  const projects = data?.data ?? [];
+
+  if (isLoading) return <Spinner message="Loading projects..." />;
+
+  if (error) return 'An error has occurred: ' + error.message;
 
   /** ---------------- MOBILE DASHBOARD ---------------- **/
   const renderDashboard = () => (
@@ -68,7 +82,7 @@ export const Dashboard = () => {
     <>
       <div className="sticky top-33 z-99 bg-[var(--full-bg)] backdrop-blur-sm hidden sm:block shadow-[0_10px_10px_-10px_rgba(0,0,0,0.1)]">
         <div className="w-full  mx-auto">
-          <WelcomeBanner userName={user?.name || 'User'} />
+          <WelcomeBanner userName={user?.name || 'User'} projectCount={projects.length} />
         </div>
       </div>
 
@@ -112,7 +126,7 @@ export const Dashboard = () => {
       {/* MOBILE VIEW */}
       <div className="block sm:hidden w-full max-w-[1440px] mx-auto">
         <div className="text-[28px] mt-4">
-          <WelcomeBanner userName={user?.name || 'User'} />
+          <WelcomeBanner userName={user?.name || 'User'} projectCount={projects.length} />
         </div>
 
         {/* Toggle Buttons */}

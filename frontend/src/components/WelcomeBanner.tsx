@@ -2,9 +2,13 @@ import React, { useEffect, useRef, useState } from 'react';
 
 interface WelcomeBannerProps {
   userName: string;
+  projectCount: number;
 }
 
-export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({ userName }) => {
+export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({
+  userName,
+  projectCount,
+}: WelcomeBannerProps) => {
   const [isFirstTime, setIsFirstTime] = useState<boolean | null>(null);
   const hasInitializedRef = useRef(false);
 
@@ -41,7 +45,8 @@ export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({ userName }) => {
         {/* )} */}
       </h2>
       <p className="hidden md:block font-['Montserrat'] text-[var(--page-subtitle)] text-[1.25rem]">
-        Here’s your business overview and latest insights.
+        {projectCount === 0 && "Here's is an example of your business overview you'll get with us"}
+        {projectCount > 0 && "Here's is your business overview and latest insights."}
       </p>
     </div>
   );
