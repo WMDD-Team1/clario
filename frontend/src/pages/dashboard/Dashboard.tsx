@@ -32,6 +32,17 @@ export const Dashboard = () => {
     }
   }, [user]);
 
+  const { isLoading, error, data } = useQuery({
+    queryKey: ['projects', 'list'],
+
+    queryFn: () => fetchAllProjects(),
+  });
+  const projects = data?.data ?? [];
+
+  if (isLoading) return <Spinner message="Loading projects..." />;
+
+  if (error) return 'An error has occurred: ' + error.message;
+
   /** ---------------- MOBILE DASHBOARD ---------------- **/
   const renderDashboard = () => (
     <div className="flex flex-col w-full gap-4">
