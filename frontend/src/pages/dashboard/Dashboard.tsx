@@ -12,6 +12,7 @@ import Overview from "./components/Overview";
 import Insight from "./components/Insight";
 import FormDrawer from "@/components/forms/FormDrawer";
 import Spinner from "@components/Spinner";
+import { fetchAllProjects } from "@api/services/projectService";
 
 export const Dashboard = () => {
   const { data: user } = useAppSelector((state: RootState) => state.user);
