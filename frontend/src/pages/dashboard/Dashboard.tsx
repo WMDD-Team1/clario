@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useAppSelector } from "@/store/hooks";
 import BalanceChart from "@/components/BalanceChart";
 import { ExpensesTable } from "@/components/ExpensesTable";
@@ -10,6 +11,7 @@ import { RemindersList } from "./components/RemindersList";
 import Overview from "./components/Overview";
 import Insight from "./components/Insight";
 import FormDrawer from "@/components/forms/FormDrawer";
+import Spinner from "@components/Spinner";
 
 export const Dashboard = () => {
   const { data: user } = useAppSelector((state: RootState) => state.user);
@@ -123,7 +125,7 @@ export const Dashboard = () => {
 
       {/* DESKTOP HEADER */}
       <div className="sticky top-33 z-99 bg-[var(--full-bg)] backdrop-blur-sm hidden sm:block shadow-[0_10px_10px_-10px_rgba(0,0,0,0.1)]">
-        <WelcomeBanner userName={user?.name || "User"} />
+        <WelcomeBanner userName={user?.name || "User"} projectCount={0} />
       </div>
 
       {/* DESKTOP PAGE */}
@@ -161,7 +163,7 @@ export const Dashboard = () => {
       {/* MOBILE VIEW */}
       <div className="block sm:hidden w-full max-w-[1440px] mx-auto">
         <div className="text-[28px] mt-4">
-          <WelcomeBanner userName={user?.name || "User"} />
+          <WelcomeBanner userName={user?.name || "User"} projectCount={0} />
         </div>
 
         <div className="flex justify-center w-full mt-4 mb-6">
