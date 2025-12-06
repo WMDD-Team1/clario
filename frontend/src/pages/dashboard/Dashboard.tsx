@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAppSelector } from '@/store/hooks';
 import BalanceChart from '@/components/BalanceChart';
 import { ExpensesTable } from '@/components/ExpensesTable';
@@ -12,10 +12,52 @@ import Insight from './components/Insight';
 import { fetchAllProjects } from '@api/index';
 import { useQuery } from '@tanstack/react-query';
 import Spinner from '@components/Spinner';
+import { OverviewResponse } from '@api/types/dashboardApi';
+import { fetchOverview } from '@api/services/dashboardService';
 
 export const Dashboard = () => {
   const { data: user } = useAppSelector((state: RootState) => state.user);
   const [activeTab, setActiveTab] = useState<'reminders' | 'dashboard' | 'insights'>('dashboard');
+
+  const [overview, setOverview] = useState<OverviewResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadOverview = async () => {
+      try {
+        setLoading(true);
+        const res = await fetchOverview();
+        setOverview(res);
+      } catch (err) {
+        console.error('Failed to fetch overview:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadOverview();
+  }, []);
+
+  const DUMMY_DATA = [
+    { label: 'YTD Income', value: '$12,000' },
+    { label: 'YTD Expense', value: '$8,000' },
+    { label: 'YTD Taxes', value: '120' },
+    { label: 'This Month Taxes', value: '120' },
+    { label: 'Recurring Expense', value: '10' },
+  ];
+  const mapOverviewToStats = (data: OverviewResponse) => [
+    { label: 'YTD Income', value: `$${data.income.toLocaleString()}` },
+    { label: 'YTD Expense', value: `$${data.expense.toLocaleString()}` },
+    { label: 'YTD Taxes', value: `$${data.taxes.toLocaleString()}` },
+    { label: 'This Month Taxes', value: `$${data.taxes.toLocaleString()}` },
+    { label: 'Recurring Expense', value: `$${data.recurringExpense.toLocaleString()}` },
+  ];
+  const isAllZero = (data: OverviewResponse | null) => {
+    if (!data) return true;
+    return Object.values(data).every((val) => val === 0);
+  };
+
+  const stats = overview && !isAllZero(overview) ? mapOverviewToStats(overview) : DUMMY_DATA;
 
   const { isLoading, error, data } = useQuery({
     queryKey: ['projects', 'list'],
@@ -33,22 +75,27 @@ export const Dashboard = () => {
     <div className="flex flex-col w-full gap-4">
       {/* Stats Section */}
       <div className="grid grid-cols-2 gap-4 sm:gap-4">
-        {[
-          { label: 'YTD Income', value: '$12,000' },
-          { label: 'YTD Expense', value: '$8,000' },
-          { label: 'YTD Taxes', value: '10' },
-          { label: 'Active Projects', value: '5' },
-          { label: 'Clients', value: '30' },
-        ].map((stat, index, arr) => (
-          <div
-            key={index}
-            className={`flex flex-col justify-center items-center py-3 bg-[var(--general-alpha)] backdrop-blur-sm rounded-2xl border border-[var(--sublight-2)] 
-        ${index === arr.length - 1 ? 'col-span-2 sm:col-span-1' : ''}`}
-          >
-            <p className="font-normal text-[var(--tertiary-text)] text-sm">{stat.label}</p>
-            <p className="text-lg font-bold text-[var(--brand-alpha)]">{stat.value}</p>
-          </div>
-        ))}
+        {
+          // [
+          //   { label: 'YTD Income', value: '$12,000' },
+          //   { label: 'YTD Expense', value: '$8,000' },
+          //   { label: 'YTD Taxes', value: '10' },
+          //   { label: 'Active Projects', value: '5' },
+          //   { label: 'Clients', value: '30' },
+          // ]
+          stats.map(({ label, value }, index) => {
+            return (
+              <div
+                key={index}
+                className={`flex flex-col justify-center items-center py-3 bg-[var(--general-alpha)] backdrop-blur-sm rounded-2xl border border-[var(--sublight-2)] 
+        ${index === stats.length - 1 ? 'col-span-2 sm:col-span-1' : ''}`}
+              >
+                <p className="font-normal text-[var(--tertiary-text)] text-sm">{label}</p>
+                <p className="text-lg font-bold text-[var(--brand-alpha)]">{value}</p>
+              </div>
+            );
+          })
+        }
       </div>
 
       {/* Charts and Tables */}

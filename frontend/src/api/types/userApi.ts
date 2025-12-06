@@ -47,7 +47,7 @@ export const roleOptions: string[] = [
   'Other',
 ];
 
-export const feeOptions: string[] = ['Fixed price', 'Milestone Based', 'Hourly', 'Retainer'];
+export const feeOptions: string[] = ['Fixed Price', 'Milestone Based', 'Hourly', 'Retainer'];
 
 export const goalOptions: string[] = [
   'Keep finances stable',

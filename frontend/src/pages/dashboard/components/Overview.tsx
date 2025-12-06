@@ -27,15 +27,15 @@ const Overview = () => {
   const DUMMY_DATA = [
     { label: 'YTD Income', value: '$12,000' },
     { label: 'YTD Expense', value: '$8,000' },
-    { label: 'YTD Taxes', value: '10' },
-    { label: 'This Month Taxes', value: '5' },
-    { label: 'Recurring Expense', value: '30' },
+    { label: 'YTD Taxes', value: '120' },
+    { label: 'This Month Taxes', value: '120' },
+    { label: 'Recurring Expense', value: '10' },
   ];
   const mapOverviewToStats = (data: OverviewResponse) => [
     { label: 'YTD Income', value: `$${data.income.toLocaleString()}` },
     { label: 'YTD Expense', value: `$${data.expense.toLocaleString()}` },
     { label: 'YTD Taxes', value: `$${data.taxes.toLocaleString()}` },
-    { label: 'This Month Taxes', value: `$${data.recurringIncome.toLocaleString()}` },
+    { label: 'This Month Taxes', value: `$${data.taxes.toLocaleString()}` },
     { label: 'Recurring Expense', value: `$${data.recurringExpense.toLocaleString()}` },
   ];
   const isAllZero = (data: OverviewResponse | null) => {
@@ -49,7 +49,7 @@ const Overview = () => {
     <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
       {stats.map(({ label, value }, idx) => {
         const isLast = idx === stats.length - 1;
-        const isOdd = stats.length % 2 !== 0; 
+        const isOdd = stats.length % 2 !== 0;
         return (
           <InsightCard
             key={idx}
