@@ -102,7 +102,7 @@ const ChangeTaxRegime: React.FC<Props> = ({ onClose, tax }) => {
               onClick={handleCancel}
               className="py-4 mr-2"
               buttonColor="white"
-              textColor="black"
+              textColor="var(--primary-text)"
               width="48%"
               disabled={loading}
             >

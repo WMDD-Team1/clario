@@ -99,7 +99,7 @@ const IncomeCategories: React.FC<Props> = ({ onClose, incCategories }) => {
               onClick={handleCancel}
               className="py-4 mr-2"
               buttonColor="white"
-              textColor="black"
+              textColor="var(--primary-text)"
               width="48%"
             >
               Cancel

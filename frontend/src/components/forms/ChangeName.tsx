@@ -88,7 +88,7 @@ const ChangeName: React.FC<Props> = ({ onClose }) => {
             onClick={handleCancel}
             className="py-4 mr-2"
             buttonColor="white"
-            textColor="black"
+            textColor="var(--primary-text)"
             width="46%"
           >
             Cancel

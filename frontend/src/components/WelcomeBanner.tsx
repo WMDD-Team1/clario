@@ -38,11 +38,11 @@ export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({
   return (
     <div className="pb-1 mb-3">
       <h2 className="!font-['merriweather'] font-bold text-[var(--primary-text)] leading-[40px]">
-        {/* {isFirstTime ? ( */}
+        {isFirstTime ? (
         <>Welcome {userName}, </>
-        {/* ) : ( */}
-        {/* <>Hi {userName} Welcome Back,</> */}
-        {/* )} */}
+         ) : (
+         <>Hi {userName} Welcome Back,</>
+        )}
       </h2>
       <p className="hidden md:block font-['Montserrat'] text-[var(--page-subtitle)] text-[1.25rem]">
         {projectCount === 0 && "Here's is an example of your business overview you'll get with us"}
