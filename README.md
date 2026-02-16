@@ -3,10 +3,10 @@
 **Clario** is a full-stack SaaS platform designed to help freelancers and independent professionals manage contracts, finances, and critical business documents in one secure workspace.  
 Built as a collaborative academic team project, the platform leverages AI-assisted analysis to extract key insights from legal documents, reducing manual review time and improving financial visibility for non-technical users.
 
-Check it out[https://www.c-lario.com/]
+[Check it out](https://www.c-lario.com/)
 ---
 
-## ❎ Problem
+## ❌ Problem
 
 Freelancers often struggle with:
 
@@ -31,14 +31,14 @@ Clario provides:
 
 ---
 
-## Team Project Context
+## 👫 Team Project Context
 
 This project was developed collaboratively by a multidisciplinary student team, including frontend, backend, and design contributors.  
 The work reflects shared ownership of product vision, implementation, and delivery.
 
 ---
 
-## My Contributions
+## 🥕 My Contributions
 
 I contributed as the **primary full-stack engineer and technical architect** within the team.
 
@@ -76,7 +76,7 @@ I contributed as the **primary full-stack engineer and technical architect** wit
 
 ---
 
-## Key Outcomes
+## 👇 Key Outcomes
 
 - Delivered a **production-scale full-stack architecture** in a team environment  
 - Enabled **AI-driven legal insight extraction** for freelancer workflows  
@@ -85,7 +85,7 @@ I contributed as the **primary full-stack engineer and technical architect** wit
 
 ---
 
-## What I Learned
+## 📚 What I Learned
 
 - Scalable backend architecture is as critical as frontend usability  
 - Clear API contracts significantly improve team development speed  
@@ -94,7 +94,7 @@ I contributed as the **primary full-stack engineer and technical architect** wit
 
 ---
 
-## Future Improvements
+## 🛠️ Future Improvements
 
 - Role-based access control and multi-tenant architecture  
 - Expanded AI analysis for financial forecasting  
@@ -103,7 +103,7 @@ I contributed as the **primary full-stack engineer and technical architect** wit
 
 ---
 
-## Relevance to Mission-Driven Platforms
+## 🎯 Relevance to Mission-Driven Platforms
 
 Clario reflects a core engineering philosophy:
 
@@ -112,12 +112,12 @@ Clario reflects a core engineering philosophy:
 This approach aligns strongly with community-impact platforms such as **GivePulse**, where thoughtful architecture and inclusive user experience enable real-world participation.
 
 
-## Required Environment
+## 🌏 Required Environment
 
 - Node.js v20.3.0 (use `.nvmrc`)
 - npm v9.8.0+
 
-## Project Structure
+## ⭐️ Project Structure
 
 ```
 project-root/
